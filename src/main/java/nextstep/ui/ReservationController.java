@@ -29,6 +29,10 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Void> createReservation(@RequestBody ReservationCreateRequest request) {
+        if (existsReservationByDateTime(request.getDate(), request.getTime())) {
+            throw new IllegalArgumentException("날짜와 시간이 똑같은 예약이 이미 존재합니다.");
+        }
+
         Reservation reservation = new Reservation(
             id.getAndIncrement(),
             request.getDate(),
@@ -38,6 +42,11 @@ public class ReservationController {
 
         reservations.add(reservation);
         return ResponseEntity.created(URI.create("/reservations/" + reservation.getId())).build();
+    }
+
+    private boolean existsReservationByDateTime(LocalDate date, LocalTime time) {
+        return reservations.stream()
+            .anyMatch(it -> it.equalsDateTime(date, time));
     }
 
     @GetMapping

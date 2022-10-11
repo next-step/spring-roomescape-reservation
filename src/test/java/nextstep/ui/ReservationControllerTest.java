@@ -1,6 +1,8 @@
 package nextstep.ui;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import io.restassured.RestAssured;
@@ -41,17 +43,34 @@ public class ReservationControllerTest {
             .statusCode(CREATED.value());
     }
 
+    @DisplayName("예약 생성 시 날짜와 시간이 똑같은 예약이 이미 있는 경우 예약을 생성할 수 없다. - POST /reservations")
+    @Test
+    void duplicateException() {
+        LocalDate date = LocalDate.of(2022, 10, 15);
+        LocalTime time = LocalTime.of(13, 0);
+        예약_생성(date, time, "최현구");
+        ReservationCreateRequest request = reservationCreateRequest(date, time, "브라운");
+
+        RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .when().post("/reservations")
+            .then().log().all()
+            .statusCode(BAD_REQUEST.value())
+            .body(is("날짜와 시간이 똑같은 예약이 이미 존재합니다."));
+    }
+
     @DisplayName("예약 조회 - GET /reservations?date={date}")
     @Test
     void getByDate() {
-        LocalDate date = LocalDate.of(2022, 10, 15);
+        LocalDate date = LocalDate.of(2022, 10, 25);
         LocalTime time = LocalTime.of(13, 0);
         String name = "최현구";
         예약_생성(date, time, name);
 
         List<ReservationResponse> results = RestAssured.given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("date", "2022-10-15")
+            .queryParam("date", "2022-10-25")
             .when().get("/reservations")
             .then().log().all()
             .statusCode(HttpStatus.OK.value())

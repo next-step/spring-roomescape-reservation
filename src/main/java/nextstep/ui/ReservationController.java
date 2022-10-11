@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,5 +51,14 @@ public class ReservationController {
         return reservations.stream()
             .filter(it -> Objects.equals(it.getDate(), date))
             .collect(toList());
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> getReservationsByDate(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time
+    ) {
+        reservations.removeIf(it -> it.equalsDateTime(date, time));
+        return ResponseEntity.noContent().build();
     }
 }

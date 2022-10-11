@@ -21,6 +21,10 @@ public class Reservation {
         this.name = name;
     }
 
+    public boolean equalsDateTime(LocalDate date, LocalTime time) {
+        return Objects.equals(this.date, date) && Objects.equals(this.time, time);
+    }
+
     public Long getId() {
         return id;
     }

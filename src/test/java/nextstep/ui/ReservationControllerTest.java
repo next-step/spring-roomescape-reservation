@@ -1,7 +1,6 @@
 package nextstep.ui;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import io.restassured.RestAssured;
@@ -39,8 +38,7 @@ public class ReservationControllerTest {
             .body(request)
             .when().post("/reservations")
             .then().log().all()
-            .statusCode(CREATED.value())
-            .header("Location", "/reservations/1");
+            .statusCode(CREATED.value());
     }
 
     @DisplayName("예약 조회 - GET /reservations?date={date}")
@@ -53,7 +51,7 @@ public class ReservationControllerTest {
 
         List<ReservationResponse> results = RestAssured.given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("date", date.toString())
+            .queryParam("date", "2022-10-15")
             .when().get("/reservations")
             .then().log().all()
             .statusCode(HttpStatus.OK.value())
@@ -62,7 +60,7 @@ public class ReservationControllerTest {
         assertThat(results).hasSize(1);
     }
 
-    @DisplayName("예약 조회 - DELETE /reservations?date={date}&time={time}")
+    @DisplayName("예약 삭제 - DELETE /reservations?date={date}&time={time}")
     @Test
     void deleteByDateTime() {
         LocalDate date = LocalDate.of(2022, 10, 20);
@@ -72,8 +70,8 @@ public class ReservationControllerTest {
 
         RestAssured.given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("date", date.toString())
-            .queryParam("time", time.toString())
+            .queryParam("date", "2022-10-20")
+            .queryParam("time", "13:00")
             .when().delete("/reservations")
             .then().log().all()
             .statusCode(HttpStatus.NO_CONTENT.value());

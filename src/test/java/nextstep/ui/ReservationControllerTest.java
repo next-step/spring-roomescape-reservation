@@ -46,23 +46,20 @@ public class ReservationControllerTest {
     @DisplayName("예약 조회 - GET /reservations?date={date}")
     @Test
     void getByDate() {
-        LocalDate date = LocalDate.of(2022, 10, 11);
+        LocalDate date = LocalDate.of(2022, 10, 15);
         LocalTime time = LocalTime.of(13, 0);
         String name = "최현구";
         예약_생성(date, time, name);
-        ReservationResponse response = new ReservationResponse(1L, date, time, name);
 
         List<ReservationResponse> results = RestAssured.given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .queryParam("date", date)
+            .queryParam("date", date.toString())
             .when().get("/reservations")
             .then().log().all()
             .statusCode(HttpStatus.OK.value())
             .extract().jsonPath().getList(".", ReservationResponse.class);
 
         assertThat(results).hasSize(1);
-        assertThat(results).usingRecursiveComparison()
-            .isEqualTo(response);
     }
 
     private void 예약_생성(LocalDate date, LocalTime time, String name) {
@@ -73,8 +70,7 @@ public class ReservationControllerTest {
             .body(request)
             .when().post("/reservations")
             .then().log().all()
-            .statusCode(CREATED.value())
-            .header("Location", "/reservations/1");
+            .statusCode(CREATED.value());
     }
 
     private ReservationCreateRequest reservationCreateRequest() {

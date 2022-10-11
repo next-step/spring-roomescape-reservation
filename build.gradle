@@ -10,10 +10,13 @@ version '1.0-SNAPSHOT'
 dependencies {
     // spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     // test
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    runtimeOnly 'com.h2database:h2'
 }
 
 repositories {

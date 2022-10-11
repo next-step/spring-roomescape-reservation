@@ -1,14 +1,13 @@
 package nextstep;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/reservations")
@@ -21,5 +20,14 @@ public class ReservationController {
         Reservation reservation = request.toObject();
         reservations.add(reservation);
         return ResponseEntity.created(URI.create("/reservations/" + reservation.getId())).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservationResponse>> get(@RequestParam("date") String date) {
+        List<ReservationResponse> findReservations = reservations.stream()
+                .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)))
+                .map(it -> new ReservationResponse(it.getId(), it.getDate(), it.getTime(), it.getName()))
+                .toList();
+        return ResponseEntity.ok(findReservations);
     }
 }

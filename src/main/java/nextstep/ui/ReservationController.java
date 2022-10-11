@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
-import nextstep.Reservation;
+import nextstep.domain.Reservation;
 import nextstep.ui.request.ReservationCreateRequest;
 import nextstep.ui.response.ReservationResponse;
 import org.springframework.format.annotation.DateTimeFormat;

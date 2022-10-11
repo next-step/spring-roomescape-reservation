@@ -5,7 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import nextstep.Reservation;
+import nextstep.domain.Reservation;
 
 public class ReservationResponse {
 

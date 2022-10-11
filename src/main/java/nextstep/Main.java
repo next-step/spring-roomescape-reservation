@@ -62,7 +62,7 @@ public class Main {
                 String time = scanner.nextLine();
 
                 reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
+                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalTime.parse(time + ":00")))
                         .findFirst()
                         .ifPresent(reservations::remove);
 
@@ -77,11 +77,11 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                String reservationFormat = "예약 날짜 : %s, 예약 시간 : %s , 예약자 이름 : %s";
+                String reservationFormat = "예약ID : %d, 예약 날짜 : %s, 예약 시간 : %s , 예약자 이름 : %s";
 
                 reservations.stream()
                         .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                        .map(it -> String.format(reservationFormat, it.getDate().toString(), it.getTime().toString(), it.getName()))
+                        .map(it -> String.format(reservationFormat, it.getId(), it.getDate().toString(), it.getTime().toString(), it.getName()))
                         .collect(Collectors.toList())
                         .forEach(System.out::println);
             }

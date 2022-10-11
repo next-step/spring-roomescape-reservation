@@ -1,8 +1,10 @@
-package nextstep.reservation;
+package nextstep.reservation.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import nextstep.reservation.Reservation;
+import nextstep.reservation.dao.ReservationDao;
 import nextstep.reservation.exception.AlreadyReservedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +19,11 @@ public class ReservationService {
     }
 
     @Transactional
-    public Long reserve(Reservation reservation) {
-        if (reservationDao.existsReservation(reservation.getDate(), reservation.getTime())) {
+    public Long reserve(LocalDate date, LocalTime time, String name) {
+        if (reservationDao.existsReservation(date, time)) {
             throw new AlreadyReservedException();
         }
-        return reservationDao.insert(reservation);
+        return reservationDao.insert(date, time, name);
     }
 
     @Transactional(readOnly = true)

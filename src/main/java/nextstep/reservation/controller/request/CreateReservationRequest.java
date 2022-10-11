@@ -1,24 +1,18 @@
-package nextstep.reservation;
+package nextstep.reservation.controller.request;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Reservation {
+public class CreateReservationRequest {
 
-    private final Long id;
     private final LocalDate date;
     private final LocalTime time;
     private final String name;
 
-    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
-        this.id = id;
+    public CreateReservationRequest(LocalDate date, LocalTime time, String name) {
         this.date = date;
         this.time = time;
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public LocalDate getDate() {

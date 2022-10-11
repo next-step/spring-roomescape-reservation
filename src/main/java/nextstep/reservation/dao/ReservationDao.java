@@ -1,9 +1,10 @@
-package nextstep.reservation;
+package nextstep.reservation.dao;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import nextstep.reservation.Reservation;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -23,14 +24,14 @@ public class ReservationDao {
         return 0 < jdbcTemplate.queryForObject(sql, Integer.class, date, time);
     }
 
-    public long insert(Reservation reservation) {
+    public Long insert(LocalDate date, LocalTime time, String name) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String sql = "INSERT INTO reservations(date, time, name) VALUES(?, ?, ?)";
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement = con.prepareStatement(sql, new String[]{"id"});
-            preparedStatement.setObject(1, reservation.getDate());
-            preparedStatement.setObject(2, reservation.getTime());
-            preparedStatement.setString(3, reservation.getName());
+            preparedStatement.setObject(1, date);
+            preparedStatement.setObject(2, time);
+            preparedStatement.setString(3, name);
             return preparedStatement;
         }, keyHolder);
 

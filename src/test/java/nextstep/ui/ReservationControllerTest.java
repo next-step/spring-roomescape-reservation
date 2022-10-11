@@ -62,6 +62,23 @@ public class ReservationControllerTest {
         assertThat(results).hasSize(1);
     }
 
+    @DisplayName("예약 조회 - DELETE /reservations?date={date}&time={time}")
+    @Test
+    void deleteByDateTime() {
+        LocalDate date = LocalDate.of(2022, 10, 20);
+        LocalTime time = LocalTime.of(13, 0);
+        String name = "최현구";
+        예약_생성(date, time, name);
+
+        RestAssured.given().log().all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("date", date.toString())
+            .queryParam("time", time.toString())
+            .when().delete("/reservations")
+            .then().log().all()
+            .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
     private void 예약_생성(LocalDate date, LocalTime time, String name) {
         ReservationCreateRequest request = reservationCreateRequest(date, time, name);
 

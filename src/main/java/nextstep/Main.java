@@ -77,8 +77,11 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
+                String reservationFormat = "예약 날짜 : %s, 예약 시간 : %s , 예약자 이름 : %s";
+
                 reservations.stream()
                         .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
+                        .map(it -> String.format(reservationFormat, it.getDate().toString(), it.getTime().toString(), it.getName()))
                         .collect(Collectors.toList())
                         .forEach(System.out::println);
             }

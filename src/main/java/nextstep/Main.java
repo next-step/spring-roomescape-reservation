@@ -18,7 +18,19 @@ public class Main implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        createReservationTable();
+        createThemesTable();
+    }
+
+    private void createReservationTable() {
         String ddl = "create table reservations (id bigint auto_increment primary key, date date, name varchar(255), time time)";
+
+        jdbcTemplate.execute("DROP TABLE reservations IF EXISTS");
+        jdbcTemplate.execute(ddl);
+    }
+
+    private void createThemesTable() {
+        String ddl = "create table themes (id bigint auto_increment primary key, name varchar(255), desc varchar(255), price bigint)";
 
         jdbcTemplate.execute("DROP TABLE reservations IF EXISTS");
         jdbcTemplate.execute(ddl);

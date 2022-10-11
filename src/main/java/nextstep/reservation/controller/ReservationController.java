@@ -2,12 +2,13 @@ package nextstep.reservation.controller;
 
 import java.net.URI;
 import java.util.List;
-import nextstep.reservation.Reservation;
-import nextstep.reservation.service.ReservationService;
+import java.util.stream.Collectors;
 import nextstep.reservation.controller.request.CreateReservationRequest;
 import nextstep.reservation.controller.request.RemoveReservationRequest;
 import nextstep.reservation.controller.request.ReservationListRequest;
+import nextstep.reservation.controller.response.ReservationFindResponse;
 import nextstep.reservation.exception.AlreadyReservedException;
+import nextstep.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +38,12 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reservation>> getReservations(ReservationListRequest request) {
-        return ResponseEntity.ok(reservationService.getReservationList(request.getDate()));
+    public ResponseEntity<List<ReservationFindResponse>> getReservations(ReservationListRequest request) {
+        List<ReservationFindResponse> response = reservationService.getReservationList(request.getDate())
+                                                                   .stream()
+                                                                   .map(ReservationFindResponse::from)
+                                                                   .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping

@@ -25,4 +25,8 @@ public class ReservationCreateRequest {
     public String getName() {
         return name;
     }
+
+    public Reservation toObject() {
+        return new Reservation(this.date, this.time, this.name);
+    }
 }

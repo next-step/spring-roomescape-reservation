@@ -16,14 +16,14 @@ public class ReservationController {
     List<Reservation> reservations = new ArrayList<>();
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody ReservationCreateRequest request) {
+    public ResponseEntity<Void> createReservation(@RequestBody ReservationCreateRequest request) {
         Reservation reservation = request.toObject();
         reservations.add(reservation);
         return ResponseEntity.created(URI.create("/reservations/" + reservation.getId())).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> get(@RequestParam("date") String date) {
+    public ResponseEntity<List<ReservationResponse>> getReservation(@RequestParam("date") String date) {
         List<ReservationResponse> findReservations = reservations.stream()
                 .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)))
                 .map(it -> new ReservationResponse(it.getId(), it.getDate(), it.getTime(), it.getName()))

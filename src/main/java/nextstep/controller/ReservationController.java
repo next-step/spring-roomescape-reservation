@@ -28,9 +28,18 @@ public class ReservationController {
         LocalTime time = LocalTime.parse(reservationCreateRequest.getTime());
         String name = reservationCreateRequest.getName();
 
+        checkReservationAvailable(date, time);
+
         Reservation reservation = new Reservation(tmpId++, date, time, name);
         reservations.add(reservation);
 
         return ResponseEntity.created(URI.create("/reservations/" + reservation.getId())).build();
+    }
+
+    private void checkReservationAvailable(LocalDate date, LocalTime time) {
+        if (reservations.stream()
+                .anyMatch(it -> it.equalsDateAndTime(date, time))) {
+            throw new IllegalArgumentException("동시간대에 이미 예약이 존재합니다.");
+        }
     }
 }

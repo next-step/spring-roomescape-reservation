@@ -14,6 +14,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import static nextstep.service.ReservationService.DUPLICATE_RESERVATION_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,7 +53,7 @@ class ReservationControllerTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(errorResponse.getMessage()).isEqualTo("동시간대에 이미 예약이 존재합니다.");
+        assertThat(errorResponse.getMessage()).isEqualTo(DUPLICATE_RESERVATION_MESSAGE);
     }
 
     @Test

@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
+    public static final String DUPLICATE_RESERVATION_MESSAGE = "동시간대에 이미 예약이 존재합니다.";
+
     private Long tmpId;
     private final List<Reservation> reservations;
 
@@ -36,7 +38,7 @@ public class ReservationService {
     private void checkReservationAvailable(LocalDate date, LocalTime time) {
         if (reservations.stream()
                 .anyMatch(it -> it.equalsDateAndTime(date, time))) {
-            throw new IllegalArgumentException("동시간대에 이미 예약이 존재합니다.");
+            throw new IllegalArgumentException(DUPLICATE_RESERVATION_MESSAGE);
         }
     }
 

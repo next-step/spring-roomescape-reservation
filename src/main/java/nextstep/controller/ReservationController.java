@@ -1,65 +1,37 @@
 package nextstep.controller;
 
-import nextstep.domain.Reservation;
 import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ReservationFindAllResponse;
+import nextstep.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
-    private Long tmpId;
-    private final List<Reservation> reservations;
+    private final ReservationService reservationService;
 
-    public ReservationController() {
-        this.tmpId = 1L;
-        this.reservations = new ArrayList<>();
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody ReservationCreateRequest reservationCreateRequest) {
-        LocalDate date = LocalDate.parse(reservationCreateRequest.getDate());
-        LocalTime time = LocalTime.parse(reservationCreateRequest.getTime());
-        String name = reservationCreateRequest.getName();
-
-        checkReservationAvailable(date, time);
-
-        Reservation reservation = new Reservation(tmpId++, date, time, name);
-        reservations.add(reservation);
-
-        return ResponseEntity.created(URI.create("/reservations/" + reservation.getId())).build();
+        Long reservationId = reservationService.createReservation(reservationCreateRequest);
+        return ResponseEntity.created(URI.create("/reservations/" + reservationId)).build();
     }
 
     @GetMapping
     public ResponseEntity<ReservationFindAllResponse> findAll(@RequestParam String date) {
-        LocalDate parsedDate = LocalDate.parse(date);
-        List<Reservation> findReservations = reservations.stream()
-                .filter(it -> it.equalsDate(parsedDate))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(ReservationFindAllResponse.from(findReservations));
+        ReservationFindAllResponse reservationFindAllResponse = reservationService.findAllReservations(date);
+        return ResponseEntity.ok(reservationFindAllResponse);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> delete(@RequestParam String date, @RequestParam String time) {
-        LocalDate parsedDate = LocalDate.parse(date);
-        LocalTime parsedTime = LocalTime.parse(time);
-
-        reservations.removeIf(it -> it.equalsDateAndTime(parsedDate, parsedTime));
+        reservationService.deleteReservation(date, time);
         return ResponseEntity.noContent().build();
-    }
-
-    private void checkReservationAvailable(LocalDate date, LocalTime time) {
-        if (reservations.stream()
-                .anyMatch(it -> it.equalsDateAndTime(date, time))) {
-            throw new IllegalArgumentException("동시간대에 이미 예약이 존재합니다.");
-        }
     }
 }

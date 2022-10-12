@@ -17,6 +17,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         final ReservationDatabase reservations = new ReservationDatabase();
+        final ReservationService reservationService = new ReservationService(reservations);
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -40,13 +41,13 @@ public class Main {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
-                Reservation reservation = new Reservation(
+                ReservationCreateRequest createRequest = new ReservationCreateRequest(
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name
                 );
 
-                reservations.save(reservation);
+                reservationService.createReservation(createRequest);
                 System.out.println("예약이 등록되었습니다.");
             }
 
@@ -61,7 +62,8 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.deleteByDateAndTime(LocalDate.parse(date), LocalTime.parse(time + ":00"));
+                ReservationDeleteRequest deleteRequest = ReservationDeleteRequest.of(date, time);
+                reservationService.deleteReservation(deleteRequest);
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -76,10 +78,10 @@ public class Main {
 
                 String reservationFormat = "예약ID : %d, 예약 날짜 : %s, 예약 시간 : %s , 예약자 이름 : %s";
 
-                reservations.findByDate(LocalDate.parse(date)).stream()
+                reservationService.findReservationByDate(date).stream()
                         .map(it -> String.format(reservationFormat, it.getId(), it.getDate().toString(), it.getTime().toString(), it.getName()))
                         .toList()
-                        .forEach(System.out::println);
+                        .forEach(System.out::println);;
             }
 
             if (INPUT_4.equals(menuInput)) {

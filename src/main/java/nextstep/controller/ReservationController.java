@@ -47,6 +47,15 @@ public class ReservationController {
         return ResponseEntity.ok(ReservationFindAllResponse.from(findReservations));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam String date, @RequestParam String time) {
+        LocalDate parsedDate = LocalDate.parse(date);
+        LocalTime parsedTime = LocalTime.parse(time);
+
+        reservations.removeIf(it -> it.equalsDateAndTime(parsedDate, parsedTime));
+        return ResponseEntity.noContent().build();
+    }
+
     private void checkReservationAvailable(LocalDate date, LocalTime time) {
         if (reservations.stream()
                 .anyMatch(it -> it.equalsDateAndTime(date, time))) {

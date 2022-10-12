@@ -36,11 +36,11 @@ public class Reservation {
         return name;
     }
 
-    public Boolean equalsDate(LocalDate date) {
+    public boolean equalsDate(LocalDate date) {
         return this.date.equals(date);
     }
 
-    public Boolean equalsDateAndTime(LocalDate date, LocalTime time) {
+    public boolean equalsDateAndTime(LocalDate date, LocalTime time) {
         return this.date.equals(date) && this.time.equals(time);
     }
 }

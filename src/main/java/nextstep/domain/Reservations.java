@@ -33,7 +33,7 @@ public class Reservations {
         values.removeIf(it -> it.equalsDateAndTime(date, time));
     }
 
-    public Boolean existsByDateAndTime(LocalDate date, LocalTime time) {
+    public boolean existsByDateAndTime(LocalDate date, LocalTime time) {
         return values.stream()
                 .anyMatch(it -> it.equalsDateAndTime(date, time));
     }

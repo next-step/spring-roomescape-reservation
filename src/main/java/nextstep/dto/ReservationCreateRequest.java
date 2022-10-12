@@ -1,9 +1,9 @@
 package nextstep.dto;
 
 public class ReservationCreateRequest {
-    private String date;
-    private String time;
-    private String name;
+    private final String date;
+    private final String time;
+    private final String name;
 
     public ReservationCreateRequest(String date, String time, String name) {
         this.date = date;

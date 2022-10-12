@@ -2,6 +2,7 @@ package nextstep.controller;
 
 import nextstep.domain.Reservation;
 import nextstep.dto.ReservationCreateRequest;
+import nextstep.dto.ReservationFindAllResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/reservations")
@@ -34,6 +36,15 @@ public class ReservationController {
         reservations.add(reservation);
 
         return ResponseEntity.created(URI.create("/reservations/" + reservation.getId())).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<ReservationFindAllResponse> findAll(@RequestParam String date) {
+        LocalDate parsedDate = LocalDate.parse(date);
+        List<Reservation> findReservations = reservations.stream()
+                .filter(it -> it.equalsDate(parsedDate))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ReservationFindAllResponse.from(findReservations));
     }
 
     private void checkReservationAvailable(LocalDate date, LocalTime time) {

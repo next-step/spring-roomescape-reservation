@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,5 +30,15 @@ public class ReservationController {
                 .map(it -> new ReservationResponse(it.getId(), it.getDate(), it.getTime(), it.getName()))
                 .toList();
         return ResponseEntity.ok(findReservations);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteReservation(@RequestParam("date") String date, @RequestParam("time") String time) {
+        ReservationDeleteRequest request = ReservationDeleteRequest.of(date, time);
+        reservations.stream()
+                .filter(it -> Objects.equals(it.getDate(), request.getDate()) && Objects.equals(it.getTime(), request.getTime()))
+                .findFirst()
+                .ifPresent(reservations::remove);
+        return ResponseEntity.noContent().build();
     }
 }

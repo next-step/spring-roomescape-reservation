@@ -71,6 +71,20 @@ class ReservationControllerTest {
         assertThat(reservationFindAllResponse.getReservations()).hasSize(1);
     }
 
+    @Test
+    @DisplayName("DELETE 예약 삭제")
+    void deleteReservation() {
+        // given
+        ReservationCreateRequest request = new ReservationCreateRequest("2022-12-04", "12:04", "조아라");
+        createReservation(request);
+
+        // when
+        ExtractableResponse<Response> response = deleteReservation("2022-12-04", "12:04");
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
     private ExtractableResponse<Response> createReservation(ReservationCreateRequest request) {
         return RestAssured
                 .given().log().all()
@@ -86,6 +100,16 @@ class ReservationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .queryParam("date", date)
                 .when().get("/reservations")
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> deleteReservation(String date, String time) {
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .queryParam("date", date)
+                .queryParam("time", time)
+                .when().delete("/reservations")
                 .then().log().all().extract();
     }
 }

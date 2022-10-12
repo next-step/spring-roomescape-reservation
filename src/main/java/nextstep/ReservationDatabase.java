@@ -1,5 +1,7 @@
 package nextstep;
 
+import org.springframework.stereotype.Repository;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Repository
 public class ReservationDatabase {
 
     public final List<Reservation> reservations = new ArrayList<>();

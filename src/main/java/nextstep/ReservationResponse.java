@@ -19,6 +19,15 @@ public class ReservationResponse {
         this.name = name;
     }
 
+    public static ReservationResponse from(Reservation reservation) {
+        return new ReservationResponse(
+                reservation.getId(),
+                reservation.getDate(),
+                reservation.getTime(),
+                reservation.getName()
+        );
+    }
+
     public Long getId() {
         return id;
     }

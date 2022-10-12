@@ -23,6 +23,7 @@ public class Reservations {
         values.add(reservation);
         return reservation;
     }
+
     public List<Reservation> findAllByDate(LocalDate date) {
         return values.stream()
                 .filter(it -> it.equalsDate(date))

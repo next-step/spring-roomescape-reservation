@@ -1,26 +1,23 @@
 package nextstep.service;
 
 import nextstep.domain.Reservation;
+import nextstep.domain.Reservations;
 import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ReservationFindAllResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
     public static final String DUPLICATE_RESERVATION_MESSAGE = "동시간대에 이미 예약이 존재합니다.";
 
-    private Long tmpId;
-    private final List<Reservation> reservations;
+    private final Reservations reservations;
 
-    public ReservationService() {
-        this.tmpId = 1L;
-        this.reservations = new ArrayList<>();
+    public ReservationService(Reservations reservations) {
+        this.reservations = reservations;
     }
 
     public Long createReservation(ReservationCreateRequest reservationCreateRequest) {
@@ -30,14 +27,12 @@ public class ReservationService {
 
         checkReservationAvailable(date, time);
 
-        Reservation reservation = new Reservation(tmpId++, date, time, name);
-        reservations.add(reservation);
+        Reservation reservation = reservations.save(date, time, name);
         return reservation.getId();
     }
 
     private void checkReservationAvailable(LocalDate date, LocalTime time) {
-        if (reservations.stream()
-                .anyMatch(it -> it.equalsDateAndTime(date, time))) {
+        if (reservations.existsByDateAndTime(date, time)) {
             throw new IllegalArgumentException(DUPLICATE_RESERVATION_MESSAGE);
         }
     }
@@ -45,9 +40,7 @@ public class ReservationService {
     public ReservationFindAllResponse findAllReservations(String inputDate) {
         LocalDate date = parseDate(inputDate);
 
-        List<Reservation> findReservations = reservations.stream()
-                .filter(it -> it.equalsDate(date))
-                .collect(Collectors.toList());
+        List<Reservation> findReservations = reservations.findAllByDate(date);
         return ReservationFindAllResponse.from(findReservations);
     }
 
@@ -55,8 +48,9 @@ public class ReservationService {
         LocalDate date = parseDate(inputDate);
         LocalTime time = parseTime(inputTime);
 
-        reservations.removeIf(it -> it.equalsDateAndTime(date, time));
+        reservations.deleteByDateAndTime(date, time);
     }
+
     private LocalDate parseDate(String date) {
         return LocalDate.parse(date);
     }

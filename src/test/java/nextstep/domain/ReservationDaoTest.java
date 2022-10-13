@@ -90,6 +90,23 @@ class ReservationDaoTest {
         assertThat(reservationDao.findAllByDate(LocalDate.of(2022, 10, 1))).isEmpty();
     }
 
+    @DisplayName("날짜와 시간에 해당되는 예약이 있는지 확인")
+    @Test
+    void existsByDateTime() {
+        saveReservation(
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(1, 0),
+            "최현구"
+        );
+
+        boolean result = reservationDao.existsByDateTime(
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(1, 0)
+        );
+
+        assertThat(result).isTrue();
+    }
+
     private Reservation saveReservation(LocalDate date, LocalTime time, String name) {
         return reservationDao.save(new Reservation(date, time, name));
     }

@@ -61,3 +61,7 @@ DELETE /reservations?date=2022-08-11&time=13:00 HTTP/1.1
 ```http request
 HTTP/1.1 204 
 ```
+
+## 2단계 요구사항
+
+* [ ] 메모리 대신 데이터베이스 적용

@@ -73,6 +73,23 @@ class ReservationDaoTest {
         assertThat(reservations).containsExactly(최현구_10월1일_예약, 최현팔_10월1일_예약);
     }
 
+    @DisplayName("날짜와 시간에 해당되는 예약 제거")
+    @Test
+    void deleteByDateTime() {
+        saveReservation(
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(1, 0),
+            "최현구"
+        );
+
+        reservationDao.deleteByDateTime(
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(1, 0)
+        );
+
+        assertThat(reservationDao.findAllByDate(LocalDate.of(2022, 10, 1))).isEmpty();
+    }
+
     private Reservation saveReservation(LocalDate date, LocalTime time, String name) {
         return reservationDao.save(new Reservation(date, time, name));
     }

@@ -1,6 +1,7 @@
 package nextstep.domain;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,5 +40,10 @@ public class ReservationDao {
     public List<Reservation> findAllByDate(LocalDate date) {
         String sql = "SELECT * FROM reservation WHERE date = ?";
         return jdbcTemplate.query(sql, mapper, date);
+    }
+
+    public void deleteByDateTime(LocalDate date, LocalTime time) {
+        String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
+        jdbcTemplate.update(sql, date, time);
     }
 }

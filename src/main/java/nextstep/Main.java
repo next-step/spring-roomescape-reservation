@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import nextstep.domain.Reservation;
 
 public class Main {
     private static final String INPUT_1 = "1";
@@ -62,7 +63,7 @@ public class Main {
                 String time = scanner.nextLine();
 
                 reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
+                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalTime.parse(time)))
                         .findFirst()
                         .ifPresent(reservations::remove);
 

@@ -63,7 +63,7 @@ public class Main {
                 String time = scanner.nextLine();
 
                 reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
+                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalTime.parse(time)))
                         .findFirst()
                         .ifPresent(reservations::remove);
 

@@ -1,6 +1,7 @@
 package nextstep;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -19,6 +20,12 @@ import java.util.Optional;
 public class ReservationJdbcRepository implements ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
+    private final RowMapper<Reservation> rowMapper = ((rs, count) -> new Reservation(
+            rs.getLong("id"),
+            rs.getDate("date").toLocalDate(),
+            rs.getTime("time").toLocalTime(),
+            rs.getString("name"))
+    );
 
     public ReservationJdbcRepository(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
@@ -39,27 +46,23 @@ public class ReservationJdbcRepository implements ReservationRepository {
 
     @Override
     public boolean existsReservation(LocalDate date, LocalTime time) {
-        return false;
+        return this.findByDateAndTime(date, time).isPresent();
     }
 
     @Override
     public Optional<Reservation> findByDateAndTime(LocalDate date, LocalTime time) {
-        return Optional.empty();
+        String sql = "SELECT * FROM reservation WHERE date = ? AND time = ?";
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, date, time));
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public List<Reservation> findByDate(LocalDate date) {
         String sql = "SELECT * FROM reservation WHERE date = ?";
-        return jdbcTemplate.query(
-                sql,
-                ((rs, count) -> new Reservation(
-                        rs.getLong("id"),
-                        rs.getDate("date").toLocalDate(),
-                        rs.getTime("time").toLocalTime(),
-                        rs.getString("name"))
-                ),
-                date
-        );
+        return jdbcTemplate.query(sql, rowMapper, date);
     }
 
     @Override
@@ -69,6 +72,6 @@ public class ReservationJdbcRepository implements ReservationRepository {
 
     @Override
     public void clear() {
-
+        // "Not yet implemented"
     }
 }

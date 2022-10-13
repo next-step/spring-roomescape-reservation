@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ReservationControllerTest {
     @LocalServerPort
@@ -47,7 +49,6 @@ public class ReservationControllerTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        assertThat(response.header("Location")).isEqualTo("/reservations/1");
 
         ExtractableResponse<Response> reservationsResponse = 예약_조회_요청("2022-10-11");
         assertThat(reservationsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());

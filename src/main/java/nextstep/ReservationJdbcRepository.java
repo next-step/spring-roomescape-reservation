@@ -74,6 +74,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
 
     @Override
     public void clear() {
-        // "Not yet implemented"
+        String sql = "DELETE FROM reservation";
+        jdbcTemplate.update(sql);
     }
 }

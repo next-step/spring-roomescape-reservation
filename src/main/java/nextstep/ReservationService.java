@@ -29,6 +29,9 @@ public class ReservationService {
     }
 
     public void cancelReservation(ReservationDeleteRequest request) {
-        reservationRepository.deleteByDateAndTime(request.getDate(), request.getTime());
+        if (reservationRepository.deleteByDateAndTime(request.getDate(), request.getTime())) {
+            return;
+        }
+        throw new IllegalStateException("예약을 취소하는데 실패했습니다.");
     }
 }

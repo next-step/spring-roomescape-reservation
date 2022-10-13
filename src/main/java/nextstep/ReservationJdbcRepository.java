@@ -2,6 +2,7 @@ package nextstep;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Repository
 @Primary
-public class ReservationJdbcRepository implements ReservationRepository{
+public class ReservationJdbcRepository implements ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
@@ -48,7 +49,17 @@ public class ReservationJdbcRepository implements ReservationRepository{
 
     @Override
     public List<Reservation> findByDate(LocalDate date) {
-        return null;
+        String sql = "SELECT * FROM reservation WHERE date = ?";
+        return jdbcTemplate.query(
+                sql,
+                ((rs, count) -> new Reservation(
+                        rs.getLong("id"),
+                        rs.getDate("date").toLocalDate(),
+                        rs.getTime("time").toLocalTime(),
+                        rs.getString("name"))
+                ),
+                date
+        );
     }
 
     @Override

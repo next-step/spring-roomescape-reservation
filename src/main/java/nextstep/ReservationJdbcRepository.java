@@ -67,7 +67,9 @@ public class ReservationJdbcRepository implements ReservationRepository {
 
     @Override
     public boolean deleteByDateAndTime(LocalDate date, LocalTime time) {
-        return false;
+        String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
+        int deleteCount = jdbcTemplate.update(sql, date, time);
+        return deleteCount > 0;
     }
 
     @Override

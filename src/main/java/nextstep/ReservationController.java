@@ -28,9 +28,9 @@ public class ReservationController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteReservation(@RequestParam("date") String date, @RequestParam("time") String time) {
+    public ResponseEntity<Void> cancelReservation(@RequestParam("date") String date, @RequestParam("time") String time) {
         ReservationDeleteRequest request = ReservationDeleteRequest.of(date, time);
-        reservationService.deleteReservation(request);
+        reservationService.cancelReservation(request);
         return ResponseEntity.noContent().build();
     }
 }

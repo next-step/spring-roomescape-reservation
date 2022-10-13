@@ -28,7 +28,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public void deleteReservation(ReservationDeleteRequest request) {
+    public void cancelReservation(ReservationDeleteRequest request) {
         reservationDatabase.deleteByDateAndTime(request.getDate(), request.getTime());
     }
 }

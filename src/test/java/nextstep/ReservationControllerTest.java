@@ -77,6 +77,29 @@ public class ReservationControllerTest {
         assertThat(reservationsResponse.jsonPath().getList("name")).contains("박민영", "찰리");
     }
 
+    @DisplayName("예약 취소")
+    @Test
+    void cancelReservation() {
+        // given
+        예약_생성_요청(new ReservationCreateRequest(
+                LocalDate.parse("2022-10-11"),
+                LocalTime.parse("13:00:00"),
+                "박민영"
+        ));
+        예약_생성_요청(new ReservationCreateRequest(
+                LocalDate.parse("2022-10-11"),
+                LocalTime.parse("14:00:00"),
+                "찰리"
+        ));
+
+        // when
+        ExtractableResponse<Response> reservationsResponse = 예약_조회_요청("2022-10-11");
+
+        //
+        assertThat(reservationsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(reservationsResponse.jsonPath().getList("name")).contains("박민영", "찰리");
+    }
+
     public static ExtractableResponse<Response> 예약_생성_요청(ReservationCreateRequest request) {
         return given()
                 .body(request)
@@ -90,6 +113,15 @@ public class ReservationControllerTest {
                 .queryParam("date", date)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/reservations")
+                .then().log().all().extract();
+    }
+
+    public static ExtractableResponse<Response> 예약_삭제_요청(String date, String time) {
+        return given()
+                .queryParam("date", date)
+                .queryParam("time", time)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete("/reservations")
                 .then().log().all().extract();
     }
 }

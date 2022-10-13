@@ -2,11 +2,7 @@ package nextstep;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
     private static final String INPUT_1 = "1";
@@ -63,7 +59,7 @@ public class Main {
                 String time = scanner.nextLine();
 
                 ReservationDeleteRequest deleteRequest = ReservationDeleteRequest.of(date, time);
-                reservationService.deleteReservation(deleteRequest);
+                reservationService.cancelReservation(deleteRequest);
 
                 System.out.println("예약이 취소되었습니다.");
             }

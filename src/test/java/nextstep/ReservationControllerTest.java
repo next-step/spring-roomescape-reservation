@@ -70,11 +70,11 @@ public class ReservationControllerTest {
         ));
 
         // when
-        ExtractableResponse<Response> reservationsResponse = 예약_조회_요청("2022-10-11");
+        ExtractableResponse<Response> response = 예약_조회_요청("2022-10-11");
 
         //
-        assertThat(reservationsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(reservationsResponse.jsonPath().getList("name")).contains("박민영", "찰리");
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("name")).contains("박민영", "찰리");
     }
 
     @DisplayName("예약 취소")

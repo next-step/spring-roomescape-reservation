@@ -25,7 +25,7 @@ public class ReservationDatabase {
 
     public Optional<Reservation> findByDateAndTime(LocalDate date, LocalTime time) {
         return reservations.stream()
-                .filter(it -> Objects.equals(it.getDate(), date) && Objects.equals(it.getTime(), time))
+                .filter(it -> it.isSameDateTime(date, time))
                 .findAny();
     }
 

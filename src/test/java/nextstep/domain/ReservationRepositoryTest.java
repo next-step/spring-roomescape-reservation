@@ -13,10 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @SpringBootTest
-class ReservationDaoTest {
+class ReservationRepositoryTest {
 
     @Autowired
-    private ReservationDao reservationDao;
+    private ReservationRepository reservationRepository;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -41,7 +41,7 @@ class ReservationDaoTest {
             "최현구"
         );
 
-        Reservation saved = reservationDao.save(reservation);
+        Reservation saved = reservationRepository.save(reservation);
 
         assertThat(saved.getId()).isNotNull();
         assertThat(saved).usingRecursiveComparison()
@@ -68,7 +68,7 @@ class ReservationDaoTest {
             "최현칠"
         );
 
-        List<Reservation> reservations = reservationDao.findAllByDate(LocalDate.of(2022, 10, 1));
+        List<Reservation> reservations = reservationRepository.findAllByDate(LocalDate.of(2022, 10, 1));
 
         assertThat(reservations).containsExactly(최현구_10월1일_예약, 최현팔_10월1일_예약);
     }
@@ -82,12 +82,12 @@ class ReservationDaoTest {
             "최현구"
         );
 
-        reservationDao.deleteByDateTime(
+        reservationRepository.deleteByDateTime(
             LocalDate.of(2022, 10, 1),
             LocalTime.of(1, 0)
         );
 
-        assertThat(reservationDao.findAllByDate(LocalDate.of(2022, 10, 1))).isEmpty();
+        assertThat(reservationRepository.findAllByDate(LocalDate.of(2022, 10, 1))).isEmpty();
     }
 
     @DisplayName("날짜와 시간에 해당되는 예약이 있는지 확인")
@@ -99,7 +99,7 @@ class ReservationDaoTest {
             "최현구"
         );
 
-        boolean result = reservationDao.existsByDateTime(
+        boolean result = reservationRepository.existsByDateTime(
             LocalDate.of(2022, 10, 1),
             LocalTime.of(1, 0)
         );
@@ -108,6 +108,6 @@ class ReservationDaoTest {
     }
 
     private Reservation saveReservation(LocalDate date, LocalTime time, String name) {
-        return reservationDao.save(new Reservation(date, time, name));
+        return reservationRepository.save(new Reservation(date, time, name));
     }
 }

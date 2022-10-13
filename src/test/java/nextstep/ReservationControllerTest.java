@@ -54,6 +54,29 @@ public class ReservationControllerTest {
         assertThat(reservationsResponse.jsonPath().getList("name")).contains("박민영");
     }
 
+    @DisplayName("예약 조회")
+    @Test
+    void getReservation() {
+        // given
+        예약_생성_요청(new ReservationCreateRequest(
+                LocalDate.parse("2022-10-11"),
+                LocalTime.parse("13:00:00"),
+                "박민영"
+        ));
+        예약_생성_요청(new ReservationCreateRequest(
+                LocalDate.parse("2022-10-11"),
+                LocalTime.parse("14:00:00"),
+                "찰리"
+        ));
+
+        // when
+        ExtractableResponse<Response> reservationsResponse = 예약_조회_요청("2022-10-11");
+
+        //
+        assertThat(reservationsResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(reservationsResponse.jsonPath().getList("name")).contains("박민영", "찰리");
+    }
+
     public static ExtractableResponse<Response> 예약_생성_요청(ReservationCreateRequest request) {
         return given()
                 .body(request)

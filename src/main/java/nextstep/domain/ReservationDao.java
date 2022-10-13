@@ -46,4 +46,10 @@ public class ReservationDao {
         String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
         jdbcTemplate.update(sql, date, time);
     }
+
+    public boolean existsByDateTime(LocalDate date, LocalTime time) {
+        String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, date, time);
+        return count > 0;
+    }
 }

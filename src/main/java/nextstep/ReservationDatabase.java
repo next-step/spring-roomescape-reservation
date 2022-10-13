@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class ReservationDatabase {
 
+    private final AtomicLong incrementId = new AtomicLong(0);
     public final List<Reservation> reservations = new ArrayList<>();
 
     public Reservation save(Reservation reservation) {
+        reservation.setId(incrementId.incrementAndGet());
         reservations.add(reservation);
         return reservation;
     }

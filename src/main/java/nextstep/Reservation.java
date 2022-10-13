@@ -3,21 +3,23 @@ package nextstep;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Reservation {
 
-    private static final AtomicLong INCREMENT_COUNT = new AtomicLong();
-    private final Long id;
+    private Long id;
     private final LocalDate date;
     private final LocalTime time;
     private final String name;
 
-    public Reservation(LocalDate date, LocalTime time, String name) {
-        this.id = INCREMENT_COUNT.incrementAndGet();
+    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
+        this.id = id;
         this.date = date;
         this.time = time;
         this.name = name;
+    }
+
+    public static Reservation of(LocalDate date, LocalTime time, String name) {
+        return new Reservation(0L, date, time, name);
     }
 
     public boolean isSameDateTime(LocalDate date, LocalTime time) {
@@ -26,6 +28,10 @@ public class Reservation {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public LocalDate getDate() {

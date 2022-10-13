@@ -27,6 +27,6 @@ public class ReservationCreateRequest {
     }
 
     public Reservation toObject() {
-        return new Reservation(this.date, this.time, this.name);
+        return Reservation.of(this.date, this.time, this.name);
     }
 }

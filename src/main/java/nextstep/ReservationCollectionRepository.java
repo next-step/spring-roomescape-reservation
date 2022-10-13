@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ReservationDatabase {
+public class ReservationCollectionRepository implements ReservationRepository{
 
     private final AtomicLong incrementId = new AtomicLong(0);
     public final List<Reservation> reservations = new ArrayList<>();
@@ -45,5 +45,10 @@ public class ReservationDatabase {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void clear() {
+        this.reservations.clear();
     }
 }

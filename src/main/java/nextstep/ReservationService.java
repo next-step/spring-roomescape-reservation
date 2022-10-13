@@ -8,27 +8,27 @@ import java.util.List;
 @Service
 public class ReservationService {
 
-    private final ReservationDatabase reservationDatabase;
+    private final ReservationRepository reservationRepository;
 
-    public ReservationService(ReservationDatabase reservationDatabase) {
-        this.reservationDatabase = reservationDatabase;
+    public ReservationService(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
     }
 
     public ReservationResponse createReservation(ReservationCreateRequest request) {
-        if (reservationDatabase.existsReservation(request.getDate(), request.getTime())) {
+        if (reservationRepository.existsReservation(request.getDate(), request.getTime())) {
             throw new IllegalStateException("해당 일시에 이미 예약이 존재하여 예약이 불가능합니다.");
         }
-        Reservation reservation = reservationDatabase.save(request.toObject());
+        Reservation reservation = reservationRepository.save(request.toObject());
         return ReservationResponse.from(reservation);
     }
 
     public List<ReservationResponse> findReservationByDate(String date) {
-        return reservationDatabase.findByDate(LocalDate.parse(date)).stream()
+        return reservationRepository.findByDate(LocalDate.parse(date)).stream()
                 .map(ReservationResponse::from)
                 .toList();
     }
 
     public void cancelReservation(ReservationDeleteRequest request) {
-        reservationDatabase.deleteByDateAndTime(request.getDate(), request.getTime());
+        reservationRepository.deleteByDateAndTime(request.getDate(), request.getTime());
     }
 }

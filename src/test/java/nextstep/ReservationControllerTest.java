@@ -24,12 +24,12 @@ public class ReservationControllerTest {
     private int port;
 
     @Autowired
-    private ReservationDatabase reservationDatabase;
+    private ReservationRepository reservationRepository;
 
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-        reservationDatabase.reservations.clear();
+        reservationRepository.clear();
     }
 
     @DisplayName("예약 생성")

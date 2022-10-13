@@ -12,8 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        final ReservationDatabase reservations = new ReservationDatabase();
-        final ReservationService reservationService = new ReservationService(reservations);
+        final ReservationRepository reservationRepository = new ReservationCollectionRepository();
+        final ReservationService reservationService = new ReservationService(reservationRepository);
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");

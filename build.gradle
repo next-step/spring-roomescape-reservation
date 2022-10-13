@@ -13,6 +13,10 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // test
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

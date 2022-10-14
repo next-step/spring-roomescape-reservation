@@ -2,6 +2,7 @@ package nextstep.themes.dao;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
 import nextstep.themes.Themes;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -45,5 +46,16 @@ public class ThemesDao {
     public void removeById(Long id) {
         String sql = "DELETE FROM themes WHERE id=?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public Optional<Themes> findById(Long id) {
+        String sql = "SELECT * FROM themes WHERE id=?";
+        return jdbcTemplate.query(sql,
+                                  (rs, rowNum) -> new Themes(
+                                          rs.getLong("id"),
+                                          rs.getString("name"),
+                                          rs.getString("desc"),
+                                          rs.getLong("price")
+                                  ), id).stream().findAny();
     }
 }

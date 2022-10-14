@@ -20,6 +20,7 @@ public class Main implements CommandLineRunner {
     public void run(String... args) throws Exception {
         createReservationTable();
         createThemesTable();
+        createSchedulesTable();
     }
 
     private void createReservationTable() {
@@ -32,7 +33,14 @@ public class Main implements CommandLineRunner {
     private void createThemesTable() {
         String ddl = "create table themes (id bigint auto_increment primary key, name varchar(255), desc varchar(255), price bigint)";
 
-        jdbcTemplate.execute("DROP TABLE reservations IF EXISTS");
+        jdbcTemplate.execute("DROP TABLE themes IF EXISTS");
+        jdbcTemplate.execute(ddl);
+    }
+
+    private void createSchedulesTable() {
+        String ddl = "create table schedules (id bigint auto_increment primary key, themes_id bigint, date date, time time)";
+
+        jdbcTemplate.execute("DROP TABLE schedules IF EXISTS");
         jdbcTemplate.execute(ddl);
     }
 }

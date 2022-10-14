@@ -90,3 +90,92 @@ HTTP/1.1 204
   * [ ] 예약 등록을 하려는 날짜와 시간에 이미 등록되어있으면 예약을 등록을 실패한다. 
   * [ ] 예약이 없는 경우에도 빈 응답 값을 응답한다. 
   * [ ] 예약이 존재하지 않는 경우 예약 삭제를 실패한다.
+
+* 테마 생성
+```http request
+POST /themes HTTP/1.1
+content-type: application/json; charset=UTF-8
+
+{
+    "name": "테마이름",
+    "desc": "테마설명",
+    "price": 22000
+}
+```
+```http request
+HTTP/1.1 201 Created
+Location: /themes/1
+```
+
+* 테마 목록 조회
+```http request
+GET /themes HTTP/1.1
+```
+```http request
+HTTP/1.1 200 
+Content-Type: application/json
+
+[
+    {
+        "id": 1,
+        "name": "테마이름",
+        "desc": "테마설명",
+        "price": 22000
+    }
+]
+```
+
+* 테마 삭제
+```http request
+DELETE /themes/1 HTTP/1.1
+```
+```http request
+HTTP/1.1 204 
+```
+
+* 스케줄 생성
+```http request
+POST /schedules HTTP/1.1
+content-type: application/json; charset=UTF-8
+
+{
+    "themeId": 1,
+    "date": "2022-08-11",
+    "time": "13:00"
+}
+```
+```http request
+HTTP/1.1 201 Created
+Location: /schedules/1
+```
+
+* 스케줄 목록 조회
+```http request
+GET /schedules?themeId=1&date=2022-08-11 HTTP/1.1
+```
+```http request
+HTTP/1.1 200 
+Content-Type: application/json
+
+[
+    {
+        "id": 1,
+        "theme": {
+            "id": 1,
+            "name": "테마이름",
+            "desc": "테마설명",
+            "price": 22000
+        },
+        "date": "2022-08-11",
+        "time": "13:00:00"
+    }
+]
+```
+
+* 스케줄 삭제
+```http request
+DELETE /schedules/1 HTTP/1.1
+```
+```http request
+HTTP/1.1 204 
+```

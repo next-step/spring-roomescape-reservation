@@ -20,4 +20,24 @@ public class AcceptanceTest {
     void setUp() {
         RestAssured.port = port;
     }
+
+    protected void initReservationTable() {
+        jdbcTemplate.execute("DROP TABLE reservation IF EXISTS");
+        jdbcTemplate.execute("CREATE TABLE reservation("
+            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "date DATE NOT NULL,"
+            + "time TIME NOT NULL,"
+            + "name VARCHAR(100) NOT NULL"
+            + ")");
+    }
+
+    protected void initThemeTable() {
+        jdbcTemplate.execute("DROP TABLE theme IF EXISTS");
+        jdbcTemplate.execute("CREATE TABLE theme("
+            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "name VARCHAR(100) NOT NULL,"
+            + "description TEXT NOT NULL,"
+            + "price DECIMAL NOT NULL"
+            + ")");
+    }
 }

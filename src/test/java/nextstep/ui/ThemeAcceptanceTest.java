@@ -22,13 +22,7 @@ public class ThemeAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        jdbcTemplate.execute("DROP TABLE theme IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE theme("
-            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-            + "name VARCHAR(100) NOT NULL,"
-            + "description TEXT NOT NULL,"
-            + "price DECIMAL NOT NULL"
-            + ")");
+        initThemeTable();
     }
 
     @DisplayName("테마 생성 - POST /themes")

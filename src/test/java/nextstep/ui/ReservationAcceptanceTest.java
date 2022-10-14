@@ -23,13 +23,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     void setUp() {
         super.setUp();
-        jdbcTemplate.execute("DROP TABLE reservation IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE reservation("
-            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-            + "date DATE NOT NULL,"
-            + "time TIME NOT NULL,"
-            + "name VARCHAR(100) NOT NULL"
-            + ")");
+        initReservationTable();
     }
 
     @DisplayName("예약 생성 - POST /reservations")

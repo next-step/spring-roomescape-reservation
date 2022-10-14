@@ -17,11 +17,13 @@ public class Reservations {
         this.reservations = reservations;
     }
 
-    public void make(String date, String time, String name) {
+    public Integer make(String date, String time, String name) {
         findBy(date, time)
             .ifPresentOrElse(reservation -> {
                 throw new ReservationException(String.format("%s %s은 이미 예약되었습니다.", date, time));
             }, () -> reservations.add(new Reservation(date, time, name)));
+
+        return reservations.size();
     }
 
     public void cancel(String date, String time) {

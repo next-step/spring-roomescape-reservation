@@ -1,9 +1,10 @@
-package nextstep;
+package nextstep.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import nextstep.exception.ReservationException;
 
 public class Reservations {
 

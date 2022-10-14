@@ -2,6 +2,7 @@ package nextstep;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import nextstep.domain.Reservations;
 
 public class Main {
 

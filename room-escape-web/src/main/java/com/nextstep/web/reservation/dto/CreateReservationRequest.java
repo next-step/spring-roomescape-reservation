@@ -18,4 +18,10 @@ public class CreateReservationRequest {
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime time;
     private String name;
+
+    public CreateReservationRequest(LocalDate date, LocalTime time, String name) {
+        this.date = date;
+        this.time = time;
+        this.name = name;
+    }
 }

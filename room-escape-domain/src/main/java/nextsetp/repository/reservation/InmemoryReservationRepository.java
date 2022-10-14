@@ -17,7 +17,7 @@ public class InmemoryReservationRepository implements ReservationRepository {
     @Override
     public Long save(Reservation reservation) {
         reservations.add(reservation);
-        return (long) (reservations.size() - 1);
+        return (long) (reservations.size());
     }
 
     @Override

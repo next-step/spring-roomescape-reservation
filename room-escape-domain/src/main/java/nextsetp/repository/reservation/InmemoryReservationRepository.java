@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InmemoryReservationRepository implements ReservationRepository {
@@ -17,6 +18,14 @@ public class InmemoryReservationRepository implements ReservationRepository {
     public Long save(Reservation reservation) {
         reservations.add(reservation);
         return (long) (reservations.size() - 1);
+    }
+
+    @Override
+    public Optional<Reservation> findBy(String date, String time) {
+        return reservations.stream()
+                .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date))
+                        && Objects.equals(it.getTime(), LocalTime.parse(time)))
+                .findFirst();
     }
 
     @Override

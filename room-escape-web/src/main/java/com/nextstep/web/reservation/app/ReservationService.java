@@ -4,6 +4,7 @@ import com.nextstep.web.reservation.dto.CreateReservationRequest;
 import com.nextstep.web.reservation.dto.ReservationResponse;
 import nextsetp.domain.reservation.Reservation;
 import nextsetp.domain.reservation.ReservationRepository;
+import nextsetp.domain.reservation.exception.DuplicationReservationException;
 import nextsetp.repository.reservation.InmemoryReservationRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,10 @@ public class ReservationService {
     }
 
     public Long save(CreateReservationRequest request) {
+        reservationRepository.findBy(request.getDate().toString(), request.getTime().toString()).ifPresent((reservation -> {
+            throw new DuplicationReservationException();
+        }));
+
         Reservation reservation = new Reservation(request.getDate(), request.getTime(), request.getName());
         return reservationRepository.save(reservation);
     }

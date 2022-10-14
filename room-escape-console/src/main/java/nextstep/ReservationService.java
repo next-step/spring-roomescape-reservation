@@ -2,6 +2,7 @@ package nextstep;
 
 import nextsetp.domain.reservation.Reservation;
 import nextsetp.domain.reservation.ReservationRepository;
+import nextsetp.domain.reservation.exception.DuplicationReservationException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,6 +16,10 @@ public class ReservationService {
     }
 
     public void save(String date, String time, String name) {
+        reservationRepository.findBy(date, time).ifPresent((reservation -> {
+            throw new DuplicationReservationException();
+        }));
+
         Reservation reservation = new Reservation(
                 LocalDate.parse(date),
                 LocalTime.parse(time + ":00"),

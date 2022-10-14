@@ -31,22 +31,26 @@ public class ReservationDao implements ReservationRepository {
         );
     }
 
+    @Override
     public Reservation save(Reservation reservation) {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(reservation);
         Long id = insertReservation.executeAndReturnKey(parameters).longValue();
         return new Reservation(id, reservation);
     }
 
+    @Override
     public List<Reservation> findAllByDate(LocalDate date) {
         String sql = "SELECT * FROM reservation WHERE date = ?";
         return jdbcTemplate.query(sql, mapper, date);
     }
 
+    @Override
     public int deleteByDateTime(LocalDate date, LocalTime time) {
         String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
         return jdbcTemplate.update(sql, date, time);
     }
 
+    @Override
     public boolean existsByDateTime(LocalDate date, LocalTime time) {
         String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, date, time);

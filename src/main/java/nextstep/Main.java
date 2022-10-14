@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import nextstep.reservation.domain.Reservation;
 
 public class Main {
     private static final String INPUT_1 = "1";

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ReservationAdvice {
+public class RoomEscapeAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handle(RuntimeException exception) {

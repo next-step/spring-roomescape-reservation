@@ -1,0 +1,19 @@
+### 예약
+POST /reservations HTTP/1.1
+content-type: application/json; charset=UTF-8
+host: localhost:8080
+
+{
+  "date": "2022-08-11",
+  "time": "13:00",
+  "name": "name"
+}
+
+### 예약 조회
+GET /reservations?date=2022-08-11 HTTP/1.1
+host: localhost:8080
+
+### 예약 삭제
+DELETE /reservations?date=2022-08-11&time=13:00 HTTP/1.1
+host: localhost:8080
+

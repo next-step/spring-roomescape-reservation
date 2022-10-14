@@ -1,92 +1,46 @@
 package nextstep;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class Main {
-    private static final String INPUT_1 = "1";
-    private static final String INPUT_2 = "2";
-    private static final String INPUT_3 = "3";
-    private static final String INPUT_4 = "4";
+@SpringBootApplication
+public class Main implements CommandLineRunner {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        List<Reservation> reservations = new ArrayList<>();
+        SpringApplication.run(Main.class, args);
+    }
 
-        while (true) {
-            System.out.println("메뉴를 선택하세요.");
-            System.out.println("1: 예약");
-            System.out.println("2: 예약 취소");
-            System.out.println("3: 예약 조회");
-            System.out.println("4: 종료");
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-            String menuInput = scanner.nextLine();
-            if (INPUT_1.equals(menuInput)) {
+    @Override
+    public void run(String... args) throws Exception {
+        createReservationTable();
+        createThemesTable();
+        createSchedulesTable();
+    }
 
-                System.out.println("예약 정보를 입력하세요.");
-                System.out.println();
+    private void createReservationTable() {
+        String ddl = "create table reservations (id bigint auto_increment primary key, date date, name varchar(255), time time)";
 
-                System.out.println("날짜 (ex.2022-08-11)");
-                String date = scanner.nextLine();
+        jdbcTemplate.execute("DROP TABLE reservations IF EXISTS");
+        jdbcTemplate.execute(ddl);
+    }
 
-                System.out.println("시간 (ex.13:00)");
-                String time = scanner.nextLine();
+    private void createThemesTable() {
+        String ddl = "create table themes (id bigint auto_increment primary key, name varchar(255), desc varchar(255), price bigint)";
 
-                System.out.println("예약자 이름");
-                String name = scanner.nextLine();
+        jdbcTemplate.execute("DROP TABLE themes IF EXISTS");
+        jdbcTemplate.execute(ddl);
+    }
 
-                Reservation reservation = new Reservation(
-                        LocalDate.parse(date),
-                        LocalTime.parse(time + ":00"),
-                        name
-                );
+    private void createSchedulesTable() {
+        String ddl = "create table schedules (id bigint auto_increment primary key, themes_id bigint, date date, time time)";
 
-                reservations.add(reservation);
-                System.out.println("예약이 등록되었습니다.");
-            }
-
-            if (INPUT_2.equals(menuInput)) {
-
-                System.out.println("취소할 예약 정보를 입력하세요.");
-                System.out.println();
-
-                System.out.println("날짜 (ex.2022-08-11)");
-                String date = scanner.nextLine();
-
-                System.out.println("시간 (ex.13:00)");
-                String time = scanner.nextLine();
-
-                reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
-                        .findFirst()
-                        .ifPresent(reservations::remove);
-
-                System.out.println("예약이 취소되었습니다.");
-            }
-
-            if (INPUT_3.equals(menuInput)) {
-
-                System.out.println("예약 조회 할 날짜를 입력하세요.");
-                System.out.println();
-
-                System.out.println("날짜 (ex.2022-08-11)");
-                String date = scanner.nextLine();
-
-                reservations.stream()
-                        .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                        .collect(Collectors.toList())
-                        .forEach(System.out::println);
-            }
-
-            if (INPUT_4.equals(menuInput)) {
-
-                break;
-            }
-        }
+        jdbcTemplate.execute("DROP TABLE schedules IF EXISTS");
+        jdbcTemplate.execute(ddl);
     }
 }

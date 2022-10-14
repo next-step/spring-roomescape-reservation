@@ -1,0 +1,19 @@
+### 테마 등록
+POST /themes HTTP/1.1
+content-type: application/json; charset=UTF-8
+host: localhost:8080
+
+{
+  "name": "테마이름",
+  "desc": "테마설명",
+  "price": 22000
+}
+
+
+### 테마 조회
+GET /themes HTTP/1.1
+host: localhost:8080
+
+### 테마 삭제
+DELETE /themes/1 HTTP/1.1
+host: localhost:8080

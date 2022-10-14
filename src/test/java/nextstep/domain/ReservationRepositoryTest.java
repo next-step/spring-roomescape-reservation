@@ -73,6 +73,14 @@ class ReservationRepositoryTest {
         assertThat(reservations).containsExactly(최현구_10월1일_예약, 최현팔_10월1일_예약);
     }
 
+    @DisplayName("날짜에 해당하는 모든 예약 조회할 때 저장되어 있는 예약이 없어도 빈 값이 조회된다.")
+    @Test
+    void findAllByDateEmpty() {
+        List<Reservation> reservations = reservationRepository.findAllByDate(LocalDate.of(2022, 10, 1));
+
+        assertThat(reservations).isEmpty();
+    }
+
     @DisplayName("날짜와 시간에 해당되는 예약 제거")
     @Test
     void deleteByDateTime() {
@@ -82,11 +90,12 @@ class ReservationRepositoryTest {
             "최현구"
         );
 
-        reservationRepository.deleteByDateTime(
+        int count = reservationRepository.deleteByDateTime(
             LocalDate.of(2022, 10, 1),
             LocalTime.of(1, 0)
         );
 
+        assertThat(count).isEqualTo(1);
         assertThat(reservationRepository.findAllByDate(LocalDate.of(2022, 10, 1))).isEmpty();
     }
 

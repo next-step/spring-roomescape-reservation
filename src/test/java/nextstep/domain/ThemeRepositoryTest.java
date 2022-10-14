@@ -8,27 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-@SpringBootTest
-public class ThemeRepositoryTest {
+public class ThemeRepositoryTest extends RepositoryTest {
 
     @Autowired
     private ThemeRepository themeRepository;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
     @BeforeEach
     void setUp() {
-        jdbcTemplate.execute("DROP TABLE theme IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE theme("
-            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-            + "name VARCHAR(100) NOT NULL,"
-            + "description TEXT NOT NULL,"
-            + "price DECIMAL NOT NULL"
-            + ")");
+        initThemeTable();
     }
 
     @DisplayName("테마 저장")

@@ -15,11 +15,31 @@ public class Schedule {
         this(null, themeId, date, time);
     }
 
+    public Schedule(Long id, Schedule schedule) {
+        this(id, schedule.getThemeId(), schedule.getDate(), schedule.getTime());
+    }
+
     public Schedule(Long id, Long themeId, LocalDate date, LocalTime time) {
         this.id = id;
         this.themeId = themeId;
         this.date = date;
         this.time = time;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getThemeId() {
+        return themeId;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
     }
 
     @Override

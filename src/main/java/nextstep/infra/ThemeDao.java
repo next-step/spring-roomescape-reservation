@@ -15,12 +15,12 @@ import org.springframework.stereotype.Repository;
 public class ThemeDao implements ThemeRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert insertReservation;
+    private final SimpleJdbcInsert insertTheme;
     private final RowMapper<Theme> mapper;
 
     public ThemeDao(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
-        this.insertReservation = new SimpleJdbcInsert(dataSource)
+        this.insertTheme = new SimpleJdbcInsert(dataSource)
             .withTableName("theme")
             .usingGeneratedKeyColumns("id");
         this.mapper = (resultSet, rowNum) -> new Theme(
@@ -34,7 +34,7 @@ public class ThemeDao implements ThemeRepository {
     @Override
     public Theme save(Theme theme) {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(theme);
-        Long id = insertReservation.executeAndReturnKey(parameters).longValue();
+        Long id = insertTheme.executeAndReturnKey(parameters).longValue();
         return new Theme(id, theme);
     }
 

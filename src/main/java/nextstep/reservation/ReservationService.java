@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.reservation;
 
 import org.springframework.stereotype.Service;
 

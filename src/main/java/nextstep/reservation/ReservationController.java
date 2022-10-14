@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.reservation;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

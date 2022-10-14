@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.reservation;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;

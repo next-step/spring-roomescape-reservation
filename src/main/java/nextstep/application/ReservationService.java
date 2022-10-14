@@ -41,6 +41,9 @@ public class ReservationService {
     }
 
     public void removeByDateTime(LocalDate date, LocalTime time) {
-        reservationRepository.deleteByDateTime(date, time);
+        int deleteCount = reservationRepository.deleteByDateTime(date, time);
+        if (deleteCount == 0) {
+            throw new IllegalArgumentException("시간과 날짜에 해당하는 예약정보가 없습니다.");
+        }
     }
 }

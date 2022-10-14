@@ -10,7 +10,7 @@ public interface ReservationRepository {
 
     List<Reservation> findAllByDate(LocalDate date);
 
-    void deleteByDateTime(LocalDate date, LocalTime time);
+    int deleteByDateTime(LocalDate date, LocalTime time);
 
     boolean existsByDateTime(LocalDate date, LocalTime time);
 }

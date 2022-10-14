@@ -42,9 +42,9 @@ public class ReservationDao implements ReservationRepository {
         return jdbcTemplate.query(sql, mapper, date);
     }
 
-    public void deleteByDateTime(LocalDate date, LocalTime time) {
+    public int deleteByDateTime(LocalDate date, LocalTime time) {
         String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
-        jdbcTemplate.update(sql, date, time);
+        return jdbcTemplate.update(sql, date, time);
     }
 
     public boolean existsByDateTime(LocalDate date, LocalTime time) {

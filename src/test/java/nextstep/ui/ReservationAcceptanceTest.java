@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ReservationControllerTest {
+public class ReservationAcceptanceTest {
 
     @LocalServerPort
     private int port;
@@ -94,6 +94,19 @@ public class ReservationControllerTest {
             .when().delete("/reservations")
             .then().log().all()
             .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @DisplayName("예약 삭제시 해당되는 예약이 없으면 삭제를 실패한다. - DELETE /reservations?date={date}&time={time}")
+    @Test
+    void deleteByDateTimeException() {
+        RestAssured.given().log().all()
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("date", "2022-10-20")
+            .queryParam("time", "13:00")
+            .when().delete("/reservations")
+            .then().log().all()
+            .statusCode(BAD_REQUEST.value())
+            .body(is("시간과 날짜에 해당하는 예약정보가 없습니다."));
     }
 
     private void 예약_생성(LocalDate date, LocalTime time, String name) {

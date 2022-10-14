@@ -36,7 +36,7 @@ public class Main {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
-                reservations.make(new Reservation(date, time, name));
+                reservations.make(date, time, name);
 
                 System.out.println("예약이 등록되었습니다.");
             }

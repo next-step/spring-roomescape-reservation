@@ -2,6 +2,7 @@ package nextstep;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Reservations {
@@ -15,15 +16,22 @@ public class Reservations {
         this.reservations = reservations;
     }
 
-    public void make(Reservation reservation) {
-        reservations.add(reservation);
+    public void make(String date, String time, String name) {
+        findBy(date, time)
+            .ifPresentOrElse(reservation -> {
+                throw new ReservationException(String.format("%s %s은 이미 예약되었습니다.", date, time));
+            }, () -> reservations.add(new Reservation(date, time, name)));
     }
 
     public void cancel(String date, String time) {
-        reservations.stream()
-            .filter(reservation -> reservation.isSame(date, time))
-            .findFirst()
+        findBy(date, time)
             .ifPresent(reservations::remove);
+    }
+
+    private Optional<Reservation> findBy(String date, String time) {
+        return reservations.stream()
+            .filter(reservation -> reservation.isSame(date, time))
+            .findFirst();
     }
 
     public List<Reservation> check(String date) {

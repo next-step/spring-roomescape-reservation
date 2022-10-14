@@ -27,7 +27,7 @@ public class ReservationServiceTest {
             + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
             + "date DATE NOT NULL,"
             + "time TIME NOT NULL,"
-            + "name VARCHAR(100)"
+            + "name VARCHAR(100) NOT NULL"
             + ")");
     }
 

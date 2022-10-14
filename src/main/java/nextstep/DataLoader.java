@@ -21,5 +21,12 @@ public class DataLoader implements CommandLineRunner {
             + "time TIME NOT NULL,"
             + "name VARCHAR(100)"
             + ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS theme("
+            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "name VARCHAR(100) NOT NULL,"
+            + "description TEXT NOT NULL,"
+            + "price DECIMAL NOT NULL"
+            + ")");
     }
 }

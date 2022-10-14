@@ -14,20 +14,22 @@ import nextstep.ui.response.ReservationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ReservationAcceptanceTest {
+public class ReservationAcceptanceTest extends AcceptanceTest {
 
-    @LocalServerPort
-    private int port;
-
+    @Override
     @BeforeEach
     void setUp() {
-        RestAssured.port = port;
+        super.setUp();
+        jdbcTemplate.execute("DROP TABLE reservation IF EXISTS");
+        jdbcTemplate.execute("CREATE TABLE reservation("
+            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "date DATE NOT NULL,"
+            + "time TIME NOT NULL,"
+            + "name VARCHAR(100) NOT NULL"
+            + ")");
     }
 
     @DisplayName("예약 생성 - POST /reservations")

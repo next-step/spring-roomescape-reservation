@@ -9,6 +9,10 @@ public class Reservation {
     private final LocalTime time;
     private final String name;
 
+    public Reservation(Long id, Reservation reservation) {
+        this(id, reservation.getDate(), reservation.getTime(), reservation.getName());
+    }
+
     public Reservation(LocalDate date, LocalTime time, String name) {
         this(null, date, time, name);
     }

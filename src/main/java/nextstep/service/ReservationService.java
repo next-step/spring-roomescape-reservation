@@ -1,7 +1,7 @@
 package nextstep.service;
 
 import nextstep.domain.Reservation;
-import nextstep.domain.Reservations;
+import nextstep.domain.ReservationRepository;
 import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ReservationFindAllResponse;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,9 @@ import java.util.List;
 public class ReservationService {
     public static final String DUPLICATE_RESERVATION_MESSAGE = "동시간대에 이미 예약이 존재합니다.";
 
-    private final Reservations reservations;
+    private final ReservationRepository reservations;
 
-    public ReservationService(Reservations reservations) {
+    public ReservationService(ReservationRepository reservations) {
         this.reservations = reservations;
     }
 
@@ -26,8 +26,7 @@ public class ReservationService {
         String name = reservationCreateRequest.getName();
 
         checkReservationAvailable(date, time);
-
-        Reservation reservation = reservations.save(date, time, name);
+        Reservation reservation = reservations.save(new Reservation(date, time, name));
         return reservation.getId();
     }
 

@@ -1,6 +1,6 @@
 package nextstep.domain;
 
-import static nextstep.domain.Fixtures.themePrice;
+import static nextstep.Fixtures.themePrice;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;

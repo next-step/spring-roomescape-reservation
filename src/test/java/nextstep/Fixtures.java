@@ -1,6 +1,7 @@
-package nextstep.domain;
+package nextstep;
 
 import java.math.BigDecimal;
+import nextstep.domain.ThemePrice;
 
 public class Fixtures {
 

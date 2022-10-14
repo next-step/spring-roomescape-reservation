@@ -76,14 +76,26 @@ public class ReservationControllerTest extends SpringControllerTest {
     }
 
     public static ExtractableResponse<Response> 예약_생성_요청(ReservationCreateRequest request) {
-        return given().body(request).contentType(MediaType.APPLICATION_JSON_VALUE).when().post("/reservations").then().log().all().extract();
+        return given()
+                .body(request).contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post("/reservations")
+                .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 예약_조회_요청(String date) {
-        return given().queryParam("date", date).contentType(MediaType.APPLICATION_JSON_VALUE).when().get("/reservations").then().log().all().extract();
+        return given()
+                .queryParam("date", date)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/reservations")
+                .then().log().all().extract();
     }
 
     public static ExtractableResponse<Response> 예약_삭제_요청(String date, String time) {
-        return given().queryParam("date", date).queryParam("time", time).contentType(MediaType.APPLICATION_JSON_VALUE).when().delete("/reservations").then().log().all().extract();
+        return given()
+                .queryParam("date", date)
+                .queryParam("time", time)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete("/reservations")
+                .then().log().all().extract();
     }
 }

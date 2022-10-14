@@ -40,4 +40,14 @@ public class AcceptanceTest {
             + "price DECIMAL NOT NULL"
             + ")");
     }
+
+    protected void initScheduleTable() {
+        jdbcTemplate.execute("DROP TABLE schedule IF EXISTS");
+        jdbcTemplate.execute("CREATE TABLE schedule("
+            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "theme_id BIGINT NOT NULL,"
+            + "date DATE NOT NULL,"
+            + "time TIME NOT NULL"
+            + ")");
+    }
 }

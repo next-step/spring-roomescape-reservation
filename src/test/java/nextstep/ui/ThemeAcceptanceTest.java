@@ -56,11 +56,11 @@ public class ThemeAcceptanceTest extends AcceptanceTest {
     @DisplayName("테마 삭제 - DELETE /themes/{themeId}")
     @Test
     void deleteById() {
-        String themeId = 테마_생성("비밀의방", "비밀의방이에욥!", BigDecimal.valueOf(50_000));
+        Long themeId = 테마_생성("비밀의방", "비밀의방이에욥!", BigDecimal.valueOf(50_000));
 
         RestAssured.given().log().all()
             .accept(MediaType.APPLICATION_JSON_VALUE)
-            .when().delete(themeId)
+            .when().delete("/themes/" + themeId)
             .then().log().all()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
@@ -76,16 +76,17 @@ public class ThemeAcceptanceTest extends AcceptanceTest {
             .body(is("ID 에 해당하는 테마가 없습니다."));
     }
 
-    private String 테마_생성(String name, String desc, BigDecimal price) {
+    private Long 테마_생성(String name, String desc, BigDecimal price) {
         ThemeCreateRequest request = themeCreateRequest(name, desc, price);
 
-        return RestAssured.given().log().all()
+        return Long.valueOf(RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(request)
             .when().post("/themes")
             .then().log().all()
             .statusCode(CREATED.value())
-            .extract().header("Location");
+            .extract().header("Location")
+            .split("/themes/")[1]);
     }
 
     private ThemeCreateRequest themeCreateRequest() {

@@ -39,7 +39,7 @@ public class ReservationController {
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time
     ) {
-        reservationService.removeByDateTime(date, time);
+        reservationService.deleteByDateTime(date, time);
         return ResponseEntity.noContent().build();
     }
 }

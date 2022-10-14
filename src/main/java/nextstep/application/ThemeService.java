@@ -26,8 +26,8 @@ public class ThemeService {
     }
 
     public void deleteById(Long themeId) {
-        int count = themeRepository.deleteById(themeId);
-        if (count == 0) {
+        int deletedCount = themeRepository.deleteById(themeId);
+        if (deletedCount == 0) {
             throw new IllegalArgumentException("ID 에 해당하는 테마가 없습니다.");
         }
     }

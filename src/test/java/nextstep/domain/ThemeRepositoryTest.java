@@ -32,6 +32,16 @@ public class ThemeRepositoryTest extends RepositoryTest {
             .isEqualTo(theme);
     }
 
+    @DisplayName("ID 를 통한 테마 조회")
+    @Test
+    void findById() {
+        Theme 비밀의방 = saveTheme("비밀의 방", "탈출해라", 50_000);
+
+        Theme found = themeRepository.findById(비밀의방.getId());
+
+        assertThat(found).isEqualTo(비밀의방);
+    }
+
     @DisplayName("모든 테마 조회")
     @Test
     void findAll() {

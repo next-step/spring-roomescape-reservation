@@ -39,6 +39,12 @@ public class ThemeDao implements ThemeRepository {
     }
 
     @Override
+    public Theme findById(Long id) {
+        String sql = "SELECT * FROM theme WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, mapper, id);
+    }
+
+    @Override
     public List<Theme> findAll() {
         String sql = "SELECT * FROM theme";
         return jdbcTemplate.query(sql, mapper);

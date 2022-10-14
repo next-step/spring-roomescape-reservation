@@ -40,9 +40,9 @@ public class ReservationService {
         return ReservationResponse.of(reservationRepository.findAllByDate(date));
     }
 
-    public void removeByDateTime(LocalDate date, LocalTime time) {
-        int deleteCount = reservationRepository.deleteByDateTime(date, time);
-        if (deleteCount == 0) {
+    public void deleteByDateTime(LocalDate date, LocalTime time) {
+        int deletedCount = reservationRepository.deleteByDateTime(date, time);
+        if (deletedCount == 0) {
             throw new IllegalArgumentException("시간과 날짜에 해당하는 예약정보가 없습니다.");
         }
     }

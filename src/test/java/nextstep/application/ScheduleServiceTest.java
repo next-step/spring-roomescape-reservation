@@ -7,21 +7,22 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-class ThemeServiceTest extends ServiceTest {
+class ScheduleServiceTest extends ServiceTest {
 
     @Autowired
-    private ThemeService themeService;
+    private ScheduleService scheduleService;
 
     @BeforeEach
     void setUp() {
+        initScheduleTable();
         initThemeTable();
     }
 
-    @DisplayName("삭제하려는 테마가 존재하지 않을 경우 예외가 발생한다.")
+    @DisplayName("스케줄을 삭제하려 할 때 ID 에 해당하는 스케줄이 없을 경우 예외가 발생한다.")
     @Test
-    void themeDeleteException() {
-        assertThatThrownBy(() -> themeService.deleteById(1L))
+    void scheduleDeleteException() {
+        assertThatThrownBy(() -> scheduleService.deleteById(1L))
             .isExactlyInstanceOf(IllegalArgumentException.class)
-            .hasMessage("ID 에 해당하는 테마가 없습니다.");
+            .hasMessage("ID 에 해당하는 스케줄이 없습니다.");
     }
 }

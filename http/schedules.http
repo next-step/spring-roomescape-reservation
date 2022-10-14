@@ -12,3 +12,7 @@ host: localhost:8080
 ### 스케쥴 조회
 GET /schedules?themeId=1&date=2022-08-11 HTTP/1.1
 host: localhost:8080
+
+### 스케쥴 제거
+DELETE /schedules/2 HTTP/1.1
+host: localhost:8080

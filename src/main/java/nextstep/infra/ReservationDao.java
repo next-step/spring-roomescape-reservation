@@ -1,9 +1,11 @@
-package nextstep.domain;
+package nextstep.infra;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import javax.sql.DataSource;
+import nextstep.domain.Reservation;
+import nextstep.domain.ReservationRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;

@@ -1,7 +1,9 @@
-package nextstep.domain;
+package nextstep.infra;
 
 import java.util.List;
 import javax.sql.DataSource;
+import nextstep.domain.Theme;
+import nextstep.domain.ThemeRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;

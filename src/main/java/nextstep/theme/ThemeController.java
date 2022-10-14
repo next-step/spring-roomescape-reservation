@@ -12,8 +12,15 @@ import java.net.URI;
 @RequestMapping("/themes")
 public class ThemeController {
 
+    private final ThemeService themeService;
+
+    public ThemeController(ThemeService themeService) {
+        this.themeService = themeService;
+    }
+
     @PostMapping
     public ResponseEntity<Void> createTheme(@RequestBody ThemeCreateRequest request) {
-        return ResponseEntity.created(URI.create("/themes/1")).build();
+        Theme theme = themeService.createTheme(request);
+        return ResponseEntity.created(URI.create("/themes/" + theme.getId())).build();
     }
 }

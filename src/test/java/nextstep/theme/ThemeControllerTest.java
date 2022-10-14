@@ -29,7 +29,11 @@ public class ThemeControllerTest extends SpringControllerTest {
     @Test
     void createTheme() {
         // given
-        ThemeCreateRequest request = new ThemeCreateRequest("404호의 비밀", "분명 있어야할 곳에 아무것도 없었다.. 남겨진 쪽지엔 404 NOT FOUND 만이 남아있는데...", 22000);
+        ThemeCreateRequest request = new ThemeCreateRequest(
+                "404호의 비밀",
+                "분명 있어야할 곳에 아무것도 없었다.. 남겨진 쪽지엔 404 NOT FOUND 만이 남아있는데...",
+                22000
+        );
 
         // when
         ExtractableResponse<Response> response = 테마_생성_요청(request);

@@ -47,6 +47,25 @@ public class ScheduleAcceptanceTest extends AcceptanceTest {
             .statusCode(CREATED.value());
     }
 
+    @DisplayName("스케줄 생성시 해당 테마에 날짜와 시간이 똑같은 스케줄이 이미 있는 경우 예약을 생성할 수 없다. - POST /schedules")
+    @Test
+    void createException() {
+        Long themeId = 테마_생성();
+        LocalDate date = LocalDate.of(2022, 10, 1);
+        LocalTime time = LocalTime.of(10, 0);
+        스케줄_생성(themeId, date, time);
+
+        ScheduleCreateRequest request = scheduleCreateRequest(themeId, date, time);
+
+        RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .when().post("/schedules")
+            .then().log().all()
+            .statusCode(BAD_REQUEST.value())
+            .body(is("테마에 날짜와 시간이 똑같은 스케줄이 이미 존재합니다."));
+    }
+
     @DisplayName("테마와 날짜에 따른 스케줄 목록 조회 - GET /schedules?themeId={themeId}&date={date}")
     @Test
     void getSchedulesByThemeIdAndDate() {

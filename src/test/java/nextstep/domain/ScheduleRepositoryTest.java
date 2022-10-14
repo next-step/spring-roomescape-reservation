@@ -45,6 +45,21 @@ public class ScheduleRepositoryTest extends RepositoryTest {
             .isEqualTo(schedule);
     }
 
+    @DisplayName("ID 를 통한 스케줄 조회")
+    @Test
+    void findById() {
+        Theme theme = saveTheme();
+        Schedule saved = saveSchedule(
+            theme.getId(),
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+
+        Schedule schedule = scheduleRepository.findById(saved.getId());
+
+        assertThat(schedule).isEqualTo(saved);
+    }
+
     @DisplayName("테마 ID 와 날짜에 해당되는 모든 스케줄 조회")
     @Test
     void findAllByThemeIdAndDate() {
@@ -80,6 +95,43 @@ public class ScheduleRepositoryTest extends RepositoryTest {
             theme.getId(),
             LocalDate.of(2022, 10, 1)
         )).isEmpty();
+    }
+
+    @DisplayName("테마에 날짜와 시간에 해당되는 스케줄이 있는지 확인")
+    @Test
+    void existsByDateTime() {
+        Theme theme = saveTheme();
+        saveSchedule(
+            theme.getId(),
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+
+        boolean result = scheduleRepository.existsByThemeIdAndDateAndTime(
+            theme.getId(),
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+
+        assertThat(result).isTrue();
+    }
+
+    @DisplayName("날짜와 시간에 해당되는 스케줄 조회")
+    @Test
+    void findByDateTime() {
+        Theme theme = saveTheme();
+        Schedule saved = saveSchedule(
+            theme.getId(),
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+
+        Schedule found = scheduleRepository.findByDateAndTime(
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+
+        assertThat(found).isEqualTo(saved);
     }
 
     private Theme saveTheme() {

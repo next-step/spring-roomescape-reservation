@@ -1,6 +1,7 @@
 package nextstep.application;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import nextstep.domain.Schedule;
 import nextstep.domain.ScheduleRepository;
@@ -22,6 +23,7 @@ public class ScheduleService {
     }
 
     public ScheduleResponse create(ScheduleCreateRequest request) {
+        validateDuplicateDateTime(request.getThemeId(), request.getDate(), request.getTime());
         Theme theme = themeRepository.findById(request.getThemeId());
         Schedule schedule = scheduleRepository.save(new Schedule(
             theme.getId(),
@@ -29,6 +31,12 @@ public class ScheduleService {
             request.getTime()
         ));
         return ScheduleResponse.from(schedule, theme);
+    }
+
+    private void validateDuplicateDateTime(Long themeId, LocalDate date, LocalTime time) {
+        if (scheduleRepository.existsByThemeIdAndDateAndTime(themeId, date, time)) {
+            throw new IllegalArgumentException("테마에 날짜와 시간이 똑같은 스케줄이 이미 존재합니다.");
+        }
     }
 
     public List<ScheduleResponse> findAllByThemeAndDate(Long themeId, LocalDate date) {

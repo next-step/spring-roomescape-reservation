@@ -5,32 +5,41 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 public class Reservation {
+
     private final Long id;
+    private final Long scheduleId;
     private final LocalDate date;
     private final LocalTime time;
     private final String name;
 
-    public Reservation(LocalDate date, LocalTime time, String name) {
-        this(null, date, time, name);
+    public Reservation(Long scheduleId, LocalDate date, LocalTime time, String name) {
+        this(null, scheduleId, date, time, name);
     }
 
     public Reservation(Long id, Reservation reservation) {
-        this(id, reservation.getDate(), reservation.getTime(), reservation.getName());
+        this(
+            id,
+            reservation.getScheduleId(),
+            reservation.getDate(),
+            reservation.getTime(),
+            reservation.getName()
+        );
     }
 
-    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
+    public Reservation(Long id, Long scheduleId, LocalDate date, LocalTime time, String name) {
         this.id = id;
+        this.scheduleId = scheduleId;
         this.date = date;
         this.time = time;
         this.name = name;
     }
 
-    public boolean equalsDateTime(LocalDate date, LocalTime time) {
-        return Objects.equals(this.date, date) && Objects.equals(this.time, time);
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
     public LocalDate getDate() {

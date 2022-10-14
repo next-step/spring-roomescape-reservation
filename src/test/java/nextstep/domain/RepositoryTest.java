@@ -14,6 +14,7 @@ public class RepositoryTest {
         jdbcTemplate.execute("DROP TABLE reservation IF EXISTS");
         jdbcTemplate.execute("CREATE TABLE reservation("
             + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "schedule_id BIGINT NOT NULL,"
             + "date DATE NOT NULL,"
             + "time TIME NOT NULL,"
             + "name VARCHAR(100) NOT NULL"

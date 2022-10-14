@@ -6,10 +6,13 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import io.restassured.RestAssured;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import nextstep.ui.request.ReservationCreateRequest;
+import nextstep.ui.request.ScheduleCreateRequest;
+import nextstep.ui.request.ThemeCreateRequest;
 import nextstep.ui.response.ReservationResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,12 +27,20 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
     void setUp() {
         super.setUp();
         initReservationTable();
+        initScheduleTable();
+        initThemeTable();
     }
 
     @DisplayName("예약 생성 - POST /reservations")
     @Test
     void create() {
-        ReservationCreateRequest request = reservationCreateRequest();
+        Long themeId = 테마_생성();
+        Long scheduleId = 스케줄_생성(
+            themeId,
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+        ReservationCreateRequest request = reservationCreateRequest(scheduleId, "최현구");
 
         RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -39,13 +50,17 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
             .statusCode(CREATED.value());
     }
 
-    @DisplayName("예약 생성 시 날짜와 시간이 똑같은 예약이 이미 있는 경우 예약을 생성할 수 없다. - POST /reservations")
+    @DisplayName("예약 생성 시 스케줄에 예약이 이미 있는 경우 예약을 생성할 수 없다. - POST /reservations")
     @Test
     void duplicateException() {
-        LocalDate date = LocalDate.of(2022, 10, 15);
-        LocalTime time = LocalTime.of(13, 0);
-        예약_생성(date, time, "최현구");
-        ReservationCreateRequest request = reservationCreateRequest(date, time, "브라운");
+        Long themeId = 테마_생성();
+        Long scheduleId = 스케줄_생성(
+            themeId,
+            LocalDate.of(2022, 10, 1),
+            LocalTime.of(10, 1)
+        );
+        예약_생성(scheduleId, "최현구");
+        ReservationCreateRequest request = reservationCreateRequest(scheduleId, "최현구");
 
         RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -53,7 +68,7 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
             .when().post("/reservations")
             .then().log().all()
             .statusCode(BAD_REQUEST.value())
-            .body(is("날짜와 시간이 똑같은 예약이 이미 존재합니다."));
+            .body(is("이미 해당 스케줄에 예약이 존재합니다."));
     }
 
     @DisplayName("예약 조회 - GET /reservations?date={date}")
@@ -105,30 +120,77 @@ public class ReservationAcceptanceTest extends AcceptanceTest {
             .body(is("시간과 날짜에 해당하는 예약정보가 없습니다."));
     }
 
-    private void 예약_생성(LocalDate date, LocalTime time, String name) {
-        ReservationCreateRequest request = reservationCreateRequest(date, time, name);
+    private Long 예약_생성(LocalDate date, LocalTime time, String name) {
+        Long themeId = 테마_생성();
+        Long scheduleId = 스케줄_생성(themeId, date, time);
+        ReservationCreateRequest request = reservationCreateRequest(scheduleId, name);
 
-        RestAssured.given().log().all()
+        return Long.valueOf(RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .body(request)
             .when().post("/reservations")
             .then().log().all()
-            .statusCode(CREATED.value());
+            .statusCode(CREATED.value())
+            .extract().header("Location")
+            .split("/reservations/")[1]);
+    }
+
+    private Long 예약_생성(Long scheduleId, String name) {
+        ReservationCreateRequest request = reservationCreateRequest(scheduleId, name);
+
+        return Long.valueOf(RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .when().post("/reservations")
+            .then().log().all()
+            .statusCode(CREATED.value())
+            .extract().header("Location")
+            .split("/reservations/")[1]);
     }
 
     private ReservationCreateRequest reservationCreateRequest() {
-        return reservationCreateRequest(
-            LocalDate.of(2022, 10, 11),
-            LocalTime.of(13, 0),
-            "최현구"
-        );
+        return reservationCreateRequest(1L, "최현구");
     }
 
-    private ReservationCreateRequest reservationCreateRequest(
-        LocalDate date,
-        LocalTime time,
-        String name
-    ) {
-        return new ReservationCreateRequest(date, time, name);
+    private ReservationCreateRequest reservationCreateRequest(Long scheduleId, String name) {
+        return new ReservationCreateRequest(scheduleId, name);
+    }
+
+    private Long 스케줄_생성(Long themeId, LocalDate date, LocalTime time) {
+        ScheduleCreateRequest request = scheduleCreateRequest(themeId, date, time);
+
+        return Long.valueOf(RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .when().post("/schedules")
+            .then().log().all()
+            .statusCode(CREATED.value())
+            .extract().header("Location")
+            .split("/schedules/")[1]);
+    }
+
+    private ScheduleCreateRequest scheduleCreateRequest(Long themeId, LocalDate date, LocalTime time) {
+        return new ScheduleCreateRequest(themeId, date, time);
+    }
+
+    private Long 테마_생성() {
+        ThemeCreateRequest request = themeCreateRequest();
+
+        return Long.valueOf(RestAssured.given().log().all()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .body(request)
+            .when().post("/themes")
+            .then().log().all()
+            .statusCode(CREATED.value())
+            .extract().header("Location")
+            .split("/themes/")[1]);
+    }
+
+    private ThemeCreateRequest themeCreateRequest() {
+        return new ThemeCreateRequest(
+            "비밀의방",
+            "기가막힌 방이랍니다~",
+            BigDecimal.valueOf(50_000)
+        );
     }
 }

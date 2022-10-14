@@ -1,29 +1,20 @@
 package nextstep.ui.request;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class ReservationCreateRequest {
 
-    private LocalDate date;
-    private LocalTime time;
+    private Long scheduleId;
     private String name;
 
     protected ReservationCreateRequest() {
     }
 
-    public ReservationCreateRequest(LocalDate date, LocalTime time, String name) {
-        this.date = date;
-        this.time = time;
+    public ReservationCreateRequest(Long scheduleId, String name) {
+        this.scheduleId = scheduleId;
         this.name = name;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getTime() {
-        return time;
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
     public String getName() {

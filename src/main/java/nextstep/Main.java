@@ -42,6 +42,7 @@ public class Main {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
+                    1L,
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name

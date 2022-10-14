@@ -12,5 +12,5 @@ public interface ReservationRepository {
 
     int deleteByDateTime(LocalDate date, LocalTime time);
 
-    boolean existsByDateTime(LocalDate date, LocalTime time);
+    boolean existsByScheduleId(Long scheduleId);
 }

@@ -27,6 +27,7 @@ public class ReservationDao implements ReservationRepository {
             .usingGeneratedKeyColumns("id");
         this.mapper = (resultSet, rowNum) -> new Reservation(
             resultSet.getLong("id"),
+            resultSet.getLong("schedule_id"),
             resultSet.getDate("date").toLocalDate(),
             resultSet.getTime("time").toLocalTime(),
             resultSet.getString("name")
@@ -53,9 +54,9 @@ public class ReservationDao implements ReservationRepository {
     }
 
     @Override
-    public boolean existsByDateTime(LocalDate date, LocalTime time) {
-        String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, date, time);
+    public boolean existsByScheduleId(Long scheduleId) {
+        String sql = "SELECT COUNT(*) FROM reservation WHERE schedule_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, scheduleId);
         return count > 0;
     }
 }

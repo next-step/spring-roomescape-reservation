@@ -31,7 +31,7 @@ class ReservationControllerTest {
     @DisplayName("POST 예약 생성")
     void createReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest("2022-12-01", "12:01", "조아라");
+        ReservationCreateRequest request = new ReservationCreateRequest("2020-12-01", "12:01", "조아라");
 
         // when
         ExtractableResponse<Response> response = createReservation(request);
@@ -44,7 +44,7 @@ class ReservationControllerTest {
     @DisplayName("POST 예약 생성 - 중복 예약 시, 예약 실패")
     void failToCreate() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest("2022-12-02", "12:02", "조아라");
+        ReservationCreateRequest request = new ReservationCreateRequest("2020-12-02", "12:02", "조아라");
         createReservation(request);
 
         // when
@@ -60,11 +60,11 @@ class ReservationControllerTest {
     @DisplayName("GET 예약 전체조회")
     void findAllReservations() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest("2022-12-03", "12:03", "조아라");
+        ReservationCreateRequest request = new ReservationCreateRequest("2020-12-03", "12:03", "조아라");
         createReservation(request);
 
         // when
-        ExtractableResponse<Response> response = findAllReservations("2022-12-03");
+        ExtractableResponse<Response> response = findAllReservations("2020-12-03");
         ReservationFindAllResponse reservationFindAllResponse = response.as(ReservationFindAllResponse.class);
 
         // then
@@ -76,11 +76,11 @@ class ReservationControllerTest {
     @DisplayName("DELETE 예약 삭제")
     void deleteReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest("2022-12-04", "12:04", "조아라");
+        ReservationCreateRequest request = new ReservationCreateRequest("2020-12-04", "12:04", "조아라");
         createReservation(request);
 
         // when
-        ExtractableResponse<Response> response = deleteReservation("2022-12-04", "12:04");
+        ExtractableResponse<Response> response = deleteReservation("2020-12-04", "12:04");
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());

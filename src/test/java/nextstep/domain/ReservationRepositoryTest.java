@@ -2,6 +2,8 @@ package nextstep.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,8 +12,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-class ReservationsTest {
-    private final Reservations reservations = new Reservations();
+@SpringBootTest
+class ReservationRepositoryTest {
+    @Autowired
+    private ReservationRepository reservations;
 
     @Test
     @DisplayName("예약을 저장한다.")
@@ -19,12 +23,16 @@ class ReservationsTest {
         // given
         LocalDate date = LocalDate.of(2022, 12, 1);
         LocalTime time = LocalTime.of(12, 1);
+        Reservation reservation = new Reservation(date, time, "조아라");
 
         // when
-        Reservation reservation = reservations.save(date, time, "조아라");
+        Reservation savedReservation = reservations.save(reservation);
 
         // then
-        assertThat(reservation.getId()).isNotNull();
+        assertThat(savedReservation.getId()).isNotNull();
+        assertThat(savedReservation).usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(reservation);
     }
 
     @Test
@@ -33,7 +41,7 @@ class ReservationsTest {
         // given
         LocalDate date = LocalDate.of(2022, 12, 2);
         LocalTime time = LocalTime.of(12, 2);
-        Reservation reservation = reservations.save(date, time, "조아라");
+        Reservation reservation = reservations.save(new Reservation(date, time, "조아라"));
 
         // when
         List<Reservation> findReservations = reservations.findAllByDate(date);
@@ -50,7 +58,7 @@ class ReservationsTest {
         // given
         LocalDate date = LocalDate.of(2022, 12, 3);
         LocalTime time = LocalTime.of(12, 3);
-        reservations.save(date, time, "조아라");
+        Reservation reservation = reservations.save(new Reservation(date, time, "조아라"));
 
         // when, then
         assertDoesNotThrow(() -> reservations.deleteByDateAndTime(date, time));
@@ -67,7 +75,7 @@ class ReservationsTest {
         LocalTime otherTime = LocalTime.of(12, 5);
 
         // when
-        reservations.save(equalDate, equalTime, "조아라");
+        reservations.save(new Reservation(equalDate, equalTime, "조아라"));
 
         // then
         assertThat(reservations.existsByDateAndTime(equalDate, equalTime)).isTrue();

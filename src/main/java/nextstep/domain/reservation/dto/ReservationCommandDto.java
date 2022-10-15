@@ -12,7 +12,7 @@ public class ReservationCommandDto {
       String name
   ) {
 
-    @Builder
+    @Builder(toBuilder = true)
     public Create {
     }
   }

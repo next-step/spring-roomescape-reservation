@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public DataLoader(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -27,6 +27,13 @@ public class DataLoader implements CommandLineRunner {
             + "name VARCHAR(100) NOT NULL,"
             + "description TEXT NOT NULL,"
             + "price DECIMAL NOT NULL"
+            + ")");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS schedule("
+            + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+            + "theme_id BIGINT NOT NULL,"
+            + "date DATE NOT NULL,"
+            + "time TIME NOT NULL"
             + ")");
     }
 }

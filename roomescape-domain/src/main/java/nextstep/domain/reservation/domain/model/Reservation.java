@@ -10,4 +10,8 @@ public record Reservation(Long id,
     public Reservation withId(Long id) {
         return new Reservation(id, date, time, name);
     }
+
+    public boolean isDateEqual(LocalDate date) {
+        return date.isEqual(date);
+    }
 }

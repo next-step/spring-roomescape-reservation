@@ -2,7 +2,10 @@ package nextstep.roomescape.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nextstep.RoomEscapeWebApplication;
+import nextstep.domain.reservation.domain.model.ReservationRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,12 +21,20 @@ public class RoomEscapeAcceptanceTest {
     protected MockMvc mockMvc;
     protected ObjectMapper objectMapper;
 
+    @Autowired
+    private ReservationRepository reservationRepository;
+
     @BeforeEach
     void setUp(WebApplicationContext context) {
         mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .alwaysDo(MockMvcResultHandlers.print())
                 .build();
         objectMapper = new ObjectMapper();
+    }
+
+    @AfterEach
+    void tearDown() {
+        reservationRepository.deleteAll();
     }
 
     protected Long extractIdFromLocation(ResultActions resultActions) {

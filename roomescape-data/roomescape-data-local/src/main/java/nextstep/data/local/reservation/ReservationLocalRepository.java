@@ -4,6 +4,8 @@ import nextstep.domain.reservation.domain.model.Reservation;
 import nextstep.domain.reservation.domain.model.ReservationRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,5 +33,17 @@ public class ReservationLocalRepository implements ReservationRepository {
     @Override
     public Optional<Reservation> findById(Long id) {
         return Optional.of(RESERVATIONS.get(id));
+    }
+
+    @Override
+    public List<Reservation> findAllByDate(LocalDate date) {
+        return RESERVATIONS.values().stream()
+                .filter(it -> it.isDateEqual(date))
+                .toList();
+    }
+
+    @Override
+    public void deleteAll() {
+        RESERVATIONS.clear();
     }
 }

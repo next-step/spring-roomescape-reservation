@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import nextstep.domain.Reservation;
+import nextstep.reservation.domain.Reservation;
 
 public class Main {
     private static final String INPUT_1 = "1";
@@ -42,6 +42,7 @@ public class Main {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
+                    1L,
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name

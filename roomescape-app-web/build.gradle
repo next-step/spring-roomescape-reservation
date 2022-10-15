@@ -3,16 +3,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation project(":roomescape-app-web")
+    implementation project(":roomescape-domain")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
 }

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,6 +78,25 @@ class ReservationIntegrationTest {
             .andExpect(header().string("Location", matchesRegex("/reservations/\\d+")));
 
         assertReservationCount("2022-08-11", 2);
+    }
+
+    @Test
+    void makeDuplicatedReservation() throws Exception {
+        String requestBody = objectMapper.writeValueAsString(
+            new MakeReservationRequest(
+                "2022-08-11", "12:00", "name"
+            )
+        );
+
+        mockMvc.perform(
+                post("/reservations")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody)
+            )
+            .andExpect(status().isConflict())
+            .andExpect(content().string("해당 시간에 이미 예약이 존재합니다. [2022-08-11 12:00]"));
+
+        assertReservationCount("2022-08-11", 1);
     }
 
     @Test

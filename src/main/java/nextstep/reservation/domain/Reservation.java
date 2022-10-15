@@ -1,6 +1,7 @@
 package nextstep.reservation.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Reservation {
@@ -13,6 +14,10 @@ public class Reservation {
         this.date = date;
         this.time = time;
         this.name = name;
+    }
+
+    public LocalDateTime localDateTime() {
+        return LocalDateTime.of(date, time);
     }
 
     public LocalDate getDate() {

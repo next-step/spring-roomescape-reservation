@@ -1,10 +1,12 @@
 package nextstep.reservation.persistence;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import nextstep.reservation.domain.Reservation;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,13 @@ public class MemoryReservationStorage implements ReservationStorage {
             .collect(Collectors.toList());
     }
 
+    @Override
+    public Optional<Reservation> findByDateTime(LocalDate date, LocalTime time) {
+        LocalDateTime targetDateTime = LocalDateTime.of(date, time);
+        return reservations.stream()
+            .filter(it -> it.localDateTime().isEqual(targetDateTime))
+            .findAny();
+    }
 
     @Override
     public void deleteByDateTime(LocalDate date, LocalTime time) {

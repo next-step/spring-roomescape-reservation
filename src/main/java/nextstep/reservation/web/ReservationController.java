@@ -4,7 +4,9 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import nextstep.reservation.domain.Reservation;
+import nextstep.reservation.domain.exception.DuplicatedReservationException;
 import nextstep.reservation.persistence.ReservationStorage;
 import nextstep.reservation.web.request.CancelReservationRequest;
 import nextstep.reservation.web.request.ListReservationRequest;
@@ -30,10 +32,22 @@ public class ReservationController {
 
     @PostMapping
     ResponseEntity<Void> makeReservation(@RequestBody MakeReservationRequest requestBody) {
+        validateDuplication(requestBody);
+
         Long index = reservationStorage.insert(requestBody.toReservation());
         URI locationUri = URI.create("/reservations/" + index);
         return ResponseEntity.created(locationUri)
             .build();
+    }
+
+    private void validateDuplication(MakeReservationRequest requestBody) {
+        Optional<Reservation> optionalReservation = reservationStorage.findByDateTime(
+            LocalDate.parse(requestBody.getDate()),
+            LocalTime.parse(requestBody.getTime())
+        );
+        if (optionalReservation.isPresent()) {
+            throw new DuplicatedReservationException(requestBody.getDate(), requestBody.getTime());
+        }
     }
 
     @GetMapping

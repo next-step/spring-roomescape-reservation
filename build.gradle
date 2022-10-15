@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id "org.springframework.boot" version "2.7.4"
+    id "io.spring.dependency-management" version "1.0.14.RELEASE"
 }
 
 group 'nextstep'
@@ -7,6 +9,14 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    // spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

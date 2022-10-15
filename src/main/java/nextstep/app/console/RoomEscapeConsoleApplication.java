@@ -1,4 +1,6 @@
-package nextstep;
+package nextstep.app.console;
+
+import nextstep.core.Reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,7 +10,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-public class Main {
+public class RoomEscapeConsoleApplication {
     private static final String INPUT_1 = "1";
     private static final String INPUT_2 = "2";
     private static final String INPUT_3 = "3";

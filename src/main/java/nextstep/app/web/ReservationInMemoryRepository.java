@@ -10,18 +10,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class ReservationInMemoryRepository implements ReservationRepository {
     private static final Map<Long, Reservation> RESERVATIONS = new ConcurrentHashMap<>();
-    private long incrementor = 1;
+    private final AtomicLong incrementor = new AtomicLong(1L);
 
     @Override
     public Reservation save(Reservation reservation) {
         Objects.requireNonNull(reservation);
         validateSameDateAndTime(reservation);
 
-        reservation.setId(incrementor++);
+        reservation.setId(incrementor.getAndIncrement());
         RESERVATIONS.put(reservation.getId(), reservation);
         return reservation;
     }
@@ -29,9 +30,9 @@ public class ReservationInMemoryRepository implements ReservationRepository {
     private void validateSameDateAndTime(Reservation reservation) {
         if (RESERVATIONS.values()
                 .stream()
-                .anyMatch(saved -> saved.isSameDate(reservation.getDate()) && saved.isSameTime(reservation.getTime()))
+                .anyMatch(it -> it.isSameDate(reservation.getDate()) && it.isSameTime(reservation.getTime()))
         ) {
-            throw new RuntimeException("동일한 날짜와 시간엔 예약할 수 없습니다.");
+            throw new IllegalArgumentException("동일한 날짜와 시간엔 예약할 수 없습니다.");
         }
     }
 
@@ -40,7 +41,7 @@ public class ReservationInMemoryRepository implements ReservationRepository {
         Objects.requireNonNull(date);
 
         return RESERVATIONS.values().stream()
-                .filter(reservation -> reservation.isSameDate(date))
+                .filter(it -> it.isSameDate(date))
                 .toList();
     }
 
@@ -50,7 +51,7 @@ public class ReservationInMemoryRepository implements ReservationRepository {
         Objects.requireNonNull(time);
 
         RESERVATIONS.values().stream()
-                .filter(reservation -> reservation.isSameDate(date) && reservation.isSameTime(time))
+                .filter(it -> it.isSameDate(date) && it.isSameTime(time))
                 .map(Reservation::getId)
                 .forEach(RESERVATIONS::remove);
     }

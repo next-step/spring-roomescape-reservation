@@ -3,6 +3,7 @@ package nextstep.domain.reservation;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +25,7 @@ class ReservationCommanderTest {
           log.debug("객체 저장됨  : {}", reservation);
           return reservation;
         }
-      }
+      }, List.of()
   );
 
   @DisplayName("예약을 생성할 때")
@@ -59,7 +60,6 @@ class ReservationCommanderTest {
       Create fixtureCreateReq = reservationFixtureFactory.getFixtureCreateReq();
 
       // when & then
-
       assertThatThrownBy(() -> reservationCommander.createReservation(
           fixtureCreateReq.toBuilder()
               .name(name)

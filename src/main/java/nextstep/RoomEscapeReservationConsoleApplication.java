@@ -1,10 +1,12 @@
 package nextstep;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import nextstep.domain.Reservations;
+import nextstep.domain.Reservation;
+import nextstep.domain.repository.ReservationRepository;
+import nextstep.infrastructure.ReservationDao;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class Main {
+public class RoomEscapeReservationConsoleApplication {
 
     private static final String INPUT_1 = "1";
     private static final String INPUT_2 = "2";
@@ -13,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Reservations reservations = new Reservations(new ArrayList<>());
+        ReservationRepository reservationRepository = new ReservationDao(new JdbcTemplate());
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -37,7 +39,7 @@ public class Main {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
-                reservations.make(date, time, name);
+                reservationRepository.save(new Reservation(date, time, name));
 
                 System.out.println("예약이 등록되었습니다.");
             }
@@ -53,7 +55,7 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.cancel(date, time);
+                reservationRepository.delete(date, time);
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -66,7 +68,7 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                reservations.check(date).forEach(System.out::println);
+                reservationRepository.findAllBy(date).forEach(System.out::println);
             }
 
             if (INPUT_4.equals(menuInput)) {

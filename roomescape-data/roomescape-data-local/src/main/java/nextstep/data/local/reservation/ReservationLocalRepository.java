@@ -5,6 +5,7 @@ import nextstep.domain.reservation.domain.model.ReservationRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,5 +46,12 @@ public class ReservationLocalRepository implements ReservationRepository {
     @Override
     public void deleteAll() {
         RESERVATIONS.clear();
+    }
+
+    @Override
+    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+        RESERVATIONS.values().stream()
+                .filter(it -> it.isDateEqual(date) && it.isTimeEqual(time))
+                .forEach(it -> RESERVATIONS.remove(it.id()));
     }
 }

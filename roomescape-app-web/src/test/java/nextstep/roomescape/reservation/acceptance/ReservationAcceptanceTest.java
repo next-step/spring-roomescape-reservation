@@ -24,11 +24,12 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     @DisplayName("예약 생성")
     @Test
     void createReservation() throws Exception {
-        doCreateReservation(DATE, TIME, NAME)
-                .andExpectAll(
-                        MockMvcResultMatchers.status().isCreated(),
-                        MockMvcResultMatchers.header().string(HttpHeaders.LOCATION, "/reservations/1")
-                );
+        ResultActions resultActions = doCreateReservation(DATE, TIME, NAME);
+
+        resultActions.andExpectAll(
+                MockMvcResultMatchers.status().isCreated(),
+                MockMvcResultMatchers.header().string(HttpHeaders.LOCATION, "/reservations/" + extractIdFromLocation(resultActions))
+        );
     }
 
     @DisplayName("예약 조회")
@@ -36,11 +37,7 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     void findAllReservations() throws Exception {
         Long id = extractIdFromLocation(doCreateReservation(DATE, TIME, NAME));
 
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get(UriComponentsBuilder.fromUriString("/reservations")
-                                .queryParam("date", DATE)
-                                .toUriString())
-                )
+        doFindAllReservations()
                 .andExpectAll(
                         MockMvcResultMatchers.status().isOk(),
                         MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON),
@@ -48,6 +45,7 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
                 );
     }
 
+    @DisplayName("예약 삭제")
     @Test
     void deleteReservation() throws Exception {
         doCreateReservation(DATE, TIME, NAME);
@@ -61,6 +59,11 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
                 .andExpectAll(
                         MockMvcResultMatchers.status().isNoContent()
                 );
+
+        doFindAllReservations()
+                .andExpect(
+                        MockMvcResultMatchers.content().string("[]")
+                );
     }
 
     private ResultActions doCreateReservation(String date, String time, String name) throws Exception {
@@ -69,6 +72,14 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(new ReservationCreateRequest(date, time, name)))
+        );
+    }
+
+    private ResultActions doFindAllReservations() throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.get(UriComponentsBuilder.fromUriString("/reservations")
+                        .queryParam("date", DATE)
+                        .toUriString())
         );
     }
 }

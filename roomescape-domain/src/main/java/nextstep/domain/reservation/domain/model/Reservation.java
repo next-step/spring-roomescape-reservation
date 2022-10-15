@@ -12,6 +12,10 @@ public record Reservation(Long id,
     }
 
     public boolean isDateEqual(LocalDate date) {
-        return date.isEqual(date);
+        return this.date.isEqual(date);
+    }
+
+    public boolean isTimeEqual(LocalTime time) {
+        return this.time.equals(time);
     }
 }

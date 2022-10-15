@@ -64,7 +64,7 @@ public class Main {
                 String time = scanner.nextLine();
 
                 reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
+                        .filter(it -> Objects.equals(it.date(), LocalDate.parse(date)) && Objects.equals(it.time(), LocalDate.parse(time)))
                         .findFirst()
                         .ifPresent(reservations::remove);
 
@@ -80,7 +80,7 @@ public class Main {
                 String date = scanner.nextLine();
 
                 reservations.stream()
-                        .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
+                        .filter(it -> it.date().isEqual(LocalDate.parse(date)))
                         .collect(Collectors.toList())
                         .forEach(System.out::println);
             }

@@ -15,6 +15,10 @@ public class Reservation {
         this.name = name;
     }
 
+    public boolean isSameDate(LocalDate date) {
+        return this.date.equals(date);
+    }
+
     public Long getId() {
         return id;
     }

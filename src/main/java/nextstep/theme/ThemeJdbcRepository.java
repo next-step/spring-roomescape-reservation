@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class ThemeJdbcRepository {
@@ -40,5 +41,11 @@ public class ThemeJdbcRepository {
         Long id = (Long) simpleJdbcInsert.executeAndReturnKey(source);
         theme.setId(id);
         return theme;
+    }
+
+    public boolean existByName(String name) {
+        String sql = "SELECT * FROM theme WHERE name = ? LIMIT 1";
+        List<Theme> themes = jdbcTemplate.query(sql, themeRowMapper, name);
+        return themes.size() > 0;
     }
 }

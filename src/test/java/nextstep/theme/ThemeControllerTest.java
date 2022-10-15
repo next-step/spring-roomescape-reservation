@@ -25,7 +25,7 @@ public class ThemeControllerTest extends SpringControllerTest {
         themeJdbcRepository.clear();
     }
 
-    @DisplayName("예약 생성")
+    @DisplayName("테마 생성")
     @Test
     void createTheme() {
         // given
@@ -40,6 +40,31 @@ public class ThemeControllerTest extends SpringControllerTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @DisplayName("테마 생성시 이미 존재하는 테마 이름이면, 생성에 실패한다.")
+    @Test
+    void createThemeDuplicatedThemeName() {
+        // given
+        ThemeCreateRequest request1 = new ThemeCreateRequest(
+                "404호의 비밀",
+                "분명 있어야할 곳에 아무것도 없었다.. 남겨진 쪽지엔 404 NOT FOUND 만이 남아있는데...",
+                22000
+        );
+        ExtractableResponse<Response> response1 = 테마_생성_요청(request1);
+        assertThat(response1.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+
+        ThemeCreateRequest request2 = new ThemeCreateRequest(
+                "404호의 비밀",
+                "404호는 존재하지 않아야하는데, 눈을 떠보니 내가 있는곳이 404호였다..",
+                22000
+        );
+
+        // when
+        ExtractableResponse<Response> response2 = 테마_생성_요청(request2);
+
+        // then
+        assertThat(response2.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     private static ExtractableResponse<Response> 테마_생성_요청(ThemeCreateRequest request) {

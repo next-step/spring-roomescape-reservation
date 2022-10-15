@@ -5,6 +5,7 @@ import nextstep.domain.reservation.domain.model.ReservationRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,6 @@ public class ReservationLocalRepository implements ReservationRepository {
     }
 
     @Override
-    public Optional<Reservation> findById(Long id) {
-        return Optional.of(RESERVATIONS.get(id));
-    }
-
-    @Override
     public List<Reservation> findAllByDate(LocalDate date) {
         return RESERVATIONS.values().stream()
                 .filter(it -> it.isDateEqual(date))
@@ -53,5 +49,12 @@ public class ReservationLocalRepository implements ReservationRepository {
         RESERVATIONS.values().stream()
                 .filter(it -> it.isDateEqual(date) && it.isTimeEqual(time))
                 .forEach(it -> RESERVATIONS.remove(it.id()));
+    }
+
+    @Override
+    public Optional<Reservation> findByDateTime(LocalDateTime dateTime) {
+        return RESERVATIONS.values().stream()
+                .filter(it -> it.isDateEqual(dateTime.toLocalDate()) && it.isTimeEqual(dateTime.toLocalTime()))
+                .findAny();
     }
 }

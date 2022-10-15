@@ -18,6 +18,11 @@ public class ReservationDomainService {
 
     public Long create(LocalDateTime reservationDateTime, String name) {
         Reservation reservation = new Reservation(null, reservationDateTime.toLocalDate(), reservationDateTime.toLocalTime(), name);
+
+        if (reservationRepository.findByDateTime(reservationDateTime).isPresent()) {
+            throw new IllegalArgumentException("동일한 날짜와 시간에 예약이 존재합니다.");
+        }
+
         Reservation saved = reservationRepository.save(reservation);
         return saved.id();
     }

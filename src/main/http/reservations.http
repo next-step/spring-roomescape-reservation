@@ -11,3 +11,6 @@ Content-Type: application/json
 ### 예약 조회
 GET http://localhost:8080/reservations?date=2022-08-11
 Content-Type: application/json
+
+### 예약 삭제
+DELETE http://localhost:8080/reservations?date=2022-08-11&time=13:00

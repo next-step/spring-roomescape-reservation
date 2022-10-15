@@ -4,15 +4,15 @@ import nextstep.app.web.dto.ReservationCreateRequest;
 import nextstep.app.web.dto.ReservationResponse;
 import nextstep.core.Reservation;
 import nextstep.core.ReservationRepository;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
-@RequestMapping(value = "/reservations", consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping("/reservations")
 @RestController
 public class ReservationController {
     private final ReservationRepository repository;
@@ -37,5 +37,11 @@ public class ReservationController {
                         .map(ReservationResponse::from)
                         .toList()
         );
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> delete(@RequestParam String date, @RequestParam String time) {
+        repository.deleteByDateAndTime(LocalDate.parse(date), LocalTime.parse(time));
+        return ResponseEntity.noContent().build();
     }
 }

@@ -19,6 +19,10 @@ public class Reservation {
         return this.date.equals(date);
     }
 
+    public boolean isSameTime(LocalTime time) {
+        return this.time.equals(time);
+    }
+
     public Long getId() {
         return id;
     }

@@ -2,9 +2,9 @@ package nextstep.presentation;
 
 import java.net.URI;
 import java.util.List;
+import nextstep.application.ReservationService;
 import nextstep.presentation.dto.ReservationRequest;
 import nextstep.presentation.dto.ReservationResponse;
-import nextstep.application.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,21 +27,18 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<Void> make(@RequestBody ReservationRequest request) {
         Integer reservationId = reservationService.make(request);
-
         return ResponseEntity.created(URI.create("/reservations/" + reservationId)).build();
     }
 
     @GetMapping
     public ResponseEntity<List<ReservationResponse>> check(@RequestParam String date) {
         List<ReservationResponse> responses = reservationService.check(date);
-
         return ResponseEntity.ok(responses);
     }
 
     @DeleteMapping
     public ResponseEntity<Void> cancel(@RequestParam String date, @RequestParam String time) {
         reservationService.cancel(date, time);
-
         return ResponseEntity.noContent().build();
     }
 }

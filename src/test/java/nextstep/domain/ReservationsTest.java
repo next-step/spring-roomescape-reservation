@@ -62,8 +62,8 @@ class ReservationsTest {
         reservations.make("2022-08-11", "14:00", "dani");
 
         List<Reservation> expected = List.of(
-            new Reservation(LocalDate.of(2022, 8, 11), LocalTime.of(13, 0), "dani"),
-            new Reservation(LocalDate.of(2022, 8, 11), LocalTime.of(14, 0), "dani")
+            new Reservation(null, LocalDate.of(2022, 8, 11), LocalTime.of(13, 0), "dani"),
+            new Reservation(null, LocalDate.of(2022, 8, 11), LocalTime.of(14, 0), "dani")
         );
 
         // when

@@ -19,10 +19,20 @@ public class ReservationInMemoryRepository implements ReservationRepository {
     @Override
     public Reservation save(Reservation reservation) {
         Objects.requireNonNull(reservation);
+        validateSameDateAndTime(reservation);
 
         reservation.setId(incrementor++);
         RESERVATIONS.put(reservation.getId(), reservation);
         return reservation;
+    }
+
+    private void validateSameDateAndTime(Reservation reservation) {
+        if (RESERVATIONS.values()
+                .stream()
+                .anyMatch(saved -> saved.isSameDate(reservation.getDate()) && saved.isSameTime(reservation.getTime()))
+        ) {
+            throw new RuntimeException("동일한 날짜와 시간엔 예약할 수 없습니다.");
+        }
     }
 
     @Override

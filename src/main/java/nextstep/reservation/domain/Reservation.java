@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Reservation {
+
     private final LocalDate date;
     private final LocalTime time;
     private final String name;
@@ -24,5 +25,14 @@ public class Reservation {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+            "date=" + date +
+            ", time=" + time +
+            ", name='" + name + '\'' +
+            '}';
     }
 }

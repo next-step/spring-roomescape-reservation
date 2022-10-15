@@ -2,14 +2,14 @@ package nextstep;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import nextstep.reservation.domain.Reservation;
+import nextstep.reservation.persistence.MemoryReservationStorage;
+import nextstep.reservation.persistence.ReservationStorage;
 
 public class RoomEscapeConsoleApplication {
+
     private static final String INPUT_1 = "1";
     private static final String INPUT_2 = "2";
     private static final String INPUT_3 = "3";
@@ -17,7 +17,7 @@ public class RoomEscapeConsoleApplication {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Reservation> reservations = new ArrayList<>();
+        ReservationStorage reservationStorage = new MemoryReservationStorage();
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -42,12 +42,11 @@ public class RoomEscapeConsoleApplication {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
-                        LocalDate.parse(date),
-                        LocalTime.parse(time + ":00"),
-                        name
+                    LocalDate.parse(date),
+                    LocalTime.parse(time + ":00"),
+                    name
                 );
-
-                reservations.add(reservation);
+                reservationStorage.insert(reservation);
                 System.out.println("예약이 등록되었습니다.");
             }
 
@@ -62,11 +61,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
-                        .findFirst()
-                        .ifPresent(reservations::remove);
-
+                reservationStorage.deleteByDateTime(LocalDate.parse(date), LocalTime.parse(time));
                 System.out.println("예약이 취소되었습니다.");
             }
 
@@ -78,14 +73,11 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                reservations.stream()
-                        .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                        .collect(Collectors.toList())
-                        .forEach(System.out::println);
+                List<Reservation> reservations = reservationStorage.findByDate(LocalDate.parse(date));
+                reservations.forEach(System.out::println);
             }
 
             if (INPUT_4.equals(menuInput)) {
-
                 break;
             }
         }

@@ -23,6 +23,10 @@ public class Reservations {
                 throw new ReservationException(String.format("%s %s은 이미 예약되었습니다.", date, time));
             }, () -> reservations.add(new Reservation(date, time, name)));
 
+        return count();
+    }
+
+    public int count() {
         return reservations.size();
     }
 

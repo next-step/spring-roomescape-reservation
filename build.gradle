@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 }
 
 subprojects {
@@ -7,6 +9,8 @@ subprojects {
     version '1.0-SNAPSHOT'
 
     apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
     repositories {
         mavenCentral()
@@ -15,4 +19,21 @@ subprojects {
     test {
         useJUnitPlatform()
     }
+}
+
+def consoleProjects = [
+        project(":roomescape-app-console")
+]
+
+def springProjects = subprojects.findAll { !consoleProjects.contains(it) }
+
+configure(springProjects) {
+    dependencies {
+        implementation("org.springframework.boot:spring-boot-starter")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+    }
+}
+
+repositories {
+    mavenCentral()
 }

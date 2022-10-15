@@ -1,7 +1,7 @@
 package nextstep.roomescape.support;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nextstep.app.web.RoomEscapeWebApplication;
+import nextstep.RoomEscapeWebApplication;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;

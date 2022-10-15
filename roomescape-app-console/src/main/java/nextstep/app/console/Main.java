@@ -1,6 +1,6 @@
 package nextstep.app.console;
 
-import nextstep.domain.model.Reservation;
+import nextstep.domain.reservation.domain.model.Reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,6 +43,7 @@ public class Main {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
+                        null,
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name

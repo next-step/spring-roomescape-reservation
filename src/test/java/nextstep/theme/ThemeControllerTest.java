@@ -67,10 +67,38 @@ public class ThemeControllerTest extends SpringControllerTest {
         assertThat(response2.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
+    @DisplayName("테마 목록 조회")
+    @Test
+    void getThemes() {
+        // given
+        테마를_생성한다("404호의 비밀");
+        테마를_생성한다("500호의 기묘한 집단모임 조사");
+
+        // when
+        ExtractableResponse<Response> response = 테마_목록_조회_요청();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.body().jsonPath().getList("name")).containsExactly("404호의 비밀", "500호의 기묘한 집단모임 조사");
+    }
+
     private static ExtractableResponse<Response> 테마_생성_요청(ThemeCreateRequest request) {
         return given()
                 .body(request).contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/themes")
+                .then().log().all().extract();
+    }
+
+    private static void 테마를_생성한다(String themeName) {
+        ThemeCreateRequest request = new ThemeCreateRequest(themeName, "설명벌레의 설명", 22222);
+        ExtractableResponse<Response> response = 테마_생성_요청(request);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    private static ExtractableResponse<Response> 테마_목록_조회_요청() {
+        return given()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/themes")
                 .then().log().all().extract();
     }
 }

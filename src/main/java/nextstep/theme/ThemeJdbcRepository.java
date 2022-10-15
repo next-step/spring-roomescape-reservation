@@ -46,6 +46,11 @@ public class ThemeJdbcRepository {
     public boolean existByName(String name) {
         String sql = "SELECT * FROM theme WHERE name = ? LIMIT 1";
         List<Theme> themes = jdbcTemplate.query(sql, themeRowMapper, name);
-        return themes.size() > 0;
+        return !(themes.isEmpty());
+    }
+
+    public List<Theme> findAll() {
+        String sql = "SELECT * FROM theme";
+        return jdbcTemplate.query(sql, themeRowMapper);
     }
 }

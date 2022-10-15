@@ -1,9 +1,9 @@
-package nextstep.service;
+package nextstep.application;
 
 import java.util.ArrayList;
 import java.util.List;
-import nextstep.controller.dto.ReservationRequest;
-import nextstep.controller.dto.ReservationResponse;
+import nextstep.presentation.dto.ReservationRequest;
+import nextstep.presentation.dto.ReservationResponse;
 import nextstep.domain.Reservation;
 import nextstep.domain.Reservations;
 import org.springframework.stereotype.Service;

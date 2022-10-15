@@ -1,10 +1,10 @@
-package nextstep.controller;
+package nextstep.presentation;
 
 import java.net.URI;
 import java.util.List;
-import nextstep.controller.dto.ReservationRequest;
-import nextstep.controller.dto.ReservationResponse;
-import nextstep.service.ReservationService;
+import nextstep.presentation.dto.ReservationRequest;
+import nextstep.presentation.dto.ReservationResponse;
+import nextstep.application.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

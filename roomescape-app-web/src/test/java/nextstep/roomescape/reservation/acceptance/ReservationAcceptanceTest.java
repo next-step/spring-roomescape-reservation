@@ -24,7 +24,7 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     @DisplayName("예약 생성")
     @Test
     void createReservation() throws Exception {
-        doCreateReservation()
+        doCreateReservation(DATE, TIME, NAME)
                 .andExpectAll(
                         MockMvcResultMatchers.status().isCreated(),
                         MockMvcResultMatchers.header().string(HttpHeaders.LOCATION, "/reservations/1")
@@ -34,11 +34,11 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     @DisplayName("예약 조회")
     @Test
     void findAllReservations() throws Exception {
-        Long id = extractIdFromLocation(doCreateReservation());
+        Long id = extractIdFromLocation(doCreateReservation(DATE, TIME, NAME));
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get(UriComponentsBuilder.fromUriString("/reservations")
-                                .queryParam("date", "2022-08-11")
+                                .queryParam("date", DATE)
                                 .toUriString())
                 )
                 .andExpectAll(
@@ -48,12 +48,27 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
                 );
     }
 
-    private ResultActions doCreateReservation() throws Exception {
+    @Test
+    void deleteReservation() throws Exception {
+        doCreateReservation(DATE, TIME, NAME);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.delete(UriComponentsBuilder.fromUriString("/reservations")
+                                .queryParam("date", DATE)
+                                .queryParam("time", TIME)
+                                .toUriString())
+                )
+                .andExpectAll(
+                        MockMvcResultMatchers.status().isNoContent()
+                );
+    }
+
+    private ResultActions doCreateReservation(String date, String time, String name) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.post("/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .content(objectMapper.writeValueAsString(new ReservationCreateRequest(DATE, TIME, NAME)))
+                        .content(objectMapper.writeValueAsString(new ReservationCreateRequest(date, time, name)))
         );
     }
 }

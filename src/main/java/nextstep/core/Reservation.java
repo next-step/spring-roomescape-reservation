@@ -42,4 +42,14 @@ public class Reservation {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "date=" + date +
+                ", time=" + time +
+                ", name='" + name + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

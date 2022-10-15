@@ -1,4 +1,4 @@
-package nextstep.app.web;
+package nextstep.app;
 
 import nextstep.core.Reservation;
 import nextstep.core.ReservationRepository;

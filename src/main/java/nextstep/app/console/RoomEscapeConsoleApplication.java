@@ -1,14 +1,12 @@
 package nextstep.app.console;
 
+import nextstep.app.ReservationInMemoryRepository;
 import nextstep.core.Reservation;
+import nextstep.core.ReservationRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class RoomEscapeConsoleApplication {
     private static final String INPUT_1 = "1";
@@ -18,7 +16,7 @@ public class RoomEscapeConsoleApplication {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Reservation> reservations = new ArrayList<>();
+        ReservationRepository repository = new ReservationInMemoryRepository();
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -48,7 +46,7 @@ public class RoomEscapeConsoleApplication {
                         name
                 );
 
-                reservations.add(reservation);
+                repository.save(reservation);
                 System.out.println("예약이 등록되었습니다.");
             }
 
@@ -63,11 +61,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
-                        .findFirst()
-                        .ifPresent(reservations::remove);
-
+                repository.deleteByDateAndTime(LocalDate.parse(date), LocalTime.parse(time));
                 System.out.println("예약이 취소되었습니다.");
             }
 
@@ -79,14 +73,11 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                reservations.stream()
-                        .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                        .collect(Collectors.toList())
+                repository.findAllByDate(LocalDate.parse(date))
                         .forEach(System.out::println);
             }
 
             if (INPUT_4.equals(menuInput)) {
-
                 break;
             }
         }

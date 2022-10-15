@@ -82,6 +82,24 @@ public class ThemeControllerTest extends SpringControllerTest {
         assertThat(response.body().jsonPath().getList("name")).containsExactly("404호의 비밀", "500호의 기묘한 집단모임 조사");
     }
 
+    @DisplayName("테마 삭제")
+    @Test
+    void deleteTheme() {
+        // given
+        테마를_생성한다("404호의 비밀");
+        ExtractableResponse<Response> getThemesResponse1 = 테마_목록_조회_요청();
+        assertThat(getThemesResponse1.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(getThemesResponse1.jsonPath().getList("name")).hasSize(1);
+        long createdThemeId = Long.parseLong(String.valueOf(getThemesResponse1.jsonPath().getList("id").get(0)));
+        // when
+        ExtractableResponse<Response> response = 테마_삭제_요청(createdThemeId);
+        ExtractableResponse<Response> getThemesResponse2 = 테마_목록_조회_요청();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+        assertThat(getThemesResponse2.body().jsonPath().getList("name")).isEmpty();
+    }
+
     private static ExtractableResponse<Response> 테마_생성_요청(ThemeCreateRequest request) {
         return given()
                 .body(request).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -99,6 +117,14 @@ public class ThemeControllerTest extends SpringControllerTest {
         return given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/themes")
+                .then().log().all().extract();
+    }
+
+    private static ExtractableResponse<Response> 테마_삭제_요청(long themeId) {
+        return given()
+                .pathParam("themeId", themeId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete("/themes/{themeId}")
                 .then().log().all().extract();
     }
 }

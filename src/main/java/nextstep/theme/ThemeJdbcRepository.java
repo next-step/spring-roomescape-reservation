@@ -53,4 +53,10 @@ public class ThemeJdbcRepository {
         String sql = "SELECT * FROM theme";
         return jdbcTemplate.query(sql, themeRowMapper);
     }
+
+    public boolean deleteThemeById(Long themeId) {
+        String sql = "DELETE FROM theme WHERE id = ?";
+        int count = jdbcTemplate.update(sql, themeId);
+        return count > 0;
+    }
 }

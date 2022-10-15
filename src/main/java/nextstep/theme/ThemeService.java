@@ -25,4 +25,11 @@ public class ThemeService {
                 .map(ThemeResponse::from)
                 .toList();
     }
+
+    public void deleteTheme(Long themeId) {
+        boolean result = this.themeJdbcRepository.deleteThemeById(themeId);
+        if (!result) {
+            throw new IllegalStateException("테마 삭제에 실패했습니다.: 해당 ID의 테마가 존재하지 않음");
+        }
+    }
 }

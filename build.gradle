@@ -2,13 +2,17 @@ plugins {
     id 'java'
 }
 
-group 'nextstep'
-version '1.0-SNAPSHOT'
+subprojects {
+    group 'nextstep'
+    version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
+    apply plugin: 'java'
 
-test {
-    useJUnitPlatform()
+    repositories {
+        mavenCentral()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }

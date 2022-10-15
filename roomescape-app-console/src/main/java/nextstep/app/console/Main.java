@@ -1,4 +1,6 @@
-package nextstep;
+package nextstep.app.console;
+
+import nextstep.domain.model.Reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

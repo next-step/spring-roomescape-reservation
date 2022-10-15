@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.domain.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

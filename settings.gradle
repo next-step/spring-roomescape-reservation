@@ -1,2 +1,5 @@
 rootProject.name = 'room-escape'
 
+include 'roomescape-app-console'
+include 'roomescape-domain'
+

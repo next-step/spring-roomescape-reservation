@@ -5,6 +5,7 @@ import nextstep.domain.reservation.domain.model.ReservationRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -15,8 +16,20 @@ public class ReservationLocalRepository implements ReservationRepository {
 
     @Override
     public Reservation save(Reservation reservation) {
-        long id = RESERVATION_ID.getAndIncrement();
-        RESERVATIONS.put(id, reservation.withId(id));
-        return RESERVATIONS.get(id);
+        return Optional.ofNullable(reservation.id())
+                .map(it -> {
+                    RESERVATIONS.put(reservation.id(), reservation);
+                    return RESERVATIONS.get(it);
+                })
+                .orElseGet(() -> {
+                    long id = RESERVATION_ID.getAndIncrement();
+                    RESERVATIONS.put(id, reservation.withId(id));
+                    return RESERVATIONS.get(id);
+                });
+    }
+
+    @Override
+    public Optional<Reservation> findById(Long id) {
+        return Optional.of(RESERVATIONS.get(id));
     }
 }

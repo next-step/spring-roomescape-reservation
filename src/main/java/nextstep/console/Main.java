@@ -60,10 +60,6 @@ public class Main {
                 String time = scanner.nextLine();
 
                 Reservations.removeBySchedule(date, time);
-                reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalTime.parse(time)))
-                        .findFirst()
-                        .ifPresent(reservations::remove);
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -88,4 +84,3 @@ public class Main {
         }
     }
 }
-

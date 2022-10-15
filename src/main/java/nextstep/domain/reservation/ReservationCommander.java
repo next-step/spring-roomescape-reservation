@@ -3,6 +3,7 @@ package nextstep.domain.reservation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class ReservationCommander {
     Reservation reservation = Reservation.builder()
         .date(createReq.date())
         .time(createReq.time())
-        .name(createReq.name())
+        .name(Name.of(createReq.name()))
         .build();
 
     return reservationRepository.save(reservation);

@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import nextstep.domain.reservation.Reservation;
+import nextstep.domain.reservation.Reservation.Name;
 
 public class RoomEscapeConsoleApp {
     private static final String INPUT_1 = "1";
@@ -44,7 +45,7 @@ public class RoomEscapeConsoleApp {
                 Reservation reservation = new Reservation(
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
-                        name
+                        Name.of(name)
                 );
 
                 reservations.add(reservation);

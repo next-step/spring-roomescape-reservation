@@ -1,6 +1,5 @@
 package nextstep.domain.reservation;
 
-import static nextstep.domain.reservation.ReservationFixture.FIXTURE1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,7 @@ class ReservationRepositoryImplTest {
   @Test
   void saveTest() {
     // given
-    var target = FIXTURE1;
+    var target = ReservationFixtureFactory.newInstance().getFixture();
     // when
     Reservation saved = reservationRepository.save(target);
     // then

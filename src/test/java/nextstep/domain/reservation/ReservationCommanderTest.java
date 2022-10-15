@@ -33,25 +33,18 @@ class ReservationCommanderTest {
     @Test
     void reservationCreateTest() {
       // given
-      var name = "성시형";
-      var date = LocalDate.now().plusDays(1);
-      var time = LocalTime.now();
-
-      var createReq = Create.builder()
-          .date(date)
-          .time(time)
-          .name(name)
-          .build();
+      ReservationFixtureFactory reservationFixtureFactory = ReservationFixtureFactory.newInstance();
+      Reservation expectedFixture = reservationFixtureFactory.getFixture();
 
       // when
       Reservation reservation = reservationCommander.createReservation(
-          createReq
+          reservationFixtureFactory.getFixtureCreateReq()
       );
 
       // then
-      assertThat(reservation.getName()).isEqualTo(name);
-      assertThat(reservation.getDate()).isEqualTo(date);
-      assertThat(reservation.getTime()).isEqualTo(time);
+      assertThat(reservation.getName()).isEqualTo(expectedFixture.getName());
+      assertThat(reservation.getDate()).isEqualTo(expectedFixture.getDate());
+      assertThat(reservation.getTime()).isEqualTo(expectedFixture.getTime());
     }
   }
 }

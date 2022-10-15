@@ -18,7 +18,7 @@ public class Reservation {
 
   LocalDate date;
   LocalTime time;
-  String name;
+  Name name;
 
   public LocalDate getDate() {
     return date;
@@ -28,7 +28,18 @@ public class Reservation {
     return time;
   }
 
-  public String getName() {
+  public Name getName() {
     return name;
+  }
+
+  public record Name(String name) {
+
+    public static Name of(String value) {
+      if (value == null || value.isEmpty()) {
+        throw new IllegalArgumentException("예약의 이름은 공란일 수 없습니다.");
+      }
+
+      return new Name(value);
+    }
   }
 }

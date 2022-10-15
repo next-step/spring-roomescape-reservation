@@ -1,5 +1,9 @@
 package nextstep.reservation.web.request;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import nextstep.reservation.domain.Reservation;
+
 public class MakeReservationRequest {
 
     private final String date;
@@ -10,6 +14,10 @@ public class MakeReservationRequest {
         this.date = date;
         this.time = time;
         this.name = name;
+    }
+
+    public Reservation toReservation() {
+        return new Reservation(LocalDate.parse(date), LocalTime.parse(time), name);
     }
 
     public String getDate() {

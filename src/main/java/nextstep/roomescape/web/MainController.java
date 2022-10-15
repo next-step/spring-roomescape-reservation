@@ -1,11 +1,11 @@
-package nextstep.web;
+package nextstep.roomescape.web;
 
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import nextstep.core.Reservation;
-import nextstep.core.Reservations;
+import nextstep.roomescape.core.Reservation;
+import nextstep.roomescape.core.Reservations;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MainController {
 
-    private final Reservations reservations = new Reservations();
+    private final Reservations reservations;
+
+    public MainController(Reservations reservations) {
+        this.reservations = reservations;
+    }
 
     @PostMapping("/reservations")
     public ResponseEntity<URI> register(@RequestBody Reservation request) {
@@ -35,7 +39,7 @@ public class MainController {
         @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
         @DateTimeFormat(pattern = "HH:mm") LocalTime time
     ) {
-        reservations.cancelByDateTime(date, time);
+        reservations.deleteByDateAndTime(date, time);
         return ResponseEntity.noContent().build();
     }
 }

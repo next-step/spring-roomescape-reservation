@@ -7,8 +7,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import nextstep.domain.reservation.Reservation;
 
-public class Main {
+public class RoomEscapeConsoleApp {
     private static final String INPUT_1 = "1";
     private static final String INPUT_2 = "2";
     private static final String INPUT_3 = "3";

@@ -52,6 +52,20 @@ class ScheduleRepositoryTest extends RepositoryTest {
     }
 
     @Test
+    @DisplayName("ID에 해당하는 스케줄을 조회한다.")
+    void findById() {
+        // given
+        Schedule schedule = schedules.save(new Schedule(THEME_ID, DATE, TIME));
+
+        // when
+        Schedule findSchedule = schedules.findById(SCHEDULE_ID);
+
+        // then
+        assertThat(findSchedule).usingRecursiveComparison()
+                .isEqualTo(schedule);
+    }
+
+    @Test
     @DisplayName("ID에 해당하는 스케줄을 삭제한다.")
     void deleteById() {
         // given
@@ -60,5 +74,18 @@ class ScheduleRepositoryTest extends RepositoryTest {
         // when, then
         assertDoesNotThrow(() -> schedules.deleteById(schedule.getId()));
         assertThat(schedules.findAllByThemeIdAndDate(THEME_ID, DATE)).isEmpty();
+    }
+
+    @Test
+    @DisplayName("테마ID, 날짜, 시간에 해당하는 스케줄이 있으면 true, 없다면 false를 반환한다.")
+    void existsByThemeIdAndDateAndTime() {
+        // given, when
+        schedules.save(new Schedule(THEME_ID, DATE, TIME));
+
+        // then
+        assertThat(schedules.existsByThemeIdAndDateAndTime(THEME_ID, DATE, TIME)).isTrue();
+        assertThat(schedules.existsByThemeIdAndDateAndTime(2L, DATE, TIME)).isFalse();
+        assertThat(schedules.existsByThemeIdAndDateAndTime(THEME_ID, OTHER_DATE, TIME)).isFalse();
+        assertThat(schedules.existsByThemeIdAndDateAndTime(THEME_ID, DATE, OTHER_TIME)).isFalse();
     }
 }

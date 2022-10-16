@@ -3,6 +3,7 @@ package nextstep.controller;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.dto.ErrorResponse;
 import nextstep.dto.ScheduleCreateRequest;
 import nextstep.dto.ScheduleFindAllResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static nextstep.Constants.*;
+import static nextstep.service.ScheduleService.DUPLICATE_SCHEDULE_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ScheduleAcceptanceTest extends AcceptanceTest{
@@ -23,8 +25,8 @@ class ScheduleAcceptanceTest extends AcceptanceTest{
     }
 
     @Test
-    @DisplayName("POST 예약 생성")
-    void createReservation() {
+    @DisplayName("POST 스케줄 생성")
+    void createSchedule() {
         // given
         ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
 
@@ -33,6 +35,22 @@ class ScheduleAcceptanceTest extends AcceptanceTest{
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("POST 스케줄 생성 - 중복 생성 시, 생성 실패")
+    void failToCreate() {
+        // given
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
+        createSchedule(request);
+
+        // when
+        ExtractableResponse<Response> response = createSchedule(request);
+        ErrorResponse errorResponse = response.as(ErrorResponse.class);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(DUPLICATE_SCHEDULE_MESSAGE);
     }
 
     @Test

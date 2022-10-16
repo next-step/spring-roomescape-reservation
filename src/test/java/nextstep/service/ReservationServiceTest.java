@@ -95,12 +95,23 @@ class ReservationServiceTest {
 
     @DisplayName("예약을 취소한다.")
     @Test
-    void cancel() {
+    void cancel_success() {
         // given
         // when
         reservationService.cancel("2022-08-11", "13:00");
 
         // then
         assertThat(reservationService.checkAll("2022-08-11")).isEmpty();
+    }
+
+    @DisplayName("예약을 취소할 때, 해당 `날짜`와 `시간`에 아무 예약도 존재하지 않으면 예약을 취소할 수 없다.")
+    @Test
+    void cancel_fail() {
+        // given
+        // when
+        // then
+        assertThatThrownBy(() -> reservationService.cancel("2022-08-12", "13:00"))
+            .isInstanceOf(ReservationException.class)
+            .hasMessage("존재하는 예약이 없어 예약을 취소할 수 없습니다.");
     }
 }

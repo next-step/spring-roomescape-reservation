@@ -66,7 +66,10 @@ public class ReservationService {
 
     @Transactional
     public void cancel(String date, String time) {
-        reservationRepository.delete(date, time);
+        reservationRepository.findBy(date, time)
+            .ifPresentOrElse(reservation -> reservationRepository.delete(date, time), () -> {
+                throw new ReservationException("존재하는 예약이 없어 예약을 취소할 수 없습니다.");
+            });
     }
 
     @Transactional

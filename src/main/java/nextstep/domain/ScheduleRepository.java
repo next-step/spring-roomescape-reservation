@@ -40,4 +40,9 @@ public class ScheduleRepository {
                 ),
                 themeId, date);
     }
+
+    public void deleteById(Long id) {
+        String sql = "delete from schedule where id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }

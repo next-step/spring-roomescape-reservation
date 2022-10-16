@@ -41,4 +41,9 @@ public class ScheduleService {
         List<Schedule> findSchedules = schedules.findAllByThemeIdAndDate(themeId, date);
         return ScheduleFindAllResponse.from(findSchedules);
     }
+
+    public void deleteSchedule(Long id) {
+        // todo 예약이 있으면 스케줄 삭제 불가
+        schedules.deleteById(id);
+    }
 }

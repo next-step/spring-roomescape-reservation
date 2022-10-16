@@ -28,4 +28,10 @@ public class ScheduleController {
         ScheduleFindAllResponse scheduleFindAllResponse = scheduleService.findAllSchedules(themeId, date);
         return ResponseEntity.ok(scheduleFindAllResponse);
     }
+
+    @DeleteMapping("/{scheduleId}")
+    public ResponseEntity<Void> delete(@PathVariable Long scheduleId) {
+        scheduleService.deleteSchedule(scheduleId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -35,6 +35,18 @@ class ReservationServiceTest extends ServiceTest {
     }
 
     @Test
+    @DisplayName("존재하지 않는 스케줄에 예약을 시도하면, 예외를 반환한다.")
+    void noSuchSchedule() {
+        // given
+        ReservationCreateRequest request = new ReservationCreateRequest(2L, NAME);
+
+        // when, then
+        assertThatThrownBy(() -> reservationService.createReservation(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(NO_SUCH_SCHEDULE_MESSAGE);
+    }
+
+    @Test
     @DisplayName("동시간대에 예약이 존재할 경우, 예외를 반환한다.")
     void failToCreateReservation() {
         // given

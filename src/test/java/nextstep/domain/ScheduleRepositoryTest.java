@@ -88,4 +88,15 @@ class ScheduleRepositoryTest extends RepositoryTest {
         assertThat(schedules.existsByThemeIdAndDateAndTime(THEME_ID, OTHER_DATE, TIME)).isFalse();
         assertThat(schedules.existsByThemeIdAndDateAndTime(THEME_ID, DATE, OTHER_TIME)).isFalse();
     }
+
+    @Test
+    @DisplayName("ID에 해당하는 스케줄이 있으면 true, 없다면 false를 반환한다.")
+    void existsById() {
+        // given, when
+        schedules.save(new Schedule(THEME_ID, DATE, TIME));
+
+        // then
+        assertThat(schedules.existsById(SCHEDULE_ID)).isTrue();
+        assertThat(schedules.existsById(2L)).isFalse();
+    }
 }

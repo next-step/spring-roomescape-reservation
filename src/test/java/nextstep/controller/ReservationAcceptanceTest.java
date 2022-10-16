@@ -41,6 +41,21 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     }
 
     @Test
+    @DisplayName("POST 예약 생성 - 존재하지 않는 스케줄에 예약 시, 예약 실패")
+    void noSuchSchedule() {
+        // given
+        ReservationCreateRequest request = new ReservationCreateRequest(2L, NAME);
+
+        // when
+        ExtractableResponse<Response> response = createReservation(request);
+        ErrorResponse errorResponse = response.as(ErrorResponse.class);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(NO_SUCH_SCHEDULE_MESSAGE);
+    }
+
+    @Test
     @DisplayName("POST 예약 생성 - 중복 예약 시, 예약 실패")
     void failToCreate() {
         // given

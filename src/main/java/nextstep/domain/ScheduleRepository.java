@@ -60,4 +60,9 @@ public class ScheduleRepository {
         String sql = "select count(*) from schedule where theme_id = ? and date = ? and time = ?";
         return jdbcTemplate.queryForObject(sql, Integer.class, themeId, date, time);
     }
+
+    public boolean existsById(Long id) {
+        String sql = "select count(*) from schedule where id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, id) > 0;
+    }
 }

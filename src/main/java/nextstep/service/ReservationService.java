@@ -16,6 +16,7 @@ import java.util.List;
 public class ReservationService {
     public static final String DUPLICATE_RESERVATION_MESSAGE = "동시간대에 이미 예약이 존재합니다.";
     public static final String NO_RESERVATION_MESSAGE = "예약이 존재하지 않습니다.";
+    public static final String NO_SUCH_SCHEDULE_MESSAGE = "존재하지 않는 스케줄입니다.";
 
     private final ReservationRepository reservations;
     private final ScheduleRepository schedules;
@@ -39,6 +40,10 @@ public class ReservationService {
     }
 
     private void checkReservationAvailable(Long scheduleId) {
+        if (!schedules.existsById(scheduleId)) {
+            throw new IllegalArgumentException(NO_SUCH_SCHEDULE_MESSAGE);
+        }
+
         if (reservations.existsByScheduleId(scheduleId)) {
             throw new IllegalArgumentException(DUPLICATE_RESERVATION_MESSAGE);
         }

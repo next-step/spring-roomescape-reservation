@@ -8,28 +8,25 @@ import nextstep.dto.ThemeFindAllResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import static nextstep.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ThemeControllerTest {
-    @LocalServerPort
-    int port;
-
+class ThemeAcceptanceTest extends AcceptanceTest {
+    @Override
     @BeforeEach
     void setUp() {
-        RestAssured.port = port;
+        super.setUp();
+        initThemeTable();
     }
 
     @Test
     @DisplayName("POST 테마 생성")
     void create() {
         // given
-        ThemeCreateRequest request = new ThemeCreateRequest("어마어마한 테마", "짱무서움", 20_000);
+        ThemeCreateRequest request = new ThemeCreateRequest(THEME_NAME, THEME_DESC, PRICE);
 
         // when
         ExtractableResponse<Response> response = createTheme(request);
@@ -42,7 +39,7 @@ class ThemeControllerTest {
     @DisplayName("GET 테마 전체조회")
     void findAll() {
         // given
-        ThemeCreateRequest request = new ThemeCreateRequest("어마어마한 테마", "짱무서움", 20_000);
+        ThemeCreateRequest request = new ThemeCreateRequest(THEME_NAME, THEME_DESC, PRICE);
         createTheme(request);
 
         // when
@@ -58,7 +55,7 @@ class ThemeControllerTest {
     @DisplayName("DELETE 테마 삭제")
     void deleteTheme() {
         // given
-        ThemeCreateRequest request = new ThemeCreateRequest("어마어마한 테마", "짱무서움", 20_000);
+        ThemeCreateRequest request = new ThemeCreateRequest(THEME_NAME, THEME_DESC, PRICE);
         createTheme(request);
 
         // when

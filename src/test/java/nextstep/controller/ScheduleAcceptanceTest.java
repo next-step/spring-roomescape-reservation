@@ -8,28 +8,25 @@ import nextstep.dto.ScheduleFindAllResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import static nextstep.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class ScheduleControllerTest {
-    @LocalServerPort
-    int port;
-
+class ScheduleAcceptanceTest extends AcceptanceTest{
+    @Override
     @BeforeEach
     void setUp() {
-        RestAssured.port = port;
+        super.setUp();
+        initScheduleTable();
     }
 
     @Test
     @DisplayName("POST 예약 생성")
     void createReservation() {
         // given
-        ScheduleCreateRequest request = new ScheduleCreateRequest(1L, "2020-12-01", "12:01");
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
 
         // when
         ExtractableResponse<Response> response = createSchedule(request);
@@ -42,11 +39,11 @@ class ScheduleControllerTest {
     @DisplayName("GET 스케줄 전체조회")
     void findAllSchedules() {
         // given
-        ScheduleCreateRequest request = new ScheduleCreateRequest(1L, "2020-12-02", "12:02");
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
         createSchedule(request);
 
         // when
-        ExtractableResponse<Response> response = findAllSchedules(1L, "2020-12-02");
+        ExtractableResponse<Response> response = findAllSchedules(THEME_ID, DATE_STRING);
         ScheduleFindAllResponse scheduleFindAllResponse = response.as(ScheduleFindAllResponse.class);
 
         // then
@@ -58,7 +55,7 @@ class ScheduleControllerTest {
     @DisplayName("DELETE 스케줄 삭제")
     void deleteSchedule() {
         // given
-        ScheduleCreateRequest request = new ScheduleCreateRequest(1L, "2020-12-03", "12:03");
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
         String scheduleId = createSchedule(request).header("Location").split("/")[2];
 
         // when

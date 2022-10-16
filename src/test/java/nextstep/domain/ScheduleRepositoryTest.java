@@ -1,29 +1,30 @@
 package nextstep.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
+import static nextstep.Constants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@SpringBootTest
-class ScheduleRepositoryTest {
+class ScheduleRepositoryTest extends RepositoryTest {
     @Autowired
     private ScheduleRepository schedules;
+
+    @BeforeEach
+    void setUp() {
+        initScheduleTable();
+    }
 
     @Test
     @DisplayName("스케줄을 저장한다.")
     void save() {
         // given
-        LocalDate date = LocalDate.of(2022, 12, 1);
-        LocalTime time = LocalTime.of(12, 1);
-        Schedule schedule = new Schedule(1L, date, time);
+        Schedule schedule = new Schedule(THEME_ID, DATE, TIME);
 
         // when
         Schedule savedSchedule = schedules.save(schedule);
@@ -39,12 +40,10 @@ class ScheduleRepositoryTest {
     @DisplayName("테마ID와 날짜에 해당하는 스케줄내역을 조회한다.")
     void findAllByThemeIdAndDate() {
         // given
-        LocalDate date = LocalDate.of(2022, 12, 2);
-        LocalTime time = LocalTime.of(12, 2);
-        Schedule schedule = schedules.save(new Schedule(1L, date, time));
+        Schedule schedule = schedules.save(new Schedule(THEME_ID, DATE, TIME));
 
         // when
-        List<Schedule> findSchedules = schedules.findAllByThemeIdAndDate(1L, date);
+        List<Schedule> findSchedules = schedules.findAllByThemeIdAndDate(THEME_ID, DATE);
 
         // then
         assertThat(findSchedules).hasSize(1);
@@ -56,12 +55,10 @@ class ScheduleRepositoryTest {
     @DisplayName("ID에 해당하는 스케줄을 삭제한다.")
     void deleteById() {
         // given
-        LocalDate date = LocalDate.of(2022, 12, 3);
-        LocalTime time = LocalTime.of(12, 3);
-        Schedule schedule = schedules.save(new Schedule(1L, date, time));
+        Schedule schedule = schedules.save(new Schedule(THEME_ID, DATE, TIME));
 
         // when, then
         assertDoesNotThrow(() -> schedules.deleteById(schedule.getId()));
-        assertThat(schedules.findAllByThemeIdAndDate(1L, date)).isEmpty();
+        assertThat(schedules.findAllByThemeIdAndDate(THEME_ID, DATE)).isEmpty();
     }
 }

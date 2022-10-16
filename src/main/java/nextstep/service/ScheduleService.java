@@ -3,10 +3,12 @@ package nextstep.service;
 import nextstep.domain.Schedule;
 import nextstep.domain.ScheduleRepository;
 import nextstep.dto.ScheduleCreateRequest;
+import nextstep.dto.ScheduleFindAllResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Service
 public class ScheduleService {
@@ -31,5 +33,12 @@ public class ScheduleService {
 
     private LocalTime parseTime(String time) {
         return LocalTime.parse(time + ":00");
+    }
+
+    public ScheduleFindAllResponse findAllSchedules(Long themeId, String inputDate) {
+        LocalDate date = parseDate(inputDate);
+
+        List<Schedule> findSchedules = schedules.findAllByThemeIdAndDate(themeId, date);
+        return ScheduleFindAllResponse.from(findSchedules);
     }
 }

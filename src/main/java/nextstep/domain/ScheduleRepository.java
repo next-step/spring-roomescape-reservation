@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.util.List;
 
 @Repository
 public class ScheduleRepository {
@@ -24,5 +26,18 @@ public class ScheduleRepository {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(schedule);
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
         return new Schedule(id, schedule);
+    }
+
+    public List<Schedule> findAllByThemeIdAndDate(Long themeId, LocalDate date) {
+        String sql = "select * from schedule where theme_id = ? and date = ?";
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, rowNum) -> new Schedule(
+                        resultSet.getLong("id"),
+                        resultSet.getLong("theme_id"),
+                        resultSet.getDate("date").toLocalDate(),
+                        resultSet.getTime("time").toLocalTime()
+                ),
+                themeId, date);
     }
 }

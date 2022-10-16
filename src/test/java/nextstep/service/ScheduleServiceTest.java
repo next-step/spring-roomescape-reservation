@@ -1,11 +1,14 @@
 package nextstep.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import nextstep.application.ReservationService;
 import nextstep.application.ScheduleService;
 import nextstep.application.ThemeService;
+import nextstep.exception.ScheduleException;
 import nextstep.presentation.dto.ScheduleRequest;
 import nextstep.presentation.dto.ScheduleResponse;
 import nextstep.presentation.dto.ThemeRequest;
@@ -17,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ScheduleServiceTest {
+class ScheduleServiceTest {
 
     @Autowired
     private ThemeService themeService;
@@ -78,5 +81,50 @@ public class ScheduleServiceTest {
             .usingRecursiveComparison()
             .ignoringFields("id", "theme.id")
             .isEqualTo(expected);
+    }
+
+    @DisplayName("스케줄을 삭제한다.")
+    @Test
+    void cancel_success() {
+        // given
+        ThemeRequest themeRequest = new ThemeRequest("열쇠공이", "열쇠공이의 이중생활", 25000);
+        Long themeId = themeService.create(themeRequest);
+
+        ScheduleRequest scheduleRequest = new ScheduleRequest(themeId, "2022-08-11", "16:00");
+        Long scheduleId = scheduleService.make(scheduleRequest);
+
+        reservationService.cancelAll();
+
+        // when
+        // then
+        assertThatCode(() -> scheduleService.cancel(scheduleId)).doesNotThrowAnyException();
+    }
+
+    @DisplayName("예약과 관련 있는 스케줄은 삭제할 수 없다.")
+    @Test
+    void cancel_fail1() {
+        // given
+        ThemeRequest themeRequest = new ThemeRequest("열쇠공이", "열쇠공이의 이중생활", 25000);
+        Long themeId = themeService.create(themeRequest);
+
+        ScheduleRequest scheduleRequest = new ScheduleRequest(themeId, "2022-08-11", "16:00");
+        Long scheduleId = scheduleService.make(scheduleRequest);
+
+        // when
+        // then
+        assertThatThrownBy(() -> scheduleService.cancel(scheduleId))
+            .isInstanceOf(ScheduleException.class)
+            .hasMessage("스케줄을 삭제할 수 없습니다.");
+    }
+
+    @DisplayName("존재하지 않는 스케줄은 삭제할 수 없다.")
+    @Test
+    void cancel_fail2() {
+        // given
+        // when
+        // then
+        assertThatThrownBy(() -> scheduleService.cancel(Long.MAX_VALUE))
+            .isInstanceOf(ScheduleException.class)
+            .hasMessage("존재하지 않는 스케줄입니다.");
     }
 }

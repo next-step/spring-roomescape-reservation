@@ -44,6 +44,10 @@ public class ReservationService {
         return new Reservation(request.getDate(), request.getTime(), request.getName());
     }
 
+    public boolean exist(Long id) {
+        return reservationRepository.exist(id);
+    }
+
     public List<ReservationResponse> checkAll(String date) {
         List<Reservation> reservations = reservationRepository.findAllBy(date);
 

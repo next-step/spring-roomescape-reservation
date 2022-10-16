@@ -1,6 +1,7 @@
 package nextstep.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
@@ -91,9 +92,7 @@ class ThemeServiceTest {
             .orElseThrow();
 
         // when
-        themeService.delete(themeId);
-
         // then
-        assertThat(themeService.checkAll()).isEmpty();
+        assertThatCode(() -> themeService.delete(themeId)).doesNotThrowAnyException();
     }
 }

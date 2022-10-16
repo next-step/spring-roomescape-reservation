@@ -1,6 +1,7 @@
 package nextstep.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
@@ -58,6 +59,30 @@ class ReservationServiceTest {
             .hasMessageContaining("이미 예약이 차있습니다.");
     }
 
+    @DisplayName("예약 유무를 확인한다. - 있음")
+    @Test
+    void exist_true() {
+        // given
+        Long reservationId = reservationService.checkAll("2022-08-11").stream()
+            .filter(reservation -> "13:00".equals(reservation.getTime()))
+            .findFirst()
+            .map(ReservationResponse::getId)
+            .orElseThrow();
+
+        // when
+        // then
+        assertThat(reservationService.exist(reservationId)).isTrue();
+    }
+
+    @DisplayName("예약 유무를 확인한다. - 없음")
+    @Test
+    void exist_false() {
+        // given
+        // when
+        // then
+        assertThat(reservationService.exist(Long.MAX_VALUE)).isFalse();
+    }
+
     @DisplayName("예약 목록을 조회한다.")
     @Test
     void checkAll() {
@@ -98,10 +123,9 @@ class ReservationServiceTest {
     void cancel_success() {
         // given
         // when
-        reservationService.cancel("2022-08-11", "13:00");
-
         // then
-        assertThat(reservationService.checkAll("2022-08-11")).isEmpty();
+        assertThatCode(() -> reservationService.cancel("2022-08-11", "13:00"))
+            .doesNotThrowAnyException();
     }
 
     @DisplayName("예약을 취소할 때, 해당 `날짜`와 `시간`에 아무 예약도 존재하지 않으면 예약을 취소할 수 없다.")

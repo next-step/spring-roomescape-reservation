@@ -36,7 +36,7 @@ public class ScheduleService {
         Long reservationId = reservationService.make(toReservationRequest(request));
 
         scheduleRepository.save(toSchedule(request, reservationId));
-        return scheduleRepository.findBy(reservationId)
+        return scheduleRepository.findByReservationId(reservationId)
             .map(Schedule::getId)
             .orElseThrow(() -> new ScheduleException("존재하지 않는 스케줄입니다."));
     }
@@ -84,7 +84,15 @@ public class ScheduleService {
 
     @Transactional
     public void cancel(Long id) {
-        scheduleRepository.delete(id);
+        scheduleRepository.findByScheduleId(id)
+            .ifPresentOrElse(schedule -> {
+                if (reservationService.exist(schedule.getReservationId())) {
+                    throw new ScheduleException("스케줄을 삭제할 수 없습니다.");
+                }
+                scheduleRepository.delete(id);
+            }, () -> {
+                throw new ScheduleException("존재하지 않는 스케줄입니다.");
+            });
     }
 
     @Transactional

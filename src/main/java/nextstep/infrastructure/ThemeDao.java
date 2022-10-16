@@ -6,6 +6,7 @@ import nextstep.domain.Theme;
 import nextstep.domain.repository.ThemeRepository;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,6 +17,13 @@ public class ThemeDao implements ThemeRepository {
     public ThemeDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    private final RowMapper<Theme> theme = (rs, rowNum) -> new Theme(
+        rs.getLong("id"),
+        rs.getString("name"),
+        rs.getString("desc"),
+        rs.getInt("price")
+    );
 
     @Override
     public void save(Theme theme) {
@@ -32,12 +40,7 @@ public class ThemeDao implements ThemeRepository {
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select id, name, desc, price from theme where name = ?",
-                (rs, rowNum) -> new Theme(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getString("desc"),
-                    rs.getInt("price")
-                ),
+                theme,
                 name
             ));
         } catch (IncorrectResultSizeDataAccessException e) {
@@ -50,12 +53,7 @@ public class ThemeDao implements ThemeRepository {
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select id, name, desc, price from theme where id = ?",
-                (rs, rowNum) -> new Theme(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getString("desc"),
-                    rs.getInt("price")
-                ),
+                theme,
                 id
             ));
         } catch (IncorrectResultSizeDataAccessException e) {
@@ -65,15 +63,7 @@ public class ThemeDao implements ThemeRepository {
 
     @Override
     public List<Theme> findAll() {
-        return jdbcTemplate.query(
-            "select id, name, desc, price from theme",
-            (rs, rowNum) -> new Theme(
-                rs.getLong("id"),
-                rs.getString("name"),
-                rs.getString("desc"),
-                rs.getInt("price")
-            )
-        );
+        return jdbcTemplate.query("select id, name, desc, price from theme", theme);
     }
 
     @Override

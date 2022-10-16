@@ -1,5 +1,6 @@
 create table if not exists reservation (
     id bigint not null auto_increment primary key,
+    schedule_id bigint not null,
     date date not null,
     time time not null,
     name varchar(255) not null

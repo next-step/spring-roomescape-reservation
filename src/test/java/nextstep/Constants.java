@@ -16,5 +16,6 @@ public class Constants {
     public static final String THEME_DESC = "짱무서움";
 
     public static final Long THEME_ID = 1L;
+    public static final Long SCHEDULE_ID = 1L;
     public static final int PRICE = 20_000;
 }

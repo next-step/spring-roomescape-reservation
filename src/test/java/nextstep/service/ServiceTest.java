@@ -9,9 +9,19 @@ class ServiceTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    protected ThemeService themeService;
+
+    @Autowired
+    protected ScheduleService scheduleService;
+
+    @Autowired
+    protected ReservationService reservationService;
+
     protected void initReservationTable() {
         String sql = "create table if not exists reservation (" +
                 "id bigint not null auto_increment primary key," +
+                "schedule_id bigint not null," +
                 "date date not null," +
                 "time time not null," +
                 "name varchar(255) not null)";

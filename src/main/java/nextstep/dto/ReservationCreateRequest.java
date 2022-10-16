@@ -1,22 +1,16 @@
 package nextstep.dto;
 
 public class ReservationCreateRequest {
-    private final String date;
-    private final String time;
+    private final Long scheduleId;
     private final String name;
 
-    public ReservationCreateRequest(String date, String time, String name) {
-        this.date = date;
-        this.time = time;
+    public ReservationCreateRequest(Long scheduleId, String name) {
+        this.scheduleId = scheduleId;
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
     public String getName() {

@@ -44,4 +44,13 @@ public class ThemeRepository {
         String sql = "delete from theme where id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    public boolean existsByName(String name) {
+        return countByName(name) > 0;
+    }
+
+    private int countByName(String name) {
+        String sql = "select count(*) from theme where name = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, name);
+    }
 }

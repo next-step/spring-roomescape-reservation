@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import nextstep.dto.ErrorResponse;
 import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ReservationFindAllResponse;
+import nextstep.dto.ScheduleCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,14 +22,16 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @BeforeEach
     void setUp() {
         super.setUp();
+        initScheduleTable();
         initReservationTable();
+        createSchedule();
     }
 
     @Test
     @DisplayName("POST 예약 생성")
     void createReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
 
         // when
         ExtractableResponse<Response> response = createReservation(request);
@@ -41,7 +44,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("POST 예약 생성 - 중복 예약 시, 예약 실패")
     void failToCreate() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
         createReservation(request);
 
         // when
@@ -57,7 +60,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("GET 예약 전체조회")
     void findAllReservations() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
         createReservation(request);
 
         // when
@@ -73,7 +76,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
     @DisplayName("DELETE 예약 삭제")
     void deleteReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
         createReservation(request);
 
         // when
@@ -108,6 +111,17 @@ class ReservationAcceptanceTest extends AcceptanceTest {
                 .queryParam("date", date)
                 .queryParam("time", time)
                 .when().delete("/reservations")
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> createSchedule() {
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
+
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when().post("/schedules")
                 .then().log().all().extract();
     }
 }

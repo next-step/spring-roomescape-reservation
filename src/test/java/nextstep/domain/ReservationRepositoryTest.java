@@ -24,7 +24,7 @@ class ReservationRepositoryTest extends RepositoryTest {
     @DisplayName("예약을 저장한다.")
     void save() {
         // given
-        Reservation reservation = new Reservation(DATE, TIME, NAME);
+        Reservation reservation = new Reservation(SCHEDULE_ID, DATE, TIME, NAME);
 
         // when
         Reservation savedReservation = reservations.save(reservation);
@@ -40,7 +40,7 @@ class ReservationRepositoryTest extends RepositoryTest {
     @DisplayName("날짜에 해당하는 예약내역을 조회한다.")
     void findAllByDate() {
         // given
-        Reservation reservation = reservations.save(new Reservation(DATE, TIME, NAME));
+        Reservation reservation = reservations.save(new Reservation(SCHEDULE_ID, DATE, TIME, NAME));
 
         // when
         List<Reservation> findReservations = reservations.findAllByDate(DATE);
@@ -55,7 +55,7 @@ class ReservationRepositoryTest extends RepositoryTest {
     @DisplayName("날짜와 시간에 해당하는 예약내역을 삭제한다.")
     void deleteByDateAndTime() {
         // given
-        Reservation reservation = reservations.save(new Reservation(DATE, TIME, NAME));
+        Reservation reservation = reservations.save(new Reservation(SCHEDULE_ID, DATE, TIME, NAME));
 
         // when, then
         assertDoesNotThrow(() -> reservations.deleteByDateAndTime(DATE, TIME));
@@ -63,15 +63,13 @@ class ReservationRepositoryTest extends RepositoryTest {
     }
 
     @Test
-    @DisplayName("날짜와 시간에 해당하는 예약내역이 있으면 true, 없다면 false를 반환한다.")
+    @DisplayName("해당 스케줄에 예약내역이 있으면 true, 없다면 false를 반환한다.")
     void existsByDateAndTime() {
         // given, when
-        reservations.save(new Reservation(DATE, TIME, NAME));
+        reservations.save(new Reservation(SCHEDULE_ID, DATE, TIME, NAME));
 
         // then
-        assertThat(reservations.existsByDateAndTime(DATE, TIME)).isTrue();
-        assertThat(reservations.existsByDateAndTime(DATE, OTHER_TIME)).isFalse();
-        assertThat(reservations.existsByDateAndTime(OTHER_DATE, TIME)).isFalse();
-        assertThat(reservations.existsByDateAndTime(OTHER_DATE, OTHER_TIME)).isFalse();
+        assertThat(reservations.existsByScheduleId(SCHEDULE_ID)).isTrue();
+        assertThat(reservations.existsByScheduleId(2L)).isFalse();
     }
 }

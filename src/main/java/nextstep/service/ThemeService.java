@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class ThemeService {
+    public static final String DUPLICATE_THEME_MESSAGE = "이미 존재하는 테마이름입니다.";
     private final ThemeRepository themes;
 
     public ThemeService(ThemeRepository themes) {
@@ -21,8 +22,15 @@ public class ThemeService {
         String desc = themeCreateRequest.getDesc();
         int price = themeCreateRequest.getPrice();
 
+        checkThemeAvailable(name);
         Theme theme = themes.save(new Theme(name, desc, price));
         return theme.getId();
+    }
+
+    private void checkThemeAvailable(String name) {
+        if (themes.existsByName(name)) {
+            throw new IllegalArgumentException(DUPLICATE_THEME_MESSAGE);
+        }
     }
 
     public ThemeFindAllResponse findAllThemes() {

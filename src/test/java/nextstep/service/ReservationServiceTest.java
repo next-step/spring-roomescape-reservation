@@ -2,10 +2,10 @@ package nextstep.service;
 
 import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ReservationFindAllResponse;
+import nextstep.dto.ScheduleCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static nextstep.Constants.*;
 import static nextstep.service.ReservationService.DUPLICATE_RESERVATION_MESSAGE;
@@ -14,19 +14,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ReservationServiceTest extends ServiceTest {
-    @Autowired
-    private ReservationService reservationService;
-
     @BeforeEach
     void setUp() {
+        initScheduleTable();
         initReservationTable();
+        scheduleService.createSchedule(new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING));
     }
 
     @Test
     @DisplayName("예약을 생성한다.")
     void createReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
 
         // when
         Long reservationId = reservationService.createReservation(request);
@@ -39,7 +38,7 @@ class ReservationServiceTest extends ServiceTest {
     @DisplayName("동시간대에 예약이 존재할 경우, 예외를 반환한다.")
     void failToCreateReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
         reservationService.createReservation(request);
 
         // when, then
@@ -52,7 +51,7 @@ class ReservationServiceTest extends ServiceTest {
     @DisplayName("특정 날짜에 해당하는 예약 목록을 조회한다.")
     void findAllReservations() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
         reservationService.createReservation(request);
 
         // when
@@ -66,7 +65,7 @@ class ReservationServiceTest extends ServiceTest {
     @DisplayName("특정 날짜와 시간에 해당하는 예약을 삭제한다.")
     void deleteReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest(DATE_STRING, TIME_STRING, NAME);
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
         reservationService.createReservation(request);
 
         // when, then

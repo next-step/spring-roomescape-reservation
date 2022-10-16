@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class ReservationFinderTest {
 
-  ReservationFinder reservationFinder = new ReservationFinder(new ReservationRepository() {
+  ReservationFinder reservationFinder = new ReservationFinderImpl(new ReservationRepository() {
     @Override
     public List<Reservation> findAll(ReservationFindCondition condition) {
       /*

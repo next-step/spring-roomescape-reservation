@@ -1,8 +1,11 @@
 package nextstep.domain.reservation.model;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Getter
 public class Reservation {
     private final Long id;
     private final LocalDate date;
@@ -16,19 +19,11 @@ public class Reservation {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public Boolean sameDateTime(LocalDate date, LocalTime time) {
+        return this.date.isEqual(date) && this.time.equals(time);
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public String getName() {
-        return name;
+    public Boolean sameDate(LocalDate date) {
+        return this.date.isEqual(date);
     }
 }

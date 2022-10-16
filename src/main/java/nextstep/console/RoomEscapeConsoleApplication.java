@@ -58,7 +58,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.cancelByDateAndTime(LocalDate.parse(date), LocalTime.parse(time));
+                reservations.cancelByDateTime(LocalDate.parse(date), LocalTime.parse(time));
 
                 System.out.println("예약이 취소되었습니다.");
             }

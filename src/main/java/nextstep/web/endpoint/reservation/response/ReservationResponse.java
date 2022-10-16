@@ -1,5 +1,7 @@
 package nextstep.web.endpoint.reservation.response;
 
+import lombok.Getter;
+import lombok.ToString;
 import nextstep.domain.reservation.model.Reservation;
 
 import java.time.LocalDate;
@@ -7,6 +9,8 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@ToString
 public class ReservationResponse {
     private final Long id;
     private final LocalDate date;
@@ -18,22 +22,6 @@ public class ReservationResponse {
         this.date = date;
         this.time = time;
         this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public static List<ReservationResponse> fromList(List<Reservation> reservations) {

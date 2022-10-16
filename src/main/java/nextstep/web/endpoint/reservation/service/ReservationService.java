@@ -21,12 +21,12 @@ public class ReservationService {
     }
 
     public void cancelByDateAndTime(ReservationDeleteRequest request) {
-        reservations.cancelByDateAndTime(request.getDate(), request.getTime());
+        reservations.cancelByDateTime(request.getDate(), request.getTime());
     }
 
     public List<ReservationResponse> findAllByDate(ReservationsSearchRequest request) {
-        List<Reservation> reservations = this.reservations.findAllByDate(request.getDate());
+        List<Reservation> findReservations = reservations.findAllByDate(request.getDate());
 
-        return ReservationResponse.fromList(reservations);
+        return ReservationResponse.fromList(findReservations);
     }
 }

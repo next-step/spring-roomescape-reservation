@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -35,9 +34,9 @@ public class ReservationController {
     }
 
     @GetMapping(RESERVATION_PATH)
-    public ResponseEntity<List<Reservation>> read(
+    public ResponseEntity<List<ReservationResponse>> read(
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        return ResponseEntity.ok(reservations.findBy(date));
+        return ResponseEntity.ok(ReservationResponse.from(reservations.findBy(date)));
     }
 
     @DeleteMapping(RESERVATION_PATH)

@@ -39,8 +39,7 @@ public class RoomEscapeService {
             .time(it.getTime().format(DateTimeFormatter.ofPattern("HH:mm")))
             .name(it.getName())
             .build())
-        .toList()
-        ;
+        .toList();
   }
 
   public void removeReservation(LocalDate date, String time) {

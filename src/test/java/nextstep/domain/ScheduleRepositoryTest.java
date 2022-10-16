@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 class ScheduleRepositoryTest {
@@ -49,5 +50,18 @@ class ScheduleRepositoryTest {
         assertThat(findSchedules).hasSize(1);
         assertThat(findSchedules.get(0)).usingRecursiveComparison()
                 .isEqualTo(schedule);
+    }
+
+    @Test
+    @DisplayName("ID에 해당하는 스케줄을 삭제한다.")
+    void deleteById() {
+        // given
+        LocalDate date = LocalDate.of(2022, 12, 3);
+        LocalTime time = LocalTime.of(12, 3);
+        Schedule schedule = schedules.save(new Schedule(1L, date, time));
+
+        // when, then
+        assertDoesNotThrow(() -> schedules.deleteById(schedule.getId()));
+        assertThat(schedules.findAllByThemeIdAndDate(1L, date)).isEmpty();
     }
 }

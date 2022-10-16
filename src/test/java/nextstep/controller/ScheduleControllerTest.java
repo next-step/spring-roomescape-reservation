@@ -39,6 +39,7 @@ class ScheduleControllerTest {
     }
 
     @Test
+    @DisplayName("GET 스케줄 전체조회")
     void findAllSchedules() {
         // given
         ScheduleCreateRequest request = new ScheduleCreateRequest(1L, "2020-12-02", "12:02");
@@ -51,6 +52,20 @@ class ScheduleControllerTest {
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(scheduleFindAllResponse.getSchedules()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("DELETE 스케줄 삭제")
+    void deleteSchedule() {
+        // given
+        ScheduleCreateRequest request = new ScheduleCreateRequest(1L, "2020-12-03", "12:03");
+        String scheduleId = createSchedule(request).header("Location").split("/")[2];
+
+        // when
+        ExtractableResponse<Response> response = deleteSchedule(Long.parseLong(scheduleId));
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     private ExtractableResponse<Response> createSchedule(ScheduleCreateRequest request) {
@@ -69,6 +84,14 @@ class ScheduleControllerTest {
                 .queryParam("themeId", themeId)
                 .queryParam("date", date)
                 .when().get("/schedules")
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> deleteSchedule(Long id) {
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete("/schedules/" + id)
                 .then().log().all().extract();
     }
 }

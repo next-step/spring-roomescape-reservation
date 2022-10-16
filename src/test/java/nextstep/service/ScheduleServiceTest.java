@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 class ScheduleServiceTest {
@@ -39,5 +40,16 @@ class ScheduleServiceTest {
 
         // then
         assertThat(schedules.getSchedules()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("ID에 해당하는 스케줄을 삭제한다.")
+    void deleteSchedule() {
+        // given
+        ScheduleCreateRequest request = new ScheduleCreateRequest(1L, "2021-12-03", "12:03");
+        Long scheduleId = scheduleService.createSchedule(request);
+
+        // when, then
+        assertDoesNotThrow(() -> scheduleService.deleteSchedule(scheduleId));
     }
 }

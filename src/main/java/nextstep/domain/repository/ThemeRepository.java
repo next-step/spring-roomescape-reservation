@@ -10,6 +10,8 @@ public interface ThemeRepository {
 
     Optional<Theme> findBy(String name);
 
+    Optional<Theme> findBy(Long id);
+
     List<Theme> findAll();
 
     void delete(Long id);

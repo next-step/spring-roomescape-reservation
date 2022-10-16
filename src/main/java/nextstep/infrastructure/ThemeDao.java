@@ -46,6 +46,24 @@ public class ThemeDao implements ThemeRepository {
     }
 
     @Override
+    public Optional<Theme> findBy(Long id) {
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                "select id, name, desc, price from theme where id = ?",
+                (rs, rowNum) -> new Theme(
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("desc"),
+                    rs.getInt("price")
+                ),
+                id
+            ));
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public List<Theme> findAll() {
         return jdbcTemplate.query(
             "select id, name, desc, price from theme",

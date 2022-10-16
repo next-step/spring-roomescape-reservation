@@ -11,3 +11,10 @@ create table if not exists theme (
     desc varchar(255) not null,
     price int not null
 );
+
+create table if not exists schedule (
+    id bigint not null auto_increment primary key,
+    themeId bigint not null,
+    date date not null,
+    time time not null
+);

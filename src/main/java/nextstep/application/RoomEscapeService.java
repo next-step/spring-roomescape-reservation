@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.application.dto.ReservationCreateReq;
+import nextstep.application.dto.Reservation;
 import nextstep.application.dto.ReservationRes;
 import nextstep.domain.ReservationEntity;
 import nextstep.domain.repository.ReservationRepository;
@@ -17,7 +17,7 @@ public class RoomEscapeService {
 
   private final ReservationRepository repository;
 
-  public Long create(ReservationCreateReq req) {
+  public Long create(Reservation req) {
     var reservation = ReservationEntity.builder()
         .date(req.date())
         .time(LocalTime.parse(req.time()))

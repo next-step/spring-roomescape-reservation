@@ -1,14 +1,9 @@
 package nextstep;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import nextstep.application.RoomEscapeService;
 import nextstep.application.dto.Reservation;
-import nextstep.application.dto.ReservationCreateReq;
 import nextstep.domain.repository.ReservationRepository;
 
 public class Main {
@@ -44,7 +39,7 @@ public class Main {
         System.out.println("예약자 이름");
         String name = scanner.nextLine();
 
-        ReservationCreateReq reservation = ReservationCreateReq.builder()
+        Reservation reservation = Reservation.builder()
             .date(LocalDate.parse(date))
             .time(time)
             .name(name)

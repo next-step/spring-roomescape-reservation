@@ -101,6 +101,18 @@ public class ReservationControllerTest extends SpringControllerTest {
                 .then().log().all().extract();
     }
 
+    public static long 예약을_생성한다(long scheduleId) {
+        ReservationCreateRequest request = new ReservationCreateRequest(
+                scheduleId,
+                LocalDate.parse("2022-10-11"),
+                LocalTime.parse("13:00:00"),
+                "박민영"
+        );
+        ExtractableResponse<Response> response = 예약_생성_요청(request);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        return Long.parseLong(String.valueOf(response.header("Location").split("^*/")[2]));
+    }
+
     public static ExtractableResponse<Response> 예약_조회_요청(Long scheduleId, String date) {
         return given()
                 .queryParam("scheduleId", scheduleId)

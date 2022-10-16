@@ -1,5 +1,6 @@
 package nextstep.schedule;
 
+import nextstep.reservation.ReservationRepository;
 import nextstep.theme.ThemeJdbcRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +12,12 @@ public class ScheduleService {
 
     private final ThemeJdbcRepository themeJdbcRepository;
     private final ScheduleJdbcRepository scheduleJdbcRepository;
+    private final ReservationRepository reservationRepository;
 
-    public ScheduleService(ThemeJdbcRepository themeJdbcRepository, ScheduleJdbcRepository scheduleJdbcRepository) {
+    public ScheduleService(ThemeJdbcRepository themeJdbcRepository, ScheduleJdbcRepository scheduleJdbcRepository, ReservationRepository reservationRepository) {
         this.themeJdbcRepository = themeJdbcRepository;
         this.scheduleJdbcRepository = scheduleJdbcRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public ScheduleResponse createSchedule(ScheduleCreateRequest request) {
@@ -36,6 +39,9 @@ public class ScheduleService {
     }
 
     public void deleteSchedule(Long scheduleId) {
+        if (this.reservationRepository.findByScheduleId(scheduleId).size() > 0) {
+            throw new IllegalStateException("스케줄 삭제 실패: 해당 스케줄에 예약이 존재합니다.");
+        }
         if (this.scheduleJdbcRepository.deleteSchedule(scheduleId)) {
             return;
         }

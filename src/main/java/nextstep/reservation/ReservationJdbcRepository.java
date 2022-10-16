@@ -67,6 +67,12 @@ public class ReservationJdbcRepository implements ReservationRepository {
         return jdbcTemplate.query(sql, rowMapper, date);
     }
 
+    @Override
+    public List<Reservation> findByScheduleId(Long scheduleId) {
+        String sql = "SELECT * FROM reservation WHERE schedule_id = ?";
+        return jdbcTemplate.query(sql, rowMapper, scheduleId);
+    }
+
     public boolean deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
         String sql = "DELETE FROM reservation WHERE schedule_id = ? AND date = ? AND time = ?";
         int deleteCount = jdbcTemplate.update(sql, scheduleId, date, time);

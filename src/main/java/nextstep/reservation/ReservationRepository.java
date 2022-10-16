@@ -17,5 +17,7 @@ public interface ReservationRepository {
 
     boolean deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time);
 
+    List<Reservation> findByScheduleId(Long scheduleId);
+
     void clear();
 }

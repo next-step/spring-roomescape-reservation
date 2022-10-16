@@ -3,6 +3,7 @@ package nextstep.schedule;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.SpringControllerTest;
+import nextstep.reservation.ReservationControllerTest;
 import nextstep.theme.ThemeJdbcRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static io.restassured.RestAssured.given;
+import static nextstep.reservation.ReservationControllerTest.*;
 import static nextstep.theme.ThemeControllerTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -122,6 +124,24 @@ public class ScheduleControllerTest extends SpringControllerTest {
         ExtractableResponse<Response> getThemesResponse = 스케줄_조회_요청(createdThemeId, "2022-10-11");
         assertThat(getThemesResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(getThemesResponse.jsonPath().getList("id")).isEmpty();
+
+        // when
+        ExtractableResponse<Response> response = 스케줄_삭제_요청(1L);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
+    @DisplayName("스케줄에 예약이 존재한다면 스케줄 삭제가 불가능하다.")
+    @Test
+    void deleteScheduleWithExistReservation() {
+        // given
+        long createdThemeId = 테마를_생성한다("404호의 비밀");
+        long createdScheduleId = 스케줄을_생성한다(createdThemeId);
+        예약을_생성한다(createdScheduleId);
+        ExtractableResponse<Response> getThemesResponse = 스케줄_조회_요청(createdThemeId, "2022-10-11");
+        assertThat(getThemesResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(getThemesResponse.jsonPath().getList("id")).hasSize(1);
 
         // when
         ExtractableResponse<Response> response = 스케줄_삭제_요청(1L);

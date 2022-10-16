@@ -4,7 +4,10 @@ import com.nextstep.web.reservation.dto.CreateReservationRequest;
 import com.nextstep.web.reservation.dto.ReservationResponse;
 import nextsetp.domain.reservation.exception.DuplicationReservationException;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -12,31 +15,27 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-class ReservationServiceTest {
+class ReservationCommandServiceTest {
+
     @Autowired
-    private ReservationService reservationService;
+    private ReservationCommandService reservationCommandService;
+
     String testDate = "2022-08-11";
     String testTime = "13:00";
+    CreateReservationRequest testRequest = new CreateReservationRequest
+            (LocalDate.parse(testDate), LocalTime.parse(testTime), "a");
 
     @BeforeEach
     void setUp() {
-        CreateReservationRequest request = new CreateReservationRequest
-                (LocalDate.parse(testDate), LocalTime.parse(testTime), "a");
-
-        reservationService.save(request);
+        reservationCommandService.save(testRequest);
     }
 
     @AfterEach
     void tearDown() {
-        reservationService.delete(testDate, testTime);
-    }
-
-    @DisplayName("해당 날짜의 예약을 조회한다.")
-    @Test
-    void findAllBy() {
-        List<ReservationResponse> reservations = reservationService.findAllBy(testDate);
-        Assertions.assertThat(reservations).hasSize(1);
+        reservationCommandService.delete(testDate, testTime);
     }
 
     @DisplayName("예약을 생성한다.")
@@ -46,19 +45,16 @@ class ReservationServiceTest {
         String time = "00:00";
         CreateReservationRequest request = new CreateReservationRequest
                 (LocalDate.parse(date), LocalTime.parse(time), "a");
-        Long id = reservationService.save(request);
+        Long id = reservationCommandService.save(request);
         Assertions.assertThat(id).isNotNull();
     }
 
     @DisplayName("해당 날짜와 시간의 예약을 삭제한다.")
     @Test
     void delete() {
-        String time = "00:00";
-        CreateReservationRequest request = new CreateReservationRequest
-                (LocalDate.parse(testDate), LocalTime.parse(time), "a");
-        reservationService.save(request);
-        reservationService.delete(testDate, time);
-        Assertions.assertThat(reservationService.findAllBy(testDate)).hasSize(1);
+        reservationCommandService.delete(testDate, testTime);
+        Long id = reservationCommandService.save(testRequest);
+        Assertions.assertThat(id).isNotNull();
     }
 
     @DisplayName("같은 날 같은 시간에 예약은 중복 생성 할 수 없다.")
@@ -70,7 +66,7 @@ class ReservationServiceTest {
                 (LocalDate.parse(duplicateDate), LocalTime.parse(duplicateTime), "b");
 
         Assertions.assertThatThrownBy(() -> {
-            reservationService.save(failRequest);
+            reservationCommandService.save(failRequest);
         }).isInstanceOf(DuplicationReservationException.class);
     }
 }

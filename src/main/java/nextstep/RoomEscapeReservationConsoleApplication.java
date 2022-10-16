@@ -1,8 +1,10 @@
 package nextstep;
 
+import java.util.Optional;
 import java.util.Scanner;
 import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
+import nextstep.exception.ReservationException;
 import nextstep.infrastructure.ReservationDao;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -40,6 +42,11 @@ public class RoomEscapeReservationConsoleApplication {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
+                Optional<Reservation> reservation = reservationRepository.findBy(date, time);
+
+                if (reservation.isPresent()) {
+                    throw new ReservationException(String.format("%s은 이미 예약되었습니다.", reservation));
+                }
                 reservationRepository.save(new Reservation(date, time, name));
 
                 System.out.println("예약이 등록되었습니다.");

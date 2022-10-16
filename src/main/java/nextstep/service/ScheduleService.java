@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class ScheduleService {
     public static final String DUPLICATE_SCHEDULE_MESSAGE = "해당 테마에 이미 존재하는 스케줄입니다.";
-    public static final String CANT_DELETE_MESSAGE = "예약이 존재하는 스케줄은 삭제할 수 없습니다.";
+    public static final String CANT_DELETE_SCHEDULE = "예약이 존재하는 스케줄은 삭제할 수 없습니다.";
     private final ScheduleRepository schedules;
     private final ReservationRepository reservations;
 
@@ -53,7 +53,7 @@ public class ScheduleService {
 
     private void checkDeleteAvailable(Long id) {
         if (reservations.existsByScheduleId(id)) {
-            throw new IllegalArgumentException(CANT_DELETE_MESSAGE);
+            throw new IllegalArgumentException(CANT_DELETE_SCHEDULE);
         }
     }
 

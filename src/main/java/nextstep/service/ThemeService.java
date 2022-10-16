@@ -1,5 +1,7 @@
 package nextstep.service;
 
+import nextstep.domain.ReservationRepository;
+import nextstep.domain.ScheduleRepository;
 import nextstep.domain.Theme;
 import nextstep.domain.ThemeRepository;
 import nextstep.dto.ThemeCreateRequest;
@@ -11,10 +13,16 @@ import java.util.List;
 @Service
 public class ThemeService {
     public static final String DUPLICATE_THEME_MESSAGE = "이미 존재하는 테마이름입니다.";
-    private final ThemeRepository themes;
+    public static final String CANT_DELETE_THEME = "예약이 존재하는 테마는 삭제할 수 없습니다.";
 
-    public ThemeService(ThemeRepository themes) {
+    private final ThemeRepository themes;
+    private final ScheduleRepository schedules;
+    private final ReservationRepository reservations;
+
+    public ThemeService(ThemeRepository themes, ScheduleRepository schedules, ReservationRepository reservations) {
         this.themes = themes;
+        this.schedules = schedules;
+        this.reservations = reservations;
     }
 
     public Long createTheme(ThemeCreateRequest themeCreateRequest) {
@@ -39,8 +47,14 @@ public class ThemeService {
     }
 
     public void deleteTheme(Long themeId) {
-
-        // todo 예약이 있으면 테마 삭제 불가
+        checkDeleteAvailable(themeId);
         themes.deleteById(themeId);
+    }
+
+    private void checkDeleteAvailable(Long themeId) {
+        List<Long> scheduleIds = schedules.findIdsByThemeId(themeId);
+        if (scheduleIds.stream().anyMatch(reservations::existsByScheduleId)) {
+            throw new IllegalArgumentException(CANT_DELETE_THEME);
+        }
     }
 }

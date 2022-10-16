@@ -42,6 +42,13 @@ public class ScheduleRepository {
         return jdbcTemplate.query(sql, mapper, themeId, date);
     }
 
+    public List<Long> findIdsByThemeId(Long themeId) {
+        String sql = "select id from schedule where theme_id = ?";
+        return jdbcTemplate.query(sql,
+                (resultSet, rowNum) -> resultSet.getLong("id"),
+                themeId);
+    }
+
     public Schedule findById(Long id) {
         String sql = "select * from schedule where id = ?";
         return jdbcTemplate.queryForObject(sql, mapper, id);

@@ -52,6 +52,21 @@ class ScheduleRepositoryTest extends RepositoryTest {
     }
 
     @Test
+    @DisplayName("테마ID에 해당하는 스케줄들의 ID목록을 조회한다.")
+    void findIdsByThemeId() {
+        // given
+        Schedule schedule = schedules.save(new Schedule(THEME_ID, DATE, TIME));
+
+        // when
+        List<Long> ids = schedules.findIdsByThemeId(THEME_ID);
+
+        // then
+        assertThat(ids).hasSize(1);
+        assertThat(ids).usingRecursiveComparison()
+                .isEqualTo(List.of(schedule.getId()));
+    }
+
+    @Test
     @DisplayName("ID에 해당하는 스케줄을 조회한다.")
     void findById() {
         // given

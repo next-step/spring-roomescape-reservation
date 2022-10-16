@@ -8,8 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.Constants.*;
-import static nextstep.service.ScheduleService.CANT_DELETE_MESSAGE;
-import static nextstep.service.ScheduleService.DUPLICATE_SCHEDULE_MESSAGE;
+import static nextstep.service.ScheduleService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -83,6 +82,6 @@ class ScheduleServiceTest extends ServiceTest {
         // when, then
         assertThatThrownBy(() -> scheduleService.deleteSchedule(scheduleId))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(CANT_DELETE_MESSAGE);
+                .hasMessage(CANT_DELETE_SCHEDULE);
     }
 }

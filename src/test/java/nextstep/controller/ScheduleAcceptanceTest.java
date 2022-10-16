@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static nextstep.Constants.*;
-import static nextstep.service.ScheduleService.CANT_DELETE_MESSAGE;
-import static nextstep.service.ScheduleService.DUPLICATE_SCHEDULE_MESSAGE;
+import static nextstep.service.ScheduleService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ScheduleAcceptanceTest extends AcceptanceTest {
@@ -100,7 +99,7 @@ class ScheduleAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-        assertThat(errorResponse.getMessage()).isEqualTo(CANT_DELETE_MESSAGE);
+        assertThat(errorResponse.getMessage()).isEqualTo(CANT_DELETE_SCHEDULE);
     }
 
     private ExtractableResponse<Response> createSchedule(ScheduleCreateRequest request) {

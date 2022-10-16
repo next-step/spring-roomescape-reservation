@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.RoomEscapeService;
-import nextstep.application.dto.ReservationReq;
+import nextstep.application.dto.ReservationCreateReq;
 import nextstep.application.dto.ReservationRes;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -26,7 +26,7 @@ public class RoomEscapeController {
   private final RoomEscapeService service;
 
   @PostMapping
-  public ResponseEntity create(@RequestBody ReservationReq req) {
+  public ResponseEntity create(@RequestBody ReservationCreateReq req) {
     Long id = service.create(req);
     return ResponseEntity.created(URI.create("/reservations/" + id)).build();
   }

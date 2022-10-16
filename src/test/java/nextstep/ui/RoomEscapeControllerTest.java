@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 import nextstep.ApiDocument;
 import nextstep.application.RoomEscapeService;
-import nextstep.application.dto.ReservationReq;
+import nextstep.application.dto.ReservationCreateReq;
 import nextstep.application.dto.ReservationRes;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,7 +29,7 @@ class RoomEscapeControllerTest extends ApiDocument {
   @Test
   void 예약_생성한다() throws Exception {
     //given
-    var reservationReq = ReservationReq.builder()
+    var reservationReq = ReservationCreateReq.builder()
         .date(LocalDate.now())
         .time("13:00")
         .name("gump")
@@ -41,10 +41,10 @@ class RoomEscapeControllerTest extends ApiDocument {
     예약_생성_성공함(actual);
   }
 
-  private ResultActions 예약_생성_요청(ReservationReq reservationReq) throws Exception {
+  private ResultActions 예약_생성_요청(ReservationCreateReq reservationCreateReq) throws Exception {
     return mockMvc.perform(post("/reservations")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(toJson(reservationReq))
+        .content(toJson(reservationCreateReq))
     );
   }
 

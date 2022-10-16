@@ -1,8 +1,12 @@
-package nextstep.console;
+package nextstep;
 
 import nextstep.domain.reservation.model.Reservation;
-import nextstep.domain.reservation.model.Reservations;
+import nextstep.domain.reservation.service.ReservationDomainService;
+import nextstep.persist.ReservationJdbcRepository;
+import nextstep.persist.config.DataSourceConfig;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -16,7 +20,10 @@ public class RoomEscapeConsoleApplication {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Reservations reservations = new Reservations();
+        DataSource dataSource = DataSourceConfig.getInstance();
+        ReservationDomainService reservationDomainService = new ReservationDomainService(
+                new ReservationJdbcRepository(new JdbcTemplate(dataSource), dataSource)
+        );
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -40,7 +47,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
-                reservations.create(
+                reservationDomainService.create(
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name);
@@ -58,7 +65,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.cancelByDateTime(LocalDate.parse(date), LocalTime.parse(time));
+                reservationDomainService.cancelByDateTime(LocalDate.parse(date), LocalTime.parse(time));
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -71,7 +78,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                List<Reservation> findReservations = reservations.findAllByDate(LocalDate.parse(date));
+                List<Reservation> findReservations = reservationDomainService.findAllByDate(LocalDate.parse(date));
                 System.out.println(findReservations);
             }
 

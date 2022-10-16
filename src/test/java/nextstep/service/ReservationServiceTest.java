@@ -55,7 +55,7 @@ class ReservationServiceTest {
         // then
         assertThatThrownBy(() -> reservationService.make(request))
             .isInstanceOf(ReservationException.class)
-            .hasMessageContaining("이미 예약되었습니다.");
+            .hasMessageContaining("이미 예약이 차있습니다.");
     }
 
     @DisplayName("예약 목록을 조회한다.")

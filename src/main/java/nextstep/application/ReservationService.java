@@ -26,7 +26,7 @@ public class ReservationService {
         Optional<Reservation> reservation = findBy(request);
 
         if (reservation.isPresent()) {
-            throw new ReservationException(String.format("%s은 이미 예약되었습니다.", reservation));
+            throw new ReservationException(String.format("%s에는 이미 예약이 차있습니다.", reservation));
         }
 
         reservationRepository.save(getReservation(request));

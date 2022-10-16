@@ -6,7 +6,7 @@ import nextstep.domain.reservation.dto.ReservationFindCondition;
 
 public interface ReservationRepository {
 
-  default Reservation save(Reservation reservation) {
+  default Reservation save(ReservationCommandDto.Create create) {
     throw new UnsupportedOperationException();
   }
 

@@ -1,8 +1,11 @@
 package nextstep.domain.reservation.dto;
 
+import static nextstep.domain.reservation.Reservation.adjustReservationTimeRule;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.Builder;
+import lombok.extern.jackson.Jacksonized;
 
 public class ReservationCommandDto {
 
@@ -12,8 +15,10 @@ public class ReservationCommandDto {
       String name
   ) {
 
+    @Jacksonized
     @Builder(toBuilder = true)
     public Create {
+      time = adjustReservationTimeRule(time);
     }
   }
 
@@ -22,8 +27,10 @@ public class ReservationCommandDto {
       LocalTime time
   ) {
 
+    @Jacksonized
     @Builder(toBuilder = true)
     public Delete {
+      time = adjustReservationTimeRule(time);
     }
   }
 }

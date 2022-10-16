@@ -23,13 +23,7 @@ public class ReservationCommander {
         createValidator -> createValidator.validate(createReq)
     );
 
-    Reservation reservation = Reservation.builder()
-        .date(createReq.date())
-        .time(createReq.time())
-        .name(Name.of(createReq.name()))
-        .build();
-
-    return reservationRepository.save(reservation);
+    return reservationRepository.save(createReq);
   }
 
   public void deleteReservation(ReservationCommandDto.Delete deleteReq) {

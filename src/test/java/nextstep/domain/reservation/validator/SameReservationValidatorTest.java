@@ -29,7 +29,7 @@ class SameReservationValidatorTest {
                */
               var fixture = reservationFixtureFactory.getFixture();
 
-              if (condition.getDate().isEqual(fixture.getDate())) {
+              if (condition.date().isEqual(fixture.getDate())) {
                 return List.of(fixture);
               }
 

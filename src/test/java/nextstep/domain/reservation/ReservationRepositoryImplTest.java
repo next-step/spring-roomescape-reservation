@@ -30,11 +30,13 @@ class ReservationRepositoryImplTest {
   @Test
   void saveTest() {
     // given
-    var target = ReservationFixtureFactory.newInstance().getFixture();
+    var target = ReservationFixtureFactory.newInstance().getFixtureCreateReq();
     // when
     Reservation saved = reservationRepository.save(target);
     // then
-    assertThat(target).isEqualTo(saved);
+    assertThat(target.name()).isEqualTo(saved.getName().value());
+    assertThat(target.date()).isEqualTo(saved.getDate());
+    assertThat(target.time()).isEqualTo(saved.getTime());
   }
 
   @DisplayName("예약 객체를 전체 조회하는 데 성공한다.")
@@ -44,7 +46,7 @@ class ReservationRepositoryImplTest {
     var fixtureFactory = ReservationFixtureFactory.newInstance();
     var reservations =
         ReservationFixtureFactory.newInstance()
-            .getCustomFixtures(
+            .getCustomFixturesCreateReq(
                 // now() + 1day and +1minute ~ +10minute
                 now().plusMinutes(1), now().plusMinutes(10)
             );
@@ -68,7 +70,7 @@ class ReservationRepositoryImplTest {
   void deleteTest() {
     // given
     var fixtureFactory = ReservationFixtureFactory.newInstance();
-    reservationRepository.save(fixtureFactory.getFixture());
+    reservationRepository.save(fixtureFactory.getFixtureCreateReq());
     Delete properDeleteReq = fixtureFactory.getFixtureDeleteReq();
     Delete notExistDeleteReq = properDeleteReq.toBuilder()
         .date(properDeleteReq.date().plusDays(1))

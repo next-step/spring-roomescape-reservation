@@ -5,8 +5,10 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
+import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
 
 
@@ -28,12 +30,7 @@ public class ReservationFixtureFactory {
 
     this.fixture = createReservation(FIXTURE_ID, name, date, time);
 
-    this.create = ReservationCommandDto.Create
-        .builder()
-        .name(name.value())
-        .date(date)
-        .time(time)
-        .build();
+    this.create = toCreate(fixture);
 
     this.delete = ReservationCommandDto.Delete
         .builder()
@@ -53,6 +50,14 @@ public class ReservationFixtureFactory {
         .name(name)
         .date(date)
         .time(time)
+        .build();
+  }
+
+  private Create toCreate(Reservation reservation) {
+    return Create.builder()
+        .name(reservation.getName().value())
+        .date(reservation.getDate())
+        .time(reservation.getTime())
         .build();
   }
 
@@ -89,6 +94,23 @@ public class ReservationFixtureFactory {
     }
 
     return reservations;
+  }
+
+  /**
+   * rageFrom으로 부터 rangeTo 까지의 예약을 분단위로 생성해 반환한다.
+   * (open ranged)
+   * <pre>
+   *   var factory = ReservationFixtureFactory.newInstance();
+   *   List<Reservation> reservationCustoms = factory.getCustomFixturesCreateReq(LocalTime.now().plusMinutes(1), LocalTime.now().plusMinutes(10));
+   *   assertThat(reservationCustoms).hasSize(10); // true
+   * </pre>
+   */
+  public List<Create> getCustomFixturesCreateReq(LocalTime rangeFrom, LocalTime rangeTo) {
+    var customFixtures = getCustomFixtures(rangeFrom, rangeTo);
+
+    return customFixtures.stream()
+        .map(this::toCreate)
+        .toList();
   }
 
   /**

@@ -2,12 +2,12 @@ package nextstep.domain.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import nextstep.domain.reservation.Reservation.Name;
+import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class H2ReservationRepository implements ReservationRepository {
+public class ReservationRepositoryImpl implements ReservationRepository {
 
   static RowMapper<Reservation> reservationRowMapper = (resultSet, rowNum) -> Reservation.builder()
       .id(resultSet.getLong("id"))
@@ -29,23 +29,25 @@ public class H2ReservationRepository implements ReservationRepository {
   JdbcTemplate jdbcTemplate;
 
   @Override
-  public Reservation save(Reservation reservation) {
-    LocalDate date = reservation.getDate();
-    // 초단위 절삭
-    LocalTime time = reservation.getTime().truncatedTo(ChronoUnit.SECONDS);
-    Name name = reservation.getName();
+  public Reservation save(Create create) {
+    LocalDate date = create.date();
+    LocalTime time = create.time();
+    String name = create.name();
 
     String saveQuery = """
         insert into reservation (date, time, name) values (?, ?, ?)
         """;
 
-    jdbcTemplate.update(saveQuery, date, time, name.value());
+    jdbcTemplate.update(saveQuery, date, time, name);
 
     String getIdQuery = "select last_insert_id ()";
     Long entityId = jdbcTemplate.queryForObject(getIdQuery, Long.class);
 
-    return reservation.toBuilder()
+    return Reservation.builder()
         .id(entityId)
+        .name(Name.of(name))
+        .date(date)
+        .time(time)
         .build();
   }
 
@@ -59,7 +61,7 @@ public class H2ReservationRepository implements ReservationRepository {
         order by date
         """;
 
-    return jdbcTemplate.query(sql, reservationRowMapper, condition.getDate());
+    return jdbcTemplate.query(sql, reservationRowMapper, condition.date());
   }
 
   /**
@@ -69,7 +71,7 @@ public class H2ReservationRepository implements ReservationRepository {
   @Override
   public boolean delete(Delete deleteReq) {
     LocalDate date = deleteReq.date();
-    LocalTime time = deleteReq.time().truncatedTo(ChronoUnit.SECONDS);
+    LocalTime time = deleteReq.time();
 
     String sql = """
         delete 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -30,17 +31,21 @@ public class ReservationDao implements ReservationRepository {
 
     @Override
     public Optional<Reservation> findBy(String date, String time) {
-        return Optional.ofNullable(jdbcTemplate.queryForObject(
-            "select id, date, time, name from reservation where date = ? and time = ?",
-            (rs, rowNum) -> new Reservation(
-                rs.getLong("id"),
-                rs.getString("date"),
-                rs.getString("time"),
-                rs.getString("name")
-            ),
-            LocalDate.parse(date),
-            LocalTime.parse(time)
-        ));
+        try {
+            return Optional.ofNullable(jdbcTemplate.queryForObject(
+                "select id, date, time, name from reservation where date = ? and time = ?",
+                (rs, rowNum) -> new Reservation(
+                    rs.getLong("id"),
+                    rs.getString("date"),
+                    rs.getString("time"),
+                    rs.getString("name")
+                ),
+                LocalDate.parse(date),
+                LocalTime.parse(time)
+            ));
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

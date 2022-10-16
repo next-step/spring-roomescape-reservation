@@ -14,7 +14,7 @@ create table if not exists theme (
 
 create table if not exists schedule (
     id bigint not null auto_increment primary key,
-    themeId bigint not null,
+    theme_id bigint not null,
     date date not null,
     time time not null
 );

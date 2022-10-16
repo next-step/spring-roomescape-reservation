@@ -1,0 +1,22 @@
+### 예약 등록
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "date": "2022-10-17",
+  "time": "10:00",
+  "name": "성시형"
+}
+
+### 예약 삭제
+DELETE http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "date": "2022-10-17",
+  "time": "10:00"
+}
+
+### 예약 조회
+GET http://localhost:8080/reservations?date=2022-10-17&time=10:00
+

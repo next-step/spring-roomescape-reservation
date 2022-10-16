@@ -22,13 +22,17 @@ public class ReservationService {
     }
 
     @Transactional
-    public Integer make(ReservationRequest request) {
+    public Long make(ReservationRequest request) {
         Optional<Reservation> reservation = findBy(request);
 
         if (reservation.isPresent()) {
             throw new ReservationException(String.format("%s은 이미 예약되었습니다.", reservation));
         }
-        return reservationRepository.save(getReservation(request));
+
+        reservationRepository.save(getReservation(request));
+        return findBy(request)
+            .map(Reservation::getId)
+            .orElseThrow(() -> new ReservationException("존재하지 않는 예약입니다."));
     }
 
     private Optional<Reservation> findBy(ReservationRequest request) {

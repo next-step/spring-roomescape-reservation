@@ -9,6 +9,12 @@ public class ReservationRequest {
     private ReservationRequest() {
     }
 
+    public ReservationRequest(String date, String time, String name) {
+        this.date = date;
+        this.time = time;
+        this.name = name;
+    }
+
     public String getDate() {
         return date;
     }

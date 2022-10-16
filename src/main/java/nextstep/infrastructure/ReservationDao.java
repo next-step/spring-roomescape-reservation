@@ -20,8 +20,8 @@ public class ReservationDao implements ReservationRepository {
     }
 
     @Override
-    public Integer save(Reservation reservation) {
-        return jdbcTemplate.update(
+    public void save(Reservation reservation) {
+        jdbcTemplate.update(
             "insert into reservation (date, time, name) values (?, ?, ?)",
             reservation.getDate(),
             reservation.getTime(),
@@ -69,5 +69,10 @@ public class ReservationDao implements ReservationRepository {
             LocalDate.parse(date),
             LocalTime.parse(time)
         );
+    }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update("delete from reservation");
     }
 }

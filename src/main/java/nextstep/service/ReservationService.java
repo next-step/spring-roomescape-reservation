@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 public class ReservationService {
     public static final String DUPLICATE_RESERVATION_MESSAGE = "동시간대에 이미 예약이 존재합니다.";
+    public static final String NO_RESERVATION_MESSAGE = "예약이 존재하지 않습니다.";
 
     private final ReservationRepository reservations;
     private final ScheduleRepository schedules;
@@ -54,7 +55,9 @@ public class ReservationService {
         LocalDate date = parseDate(inputDate);
         LocalTime time = parseTime(inputTime);
 
-        reservations.deleteByDateAndTime(date, time);
+        if (reservations.deleteByDateAndTime(date, time) == 0) {
+            throw new IllegalArgumentException(NO_RESERVATION_MESSAGE);
+        }
     }
 
     private LocalDate parseDate(String date) {

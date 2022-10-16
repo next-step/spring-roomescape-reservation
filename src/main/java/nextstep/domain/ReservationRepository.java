@@ -43,9 +43,9 @@ public class ReservationRepository {
                 date);
     }
 
-    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+    public int deleteByDateAndTime(LocalDate date, LocalTime time) {
         String sql = "delete from reservation where date = ? and time = ?";
-        jdbcTemplate.update(sql, date, time);
+        return jdbcTemplate.update(sql, date, time);
     }
 
     public boolean existsByScheduleId(Long scheduleId) {

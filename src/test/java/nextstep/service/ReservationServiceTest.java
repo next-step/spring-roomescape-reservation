@@ -8,7 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.Constants.*;
-import static nextstep.service.ReservationService.DUPLICATE_RESERVATION_MESSAGE;
+import static nextstep.service.ReservationService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -70,5 +70,14 @@ class ReservationServiceTest extends ServiceTest {
 
         // when, then
         assertDoesNotThrow(() -> reservationService.deleteReservation(DATE_STRING, TIME_STRING));
+    }
+
+    @Test
+    @DisplayName("해당 날짜, 시간에 예약이 존재하지 않는 경우, 삭제에 실패한다.")
+    void failToDelete() {
+        // given, when, then
+        assertThatThrownBy(() -> reservationService.deleteReservation(DATE_STRING, TIME_STRING))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(NO_RESERVATION_MESSAGE);
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static nextstep.Constants.*;
-import static nextstep.service.ReservationService.DUPLICATE_RESERVATION_MESSAGE;
+import static nextstep.service.ReservationService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ReservationAcceptanceTest extends AcceptanceTest {
@@ -84,6 +84,18 @@ class ReservationAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("DELETE 예약 삭제 - 예약이 없을 경우, 삭제 불가")
+    void failToDelete() {
+        // given, when
+        ExtractableResponse<Response> response = deleteReservation(DATE_STRING, TIME_STRING);
+        ErrorResponse errorResponse = response.as(ErrorResponse.class);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(NO_RESERVATION_MESSAGE);
     }
 
     private ExtractableResponse<Response> createReservation(ReservationCreateRequest request) {

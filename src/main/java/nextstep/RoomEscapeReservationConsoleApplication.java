@@ -5,6 +5,7 @@ import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
 import nextstep.infrastructure.ReservationDao;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 public class RoomEscapeReservationConsoleApplication {
 
@@ -15,7 +16,7 @@ public class RoomEscapeReservationConsoleApplication {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ReservationRepository reservationRepository = new ReservationDao(new JdbcTemplate());
+        ReservationRepository reservationRepository = new ReservationDao(jdbcTemplate());
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -76,5 +77,19 @@ public class RoomEscapeReservationConsoleApplication {
                 break;
             }
         }
+    }
+
+    private static JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(dataSource());
+    }
+
+    private static DriverManagerDataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setUrl("jdbc:h2:tcp://localhost/~/test");
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUsername("sa");
+
+        return dataSource;
     }
 }

@@ -1,5 +1,6 @@
 package nextstep.service;
 
+import nextstep.domain.ReservationRepository;
 import nextstep.domain.Schedule;
 import nextstep.domain.ScheduleRepository;
 import nextstep.dto.ScheduleCreateRequest;
@@ -13,10 +14,13 @@ import java.util.List;
 @Service
 public class ScheduleService {
     public static final String DUPLICATE_SCHEDULE_MESSAGE = "해당 테마에 이미 존재하는 스케줄입니다.";
+    public static final String CANT_DELETE_MESSAGE = "예약이 존재하는 스케줄은 삭제할 수 없습니다.";
     private final ScheduleRepository schedules;
+    private final ReservationRepository reservations;
 
-    public ScheduleService(ScheduleRepository schedules) {
+    public ScheduleService(ScheduleRepository schedules, ReservationRepository reservations) {
         this.schedules = schedules;
+        this.reservations = reservations;
     }
 
     public Long createSchedule(ScheduleCreateRequest scheduleCreateRequest) {
@@ -43,8 +47,14 @@ public class ScheduleService {
     }
 
     public void deleteSchedule(Long id) {
-        // todo 예약이 있으면 스케줄 삭제 불가
+        checkDeleteAvailable(id);
         schedules.deleteById(id);
+    }
+
+    private void checkDeleteAvailable(Long id) {
+        if (reservations.existsByScheduleId(id)) {
+            throw new IllegalArgumentException(CANT_DELETE_MESSAGE);
+        }
     }
 
     private LocalDate parseDate(String date) {

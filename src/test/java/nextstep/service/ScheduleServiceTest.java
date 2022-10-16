@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.Constants.*;
+import static nextstep.service.ScheduleService.CANT_DELETE_MESSAGE;
 import static nextstep.service.ScheduleService.DUPLICATE_SCHEDULE_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,6 +18,7 @@ class ScheduleServiceTest extends ServiceTest {
     @BeforeEach
     void setUp() {
         initScheduleTable();
+        initReservationTable();
     }
 
     @Test
@@ -68,5 +70,19 @@ class ScheduleServiceTest extends ServiceTest {
 
         // when, then
         assertDoesNotThrow(() -> scheduleService.deleteSchedule(scheduleId));
+    }
+
+    @Test
+    @DisplayName("스케줄 삭제 시, 예약이 존재하면 예외를 반환한다.")
+    void failToDelete() {
+        // given
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
+        Long scheduleId = scheduleService.createSchedule(request);
+        reservationService.createReservation(new ReservationCreateRequest(SCHEDULE_ID, NAME));
+
+        // when, then
+        assertThatThrownBy(() -> scheduleService.deleteSchedule(scheduleId))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(CANT_DELETE_MESSAGE);
     }
 }

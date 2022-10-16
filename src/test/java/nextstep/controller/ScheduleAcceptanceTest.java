@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.dto.ErrorResponse;
+import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ScheduleCreateRequest;
 import nextstep.dto.ScheduleFindAllResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,15 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static nextstep.Constants.*;
+import static nextstep.service.ScheduleService.CANT_DELETE_MESSAGE;
 import static nextstep.service.ScheduleService.DUPLICATE_SCHEDULE_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ScheduleAcceptanceTest extends AcceptanceTest{
+class ScheduleAcceptanceTest extends AcceptanceTest {
     @Override
     @BeforeEach
     void setUp() {
         super.setUp();
         initScheduleTable();
+        initReservationTable();
     }
 
     @Test
@@ -83,6 +86,23 @@ class ScheduleAcceptanceTest extends AcceptanceTest{
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    @DisplayName("DELETE 스케줄 삭제 - 예약 존재 시, 삭제 실패")
+    void failToDelete() {
+        // given
+        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
+        String scheduleId = createSchedule(request).header("Location").split("/")[2];
+        createReservation();
+
+        // when
+        ExtractableResponse<Response> response = deleteSchedule(Long.parseLong(scheduleId));
+        ErrorResponse errorResponse = response.as(ErrorResponse.class);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(CANT_DELETE_MESSAGE);
+    }
+
     private ExtractableResponse<Response> createSchedule(ScheduleCreateRequest request) {
         return RestAssured
                 .given().log().all()
@@ -107,6 +127,17 @@ class ScheduleAcceptanceTest extends AcceptanceTest{
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().delete("/schedules/" + id)
+                .then().log().all().extract();
+    }
+
+    private void createReservation() {
+        ReservationCreateRequest request = new ReservationCreateRequest(SCHEDULE_ID, NAME);
+
+        RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(request)
+                .when().post("/reservations")
                 .then().log().all().extract();
     }
 }

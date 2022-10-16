@@ -126,10 +126,10 @@ class ReservationAcceptanceTest extends AcceptanceTest {
                 .then().log().all().extract();
     }
 
-    private ExtractableResponse<Response> createSchedule() {
+    private void createSchedule() {
         ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
 
-        return RestAssured
+        RestAssured
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(request)

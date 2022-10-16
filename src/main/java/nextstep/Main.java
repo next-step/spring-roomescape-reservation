@@ -1,6 +1,7 @@
 package nextstep;
 
 import nextstep.domain.Reservation;
+import nextstep.domain.ReservationTime;
 import nextstep.domain.Reservations;
 
 import java.time.LocalDate;
@@ -60,7 +61,8 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 LocalTime time = LocalTime.parse(scanner.nextLine());
 
-                reservations.remove(date, time);
+                ReservationTime reservationTime = new ReservationTime(date, time);
+                reservations.remove(reservationTime);
 
                 System.out.println("예약이 취소되었습니다.");
             }

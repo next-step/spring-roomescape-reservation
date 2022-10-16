@@ -30,7 +30,7 @@ public class ReservationFixtureFactory {
 
     this.create = ReservationCommandDto.Create
         .builder()
-        .name(name.name())
+        .name(name.value())
         .date(date)
         .time(time)
         .build();
@@ -63,7 +63,7 @@ public class ReservationFixtureFactory {
   /**
    * 다음날 이 시간의 예약.
    * <pre>
-   *   Reservation(date= now + 1day, time = now, name = 성시형)
+   *   Reservation(date= now + 1day, time = now, value = 성시형)
    * </pre>
    */
   public Reservation getFixture() {
@@ -94,7 +94,7 @@ public class ReservationFixtureFactory {
   /**
    * 다음날 이 시간의 예약 생성 요청 객체. fixture와 값이 같음
    * <pre>
-   *   ReservationCommandDto.Create(date= now + 1day, time = now, name = 성시형)
+   *   ReservationCommandDto.Create(date= now + 1day, time = now, value = 성시형)
    * </pre>
    *
    * @see ReservationFixtureFactory#getFixture() getFixture

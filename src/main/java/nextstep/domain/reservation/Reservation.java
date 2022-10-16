@@ -2,8 +2,6 @@ package nextstep.domain.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -26,7 +24,7 @@ public class Reservation {
   LocalTime time;
   Name name;
 
-  public record Name(String name) {
+  public record Name(String value) {
 
     public static Name of(String value) {
       if (value == null || value.isEmpty()) {

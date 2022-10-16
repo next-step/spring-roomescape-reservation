@@ -31,4 +31,11 @@ public class ReservationCommander {
     return reservationRepository.save(reservation);
   }
 
+  public void deleteReservation(ReservationCommandDto.Delete deleteReq) {
+    boolean isDelete = reservationRepository.delete(deleteReq);
+    if (!isDelete) {
+      throw new IllegalArgumentException("해당 일시에는 예약이 없습니다. 요청받은 일자 : %s".formatted(deleteReq.toString()));
+    }
+  }
+
 }

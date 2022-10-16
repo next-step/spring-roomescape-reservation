@@ -80,6 +80,19 @@ class ReservationServiceTest {
             .isEqualTo(expected);
     }
 
+    @DisplayName("예약 목록을 조회할 때, 예약이 없으면 빈 목록을 조회한다.")
+    @Test
+    void checkAll_empty() {
+        // given
+        reservationService.cancel("2022-08-11", "13:00");
+
+        // when
+        List<ReservationResponse> responses = reservationService.checkAll("2022-08-11");
+
+        // then
+        assertThat(responses).isEmpty();
+    }
+
     @DisplayName("예약을 취소한다.")
     @Test
     void cancel() {

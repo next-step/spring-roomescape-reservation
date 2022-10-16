@@ -1,5 +1,6 @@
 package nextstep.application;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,6 +47,9 @@ public class ReservationService {
     public List<ReservationResponse> checkAll(String date) {
         List<Reservation> reservations = reservationRepository.findAllBy(date);
 
+        if (reservations.isEmpty()) {
+            return Collections.emptyList();
+        }
         return reservations.stream()
             .map(this::toResponse)
             .collect(Collectors.toList());

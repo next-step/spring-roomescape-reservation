@@ -60,7 +60,7 @@ class ReservationServiceTest {
 
     @DisplayName("예약 목록을 조회한다.")
     @Test
-    void check() {
+    void checkAll() {
         // given
         ReservationRequest request = new ReservationRequest("2022-08-11", "14:00", "dani");
         reservationService.make(request);

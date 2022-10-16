@@ -5,7 +5,6 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;

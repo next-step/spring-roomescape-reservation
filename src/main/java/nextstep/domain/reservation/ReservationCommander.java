@@ -4,7 +4,6 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
 import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import nextstep.domain.reservation.validator.ReservationCreateValidator;

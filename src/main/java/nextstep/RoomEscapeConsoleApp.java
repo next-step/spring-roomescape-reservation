@@ -43,6 +43,7 @@ public class RoomEscapeConsoleApp {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
+                        1L,
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         Name.of(name)

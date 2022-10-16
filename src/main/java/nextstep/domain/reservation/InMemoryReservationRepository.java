@@ -15,13 +15,11 @@ import lombok.experimental.FieldDefaults;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
-import org.springframework.stereotype.Component;
 
-@Component
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ReservationRepositoryImpl implements ReservationRepository {
+public class InMemoryReservationRepository implements ReservationRepository {
 
-  static Map<LocalDate, Set<Reservation>> reservationBook = new ConcurrentHashMap<>();
+  Map<LocalDate, Set<Reservation>> reservationBook = new ConcurrentHashMap<>();
 
   // TODO : 정렬 로직과 중복 제거 로직은 향후 책임 분리
   @Override

@@ -14,6 +14,7 @@ public class ReservationFixtureFactory {
 
   private static final Name NAME = Name.of("성시형");
   private static final LocalDate LOCAL_DATE = LocalDate.now().plusDays(1);
+  private static final Long FIXTURE_ID = 1L;
 
   private final Reservation fixture;
   private final ReservationCommandDto.Create create;
@@ -25,7 +26,7 @@ public class ReservationFixtureFactory {
     final LocalDate date = LOCAL_DATE;
     final LocalTime time = LocalTime.now();
 
-    this.fixture = createReservation(name, date, time);
+    this.fixture = createReservation(FIXTURE_ID, name, date, time);
 
     this.create = ReservationCommandDto.Create
         .builder()
@@ -46,8 +47,9 @@ public class ReservationFixtureFactory {
         .build();
   }
 
-  private Reservation createReservation(Name name, LocalDate date, LocalTime time) {
+  private Reservation createReservation(Long id, Name name, LocalDate date, LocalTime time) {
     return Reservation.builder()
+        .id(id)
         .name(name)
         .date(date)
         .time(time)
@@ -82,7 +84,7 @@ public class ReservationFixtureFactory {
     List<Reservation> reservations = new ArrayList<>();
 
     while (!rangeTo.isAfter(rangeFrom)) {
-      reservations.add(createReservation(NAME, LOCAL_DATE, rangeFrom));
+      reservations.add(createReservation(FIXTURE_ID, NAME, LOCAL_DATE, rangeFrom));
       rangeFrom = rangeFrom.plusMinutes(1);
     }
 

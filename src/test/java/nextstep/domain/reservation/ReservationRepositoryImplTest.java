@@ -16,7 +16,7 @@ class ReservationRepositoryImplTest {
   @BeforeEach
   void setting() {
     // for delete all
-    reservationRepository = new ReservationRepositoryImpl();
+    reservationRepository = new InMemoryReservationRepository();
   }
 
   @DisplayName("예약 객체를 저장하는데 성공한다.")
@@ -42,10 +42,10 @@ class ReservationRepositoryImplTest {
                 now().plusMinutes(1), now().plusMinutes(10)
             );
 
+    int expectedSize = reservations.size();
     reservations.forEach(
         reservation -> reservationRepository.save(reservation)
     );
-    int expectedSize = reservations.size();
 
     // when
     List<Reservation> findAll = reservationRepository.findAll(

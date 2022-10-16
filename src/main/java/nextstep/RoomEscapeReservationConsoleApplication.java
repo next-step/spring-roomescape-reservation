@@ -1,10 +1,15 @@
 package nextstep;
 
-import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
-import nextstep.domain.Reservations;
+import nextstep.domain.Reservation;
+import nextstep.domain.repository.ReservationRepository;
+import nextstep.exception.ReservationException;
+import nextstep.infrastructure.ReservationDao;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
-public class Main {
+public class RoomEscapeReservationConsoleApplication {
 
     private static final String INPUT_1 = "1";
     private static final String INPUT_2 = "2";
@@ -13,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Reservations reservations = new Reservations(new ArrayList<>());
+        ReservationRepository reservationRepository = new ReservationDao(jdbcTemplate());
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -37,7 +42,12 @@ public class Main {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
-                reservations.make(date, time, name);
+                Optional<Reservation> reservation = reservationRepository.findBy(date, time);
+
+                if (reservation.isPresent()) {
+                    throw new ReservationException(String.format("%s은 이미 예약되었습니다.", reservation));
+                }
+                reservationRepository.save(new Reservation(date, time, name));
 
                 System.out.println("예약이 등록되었습니다.");
             }
@@ -53,7 +63,7 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.cancel(date, time);
+                reservationRepository.delete(date, time);
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -66,7 +76,7 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                reservations.check(date).forEach(System.out::println);
+                reservationRepository.findAllBy(date).forEach(System.out::println);
             }
 
             if (INPUT_4.equals(menuInput)) {
@@ -74,5 +84,19 @@ public class Main {
                 break;
             }
         }
+    }
+
+    private static JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(dataSource());
+    }
+
+    private static DriverManagerDataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setUrl("jdbc:h2:tcp://localhost/~/test");
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUsername("sa");
+
+        return dataSource;
     }
 }

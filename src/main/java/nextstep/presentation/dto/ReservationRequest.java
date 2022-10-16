@@ -1,24 +1,18 @@
-package nextstep.controller.dto;
+package nextstep.presentation.dto;
 
-public class ReservationResponse {
+public class ReservationRequest {
 
-    private Integer id;
     private String date;
     private String time;
     private String name;
 
-    private ReservationResponse() {
+    private ReservationRequest() {
     }
 
-    public ReservationResponse(Integer id, String date, String time, String name) {
-        this.id = id;
+    public ReservationRequest(String date, String time, String name) {
         this.date = date;
         this.time = time;
         this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getDate() {

@@ -1,12 +1,13 @@
-package nextstep;
+package nextstep.app.console;
+
+import nextstep.data.local.reservation.ReservationLocalRepository;
+import nextstep.domain.reservation.domain.service.ReservationDomainService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
     private static final String INPUT_1 = "1";
@@ -16,7 +17,8 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Reservation> reservations = new ArrayList<>();
+        ReservationLocalRepository reservationRepository = new ReservationLocalRepository();
+        ReservationDomainService reservationService = new ReservationDomainService(reservationRepository);
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");
@@ -40,13 +42,8 @@ public class Main {
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
-                Reservation reservation = new Reservation(
-                        LocalDate.parse(date),
-                        LocalTime.parse(time + ":00"),
-                        name
-                );
+                reservationService.create(LocalDateTime.parse(date + " " + time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), name);
 
-                reservations.add(reservation);
                 System.out.println("예약이 등록되었습니다.");
             }
 
@@ -61,10 +58,7 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
-                        .findFirst()
-                        .ifPresent(reservations::remove);
+                reservationService.delete(LocalDate.parse(date), LocalTime.parse(time));
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -77,9 +71,7 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                reservations.stream()
-                        .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                        .collect(Collectors.toList())
+                reservationRepository.findAllByDate(LocalDate.parse(date))
                         .forEach(System.out::println);
             }
 

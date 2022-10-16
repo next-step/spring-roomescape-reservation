@@ -1,2 +1,8 @@
 rootProject.name = 'room-escape'
 
+include 'roomescape-app-console'
+include 'roomescape-app-web'
+include 'roomescape-domain'
+include 'roomescape-data:roomescape-data-local'
+findProject(':roomescape-data:roomescape-data-local')?.name = 'roomescape-data-local'
+

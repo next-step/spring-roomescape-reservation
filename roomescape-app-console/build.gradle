@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(":roomescape-domain")
+    implementation project(":roomescape-data:roomescape-data-local")
+}

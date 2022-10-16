@@ -1,6 +1,7 @@
 package nextstep.controller;
 
 import nextstep.dto.ThemeCreateRequest;
+import nextstep.dto.ThemeFindAllResponse;
 import nextstep.service.ThemeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,5 +21,11 @@ public class ThemeController {
     public ResponseEntity<Void> create(@RequestBody ThemeCreateRequest themeCreateRequest) {
         Long themeId = themeService.createTheme(themeCreateRequest);
         return ResponseEntity.created(URI.create("/themes/" + themeId)).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<ThemeFindAllResponse> findAll() {
+        ThemeFindAllResponse themeFindallResponse = themeService.findAllThemes();
+        return ResponseEntity.ok(themeFindallResponse);
     }
 }

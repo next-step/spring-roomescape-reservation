@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository
 public class ThemeRepository {
@@ -24,5 +25,18 @@ public class ThemeRepository {
         SqlParameterSource parameters = new BeanPropertySqlParameterSource(theme);
         Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
         return new Theme(id, theme);
+    }
+
+    public List<Theme> findAll() {
+        String sql = "select * from theme";
+        return jdbcTemplate.query(
+                sql,
+                (resultSet, rowNum) -> new Theme(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("desc"),
+                        resultSet.getInt("price")
+                )
+        );
     }
 }

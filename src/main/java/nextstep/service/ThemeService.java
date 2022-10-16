@@ -29,4 +29,9 @@ public class ThemeService {
         List<Theme> findThemes = themes.findAll();
         return ThemeFindAllResponse.from(findThemes);
     }
+
+    public void deleteTheme(Long themeId) {
+        // todo 예약이 있으면 테마 삭제 불가
+        themes.deleteById(themeId);
+    }
 }

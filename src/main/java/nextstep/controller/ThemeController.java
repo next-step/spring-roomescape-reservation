@@ -28,4 +28,10 @@ public class ThemeController {
         ThemeFindAllResponse themeFindallResponse = themeService.findAllThemes();
         return ResponseEntity.ok(themeFindallResponse);
     }
+
+    @DeleteMapping("/{themeId}")
+    public ResponseEntity<Void> delete(@PathVariable Long themeId) {
+        themeService.deleteTheme(themeId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -1,5 +1,7 @@
 package nextstep.domain.repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -19,5 +21,11 @@ public class ReservationRepository {
         .build();
     STORE.put(sequenceId, entity);
     return entity;
+  }
+
+  public List<ReservationEntity> findReservationsByDate(LocalDate date) {
+    return STORE.values().stream()
+        .filter(it -> it.getDate().isEqual(date))
+        .toList();
   }
 }

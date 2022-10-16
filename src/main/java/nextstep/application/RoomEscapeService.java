@@ -2,7 +2,9 @@ package nextstep.application;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.dto.ReservationCreateReq;
 import nextstep.application.dto.ReservationRes;
@@ -27,7 +29,16 @@ public class RoomEscapeService {
   }
 
   public List<ReservationRes> findReservations(LocalDate date) {
-    return null;
+    var reservations = repository.findReservationsByDate(date);
+    return reservations.stream()
+        .map(it -> ReservationRes.builder()
+            .id(it.getId())
+            .date(it.getDate())
+            .time(it.getTime().format(DateTimeFormatter.ofPattern("HH:mm")))
+            .name(it.getName())
+            .build())
+        .toList()
+        ;
   }
 
   public void removeReservation(LocalDate date, String time) {

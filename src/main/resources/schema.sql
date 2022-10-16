@@ -1,5 +1,6 @@
 CREATE TABLE reservation(
                 id IDENTITY NOT NULL,
+                schedule_id INTEGER,
                 date DATE,
                 time TIME,
                 name VARCHAR(20),

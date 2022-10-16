@@ -1,0 +1,28 @@
+package nextstep.domain;
+
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+
+@Repository
+public class ScheduleRepository {
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
+
+    public ScheduleRepository(JdbcTemplate jdbcTemplate, DataSource dataSource) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("schedule")
+                .usingGeneratedKeyColumns("id");
+    }
+
+    public Schedule save(Schedule schedule) {
+        SqlParameterSource parameters = new BeanPropertySqlParameterSource(schedule);
+        Long id = simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
+        return new Schedule(id, schedule);
+    }
+}

@@ -1,5 +1,15 @@
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation project(":roomescape-domain")
-    implementation project(":roomescape-data:roomescape-data-local")
+    implementation project(":roomescape-data:roomescape-data-jdbc")
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    project(":roomescape-data:roomescape-data-jdbc").sourceSets.main.resources
+            ]
+        }
+    }
 }

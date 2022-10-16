@@ -20,4 +20,8 @@ public class ThemeEntity {
     public static ThemeEntity of(Theme theme) {
         return new ThemeEntity(null, theme.getName(), theme.getDesc(), theme.getPrice());
     }
+
+    public Theme toTheme() {
+        return new Theme(name, desc, price);
+    }
 }

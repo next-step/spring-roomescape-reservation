@@ -24,6 +24,10 @@ public class ThemeResponse {
         this.price = price;
     }
 
+    public static ThemeResponse of(ThemeEntity themeEntity) {
+        return new ThemeResponse(themeEntity.getId(), themeEntity.getName(),
+                themeEntity.getDesc(), themeEntity.getPrice());
+    }
     public static List<ThemeResponse> toListFromEntity(List<ThemeEntity> themeEntities) {
         return themeEntities.stream()
                 .map(themeEntity -> new ThemeResponse(themeEntity.getId(), themeEntity.getName(),

@@ -1,9 +1,5 @@
 package com.nextstep.web.theme.controller;
 
-import com.nextstep.web.reservation.app.ReservationCommandService;
-import com.nextstep.web.reservation.app.ReservationQueryService;
-import com.nextstep.web.reservation.dto.CreateReservationRequest;
-import com.nextstep.web.reservation.dto.ReservationResponse;
 import com.nextstep.web.theme.app.ThemeCommandService;
 import com.nextstep.web.theme.app.ThemeQueryService;
 import com.nextstep.web.theme.dto.CreateThemeRequest;

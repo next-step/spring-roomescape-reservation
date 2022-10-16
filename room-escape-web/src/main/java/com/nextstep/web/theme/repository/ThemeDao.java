@@ -1,6 +1,7 @@
 package com.nextstep.web.theme.repository;
 
 import com.nextstep.web.theme.repository.entity.ThemeEntity;
+import nextsetp.domain.theme.Theme;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class ThemeDao {
@@ -35,6 +37,13 @@ public class ThemeDao {
         parameters.put("PRICE", themeEntity.getPrice());
 
         return (long) jdbcInsert.execute(parameters);
+    }
+
+    public Optional<ThemeEntity> findById(Long id) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE id = :id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("id", id);
+        return jdbcTemplate.query(query, namedParameters, rowMapper).stream().findFirst();
     }
 
     public List<ThemeEntity> findAll() {

@@ -15,11 +15,11 @@ public class Reservation {
     }
 
     public Reservation(String date, String time, String name) {
-        this(null, LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
+        this(null, LocalDate.parse(date), LocalTime.parse(time), name);
     }
 
     public Reservation(Long id, String date, String time, String name) {
-        this(id, LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
+        this(id, LocalDate.parse(date), LocalTime.parse(time), name);
     }
 
     public Reservation(Long id, LocalDate date, LocalTime time, String name) {

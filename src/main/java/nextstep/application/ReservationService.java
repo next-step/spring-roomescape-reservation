@@ -1,5 +1,7 @@
 package nextstep.application;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import nextstep.domain.Reservation;
@@ -27,7 +29,7 @@ public class ReservationService {
     }
 
     public List<ReservationResponse> check(String date) {
-        List<Reservation> reservations = reservationRepository.findAllBy(date);
+        List<Reservation> reservations = reservationRepository.findAllBy(LocalDate.parse(date));
         return reservations.stream()
             .map(this::getResponse)
             .collect(Collectors.toList());
@@ -43,6 +45,6 @@ public class ReservationService {
     }
 
     public void cancel(String date, String time) {
-        reservationRepository.delete(date, time);
+        reservationRepository.delete(LocalDate.parse(date), LocalTime.parse(time));
     }
 }

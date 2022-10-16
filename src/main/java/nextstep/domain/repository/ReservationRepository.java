@@ -1,5 +1,7 @@
 package nextstep.domain.repository;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import nextstep.domain.Reservation;
 
@@ -7,7 +9,7 @@ public interface ReservationRepository {
 
     Integer save(Reservation reservation);
 
-    List<Reservation> findAllBy(String date);
+    List<Reservation> findAllBy(LocalDate date);
 
-    void delete(String date, String time);
+    void delete(LocalDate date, LocalTime time);
 }

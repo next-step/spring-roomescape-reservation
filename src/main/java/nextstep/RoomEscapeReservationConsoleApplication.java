@@ -1,5 +1,7 @@
 package nextstep;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Scanner;
 import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
@@ -55,7 +57,7 @@ public class RoomEscapeReservationConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservationRepository.delete(date, time);
+                reservationRepository.delete(LocalDate.parse(date), LocalTime.parse(time));
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -68,7 +70,8 @@ public class RoomEscapeReservationConsoleApplication {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                reservationRepository.findAllBy(date).forEach(System.out::println);
+                reservationRepository.findAllBy(LocalDate.parse(date))
+                    .forEach(reservation -> System.out.println(reservation.toString()));
             }
 
             if (INPUT_4.equals(menuInput)) {

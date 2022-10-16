@@ -1,5 +1,7 @@
 package nextstep.infrastructure;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
@@ -26,7 +28,7 @@ public class ReservationDao implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findAllBy(String date) {
+    public List<Reservation> findAllBy(LocalDate date) {
         return jdbcTemplate.query(
             "select id, date, time, name from reservation where date = ?",
             (rs, rowNum) -> new Reservation(
@@ -40,7 +42,7 @@ public class ReservationDao implements ReservationRepository {
     }
 
     @Override
-    public void delete(String date, String time) {
+    public void delete(LocalDate date, LocalTime time) {
         jdbcTemplate.update("delete from reservation where date = ? and time = ?", date, time);
     }
 }

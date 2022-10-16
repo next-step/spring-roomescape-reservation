@@ -9,9 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import nextstep.reservation.domain.Reservation;
-import org.springframework.stereotype.Component;
 
-@Component
 public class MemoryReservationStorage implements ReservationStorage {
 
     private final List<Reservation> reservations = new ArrayList<>();

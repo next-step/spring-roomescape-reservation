@@ -6,11 +6,17 @@ import java.time.LocalTime;
 
 public class Reservation {
 
+    private final Long id;
     private final LocalDate date;
     private final LocalTime time;
     private final String name;
 
     public Reservation(LocalDate date, LocalTime time, String name) {
+        this(null, date, time, name);
+    }
+
+    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
+        this.id = id;
         this.date = date;
         this.time = time;
         this.name = name;
@@ -18,6 +24,10 @@ public class Reservation {
 
     public LocalDateTime localDateTime() {
         return LocalDateTime.of(date, time);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public LocalDate getDate() {
@@ -35,7 +45,8 @@ public class Reservation {
     @Override
     public String toString() {
         return "Reservation{" +
-            "date=" + date +
+            "id=" + id +
+            ", date=" + date +
             ", time=" + time +
             ", name='" + name + '\'' +
             '}';

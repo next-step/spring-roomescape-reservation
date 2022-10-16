@@ -3,11 +3,15 @@ package nextstep.schedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @Repository
 public class ScheduleJdbcRepository {
@@ -15,6 +19,13 @@ public class ScheduleJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
+
+    private final RowMapper<Schedule> rowMapper = ((rs, rowNum) -> new Schedule(
+            rs.getLong("id"),
+            rs.getLong("theme_id"),
+            rs.getDate("date").toLocalDate(),
+            rs.getTime("time").toLocalTime()
+    ));
 
     public ScheduleJdbcRepository(JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
@@ -31,6 +42,12 @@ public class ScheduleJdbcRepository {
         Long id = (Long) simpleJdbcInsert.executeAndReturnKey(source);
         schedule.setId(id);
         return schedule;
+    }
+
+    public boolean existsByThemeIdAndDateAndTime(long themeId, LocalDate date, LocalTime time) {
+        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date = ? AND time = ?";
+        List<Schedule> schedules = jdbcTemplate.query(sql, rowMapper, themeId, date, time);
+        return !(schedules.isEmpty());
     }
 
     public void clear() {

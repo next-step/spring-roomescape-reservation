@@ -1,8 +1,10 @@
 package nextstep.domain.repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import nextstep.domain.ReservationEntity;
@@ -27,5 +29,12 @@ public class ReservationRepository {
     return STORE.values().stream()
         .filter(it -> it.getDate().isEqual(date))
         .toList();
+  }
+
+  public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+    STORE.values().stream()
+        .filter(it -> it.getDate().isEqual(date) && Objects.equals(it.getTime(), time))
+        .findFirst()
+        .ifPresent(it -> STORE.remove(it.getId()));
   }
 }

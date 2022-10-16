@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.dto.ReservationCreateReq;
 import nextstep.application.dto.ReservationRes;
@@ -42,6 +41,8 @@ public class RoomEscapeService {
   }
 
   public void removeReservation(LocalDate date, String time) {
+    var targetTime = LocalTime.parse(time);
+    repository.deleteByDateAndTime(date, targetTime);
   }
 
 }

@@ -43,7 +43,7 @@ public class ReservationService {
         return new Reservation(request.getDate(), request.getTime(), request.getName());
     }
 
-    public List<ReservationResponse> check(String date) {
+    public List<ReservationResponse> checkAll(String date) {
         List<Reservation> reservations = reservationRepository.findAllBy(date);
 
         return reservations.stream()

@@ -71,7 +71,7 @@ class ReservationServiceTest {
         );
 
         // when
-        List<ReservationResponse> responses = reservationService.check("2022-08-11");
+        List<ReservationResponse> responses = reservationService.checkAll("2022-08-11");
 
         // then
         assertThat(responses)
@@ -88,6 +88,6 @@ class ReservationServiceTest {
         reservationService.cancel("2022-08-11", "13:00");
 
         // then
-        assertThat(reservationService.check("2022-08-11")).isEmpty();
+        assertThat(reservationService.checkAll("2022-08-11")).isEmpty();
     }
 }

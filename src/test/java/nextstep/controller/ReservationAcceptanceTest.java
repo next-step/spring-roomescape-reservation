@@ -6,7 +6,6 @@ import io.restassured.response.Response;
 import nextstep.dto.ErrorResponse;
 import nextstep.dto.ReservationCreateRequest;
 import nextstep.dto.ReservationFindAllResponse;
-import nextstep.dto.ScheduleCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,7 @@ class ReservationAcceptanceTest extends AcceptanceTest {
         super.setUp();
         initScheduleTable();
         initReservationTable();
-        createSchedule();
+        스케줄생성();
     }
 
     @Test
@@ -138,17 +137,6 @@ class ReservationAcceptanceTest extends AcceptanceTest {
                 .queryParam("date", date)
                 .queryParam("time", time)
                 .when().delete("/reservations")
-                .then().log().all().extract();
-    }
-
-    private void createSchedule() {
-        ScheduleCreateRequest request = new ScheduleCreateRequest(THEME_ID, DATE_STRING, TIME_STRING);
-
-        RestAssured
-                .given().log().all()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(request)
-                .when().post("/schedules")
                 .then().log().all().extract();
     }
 }

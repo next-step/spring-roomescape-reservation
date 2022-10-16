@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static nextstep.Constants.*;
-import static nextstep.service.ThemeService.CANT_DELETE_THEME;
+import static nextstep.service.ThemeService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -32,6 +32,19 @@ class ThemeServiceTest extends ServiceTest {
 
         // then
         assertThat(themeId).isNotNull();
+    }
+
+    @Test
+    @DisplayName("테마 생성 시, 같은 이름의 테마가 이미 존재한다면, 예외를 반환한다.")
+    void failToCreate() {
+        // given
+        ThemeCreateRequest request = new ThemeCreateRequest(THEME_NAME, THEME_DESC, PRICE);
+        themeService.createTheme(request);
+
+        // when, then
+        assertThatThrownBy(() -> themeService.createTheme(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(DUPLICATE_THEME_MESSAGE);
     }
 
     @Test

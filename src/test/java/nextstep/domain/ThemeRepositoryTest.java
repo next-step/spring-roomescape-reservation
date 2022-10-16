@@ -60,4 +60,15 @@ class ThemeRepositoryTest extends RepositoryTest {
         // when, then
         assertDoesNotThrow(() -> themes.deleteById(theme.getId()));
     }
+
+    @Test
+    @DisplayName("이름에 해당하는 테마가 있다면 true, 없다면 false를 반환한다.")
+    void existsByName() {
+        // given
+        Theme theme = themes.save(new Theme(THEME_NAME, THEME_DESC, PRICE));
+
+        // when, then
+        assertThat(themes.existsByName(THEME_NAME)).isTrue();
+        assertThat(themes.existsByName("없는 이름")).isFalse();
+    }
 }

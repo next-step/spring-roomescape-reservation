@@ -3,6 +3,7 @@ package nextstep.controller;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.dto.ErrorResponse;
 import nextstep.dto.ThemeCreateRequest;
 import nextstep.dto.ThemeFindAllResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import static nextstep.Constants.*;
+import static nextstep.service.ThemeService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ThemeAcceptanceTest extends AcceptanceTest {
@@ -20,6 +22,7 @@ class ThemeAcceptanceTest extends AcceptanceTest {
     void setUp() {
         super.setUp();
         initThemeTable();
+        initScheduleTable();
     }
 
     @Test
@@ -33,6 +36,22 @@ class ThemeAcceptanceTest extends AcceptanceTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("POST 테마 생성 - 같은 이름의 테마 존재 시, 생성 실패")
+    void failToCreate() {
+        // given
+        ThemeCreateRequest request = new ThemeCreateRequest(THEME_NAME, THEME_DESC, PRICE);
+        createTheme(request);
+
+        // when
+        ExtractableResponse<Response> response = createTheme(request);
+        ErrorResponse errorResponse = response.as(ErrorResponse.class);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(DUPLICATE_THEME_MESSAGE);
     }
 
     @Test
@@ -59,10 +78,28 @@ class ThemeAcceptanceTest extends AcceptanceTest {
         createTheme(request);
 
         // when
-        ExtractableResponse<Response> response = deleteTheme(1L);
+        ExtractableResponse<Response> response = deleteTheme(THEME_ID);
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("DELETE 테마 삭제 - 예약 존재 시, 삭제 실패")
+    void failToDelete() {
+        // given
+        ThemeCreateRequest request = new ThemeCreateRequest(THEME_NAME, THEME_DESC, PRICE);
+        createTheme(request);
+        스케줄생성();
+        예약생성();
+
+        // when
+        ExtractableResponse<Response> response = deleteTheme(THEME_ID);
+        ErrorResponse errorResponse = response.as(ErrorResponse.class);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(errorResponse.getMessage()).isEqualTo(CANT_DELETE_THEME);
     }
 
     private ExtractableResponse<Response> createTheme(ThemeCreateRequest request) {

@@ -1,7 +1,6 @@
 package nextstep.domain.reservation;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ public class ReservationFixtureFactory {
 
   private final Reservation fixture;
   private final ReservationCommandDto.Create create;
+  private final ReservationCommandDto.Delete delete;
   private final ReservationFindCondition findCondition;
 
   private ReservationFixtureFactory() {
@@ -29,6 +29,12 @@ public class ReservationFixtureFactory {
     this.create = ReservationCommandDto.Create
         .builder()
         .name(name.name())
+        .date(date)
+        .time(time)
+        .build();
+
+    this.delete = ReservationCommandDto.Delete
+        .builder()
         .date(date)
         .time(time)
         .build();
@@ -91,6 +97,18 @@ public class ReservationFixtureFactory {
    */
   public ReservationCommandDto.Create getFixtureCreateReq() {
     return create;
+  }
+
+  /**
+   * 다음날 이 시간의 예약 삭제 객체. fixture와 값이 같음
+   * <pre>
+   *   ReservationCommandDto.Delete(date= now + 1day, time = now)
+   * </pre>
+   *
+   * @see ReservationFixtureFactory#getFixture() getFixture
+   */
+  public ReservationCommandDto.Delete getFixtureDeleteReq() {
+    return delete;
   }
 
   /**

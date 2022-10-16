@@ -42,4 +42,12 @@ public class Reservation {
       return new Name(value);
     }
   }
+
+  public boolean hasSameDateTime(Reservation that){
+    return hasSameDateTime(that.date, that.time);
+  }
+
+  public boolean hasSameDateTime(LocalDate date, LocalTime time){
+    return this.date.equals(date) && this.time.equals(time);
+  }
 }

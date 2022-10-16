@@ -16,4 +16,14 @@ public class ReservationCommandDto {
     public Create {
     }
   }
+
+  public record Delete(
+      LocalDate date,
+      LocalTime time
+  ) {
+
+    @Builder(toBuilder = true)
+    public Delete {
+    }
+  }
 }

@@ -1,12 +1,13 @@
 package nextstep;
 
+import nextstep.domain.Reservation;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
     private static final String INPUT_1 = "1";
@@ -62,7 +63,7 @@ public class Main {
                 String time = scanner.nextLine();
 
                 reservations.stream()
-                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
+                        .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalTime.parse(time)))
                         .findFirst()
                         .ifPresent(reservations::remove);
 
@@ -79,7 +80,6 @@ public class Main {
 
                 reservations.stream()
                         .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                        .collect(Collectors.toList())
                         .forEach(System.out::println);
             }
 

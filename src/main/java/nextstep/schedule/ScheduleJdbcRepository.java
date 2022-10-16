@@ -55,4 +55,9 @@ public class ScheduleJdbcRepository {
         jdbcTemplate.update(sql);
         logger.info(sql);
     }
+
+    public List<Schedule> findByThemeIdAndDate(Long themeId, LocalDate date) {
+        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date = ?";
+        return jdbcTemplate.query(sql, rowMapper, themeId, date);
+    }
 }

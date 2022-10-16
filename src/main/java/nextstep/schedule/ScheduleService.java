@@ -3,6 +3,9 @@ package nextstep.schedule;
 import nextstep.theme.ThemeJdbcRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 public class ScheduleService {
 
@@ -23,5 +26,12 @@ public class ScheduleService {
         }
         Schedule schedule = scheduleJdbcRepository.save(request.toObject());
         return ScheduleResponse.from(schedule);
+    }
+
+    public List<ScheduleResponse> getSchedules(Long themeId, LocalDate date) {
+        List<Schedule> schedules = scheduleJdbcRepository.findByThemeIdAndDate(themeId, date);
+        return schedules.stream()
+                .map(ScheduleResponse::from)
+                .toList();
     }
 }

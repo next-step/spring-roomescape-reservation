@@ -3,8 +3,6 @@ package nextstep.schedule;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import nextstep.SpringControllerTest;
-import nextstep.theme.ThemeControllerTest;
-import nextstep.theme.ThemeCreateRequest;
 import nextstep.theme.ThemeJdbcRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static io.restassured.RestAssured.given;
+import static nextstep.theme.ThemeControllerTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ScheduleControllerTest extends SpringControllerTest {
@@ -38,7 +37,7 @@ class ScheduleControllerTest extends SpringControllerTest {
     @Test
     void createSchedule() {
         // given
-        Long themeId = ThemeControllerTest.테마를_생성한다("404호의 비밀");
+        long themeId = 테마를_생성한다("404호의 비밀");
         ScheduleCreateRequest request = new ScheduleCreateRequest(themeId, LocalDate.parse("2022-10-11"), LocalTime.parse("13:00:00"));
 
         // when
@@ -52,7 +51,7 @@ class ScheduleControllerTest extends SpringControllerTest {
     @Test
     void createScheduleWithDuplicatedSchedule() {
         // given
-        long themeId = ThemeControllerTest.테마를_생성한다("404호의 비밀");
+        long themeId = 테마를_생성한다("404호의 비밀");
 
         ScheduleCreateRequest request1 = new ScheduleCreateRequest(themeId, LocalDate.parse("2022-10-11"), LocalTime.parse("13:00:00"));
         ExtractableResponse<Response> response1 = 스케줄_생성_요청(request1);
@@ -80,10 +79,41 @@ class ScheduleControllerTest extends SpringControllerTest {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
+    @DisplayName("스케줄 조회")
+    @Test
+    void getSchedules() {
+        // given
+        long createdThemeId = 테마를_생성한다("404호의 비밀");
+        long createdScheduleId = 스케줄을_생성한다(createdThemeId);
+
+        // when
+        ExtractableResponse<Response> response = 스케줄_조회_요청(createdThemeId, "2022-10-11");
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("date")).containsExactly("2022-10-11");
+    }
+
     private static ExtractableResponse<Response> 스케줄_생성_요청(ScheduleCreateRequest request) {
         return given()
                 .body(request).contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/schedules")
+                .then().log().all().extract();
+    }
+
+    public static long 스케줄을_생성한다(long themeId) {
+        ScheduleCreateRequest request = new ScheduleCreateRequest(themeId, LocalDate.parse("2022-10-11"), LocalTime.parse("13:00:00"));
+        ExtractableResponse<Response> response = 스케줄_생성_요청(request);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        return Long.parseLong(String.valueOf(response.header("Location").split("^*/")[2]));
+    }
+
+    private ExtractableResponse<Response> 스케줄_조회_요청(long themeId, String date) {
+        return given()
+                .queryParam("themeId", themeId)
+                .queryParam("date", date)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().get("/schedules")
                 .then().log().all().extract();
     }
 }

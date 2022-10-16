@@ -3,6 +3,7 @@ package nextstep.infrastructure;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +29,22 @@ public class ReservationDao implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findAllBy(LocalDate date) {
+    public Optional<Reservation> findBy(String date, String time) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(
+            "select id, date, time, name from reservation where date = ? and time = ?",
+            (rs, rowNum) -> new Reservation(
+                rs.getLong("id"),
+                rs.getString("date"),
+                rs.getString("time"),
+                rs.getString("name")
+            ),
+            LocalDate.parse(date),
+            LocalTime.parse(time)
+        ));
+    }
+
+    @Override
+    public List<Reservation> findAllBy(String date) {
         return jdbcTemplate.query(
             "select id, date, time, name from reservation where date = ?",
             (rs, rowNum) -> new Reservation(
@@ -37,12 +53,16 @@ public class ReservationDao implements ReservationRepository {
                 rs.getString("time"),
                 rs.getString("name")
             ),
-            date
+            LocalDate.parse(date)
         );
     }
 
     @Override
-    public void delete(LocalDate date, LocalTime time) {
-        jdbcTemplate.update("delete from reservation where date = ? and time = ?", date, time);
+    public void delete(String date, String time) {
+        jdbcTemplate.update(
+            "delete from reservation where date = ? and time = ?",
+            LocalDate.parse(date),
+            LocalTime.parse(time)
+        );
     }
 }

@@ -6,6 +6,6 @@ import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Jacksonized
-public record RoomReservationReq(LocalDate date, String time, String name) {
+public record ReservationRes(Long id, LocalDate date, String time, String name) {
 
 }

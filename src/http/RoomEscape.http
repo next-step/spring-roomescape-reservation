@@ -1,4 +1,4 @@
-## 예약 생성
+### 예약 생성
 POST {{room-escape-api}}/reservations
 content-type: application/json; charset=UTF-8
 
@@ -7,3 +7,9 @@ content-type: application/json; charset=UTF-8
   "time": "13:00",
   "name": "name"
 }
+
+
+### 예약 조회
+GET {{room-escape-api}}/reservations?date=2022-08-11
+content-type: application/json
+

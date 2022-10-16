@@ -1,7 +1,15 @@
 === 예약 생성
 ==== 성공
 ===== Request
-include::{snippets}/room-escape-create/http-request.adoc[]
+include::{snippets}/reservation-create/http-request.adoc[]
 
 ===== Response
-include::{snippets}/room-escape-create/http-response.adoc[]
+include::{snippets}/reservation-create/http-response.adoc[]
+
+=== 예약 조회
+==== 성공
+===== Request
+include::{snippets}/find-reservations/http-request.adoc[]
+
+===== Response
+include::{snippets}/find-reservations/http-response.adoc[]

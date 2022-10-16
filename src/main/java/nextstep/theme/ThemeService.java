@@ -15,7 +15,7 @@ public class ThemeService {
 
     public Theme createTheme(ThemeCreateRequest request) {
         if (this.themeJdbcRepository.existByName(request.getName())) {
-            throw new IllegalStateException("이미 존재하는 테마 이름입니다.");
+            throw new IllegalStateException("테마 생성 실패: 이미 존재하는 테마 이름입니다.");
         }
         return this.themeJdbcRepository.create(request.toObject());
     }

@@ -1,7 +1,10 @@
 package nextstep;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
+import nextstep.application.ReservationCreateValidation;
+import nextstep.application.ReservationPolicy;
 import nextstep.application.RoomEscapeService;
 import nextstep.application.dto.Reservation;
 import nextstep.domain.repository.ReservationRepository;
@@ -15,7 +18,8 @@ public class Main {
 
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    RoomEscapeService service = new RoomEscapeService(new ReservationRepository());
+    RoomEscapeService service = new RoomEscapeService(new ReservationRepository(),
+        new ReservationPolicy(List.of(new ReservationCreateValidation(new ReservationRepository()))));
 
     while (true) {
       System.out.println("메뉴를 선택하세요.");
@@ -45,7 +49,12 @@ public class Main {
             .name(name)
             .build();
 
-        service.create(reservation);
+        try {
+          service.create(reservation);
+        } catch (RuntimeException e) {
+          System.out.println("이미 해당 날짜, 시간에 예약이 존재합니다.");
+          continue;
+        }
         System.out.println("예약이 등록되었습니다.");
       }
 

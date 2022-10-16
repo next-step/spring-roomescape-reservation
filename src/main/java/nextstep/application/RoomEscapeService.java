@@ -17,7 +17,10 @@ public class RoomEscapeService {
 
   private final ReservationRepository repository;
 
+  private final ReservationPolicy policy;
+
   public Long create(Reservation req) {
+    policy.checkValid(req);
     var reservation = ReservationEntity.builder()
         .date(req.date())
         .time(LocalTime.parse(req.time()))

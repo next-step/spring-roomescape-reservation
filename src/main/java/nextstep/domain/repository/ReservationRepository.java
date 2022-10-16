@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import nextstep.domain.ReservationEntity;
@@ -32,9 +33,12 @@ public class ReservationRepository {
   }
 
   public void deleteByDateAndTime(LocalDate date, LocalTime time) {
-    STORE.values().stream()
+    findReservationsByDateAndTime(date, time).ifPresent(it -> STORE.remove(it.getId()));
+  }
+
+  public Optional<ReservationEntity> findReservationsByDateAndTime(LocalDate date, LocalTime time) {
+    return STORE.values().stream()
         .filter(it -> it.getDate().isEqual(date) && Objects.equals(it.getTime(), time))
-        .findFirst()
-        .ifPresent(it -> STORE.remove(it.getId()));
+        .findFirst();
   }
 }

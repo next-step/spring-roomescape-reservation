@@ -64,4 +64,9 @@ public class ReservationService {
     public void cancel(String date, String time) {
         reservationRepository.delete(date, time);
     }
+
+    @Transactional
+    public void cancelAll() {
+        reservationRepository.deleteAll();
+    }
 }

@@ -2,6 +2,7 @@ package nextstep.domain.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import nextstep.domain.reservation.Reservation.Name;
@@ -69,7 +70,7 @@ public class ReservationFixtureFactory {
 
   /**
    * rageFrom으로 부터 rangeTo 까지의 예약을 분단위로 생성해 반환한다.
-   * (rance closed)
+   * (open ranged)
    * <pre>
    *   var factory = ReservationFixtureFactory.newInstance();
    *   List<Reservation> reservationCustoms = factory.getCustomFixtures(LocalTime.now().plusMinutes(1), LocalTime.now().plusMinutes(10));
@@ -77,9 +78,10 @@ public class ReservationFixtureFactory {
    * </pre>
    */
   public List<Reservation> getCustomFixtures(LocalTime rangeFrom, LocalTime rangeTo) {
+    rangeTo = rangeTo.truncatedTo(ChronoUnit.MINUTES);
     List<Reservation> reservations = new ArrayList<>();
 
-    while (!rangeFrom.equals(rangeTo) && rangeTo.isAfter(rangeFrom)) {
+    while (!rangeTo.isAfter(rangeFrom)) {
       reservations.add(createReservation(NAME, LOCAL_DATE, rangeFrom));
       rangeFrom = rangeFrom.plusMinutes(1);
     }

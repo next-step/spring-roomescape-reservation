@@ -2,13 +2,12 @@ package nextstep.domain.reservation.validator;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import nextstep.domain.reservation.ReservationFixtureFactory;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
+import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +44,7 @@ class DateAndTimeValidatorTest {
         fixtureCreateReq.toBuilder()
             .date(pastDate)
             .build()
-    )).isInstanceOf(IllegalArgumentException.class)
+    )).isInstanceOf(ReservationIllegalArgumentException.class)
         .hasMessageContaining("이미 지난 날짜에 대해 예약할 수 없습니다. 현재 날짜 : ");
   }
 
@@ -65,7 +64,7 @@ class DateAndTimeValidatorTest {
             .date(today)
             .time(pastTime)
             .build()
-    )).isInstanceOf(IllegalArgumentException.class)
+    )).isInstanceOf(ReservationIllegalArgumentException.class)
         .hasMessageContaining("이미 지난 시간에 대해 예약할 수 없습니다. 현재 시간 : ");
   }
 }

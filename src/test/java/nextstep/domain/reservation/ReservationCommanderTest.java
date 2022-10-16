@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
+import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ class ReservationCommanderTest {
           fixtureCreateReq.toBuilder()
               .name(name)
               .build()
-      )).isInstanceOf(IllegalArgumentException.class)
+      )).isInstanceOf(ReservationIllegalArgumentException.class)
           .hasMessageContaining("예약의 이름은 공란일 수 없습니다.");
     }
 
@@ -100,7 +101,7 @@ class ReservationCommanderTest {
           .build();
       // when & then
       assertThatThrownBy(() -> reservationCommander.deleteReservation(notExistDeleteReq))
-          .isInstanceOf(IllegalArgumentException.class)
+          .isInstanceOf(ReservationIllegalArgumentException.class)
           .hasMessageContaining("해당 일시에는 예약이 없습니다. 요청받은 일자");
     }
   }

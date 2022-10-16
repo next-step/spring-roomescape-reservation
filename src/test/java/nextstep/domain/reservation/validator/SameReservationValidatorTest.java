@@ -11,6 +11,7 @@ import nextstep.domain.reservation.ReservationFinderImpl;
 import nextstep.domain.reservation.ReservationFixtureFactory;
 import nextstep.domain.reservation.ReservationRepository;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
+import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +61,7 @@ class SameReservationValidatorTest {
     var createReq = reservationFixtureFactory.getFixtureCreateReq();
     // when & then
     assertThatThrownBy(() -> validator.validate(createReq))
-        .isInstanceOf(IllegalArgumentException.class)
+        .isInstanceOf(ReservationIllegalArgumentException.class)
         .hasMessageContaining("해당 일시엔 이미 예약이 존재합니다.");
   }
 }

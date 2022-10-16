@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class ReservationRepositoryImplTest {
 
-  ReservationRepository reservationRepository = new ReservationRepositoryImpl();
+  ReservationRepository reservationRepository;
 
   @BeforeEach
   void setting() {

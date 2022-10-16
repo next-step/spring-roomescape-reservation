@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 
 @RequiredArgsConstructor
 @EqualsAndHashCode
@@ -36,7 +37,7 @@ public class Reservation {
 
     public static Name of(String value) {
       if (value == null || value.isEmpty()) {
-        throw new IllegalArgumentException("예약의 이름은 공란일 수 없습니다.");
+        throw new ReservationIllegalArgumentException("예약의 이름은 공란일 수 없습니다.");
       }
 
       return new Name(value);

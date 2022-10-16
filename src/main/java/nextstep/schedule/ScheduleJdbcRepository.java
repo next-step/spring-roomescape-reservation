@@ -45,7 +45,7 @@ public class ScheduleJdbcRepository {
     }
 
     public boolean existsByThemeIdAndDateAndTime(long themeId, LocalDate date, LocalTime time) {
-        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date = ? AND time = ?";
+        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date = ? AND time = ? LIMIT 1";
         List<Schedule> schedules = jdbcTemplate.query(sql, rowMapper, themeId, date, time);
         return !(schedules.isEmpty());
     }

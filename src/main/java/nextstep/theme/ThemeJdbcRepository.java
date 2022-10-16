@@ -49,6 +49,12 @@ public class ThemeJdbcRepository {
         return !(themes.isEmpty());
     }
 
+    public boolean existById(Long id) {
+        String sql = "SELECT * FROM theme WHERE id = ? LIMIT 1";
+        List<Theme> themes = jdbcTemplate.query(sql, themeRowMapper, id);
+        return !(themes.isEmpty());
+    }
+
     public List<Theme> findAll() {
         String sql = "SELECT * FROM theme";
         return jdbcTemplate.query(sql, themeRowMapper);

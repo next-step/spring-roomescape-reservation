@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -86,11 +88,10 @@ public class ThemeControllerTest extends SpringControllerTest {
     @Test
     void deleteTheme() {
         // given
-        테마를_생성한다("404호의 비밀");
+        Long createdThemeId = 테마를_생성한다("404호의 비밀");
         ExtractableResponse<Response> getThemesResponse1 = 테마_목록_조회_요청();
         assertThat(getThemesResponse1.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(getThemesResponse1.jsonPath().getList("name")).hasSize(1);
-        long createdThemeId = Long.parseLong(String.valueOf(getThemesResponse1.jsonPath().getList("id").get(0)));
         // when
         ExtractableResponse<Response> response = 테마_삭제_요청(createdThemeId);
         ExtractableResponse<Response> getThemesResponse2 = 테마_목록_조회_요청();
@@ -100,27 +101,29 @@ public class ThemeControllerTest extends SpringControllerTest {
         assertThat(getThemesResponse2.body().jsonPath().getList("name")).isEmpty();
     }
 
-    private static ExtractableResponse<Response> 테마_생성_요청(ThemeCreateRequest request) {
+    public static ExtractableResponse<Response> 테마_생성_요청(ThemeCreateRequest request) {
         return given()
                 .body(request).contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post("/themes")
                 .then().log().all().extract();
     }
 
-    private static void 테마를_생성한다(String themeName) {
+    public static Long 테마를_생성한다(String themeName) {
         ThemeCreateRequest request = new ThemeCreateRequest(themeName, "설명벌레의 설명", 22222);
         ExtractableResponse<Response> response = 테마_생성_요청(request);
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        String[] locations = response.header("Location").split("^*/");
+        return Long.valueOf(String.valueOf(locations[2]));
     }
 
-    private static ExtractableResponse<Response> 테마_목록_조회_요청() {
+    public static ExtractableResponse<Response> 테마_목록_조회_요청() {
         return given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/themes")
                 .then().log().all().extract();
     }
 
-    private static ExtractableResponse<Response> 테마_삭제_요청(long themeId) {
+    public static ExtractableResponse<Response> 테마_삭제_요청(long themeId) {
         return given()
                 .pathParam("themeId", themeId)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

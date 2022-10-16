@@ -8,8 +8,10 @@ import nextstep.domain.reservation.dto.ReservationCommandDto;
 import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import nextstep.domain.reservation.validator.ReservationCreateValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReservationCommander {

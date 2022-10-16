@@ -54,6 +54,20 @@ class ThemeControllerTest {
         assertThat(themeFindAllResponse.getThemes()).hasSize(1);
     }
 
+    @Test
+    @DisplayName("DELETE 테마 삭제")
+    void deleteTheme() {
+        // given
+        ThemeCreateRequest request = new ThemeCreateRequest("어마어마한 테마", "짱무서움", 20_000);
+        createTheme(request);
+
+        // when
+        ExtractableResponse<Response> response = deleteTheme(1L);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+    }
+
     private ExtractableResponse<Response> createTheme(ThemeCreateRequest request) {
         return RestAssured
                 .given().log().all()
@@ -68,6 +82,14 @@ class ThemeControllerTest {
                 .given().log().all()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/themes")
+                .then().log().all().extract();
+    }
+
+    private ExtractableResponse<Response> deleteTheme(Long id) {
+        return RestAssured
+                .given().log().all()
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete("/themes/" + id)
                 .then().log().all().extract();
     }
 }

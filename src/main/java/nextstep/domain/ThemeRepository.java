@@ -41,7 +41,7 @@ public class ThemeRepository {
     }
 
     public void deleteById(Long id) {
-        String sql = "delete from theme whre id = ?";
+        String sql = "delete from theme where id = ?";
         jdbcTemplate.update(sql, id);
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 class ThemeRepositoryTest {
@@ -43,5 +44,15 @@ class ThemeRepositoryTest {
         assertThat(findThemes).hasSize(1);
         assertThat(findThemes.get(0)).usingRecursiveComparison()
                 .isEqualTo(theme);
+    }
+
+    @Test
+    @DisplayName("테마 ID에 해당하는 테마를 삭제한다.")
+    void deleteById() {
+        // given
+        Theme theme = themes.save(new Theme("어마어마한 테마", "짱무서움", 20_000));
+
+        // when, then
+        assertDoesNotThrow(() -> themes.deleteById(theme.getId()));
     }
 }

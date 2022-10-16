@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReservationFindAllResponse {
-    private final List<ReservationFindResponse> reservations;
+    private List<ReservationFindResponse> reservations;
+
+    public ReservationFindAllResponse() {
+    }
 
     private ReservationFindAllResponse(List<ReservationFindResponse> reservations) {
         this.reservations = reservations;

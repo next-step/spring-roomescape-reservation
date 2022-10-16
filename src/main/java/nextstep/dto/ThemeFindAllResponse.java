@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ThemeFindAllResponse {
-    private final List<ThemeFindResponse> themes;
+    private List<ThemeFindResponse> themes;
+
+    public ThemeFindAllResponse() {
+    }
 
     public ThemeFindAllResponse(List<ThemeFindResponse> themes) {
         this.themes = themes;

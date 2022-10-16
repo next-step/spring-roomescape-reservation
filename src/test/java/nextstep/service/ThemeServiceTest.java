@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest
 class ThemeServiceTest {
@@ -39,5 +40,16 @@ class ThemeServiceTest {
 
         // then
         assertThat(themes.getThemes()).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("테마 ID로 테마를 삭제한다.")
+    void deleteTheme() {
+        // given
+        ThemeCreateRequest request = new ThemeCreateRequest("어마어마한 테마", "짱무서움", 20_000);
+        Long themeId = themeService.createTheme(request);
+
+        // when, then
+        assertDoesNotThrow(() -> themeService.deleteTheme(themeId));
     }
 }

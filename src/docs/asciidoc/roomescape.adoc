@@ -1,0 +1,7 @@
+=== 예약 생성
+==== 성공
+===== Request
+include::{snippets}/room-escape-create/http-request.adoc[]
+
+===== Response
+include::{snippets}/room-escape-create/http-response.adoc[]

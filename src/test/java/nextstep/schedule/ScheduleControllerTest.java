@@ -18,7 +18,7 @@ import static io.restassured.RestAssured.given;
 import static nextstep.theme.ThemeControllerTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ScheduleControllerTest extends SpringControllerTest {
+public class ScheduleControllerTest extends SpringControllerTest {
 
     @Autowired
     private ThemeJdbcRepository themeJdbcRepository;

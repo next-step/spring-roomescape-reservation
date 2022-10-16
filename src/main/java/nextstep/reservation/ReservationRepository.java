@@ -9,13 +9,13 @@ public interface ReservationRepository {
 
     Reservation save(Reservation reservation);
 
-    boolean existsReservation(LocalDate date, LocalTime time);
+    boolean existsReservation(Long scheduleId, LocalDate date, LocalTime time);
 
-    Optional<Reservation> findByDateAndTime(LocalDate date, LocalTime time);
+    Optional<Reservation> findByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time);
 
     List<Reservation> findByDate(LocalDate date);
 
-    boolean deleteByDateAndTime(LocalDate date, LocalTime time);
+    boolean deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time);
 
     void clear();
 }

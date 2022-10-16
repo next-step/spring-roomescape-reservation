@@ -15,7 +15,7 @@ public class ReservationService {
     }
 
     public ReservationResponse createReservation(ReservationCreateRequest request) {
-        if (reservationRepository.existsReservation(request.getDate(), request.getTime())) {
+        if (reservationRepository.existsReservation(request.getScheduleId(), request.getDate(), request.getTime())) {
             throw new IllegalStateException("해당 일시에 이미 예약이 존재하여 예약이 불가능합니다.");
         }
         Reservation reservation = reservationRepository.save(request.toObject());
@@ -29,7 +29,7 @@ public class ReservationService {
     }
 
     public void cancelReservation(ReservationDeleteRequest request) {
-        if (reservationRepository.deleteByDateAndTime(request.getDate(), request.getTime())) {
+        if (reservationRepository.deleteByScheduleIdAndDateAndTime(request.getScheduleId(), request.getDate(), request.getTime())) {
             return;
         }
         throw new IllegalStateException("예약을 취소하는데 실패했습니다.");

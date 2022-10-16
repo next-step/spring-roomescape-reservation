@@ -22,6 +22,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final RowMapper<Reservation> rowMapper = ((rs, count) -> new Reservation(
             rs.getLong("id"),
+            rs.getLong("schedule_id"),
             rs.getDate("date").toLocalDate(),
             rs.getTime("time").toLocalTime(),
             rs.getString("name"))
@@ -37,6 +38,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
     @Override
     public Reservation save(Reservation reservation) {
         SqlParameterSource source = new MapSqlParameterSource()
+                .addValue("schedule_id", reservation.getScheduleId())
                 .addValue("date", reservation.getDate())
                 .addValue("time", reservation.getTime())
                 .addValue("name", reservation.getName());
@@ -45,15 +47,15 @@ public class ReservationJdbcRepository implements ReservationRepository {
     }
 
     @Override
-    public boolean existsReservation(LocalDate date, LocalTime time) {
-        return this.findByDateAndTime(date, time).isPresent();
+    public boolean existsReservation(Long scheduleId, LocalDate date, LocalTime time) {
+        return this.findByScheduleIdAndDateAndTime(scheduleId, date, time).isPresent();
     }
 
     @Override
-    public Optional<Reservation> findByDateAndTime(LocalDate date, LocalTime time) {
-        String sql = "SELECT * FROM reservation WHERE date = ? AND time = ?";
+    public Optional<Reservation> findByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
+        String sql = "SELECT * FROM reservation WHERE schedule_id = ? AND date = ? AND time = ?";
         try {
-            return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, date, time));
+            return Optional.of(jdbcTemplate.queryForObject(sql, rowMapper, scheduleId, date, time));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -65,10 +67,9 @@ public class ReservationJdbcRepository implements ReservationRepository {
         return jdbcTemplate.query(sql, rowMapper, date);
     }
 
-    @Override
-    public boolean deleteByDateAndTime(LocalDate date, LocalTime time) {
-        String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
-        int deleteCount = jdbcTemplate.update(sql, date, time);
+    public boolean deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
+        String sql = "DELETE FROM reservation WHERE schedule_id = ? AND date = ? AND time = ?";
+        int deleteCount = jdbcTemplate.update(sql, scheduleId, date, time);
         return deleteCount > 0;
     }
 

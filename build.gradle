@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.4'
     id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group 'nextstep'
@@ -11,17 +12,45 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
 test {
+    outputs.dir snippetsDir
     useJUnitPlatform()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.4'
-    implementation 'org.projectlombok:lombok:1.18.24'
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
 }
 
 configurations {
     complieOnly {
         extendsFrom annotationProcessor
     }
+    asciidoctorExt
 }
+
+bootJar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+}
+

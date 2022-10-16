@@ -4,22 +4,24 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Reservation {
-    private final LocalDate date;
-    private final LocalTime time;
+    private final ReservationTime reservationTime;
     private final String name;
 
     public Reservation(LocalDate date, LocalTime time, String name) {
-        this.date = date;
-        this.time = time;
+        this.reservationTime = new ReservationTime(date, time);
         this.name = name;
     }
 
+    public ReservationTime getReservationTime() {
+        return reservationTime;
+    }
+
     public LocalDate getDate() {
-        return date;
+        return reservationTime.getDate();
     }
 
     public LocalTime getTime() {
-        return time;
+        return reservationTime.getTime();
     }
 
     public String getName() {

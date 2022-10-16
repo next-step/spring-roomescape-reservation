@@ -1,6 +1,7 @@
 package nextstep.api;
 
 import nextstep.domain.Reservation;
+import nextstep.domain.ReservationTime;
 import nextstep.domain.Reservations;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +36,17 @@ public class ReservationController {
 
     @GetMapping(RESERVATION_PATH)
     public ResponseEntity<List<Reservation>> read(
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-    ) {
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return ResponseEntity.ok(reservations.findBy(date));
     }
 
     @DeleteMapping(RESERVATION_PATH)
     public ResponseEntity<Void> delete(
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+        @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time
     ) {
-        reservations.remove(date, time);
+        ReservationTime reservationTime = new ReservationTime(date, time);
+        reservations.remove(reservationTime);
         return ResponseEntity.noContent().build();
     }
 }

@@ -8,15 +8,22 @@ import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+@SpringBootTest
 class ReservationRepositoryImplTest {
 
+  @Autowired
   ReservationRepository reservationRepository;
 
+  @Autowired
+  JdbcTemplate jdbcTemplate;
+
   @BeforeEach
-  void setting() {
-    // for delete all
-    reservationRepository = new InMemoryReservationRepository();
+  void setUp() {
+    jdbcTemplate.update("delete from reservation");
   }
 
   @DisplayName("예약 객체를 저장하는데 성공한다.")
@@ -64,7 +71,7 @@ class ReservationRepositoryImplTest {
     reservationRepository.save(fixtureFactory.getFixture());
     Delete properDeleteReq = fixtureFactory.getFixtureDeleteReq();
     Delete notExistDeleteReq = properDeleteReq.toBuilder()
-        .time(properDeleteReq.time().plusMinutes(1))
+        .date(properDeleteReq.date().plusDays(1))
         .build();
 
     // when

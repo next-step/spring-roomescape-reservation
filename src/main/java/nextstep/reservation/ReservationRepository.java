@@ -19,5 +19,7 @@ public interface ReservationRepository {
 
     List<Reservation> findByScheduleId(Long scheduleId);
 
+    boolean existsByScheduleIds(List<Long> scheduleIds);
+
     void clear();
 }

@@ -2,27 +2,43 @@ package nextstep.theme;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import nextstep.CurrentDateTimeService;
 import nextstep.SpringControllerTest;
+import nextstep.reservation.ReservationRepository;
+import nextstep.schedule.ScheduleJdbcRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static io.restassured.RestAssured.given;
+import static nextstep.reservation.ReservationControllerTest.*;
+import static nextstep.schedule.ScheduleControllerTest.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ThemeControllerTest extends SpringControllerTest {
 
     @Autowired
     private ThemeJdbcRepository themeJdbcRepository;
+    @Autowired
+    private ScheduleJdbcRepository scheduleJdbcRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Override
     @BeforeEach
     protected void setUp() {
         super.setUp();
         themeJdbcRepository.clear();
+        scheduleJdbcRepository.clear();
+        reservationRepository.clear();
     }
 
     @DisplayName("테마 생성")
@@ -90,6 +106,7 @@ public class ThemeControllerTest extends SpringControllerTest {
         ExtractableResponse<Response> getThemesResponse1 = 테마_목록_조회_요청();
         assertThat(getThemesResponse1.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(getThemesResponse1.jsonPath().getList("name")).hasSize(1);
+
         // when
         ExtractableResponse<Response> response = 테마_삭제_요청(createdThemeId);
         ExtractableResponse<Response> getThemesResponse2 = 테마_목록_조회_요청();
@@ -97,6 +114,24 @@ public class ThemeControllerTest extends SpringControllerTest {
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
         assertThat(getThemesResponse2.body().jsonPath().getList("name")).isEmpty();
+    }
+
+    @DisplayName("테마에 남은 예약이 있다면, 테마 삭제 요청은 실패한다.")
+    @Test
+    void deleteThemeWithExistsReservation() {
+        // given
+        long createdThemeId = 테마를_생성한다("404호의 비밀");
+        long createdScheduleId = 스케줄을_생성한다(createdThemeId);
+        예약을_생성한다(createdScheduleId);
+        ExtractableResponse<Response> getThemesResponse1 = 테마_목록_조회_요청();
+        assertThat(getThemesResponse1.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(getThemesResponse1.jsonPath().getList("name")).hasSize(1);
+
+        // when
+        ExtractableResponse<Response> response = 테마_삭제_요청(createdThemeId);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     public static ExtractableResponse<Response> 테마_생성_요청(ThemeCreateRequest request) {
@@ -127,5 +162,19 @@ public class ThemeControllerTest extends SpringControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().delete("/themes/{themeId}")
                 .then().log().all().extract();
+    }
+}
+
+@Service
+@Primary
+class MockCurrentDateTimeService extends CurrentDateTimeService {
+    @Override
+    public LocalDate nowDate() {
+        return LocalDate.parse("1000-01-01");
+    }
+
+    @Override
+    public LocalTime nowTime() {
+        return LocalTime.parse("00:00:00");
     }
 }

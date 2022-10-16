@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class ReservationJdbcRepository implements ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final RowMapper<Reservation> rowMapper = ((rs, count) -> new Reservation(
             rs.getLong("id"),
             rs.getLong("schedule_id"),
@@ -33,6 +35,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
         this.simpleJdbcInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("reservation")
                 .usingGeneratedKeyColumns("id");
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
@@ -71,6 +74,14 @@ public class ReservationJdbcRepository implements ReservationRepository {
     public List<Reservation> findByScheduleId(Long scheduleId) {
         String sql = "SELECT * FROM reservation WHERE schedule_id = ?";
         return jdbcTemplate.query(sql, rowMapper, scheduleId);
+    }
+
+    @Override
+    public boolean existsByScheduleIds(List<Long> scheduleIds) {
+        String sql = "SELECT * FROM reservation WHERE schedule_id IN (:scheduleIds) LIMIT 1";
+        SqlParameterSource source = new MapSqlParameterSource("scheduleIds", scheduleIds);
+        List<Reservation> reservations = namedParameterJdbcTemplate.query(sql, source, rowMapper);
+        return !(reservations.isEmpty());
     }
 
     public boolean deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {

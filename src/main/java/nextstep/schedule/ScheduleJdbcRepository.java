@@ -66,4 +66,9 @@ public class ScheduleJdbcRepository {
         jdbcTemplate.update(sql);
         logger.info(sql);
     }
+
+    public List<Schedule> findByThemeIdAndDateGreaterThanAndTimeGreaterThan(Long themeId, LocalDate date, LocalTime time) {
+        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date > ? AND time > ?";
+        return jdbcTemplate.query(sql, rowMapper, themeId, date, time);
+    }
 }

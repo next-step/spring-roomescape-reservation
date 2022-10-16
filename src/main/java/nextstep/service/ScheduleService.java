@@ -3,8 +3,8 @@ package nextstep.service;
 import nextstep.domain.ReservationRepository;
 import nextstep.domain.Schedule;
 import nextstep.domain.ScheduleRepository;
-import nextstep.dto.ScheduleCreateRequest;
-import nextstep.dto.ScheduleFindAllResponse;
+import nextstep.dto.schedule.ScheduleCreateRequest;
+import nextstep.dto.schedule.ScheduleFindAllResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

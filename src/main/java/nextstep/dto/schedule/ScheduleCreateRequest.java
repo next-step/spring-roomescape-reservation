@@ -1,4 +1,4 @@
-package nextstep.dto;
+package nextstep.dto.schedule;
 
 public class ScheduleCreateRequest {
     private final Long themeId;

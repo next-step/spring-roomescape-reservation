@@ -1,4 +1,4 @@
-package nextstep.dto;
+package nextstep.dto.theme;
 
 import nextstep.domain.Theme;
 

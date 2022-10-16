@@ -4,8 +4,8 @@ import nextstep.domain.Reservation;
 import nextstep.domain.ReservationRepository;
 import nextstep.domain.Schedule;
 import nextstep.domain.ScheduleRepository;
-import nextstep.dto.ReservationCreateRequest;
-import nextstep.dto.ReservationFindAllResponse;
+import nextstep.dto.reservation.ReservationCreateRequest;
+import nextstep.dto.reservation.ReservationFindAllResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
 package nextstep.controller;
 
-import nextstep.dto.ScheduleCreateRequest;
-import nextstep.dto.ScheduleFindAllResponse;
+import nextstep.dto.schedule.ScheduleCreateRequest;
+import nextstep.dto.schedule.ScheduleFindAllResponse;
 import nextstep.service.ScheduleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

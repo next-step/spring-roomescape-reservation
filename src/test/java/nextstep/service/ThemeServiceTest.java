@@ -1,9 +1,9 @@
 package nextstep.service;
 
-import nextstep.dto.ReservationCreateRequest;
-import nextstep.dto.ScheduleCreateRequest;
-import nextstep.dto.ThemeCreateRequest;
-import nextstep.dto.ThemeFindAllResponse;
+import nextstep.dto.reservation.ReservationCreateRequest;
+import nextstep.dto.schedule.ScheduleCreateRequest;
+import nextstep.dto.theme.ThemeCreateRequest;
+import nextstep.dto.theme.ThemeFindAllResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

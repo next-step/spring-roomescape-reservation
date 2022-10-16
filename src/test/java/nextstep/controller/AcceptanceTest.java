@@ -1,8 +1,8 @@
 package nextstep.controller;
 
 import io.restassured.RestAssured;
-import nextstep.dto.ScheduleCreateRequest;
-import nextstep.dto.ReservationCreateRequest;
+import nextstep.dto.schedule.ScheduleCreateRequest;
+import nextstep.dto.reservation.ReservationCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

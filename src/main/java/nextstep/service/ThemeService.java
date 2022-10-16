@@ -4,8 +4,8 @@ import nextstep.domain.ReservationRepository;
 import nextstep.domain.ScheduleRepository;
 import nextstep.domain.Theme;
 import nextstep.domain.ThemeRepository;
-import nextstep.dto.ThemeCreateRequest;
-import nextstep.dto.ThemeFindAllResponse;
+import nextstep.dto.theme.ThemeCreateRequest;
+import nextstep.dto.theme.ThemeFindAllResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

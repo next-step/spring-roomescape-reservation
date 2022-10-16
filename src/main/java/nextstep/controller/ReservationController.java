@@ -1,7 +1,7 @@
 package nextstep.controller;
 
-import nextstep.dto.ReservationCreateRequest;
-import nextstep.dto.ReservationFindAllResponse;
+import nextstep.dto.reservation.ReservationCreateRequest;
+import nextstep.dto.reservation.ReservationFindAllResponse;
 import nextstep.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

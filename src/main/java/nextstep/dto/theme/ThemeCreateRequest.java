@@ -1,4 +1,4 @@
-package nextstep.dto;
+package nextstep.dto.theme;
 
 public class ThemeCreateRequest {
     private final String name;

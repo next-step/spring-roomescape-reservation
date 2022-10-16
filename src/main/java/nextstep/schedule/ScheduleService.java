@@ -34,4 +34,11 @@ public class ScheduleService {
                 .map(ScheduleResponse::from)
                 .toList();
     }
+
+    public void deleteSchedule(Long scheduleId) {
+        if (this.scheduleJdbcRepository.deleteSchedule(scheduleId)) {
+            return;
+        }
+        throw new IllegalStateException("스케줄 삭제 실패: 존재하지 않는 스케줄 ID 입니다.");
+    }
 }

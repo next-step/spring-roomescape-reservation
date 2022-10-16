@@ -50,14 +50,20 @@ public class ScheduleJdbcRepository {
         return !(schedules.isEmpty());
     }
 
+    public List<Schedule> findByThemeIdAndDate(Long themeId, LocalDate date) {
+        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date = ?";
+        return jdbcTemplate.query(sql, rowMapper, themeId, date);
+    }
+
+    public boolean deleteSchedule(Long scheduleId) {
+        String sql = "DELETE FROM schedule WHERE id = ?";
+        int deletedCount = jdbcTemplate.update(sql, scheduleId);
+        return deletedCount > 0;
+    }
+
     public void clear() {
         String sql = "DELETE FROM schedule";
         jdbcTemplate.update(sql);
         logger.info(sql);
-    }
-
-    public List<Schedule> findByThemeIdAndDate(Long themeId, LocalDate date) {
-        String sql = "SELECT * FROM schedule WHERE theme_id = ? AND date = ?";
-        return jdbcTemplate.query(sql, rowMapper, themeId, date);
     }
 }

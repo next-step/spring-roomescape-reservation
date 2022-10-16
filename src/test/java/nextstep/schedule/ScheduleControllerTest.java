@@ -94,6 +94,42 @@ class ScheduleControllerTest extends SpringControllerTest {
         assertThat(response.jsonPath().getList("date")).containsExactly("2022-10-11");
     }
 
+    @DisplayName("스케줄 삭제")
+    @Test
+    void deleteSchedule() {
+        // given
+        long createdThemeId = 테마를_생성한다("404호의 비밀");
+        long createdScheduleId = 스케줄을_생성한다(createdThemeId);
+        ExtractableResponse<Response> getThemesResponse = 스케줄_조회_요청(createdThemeId, "2022-10-11");
+        assertThat(getThemesResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(getThemesResponse.jsonPath().getList("id")).hasSize(1);
+
+        // when
+        ExtractableResponse<Response> response = 스케줄_삭제_요청(createdScheduleId);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
+        ExtractableResponse<Response> getThemesResponse2 = 스케줄_조회_요청(createdThemeId, "2022-10-11");
+        assertThat(getThemesResponse2.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(getThemesResponse2.jsonPath().getList("id")).isEmpty();
+    }
+
+    @DisplayName("스케줄이 존재하지 않으면 스케줄 삭제에 실패한다.")
+    @Test
+    void deleteScheduleWithNonExistScheduleId() {
+        // given
+        long createdThemeId = 테마를_생성한다("404호의 비밀");
+        ExtractableResponse<Response> getThemesResponse = 스케줄_조회_요청(createdThemeId, "2022-10-11");
+        assertThat(getThemesResponse.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(getThemesResponse.jsonPath().getList("id")).isEmpty();
+
+        // when
+        ExtractableResponse<Response> response = 스케줄_삭제_요청(1L);
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    }
+
     private static ExtractableResponse<Response> 스케줄_생성_요청(ScheduleCreateRequest request) {
         return given()
                 .body(request).contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -108,12 +144,20 @@ class ScheduleControllerTest extends SpringControllerTest {
         return Long.parseLong(String.valueOf(response.header("Location").split("^*/")[2]));
     }
 
-    private ExtractableResponse<Response> 스케줄_조회_요청(long themeId, String date) {
+    public ExtractableResponse<Response> 스케줄_조회_요청(long themeId, String date) {
         return given()
                 .queryParam("themeId", themeId)
                 .queryParam("date", date)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().get("/schedules")
+                .then().log().all().extract();
+    }
+
+    public ExtractableResponse<Response> 스케줄_삭제_요청(long scheduleId) {
+        return given()
+                .pathParam("scheduleId", scheduleId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().delete("/schedules/{scheduleId}")
                 .then().log().all().extract();
     }
 }

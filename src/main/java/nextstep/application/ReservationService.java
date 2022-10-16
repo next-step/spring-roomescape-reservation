@@ -29,7 +29,7 @@ public class ReservationService {
             throw new ReservationException(String.format("%s에는 이미 예약이 차있습니다.", reservation));
         }
 
-        reservationRepository.save(getReservation(request));
+        reservationRepository.save(toReservation(request));
         return findBy(request)
             .map(Reservation::getId)
             .orElseThrow(() -> new ReservationException("존재하지 않는 예약입니다."));
@@ -39,7 +39,7 @@ public class ReservationService {
         return reservationRepository.findBy(request.getDate(), request.getTime());
     }
 
-    private Reservation getReservation(ReservationRequest request) {
+    private Reservation toReservation(ReservationRequest request) {
         return new Reservation(request.getDate(), request.getTime(), request.getName());
     }
 
@@ -47,11 +47,11 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findAllBy(date);
 
         return reservations.stream()
-            .map(this::getResponse)
+            .map(this::toResponse)
             .collect(Collectors.toList());
     }
 
-    private ReservationResponse getResponse(Reservation reservation) {
+    private ReservationResponse toResponse(Reservation reservation) {
         return new ReservationResponse(
             reservation.getId(),
             reservation.getDate().toString(),

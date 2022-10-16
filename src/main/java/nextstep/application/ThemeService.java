@@ -29,7 +29,7 @@ public class ThemeService {
             throw new ThemeException(String.format("%s는(은) 이미 존재하는 테마입니다.", request.getName()));
         }
 
-        themeRepository.save(getTheme(request));
+        themeRepository.save(toTheme(request));
         return findBy(request)
             .map(Theme::getId)
             .orElseThrow(() -> new ThemeException("존재하지 않는 테마입니다."));
@@ -39,19 +39,25 @@ public class ThemeService {
         return themeRepository.findBy(request.getName());
     }
 
-    private Theme getTheme(ThemeRequest request) {
+    private Theme toTheme(ThemeRequest request) {
         return new Theme(request.getName(), request.getDesc(), request.getPrice());
+    }
+
+    public ThemeResponse checkBy(Long id) {
+        return themeRepository.findBy(id)
+            .map(this::toResponse)
+            .orElseThrow(() -> new ThemeException("존재하지 않는 테마입니다."));
     }
 
     public List<ThemeResponse> checkAll() {
         List<Theme> themes = themeRepository.findAll();
 
         return themes.stream()
-            .map(this::getResponse)
+            .map(this::toResponse)
             .collect(Collectors.toList());
     }
 
-    private ThemeResponse getResponse(Theme theme) {
+    private ThemeResponse toResponse(Theme theme) {
         return new ThemeResponse(theme.getId(), theme.getName(), theme.getDesc(), theme.getPrice());
     }
 

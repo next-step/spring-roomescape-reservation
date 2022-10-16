@@ -13,3 +13,11 @@ include::{snippets}/find-reservations/http-request.adoc[]
 
 ===== Response
 include::{snippets}/find-reservations/http-response.adoc[]
+
+=== 예약 삭제
+==== 성공
+===== Request
+include::{snippets}/remove-reservations/http-request.adoc[]
+
+===== Response
+include::{snippets}/remove-reservations/http-response.adoc[]

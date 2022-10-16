@@ -18,4 +18,8 @@ public class RoomEscapeService {
   public List<ReservationRes> findReservations(LocalDate date) {
     return null;
   }
+
+  public void removeReservation(LocalDate date, String time) {
+  }
+
 }

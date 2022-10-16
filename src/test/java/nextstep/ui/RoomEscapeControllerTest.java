@@ -1,6 +1,8 @@
 package nextstep.ui;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,7 +27,7 @@ class RoomEscapeControllerTest extends ApiDocument {
   private RoomEscapeService service;
 
   @Test
-  void 예약_생성된다() throws Exception {
+  void 예약_생성한다() throws Exception {
     //given
     var reservationReq = ReservationReq.builder()
         .date(LocalDate.now())
@@ -53,7 +55,7 @@ class RoomEscapeControllerTest extends ApiDocument {
   }
 
   @Test
-  void 예약_목록_조회된다() throws Exception {
+  void 예약_목록_조회한다() throws Exception {
     //given
     var date = LocalDate.now();
     var reservationRes = List.of(ReservationRes.builder()
@@ -71,6 +73,21 @@ class RoomEscapeControllerTest extends ApiDocument {
     actual.andExpect(status().isOk())
         .andDo(print())
         .andDo(toDocument("find-reservations"));
+
+  }
+
+  @Test
+  void 예약_삭제한다() throws Exception {
+    //given
+    var date = LocalDate.now();
+    var time = "13:00";
+    willDoNothing().given(service).removeReservation(date, time);
+    //when
+    var actual = mockMvc.perform(delete("/reservations?date={date}&time={time}", date, time));
+    //then
+    actual.andExpect(status().isNoContent())
+        .andDo(print())
+        .andDo(toDocument("remove-reservations"));
 
   }
 }

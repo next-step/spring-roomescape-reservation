@@ -10,6 +10,8 @@ public interface ReservationRepository {
 
     Optional<Reservation> findBy(String date, String time);
 
+    boolean exist(Long id);
+
     List<Reservation> findAllBy(String date);
 
     void delete(String date, String time);

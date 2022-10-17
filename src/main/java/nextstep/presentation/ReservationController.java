@@ -31,8 +31,8 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> check(@RequestParam String date) {
-        List<ReservationResponse> responses = reservationService.check(date);
+    public ResponseEntity<List<ReservationResponse>> checkAll(@RequestParam String date) {
+        List<ReservationResponse> responses = reservationService.checkAll(date);
         return ResponseEntity.ok(responses);
     }
 

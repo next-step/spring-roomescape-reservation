@@ -8,6 +8,7 @@ import nextstep.domain.Reservation;
 import nextstep.domain.repository.ReservationRepository;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,6 +19,13 @@ public class ReservationDao implements ReservationRepository {
     public ReservationDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
+
+    private final RowMapper<Reservation> reservation = (rs, rowNum) -> new Reservation(
+        rs.getLong("id"),
+        rs.getString("date"),
+        rs.getString("time"),
+        rs.getString("name")
+    );
 
     @Override
     public void save(Reservation reservation) {
@@ -34,12 +42,7 @@ public class ReservationDao implements ReservationRepository {
         try {
             return Optional.ofNullable(jdbcTemplate.queryForObject(
                 "select id, date, time, name from reservation where date = ? and time = ?",
-                (rs, rowNum) -> new Reservation(
-                    rs.getLong("id"),
-                    rs.getString("date"),
-                    rs.getString("time"),
-                    rs.getString("name")
-                ),
+                reservation,
                 LocalDate.parse(date),
                 LocalTime.parse(time)
             ));
@@ -49,15 +52,20 @@ public class ReservationDao implements ReservationRepository {
     }
 
     @Override
+    public boolean exist(Long id) {
+        List<Reservation> reservations = jdbcTemplate.query(
+            "select id, date, time, name from reservation where id = ?",
+            reservation,
+            id
+        );
+        return !reservations.isEmpty();
+    }
+
+    @Override
     public List<Reservation> findAllBy(String date) {
         return jdbcTemplate.query(
             "select id, date, time, name from reservation where date = ?",
-            (rs, rowNum) -> new Reservation(
-                rs.getLong("id"),
-                rs.getString("date"),
-                rs.getString("time"),
-                rs.getString("name")
-            ),
+            reservation,
             LocalDate.parse(date)
         );
     }

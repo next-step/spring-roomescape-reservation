@@ -35,6 +35,7 @@ public class ReservationRepository {
                 sql,
                 (resultSet, rowNum) -> new Reservation(
                         resultSet.getLong("id"),
+                        resultSet.getLong("schedule_id"),
                         resultSet.getDate("date").toLocalDate(),
                         resultSet.getTime("time").toLocalTime(),
                         resultSet.getString("name")
@@ -42,17 +43,17 @@ public class ReservationRepository {
                 date);
     }
 
-    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+    public int deleteByDateAndTime(LocalDate date, LocalTime time) {
         String sql = "delete from reservation where date = ? and time = ?";
-        jdbcTemplate.update(sql, date, time);
+        return jdbcTemplate.update(sql, date, time);
     }
 
-    public boolean existsByDateAndTime(LocalDate date, LocalTime time) {
-        return countByDateAndTime(date, time) > 0;
+    public boolean existsByScheduleId(Long scheduleId) {
+        return countByScheduleId(scheduleId) > 0;
     }
 
-    private int countByDateAndTime(LocalDate date, LocalTime time) {
-        String sql = "select count(*) from reservation where date = ? and time = ?";
-        return jdbcTemplate.queryForObject(sql, Integer.class, date, time);
+    private int countByScheduleId(Long scheduleId) {
+        String sql = "select count(*) from reservation where schedule_id = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, scheduleId);
     }
 }

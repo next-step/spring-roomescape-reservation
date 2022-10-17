@@ -1,4 +1,4 @@
-package nextstep.dto;
+package nextstep.dto.reservation;
 
 import nextstep.domain.Reservation;
 

@@ -1,4 +1,4 @@
-package nextstep.dto;
+package nextstep.dto.reservation;
 
 import nextstep.domain.Reservation;
 
@@ -19,10 +19,10 @@ public class ReservationFindAllResponse {
         return reservations;
     }
 
-    public static ReservationFindAllResponse from(List<Reservation> findReservations) {
-        List<ReservationFindResponse> reservations = findReservations.stream()
+    public static ReservationFindAllResponse from(List<Reservation> reservations) {
+        List<ReservationFindResponse> reservationFindResponses = reservations.stream()
                 .map(ReservationFindResponse::from)
                 .collect(Collectors.toList());
-        return new ReservationFindAllResponse(reservations);
+        return new ReservationFindAllResponse(reservationFindResponses);
     }
 }

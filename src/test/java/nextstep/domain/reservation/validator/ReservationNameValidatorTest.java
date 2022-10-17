@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import nextstep.domain.reservation.ReservationFixtureFactory;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

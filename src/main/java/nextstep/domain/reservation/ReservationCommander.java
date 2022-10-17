@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import nextstep.domain.reservation.validator.ReservationCreateValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

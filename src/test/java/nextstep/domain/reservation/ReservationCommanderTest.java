@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

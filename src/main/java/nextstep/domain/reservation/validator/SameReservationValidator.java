@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import nextstep.domain.reservation.ReservationFinder;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.springframework.stereotype.Component;
 
 @Component

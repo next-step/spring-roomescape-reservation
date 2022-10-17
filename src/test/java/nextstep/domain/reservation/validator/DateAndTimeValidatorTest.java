@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import nextstep.domain.reservation.ReservationFixtureFactory;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

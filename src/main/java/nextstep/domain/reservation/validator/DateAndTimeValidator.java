@@ -3,7 +3,7 @@ package nextstep.domain.reservation.validator;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.springframework.stereotype.Component;
 
 @Component

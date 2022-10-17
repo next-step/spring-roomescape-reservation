@@ -10,15 +10,18 @@ import nextstep.application.dto.ReservationRes;
 import nextstep.domain.ReservationEntity;
 import nextstep.domain.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RoomEscapeService {
 
   private final ReservationRepository repository;
 
   private final ReservationPolicy policy;
 
+  @Transactional
   public Long create(Reservation req) {
     policy.checkValid(req);
     var reservation = ReservationEntity.builder()
@@ -42,6 +45,7 @@ public class RoomEscapeService {
         .toList();
   }
 
+  @Transactional
   public void removeReservation(LocalDate date, String time) {
     var targetTime = LocalTime.parse(time);
     repository.deleteByDateAndTime(date, targetTime);

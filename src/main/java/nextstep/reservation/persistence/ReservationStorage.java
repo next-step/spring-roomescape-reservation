@@ -10,9 +10,9 @@ public interface ReservationStorage {
 
     Long insert(Reservation reservation);
 
-    List<Reservation> findByDate(LocalDate date);
+    List<Reservation> findBy(Long scheduleId, LocalDate date);
 
-    Optional<Reservation> findByDateTime(LocalDate date, LocalTime time);
+    Optional<Reservation> findBy(Long scheduleId, LocalDate date, LocalTime time);
 
-    void deleteByDateTime(LocalDate date, LocalTime time);
+    void deleteBy(Long scheduleId, LocalDate date, LocalTime time);
 }

@@ -1,4 +1,4 @@
-package nextstep.reservation;
+package nextstep.schedule;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.matchesRegex;
@@ -15,9 +15,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import nextstep.reservation.domain.Reservation;
-import nextstep.reservation.persistence.ReservationStorage;
-import nextstep.reservation.web.request.MakeReservationRequest;
+import nextstep.schedule.domain.Schedule;
+import nextstep.schedule.persistence.ScheduleDao;
+import nextstep.schedule.web.request.MakeScheduleRequest;
+import nextstep.theme.domain.Theme;
+import nextstep.theme.persistence.ThemeDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +35,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class ReservationIntegrationTest {
+public class ScheduleIntegrationTest {
 
-    private static final Long SCHEDULE_ID = 1L;
     private static final String DATE_TEXT = "2022-08-11";
     private static final LocalDate DATE = LocalDate.parse(DATE_TEXT);
 
@@ -46,9 +47,14 @@ class ReservationIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ReservationStorage reservationStorage;
+    private ScheduleDao scheduleDao;
+
+    @Autowired
+    private ThemeDao themeDao;
 
     private MockMvc mockMvc;
+    private Long initialScheduleId;
+    private Long initialThemeId;
 
     @BeforeEach
     void setUp() {
@@ -60,105 +66,69 @@ class ReservationIntegrationTest {
 
     @BeforeEach
     void initializeData() {
-        reservationStorage.insert(
-            new Reservation(SCHEDULE_ID, DATE, LocalTime.parse("12:00"), "ggyool")
+        initialThemeId = themeDao.insert(
+            new Theme("자물쇠형", "장치나 소품없이 자물쇠만 배치된 테마", 22000L)
+        );
+        initialScheduleId = scheduleDao.insert(
+            new Schedule(initialThemeId, DATE, LocalTime.parse("12:00"))
         );
     }
 
     @Test
-    void makeReservation() throws Exception {
+    void makeSchedule() throws Exception {
         String requestBody = objectMapper.writeValueAsString(
-            new MakeReservationRequest(
-                SCHEDULE_ID, "2022-08-11", "13:00", "name"
-            )
+            new MakeScheduleRequest(initialThemeId, DATE_TEXT, "13:00")
         );
 
         mockMvc.perform(
-                post("/reservations")
+                post("/schedules")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(requestBody)
             )
             .andExpect(status().isCreated())
-            .andExpect(header().string("Location", matchesRegex("/reservations/\\d+")));
+            .andExpect(header().string("Location", matchesRegex("/schedules/\\d+")));
 
-        assertReservationCount(2);
+        assertScheduleCount(2);
     }
 
     @Test
-    void makeDuplicatedReservation() throws Exception {
-        String requestBody = objectMapper.writeValueAsString(
-            new MakeReservationRequest(
-                SCHEDULE_ID, DATE_TEXT, "12:00", "name"
-            )
-        );
-
+    void listSchedules() throws Exception {
         mockMvc.perform(
-                post("/reservations")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody)
-            )
-            .andExpect(status().isConflict())
-            .andExpect(content().string(
-                String.format("아이디가 [%s]인 스케쥴이 [%s %s]에 이미 예약이 존재합니다.", SCHEDULE_ID, DATE_TEXT, "12:00"))
-            );
-
-        assertReservationCount(1);
-    }
-
-    @Test
-    void listReservations() throws Exception {
-        mockMvc.perform(
-                get("/reservations")
-                    .param("scheduleId", "1")
+                get("/schedules")
+                    .param("themeId", "1")
                     .param("date", "2022-08-11")
             )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id").isNumber())
-            .andExpect(jsonPath("$[0].scheduleId").value(1L))
+            .andExpect(jsonPath("$[0].theme.id").value(initialThemeId))
+            .andExpect(jsonPath("$[0].theme.name").value("자물쇠형"))
+            .andExpect(jsonPath("$[0].theme.desc").value("장치나 소품없이 자물쇠만 배치된 테마"))
+            .andExpect(jsonPath("$[0].theme.price").value(22000L))
             .andExpect(jsonPath("$[0].date").value("2022-08-11"))
-            .andExpect(jsonPath("$[0].time").value("12:00:00"))
-            .andExpect(jsonPath("$[0].name").value("ggyool"));
+            .andExpect(jsonPath("$[0].time").value("12:00:00"));
     }
 
     @Test
-    void listReservationsEmpty() throws Exception {
+    void listSchedulesWithNotFoundTheme() throws Exception {
         mockMvc.perform(
-                get("/reservations")
-                    .param("scheduleId", "999")
+                get("/schedules")
+                    .param("themeId", "999")
                     .param("date", "2022-08-11")
-            )
-            .andExpect(status().isNoContent());
-    }
-
-    @Test
-    void cancelReservation() throws Exception {
-        mockMvc.perform(
-                delete("/reservations")
-                    .param("scheduleId", "1")
-                    .param("date", "2022-08-11")
-                    .param("time", "12:00")
-            )
-            .andExpect(status().isNoContent());
-
-        assertReservationCount(0);
-    }
-
-    @Test
-    void cancelNotFoundReservation() throws Exception {
-        mockMvc.perform(
-                delete("/reservations")
-                    .param("scheduleId", "999")
-                    .param("date", "2022-08-11")
-                    .param("time", "03:00")
             )
             .andExpect(status().isNotFound())
-            .andExpect(content().string(
-                "예약이 존재하지 않습니다. [scheduleId: 999] [date: 2022-08-11] [time: 03:00]")
-            );
+            .andExpect(content().string("아이디가 [999]인 테마를 찾을 수 없습니다."));
     }
 
-    private void assertReservationCount(int count) {
-        List<Reservation> reservations = reservationStorage.findBy(SCHEDULE_ID, DATE);
-        assertThat(reservations).hasSize(count);
+    @Test
+    void deleteSchedule() throws Exception {
+        mockMvc.perform(delete("/schedules/{id}", initialScheduleId))
+            .andExpect(status().isNoContent());
+
+        assertScheduleCount(0);
+    }
+
+    private void assertScheduleCount(int count) {
+        List<Schedule> schedules = scheduleDao.findBy(initialThemeId, DATE);
+        assertThat(schedules).hasSize(count);
     }
 }

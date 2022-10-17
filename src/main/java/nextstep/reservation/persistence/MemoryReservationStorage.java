@@ -9,9 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import nextstep.reservation.domain.Reservation;
-import org.springframework.stereotype.Component;
 
-@Component
 public class MemoryReservationStorage implements ReservationStorage {
 
     private final List<Reservation> reservations = new ArrayList<>();
@@ -27,14 +25,14 @@ public class MemoryReservationStorage implements ReservationStorage {
     }
 
     @Override
-    public List<Reservation> findByDate(LocalDate date) {
+    public List<Reservation> findBy(Long scheduleId, LocalDate date) {
         return reservations.stream()
             .filter(it -> it.getDate().isEqual(date))
             .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Reservation> findByDateTime(LocalDate date, LocalTime time) {
+    public Optional<Reservation> findBy(Long scheduleId, LocalDate date, LocalTime time) {
         LocalDateTime targetDateTime = LocalDateTime.of(date, time);
         return reservations.stream()
             .filter(it -> it.localDateTime().isEqual(targetDateTime))
@@ -42,7 +40,7 @@ public class MemoryReservationStorage implements ReservationStorage {
     }
 
     @Override
-    public void deleteByDateTime(LocalDate date, LocalTime time) {
+    public void deleteBy(Long scheduleId, LocalDate date, LocalTime time) {
         reservations.stream()
             .filter(it -> Objects.equals(it.getDate(), date) && Objects.equals(it.getTime(), time))
             .findFirst()

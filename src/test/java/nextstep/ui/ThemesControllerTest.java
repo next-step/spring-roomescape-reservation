@@ -26,7 +26,7 @@ class ThemesControllerTest extends ApiDocument {
   private ThemesService service;
 
   @Test
-  void 테마_추가한다() throws Exception {
+  void 테마_생성한다() throws Exception {
     //given
     var themes = Themes.builder()
         .name("테마이름")

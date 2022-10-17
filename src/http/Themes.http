@@ -1,0 +1,16 @@
+### 테마 생성
+POST {{themes-api}}/themes
+content-type: application/json; charset=UTF-8
+
+{
+  "name": "테마이름",
+  "desc": "테마설명",
+  "price": 22000
+}
+
+### 테마 전체 조회
+GET {{themes-api}}/themes
+content-type: application/json
+
+### 테마 삭제
+DELETE {{themes-api}}/themes/1

@@ -9,7 +9,8 @@ public class Reservation {
     private LocalTime time;
     private String name;
 
-    public Reservation(LocalDate date, LocalTime time, String name) {
+    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
+        this.id = id;
         this.date = date;
         this.time = time;
         this.name = name;

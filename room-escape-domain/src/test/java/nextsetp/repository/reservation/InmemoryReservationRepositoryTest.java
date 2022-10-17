@@ -1,5 +1,6 @@
 package nextsetp.repository.reservation;
 
+import nextsetp.domain.reservation.InmemoryReservationRepository;
 import nextsetp.domain.reservation.Reservation;
 
 import org.assertj.core.api.Assertions;

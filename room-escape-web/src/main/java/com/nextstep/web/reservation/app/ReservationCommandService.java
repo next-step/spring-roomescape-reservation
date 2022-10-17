@@ -1,22 +1,19 @@
 package com.nextstep.web.reservation.app;
 
 import com.nextstep.web.reservation.dto.CreateReservationRequest;
-import com.nextstep.web.reservation.dto.ReservationResponse;
 import nextsetp.domain.reservation.Reservation;
 import nextsetp.domain.reservation.ReservationRepository;
 import nextsetp.domain.reservation.exception.DuplicationReservationException;
-import nextsetp.repository.reservation.InmemoryReservationRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ReservationService {
-    private ReservationRepository reservationRepository = new InmemoryReservationRepository();
+@Transactional
+public class ReservationCommandService {
+    private final ReservationRepository reservationRepository;
 
-    public List<ReservationResponse> findAllBy(String date) {
-        final List<Reservation> reservations = reservationRepository.findAllBy(date);
-        return ReservationResponse.toList(reservations);
+    public ReservationCommandService(ReservationRepository reservationRepository) {
+        this.reservationRepository = reservationRepository;
     }
 
     public Long save(CreateReservationRequest request) {

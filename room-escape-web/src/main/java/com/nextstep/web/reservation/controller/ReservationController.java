@@ -1,6 +1,7 @@
 package com.nextstep.web.reservation.controller;
 
-import com.nextstep.web.reservation.app.ReservationService;
+import com.nextstep.web.reservation.app.ReservationCommandService;
+import com.nextstep.web.reservation.app.ReservationQueryService;
 import com.nextstep.web.reservation.dto.CreateReservationRequest;
 import com.nextstep.web.reservation.dto.ReservationResponse;
 import org.springframework.http.ResponseEntity;
@@ -13,26 +14,28 @@ import java.util.List;
 @Controller
 @RequestMapping("/reservations")
 public class ReservationController {
-    private final ReservationService reservationService;
+    private final ReservationQueryService reservationQueryService;
+    private final ReservationCommandService reservationCommandService;
 
-    public ReservationController(ReservationService reservationService) {
-        this.reservationService = reservationService;
+    public ReservationController(ReservationQueryService reservationQueryService, ReservationCommandService reservationCommandService) {
+        this.reservationQueryService = reservationQueryService;
+        this.reservationCommandService = reservationCommandService;
     }
 
     @GetMapping
     public ResponseEntity<List<ReservationResponse>> read(@RequestParam String date) {
-        return ResponseEntity.ok(reservationService.findAllBy(date));
+        return ResponseEntity.ok(reservationQueryService.findAllBy(date));
     }
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody CreateReservationRequest request) {
-        Long id = reservationService.save(request);
+        Long id = reservationCommandService.save(request);
         return ResponseEntity.created(URI.create("/reservation/" + id)).build();
     }
 
     @DeleteMapping
     private ResponseEntity<Void> delete(@RequestParam String date, @RequestParam String time) {
-        reservationService.delete(date, time);
+        reservationCommandService.delete(date, time);
         return ResponseEntity.noContent().build();
     }
 }

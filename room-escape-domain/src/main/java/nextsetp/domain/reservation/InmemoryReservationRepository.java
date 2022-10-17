@@ -1,7 +1,4 @@
-package nextsetp.repository.reservation;
-
-import nextsetp.domain.reservation.Reservation;
-import nextsetp.domain.reservation.ReservationRepository;
+package nextsetp.domain.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

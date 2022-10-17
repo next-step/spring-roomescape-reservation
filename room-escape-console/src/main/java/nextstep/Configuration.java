@@ -1,7 +1,7 @@
 package nextstep;
 
 import nextsetp.domain.reservation.ReservationRepository;
-import nextsetp.repository.reservation.InmemoryReservationRepository;
+import nextsetp.domain.reservation.InmemoryReservationRepository;
 
 public class Configuration {
 

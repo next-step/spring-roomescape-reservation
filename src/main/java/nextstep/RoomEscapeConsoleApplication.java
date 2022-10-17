@@ -14,6 +14,7 @@ public class RoomEscapeConsoleApplication {
     private static final String INPUT_2 = "2";
     private static final String INPUT_3 = "3";
     private static final String INPUT_4 = "4";
+    private static final Long FIXED_ID = 0L;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -42,6 +43,7 @@ public class RoomEscapeConsoleApplication {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
+                    FIXED_ID,
                     LocalDate.parse(date),
                     LocalTime.parse(time + ":00"),
                     name
@@ -61,7 +63,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                reservationStorage.deleteByDateTime(LocalDate.parse(date), LocalTime.parse(time));
+                reservationStorage.deleteBy(FIXED_ID, LocalDate.parse(date), LocalTime.parse(time));
                 System.out.println("예약이 취소되었습니다.");
             }
 
@@ -73,7 +75,7 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                List<Reservation> reservations = reservationStorage.findByDate(LocalDate.parse(date));
+                List<Reservation> reservations = reservationStorage.findBy(FIXED_ID, LocalDate.parse(date));
                 reservations.forEach(System.out::println);
             }
 

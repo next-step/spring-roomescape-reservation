@@ -35,6 +35,10 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class ReservationIntegrationTest {
 
+    private static final Long SCHEDULE_ID = 1L;
+    private static final String DATE_TEXT = "2022-08-11";
+    private static final LocalDate DATE = LocalDate.parse(DATE_TEXT);
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
@@ -57,7 +61,7 @@ class ReservationIntegrationTest {
     @BeforeEach
     void initializeData() {
         reservationStorage.insert(
-            new Reservation(LocalDate.parse("2022-08-11"), LocalTime.parse("12:00"), "ggyool")
+            new Reservation(SCHEDULE_ID, DATE, LocalTime.parse("12:00"), "ggyool")
         );
     }
 
@@ -65,7 +69,7 @@ class ReservationIntegrationTest {
     void makeReservation() throws Exception {
         String requestBody = objectMapper.writeValueAsString(
             new MakeReservationRequest(
-                "2022-08-11", "13:00", "name"
+                SCHEDULE_ID, "2022-08-11", "13:00", "name"
             )
         );
 
@@ -77,14 +81,14 @@ class ReservationIntegrationTest {
             .andExpect(status().isCreated())
             .andExpect(header().string("Location", matchesRegex("/reservations/\\d+")));
 
-        assertReservationCount("2022-08-11", 2);
+        assertReservationCount(2);
     }
 
     @Test
     void makeDuplicatedReservation() throws Exception {
         String requestBody = objectMapper.writeValueAsString(
             new MakeReservationRequest(
-                "2022-08-11", "12:00", "name"
+                SCHEDULE_ID, DATE_TEXT, "12:00", "name"
             )
         );
 
@@ -94,17 +98,23 @@ class ReservationIntegrationTest {
                     .content(requestBody)
             )
             .andExpect(status().isConflict())
-            .andExpect(content().string("해당 시간에 이미 예약이 존재합니다. [2022-08-11 12:00]"));
+            .andExpect(content().string(
+                String.format("아이디가 [%s]인 스케쥴이 [%s %s]에 이미 예약이 존재합니다.", SCHEDULE_ID, DATE_TEXT, "12:00"))
+            );
 
-        assertReservationCount("2022-08-11", 1);
+        assertReservationCount(1);
     }
 
     @Test
     void listReservations() throws Exception {
         mockMvc.perform(
-                get("/reservations").param("date", "2022-08-11")
+                get("/reservations")
+                    .param("scheduleId", "1")
+                    .param("date", "2022-08-11")
             )
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].id").isNumber())
+            .andExpect(jsonPath("$[0].scheduleId").value(1L))
             .andExpect(jsonPath("$[0].date").value("2022-08-11"))
             .andExpect(jsonPath("$[0].time").value("12:00:00"))
             .andExpect(jsonPath("$[0].name").value("ggyool"));
@@ -114,16 +124,17 @@ class ReservationIntegrationTest {
     void cancelReservation() throws Exception {
         mockMvc.perform(
                 delete("/reservations")
+                    .param("scheduleId", "1")
                     .param("date", "2022-08-11")
                     .param("time", "12:00")
             )
             .andExpect(status().isNoContent());
 
-        assertReservationCount("2022-08-11", 0);
+        assertReservationCount(0);
     }
 
-    private void assertReservationCount(String date, int count) {
-        List<Reservation> reservations = reservationStorage.findByDate(LocalDate.parse(date));
+    private void assertReservationCount(int count) {
+        List<Reservation> reservations = reservationStorage.findBy(SCHEDULE_ID, DATE);
         assertThat(reservations).hasSize(count);
     }
 }

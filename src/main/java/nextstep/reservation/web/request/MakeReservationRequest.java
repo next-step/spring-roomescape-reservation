@@ -6,18 +6,24 @@ import nextstep.reservation.domain.Reservation;
 
 public class MakeReservationRequest {
 
+    private final Long scheduleId;
     private final String date;
     private final String time;
     private final String name;
 
-    public MakeReservationRequest(String date, String time, String name) {
+    public MakeReservationRequest(Long scheduleId, String date, String time, String name) {
+        this.scheduleId = scheduleId;
         this.date = date;
         this.time = time;
         this.name = name;
     }
 
     public Reservation toReservation() {
-        return new Reservation(LocalDate.parse(date), LocalTime.parse(time), name);
+        return new Reservation(scheduleId, LocalDate.parse(date), LocalTime.parse(time), name);
+    }
+
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
     public String getDate() {

@@ -34,25 +34,29 @@ public class ReservationController {
     ResponseEntity<Void> makeReservation(@RequestBody MakeReservationRequest requestBody) {
         validateDuplication(requestBody);
 
-        Long index = reservationStorage.insert(requestBody.toReservation());
-        URI locationUri = URI.create("/reservations/" + index);
+        Long id = reservationStorage.insert(requestBody.toReservation());
+        URI locationUri = URI.create("/reservations/" + id);
         return ResponseEntity.created(locationUri)
             .build();
     }
 
     private void validateDuplication(MakeReservationRequest requestBody) {
-        Optional<Reservation> optionalReservation = reservationStorage.findByDateTime(
+        Optional<Reservation> optionalReservation = reservationStorage.findBy(
+            requestBody.getScheduleId(),
             LocalDate.parse(requestBody.getDate()),
             LocalTime.parse(requestBody.getTime())
         );
         if (optionalReservation.isPresent()) {
-            throw new DuplicatedReservationException(requestBody.getDate(), requestBody.getTime());
+            throw new DuplicatedReservationException(
+                requestBody.getScheduleId(), requestBody.getDate(), requestBody.getTime()
+            );
         }
     }
 
     @GetMapping
     ResponseEntity<List<Reservation>> listReservations(@ModelAttribute ListReservationRequest requestParams) {
-        List<Reservation> reservations = reservationStorage.findByDate(
+        List<Reservation> reservations = reservationStorage.findBy(
+            requestParams.getScheduleId(),
             LocalDate.parse(requestParams.getDate())
         );
         return ResponseEntity.ok(reservations);
@@ -60,7 +64,8 @@ public class ReservationController {
 
     @DeleteMapping
     ResponseEntity<Void> cancelReservation(@ModelAttribute CancelReservationRequest requestParams) {
-        reservationStorage.deleteByDateTime(
+        reservationStorage.deleteBy(
+            requestParams.getScheduleId(),
             LocalDate.parse(requestParams.getDate()),
             LocalTime.parse(requestParams.getTime())
         );

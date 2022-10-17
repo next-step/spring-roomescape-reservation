@@ -83,4 +83,19 @@ public class ScheduleJdbcRepository extends AbstractJdbcRepository<Schedule> imp
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<Schedule> findById(Long id) {
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject(
+                            "SELECT * FROM schedule WHERE id=?",
+                            rowMapper(),
+                            id
+                    )
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package nextstep.roomescape.acceptance;
 
-import nextstep.app.web.schedule.port.web.ScheduleCreateRequest;
 import nextstep.app.web.schedule.port.web.ScheduleResponse;
 import nextstep.app.web.theme.port.web.ThemeResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +11,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 class ScheduleAcceptanceTest extends RoomEscapeAcceptanceTest {
@@ -66,15 +64,6 @@ class ScheduleAcceptanceTest extends RoomEscapeAcceptanceTest {
                 .andExpect(
                         MockMvcResultMatchers.content().string("[]")
                 );
-    }
-
-    private ResultActions doCreateSchedule(Long themeId, String date, String time) throws Exception {
-        return mockMvc.perform(
-                MockMvcRequestBuilders.post("/schedules")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .content(objectMapper.writeValueAsString(new ScheduleCreateRequest(themeId, date, time)))
-        );
     }
 
     private ResultActions doFindAllScheduleByThemeIdAndDate(Long themeId, String date) throws Exception {

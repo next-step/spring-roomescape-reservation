@@ -38,8 +38,8 @@ public class ReservationController {
     }
 
     @DeleteMapping("/reservations")
-    public ResponseEntity<Void> delete(@RequestParam String date, @RequestParam String time) {
-        deleteReservationUseCase.delete(new DeleteReservationCommand(LocalDate.parse(date), LocalTime.parse(time)));
+    public ResponseEntity<Void> delete(@RequestParam Long scheduleId, @RequestParam String date, @RequestParam String time) {
+        deleteReservationUseCase.delete(new DeleteReservationCommand(scheduleId, LocalDate.parse(date), LocalTime.parse(time)));
         return ResponseEntity.noContent().build();
     }
 

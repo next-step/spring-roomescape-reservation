@@ -13,7 +13,7 @@ public interface ReservationRepository {
 
     void deleteAll();
 
-    void deleteByDateAndTime(LocalDate date, LocalTime time);
+    void deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time);
 
-    Optional<Reservation> findByDateTime(LocalDateTime dateTime);
+    Optional<Reservation> findByScheduleIdAndDateTime(Long scheduleId, LocalDateTime dateTime);
 }

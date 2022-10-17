@@ -23,7 +23,9 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     @DisplayName("예약 생성")
     @Test
     void createReservation() throws Exception {
-        ResultActions resultActions = doCreateReservation(DATE, TIME, NAME);
+        Long themeId = extractIdFromLocation(doCreateTheme("name", "desc", 22000L));
+        Long scheduleId = extractIdFromLocation(doCreateSchedule(themeId, DATE, TIME));
+        ResultActions resultActions = doCreateReservation(scheduleId, DATE, TIME, NAME);
 
         resultActions.andExpectAll(
                 MockMvcResultMatchers.status().isCreated(),
@@ -34,7 +36,9 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     @DisplayName("예약 조회")
     @Test
     void findAllReservations() throws Exception {
-        Long id = extractIdFromLocation(doCreateReservation(DATE, TIME, NAME));
+        Long themeId = extractIdFromLocation(doCreateTheme("name", "desc", 22000L));
+        Long scheduleId = extractIdFromLocation(doCreateSchedule(themeId, DATE, TIME));
+        Long id = extractIdFromLocation(doCreateReservation(scheduleId, DATE, TIME, NAME));
 
         doFindAllReservations()
                 .andExpectAll(
@@ -47,10 +51,13 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
     @DisplayName("예약 삭제")
     @Test
     void deleteReservation() throws Exception {
-        doCreateReservation(DATE, TIME, NAME);
+        Long themeId = extractIdFromLocation(doCreateTheme("name", "desc", 22000L));
+        Long scheduleId = extractIdFromLocation(doCreateSchedule(themeId, DATE, TIME));
+        doCreateReservation(scheduleId, DATE, TIME, NAME);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.delete(UriComponentsBuilder.fromUriString("/reservations")
+                                .queryParam("scheduleId", scheduleId)
                                 .queryParam("date", DATE)
                                 .queryParam("time", TIME)
                                 .toUriString())
@@ -65,12 +72,12 @@ class ReservationAcceptanceTest extends RoomEscapeAcceptanceTest {
                 );
     }
 
-    private ResultActions doCreateReservation(String date, String time, String name) throws Exception {
+    private ResultActions doCreateReservation(Long scheduleId, String date, String time, String name) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.post("/reservations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
-                        .content(objectMapper.writeValueAsString(new ReservationCreateRequest(date, time, name)))
+                        .content(objectMapper.writeValueAsString(new ReservationCreateRequest(scheduleId, date, time, name)))
         );
     }
 

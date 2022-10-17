@@ -31,6 +31,7 @@ public class ReservationJdbcRepository extends AbstractJdbcRepository<Reservatio
     protected RowMapper<Reservation> rowMapper() {
         return (rs, rowNum) -> new Reservation(
                 rs.getLong("id"),
+                rs.getLong("schedule_id"),
                 rs.getObject("date", LocalDate.class),
                 rs.getObject("time", LocalTime.class),
                 rs.getString("name")
@@ -41,6 +42,7 @@ public class ReservationJdbcRepository extends AbstractJdbcRepository<Reservatio
     public Reservation save(Reservation reservation) {
         long id = simpleJdbcInsert.executeAndReturnKey(
                 Map.of(
+                        "schedule_id", reservation.scheduleId(),
                         "date", reservation.date(),
                         "time", reservation.time(),
                         "name", reservation.name()
@@ -65,18 +67,18 @@ public class ReservationJdbcRepository extends AbstractJdbcRepository<Reservatio
     }
 
     @Override
-    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
-        jdbcTemplate.update("DELETE FROM reservation WHERE date=? AND time=?", date, time);
+    public void deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
+        jdbcTemplate.update("DELETE FROM reservation WHERE schedule_id =? AND date=? AND time=?", scheduleId, date, time);
     }
 
     @Override
-    public Optional<Reservation> findByDateTime(LocalDateTime dateTime) {
+    public Optional<Reservation> findByScheduleIdAndDateTime(Long scheduleId, LocalDateTime dateTime) {
         try {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
-                            "SELECT * FROM reservation WHERE date=? AND time=?",
+                            "SELECT * FROM reservation WHERE schedule_id=? AND date=? AND time=?",
                             rowMapper(),
-                            dateTime.toLocalDate(), dateTime.toLocalTime()
+                            scheduleId, dateTime.toLocalDate(), dateTime.toLocalTime()
                     )
             );
         } catch (EmptyResultDataAccessException e) {

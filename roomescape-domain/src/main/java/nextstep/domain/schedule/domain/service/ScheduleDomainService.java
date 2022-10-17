@@ -14,7 +14,6 @@ public class ScheduleDomainService {
         this.scheduleRepository = scheduleRepository;
     }
 
-
     public Long create(Long themeId, LocalDateTime dateTime) {
         Schedule schedule = new Schedule(null, themeId, dateTime.toLocalDate(), dateTime.toLocalTime());
 
@@ -28,5 +27,9 @@ public class ScheduleDomainService {
 
     public void deleteById(Long id) {
         scheduleRepository.deleteById(id);
+    }
+
+    public boolean existsById(Long id) {
+        return scheduleRepository.findById(id).isPresent();
     }
 }

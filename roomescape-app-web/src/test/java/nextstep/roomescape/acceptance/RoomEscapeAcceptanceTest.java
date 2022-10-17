@@ -2,6 +2,7 @@ package nextstep.roomescape.acceptance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nextstep.RoomEscapeWebApplication;
+import nextstep.app.web.schedule.port.web.ScheduleCreateRequest;
 import nextstep.app.web.theme.port.web.ThemeCreateRequest;
 import nextstep.domain.reservation.domain.model.ReservationRepository;
 import nextstep.domain.schedule.domain.model.ScheduleRepository;
@@ -57,6 +58,15 @@ class RoomEscapeAcceptanceTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .content(objectMapper.writeValueAsString(new ThemeCreateRequest(name, desc, price)))
+        );
+    }
+
+    protected ResultActions doCreateSchedule(Long themeId, String date, String time) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.post("/schedules")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .content(objectMapper.writeValueAsString(new ScheduleCreateRequest(themeId, date, time)))
         );
     }
 

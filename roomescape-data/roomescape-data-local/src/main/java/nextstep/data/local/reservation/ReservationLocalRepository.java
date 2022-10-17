@@ -45,16 +45,16 @@ public class ReservationLocalRepository implements ReservationRepository {
     }
 
     @Override
-    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+    public void deleteByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
         RESERVATIONS.values().stream()
-                .filter(it -> it.isDateEqual(date) && it.isTimeEqual(time))
+                .filter(it -> it.isScheduleEqual(scheduleId) && it.isDateEqual(date) && it.isTimeEqual(time))
                 .forEach(it -> RESERVATIONS.remove(it.id()));
     }
 
     @Override
-    public Optional<Reservation> findByDateTime(LocalDateTime dateTime) {
+    public Optional<Reservation> findByScheduleIdAndDateTime(Long scheduleId, LocalDateTime dateTime) {
         return RESERVATIONS.values().stream()
-                .filter(it -> it.isDateEqual(dateTime.toLocalDate()) && it.isTimeEqual(dateTime.toLocalTime()))
+                .filter(it -> it.isScheduleEqual(scheduleId) && it.isDateEqual(dateTime.toLocalDate()) && it.isTimeEqual(dateTime.toLocalTime()))
                 .findAny();
     }
 }

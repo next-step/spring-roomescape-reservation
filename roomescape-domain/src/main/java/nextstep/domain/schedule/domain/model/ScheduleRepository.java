@@ -15,4 +15,6 @@ public interface ScheduleRepository {
     void deleteAll();
 
     Optional<Schedule> findByThemeIdAndDateTime(Long themeId, LocalDateTime dateTime);
+
+    Optional<Schedule> findById(Long id);
 }

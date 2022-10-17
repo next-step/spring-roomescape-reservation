@@ -3,5 +3,4 @@ create table if not exists reservation (
     date varchar(100) not null,
     time varchar(100) not null,
     name varchar(100) not null
-
 );

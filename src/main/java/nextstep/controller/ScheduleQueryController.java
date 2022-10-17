@@ -4,26 +4,27 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import nextstep.controller.dto.ThemeViewResponse.Theme;
-import nextstep.domain.theme.ThemeRepository;
+import nextstep.controller.dto.ScheduleViewResponse;
+import nextstep.domain.schedule.Schedule;
+import nextstep.domain.schedule.ScheduleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/themes")
+@RequestMapping("/schedules")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ThemeQueryController {
+public class ScheduleQueryController {
 
-  ThemeRepository themeRepository;
+  ScheduleRepository scheduleRepository;
 
   @GetMapping
-  public ResponseEntity<List<Theme>> getThemes() {
-    List<nextstep.domain.theme.Theme> themes = themeRepository.findAll();
-    List<Theme> responses = themes.stream()
-        .map(Theme::of)
+  public ResponseEntity<List<ScheduleViewResponse.Schedule>> getSchedules() {
+    List<Schedule> schedules = scheduleRepository.findAll();
+    List<ScheduleViewResponse.Schedule> responses = schedules.stream()
+        .map(ScheduleViewResponse.Schedule::of)
         .toList();
     return ResponseEntity.ok().body(responses);
   }

@@ -15,3 +15,12 @@ CREATE TABLE theme
     description VARCHAR(1000) NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE schedule
+(
+    id       INTEGER NOT NULL AUTO_INCREMENT,
+    theme_id INTEGER NOT NULL,
+    `date`   DATE    NOT NULL,
+    `time`   TIME    NOT NULL,
+    PRIMARY KEY (id)
+);

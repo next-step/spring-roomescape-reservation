@@ -8,26 +8,35 @@ import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+@SpringBootTest
 class ReservationRepositoryImplTest {
 
+  @Autowired
   ReservationRepository reservationRepository;
 
+  @Autowired
+  JdbcTemplate jdbcTemplate;
+
   @BeforeEach
-  void setting() {
-    // for delete all
-    reservationRepository = new ReservationRepositoryImpl();
+  void setUp() {
+    jdbcTemplate.update("delete from reservation");
   }
 
   @DisplayName("예약 객체를 저장하는데 성공한다.")
   @Test
   void saveTest() {
     // given
-    var target = ReservationFixtureFactory.newInstance().getFixture();
+    var target = ReservationFixtureFactory.newInstance().getFixtureCreateReq();
     // when
     Reservation saved = reservationRepository.save(target);
     // then
-    assertThat(target).isEqualTo(saved);
+    assertThat(target.name()).isEqualTo(saved.getName().value());
+    assertThat(target.date()).isEqualTo(saved.getDate());
+    assertThat(target.time()).isEqualTo(saved.getTime());
   }
 
   @DisplayName("예약 객체를 전체 조회하는 데 성공한다.")
@@ -37,15 +46,15 @@ class ReservationRepositoryImplTest {
     var fixtureFactory = ReservationFixtureFactory.newInstance();
     var reservations =
         ReservationFixtureFactory.newInstance()
-            .getCustomFixtures(
+            .getCustomFixturesCreateReq(
                 // now() + 1day and +1minute ~ +10minute
                 now().plusMinutes(1), now().plusMinutes(10)
             );
 
+    int expectedSize = reservations.size();
     reservations.forEach(
         reservation -> reservationRepository.save(reservation)
     );
-    int expectedSize = reservations.size();
 
     // when
     List<Reservation> findAll = reservationRepository.findAll(
@@ -61,10 +70,10 @@ class ReservationRepositoryImplTest {
   void deleteTest() {
     // given
     var fixtureFactory = ReservationFixtureFactory.newInstance();
-    reservationRepository.save(fixtureFactory.getFixture());
+    reservationRepository.save(fixtureFactory.getFixtureCreateReq());
     Delete properDeleteReq = fixtureFactory.getFixtureDeleteReq();
     Delete notExistDeleteReq = properDeleteReq.toBuilder()
-        .time(properDeleteReq.time().plusMinutes(1))
+        .date(properDeleteReq.date().plusDays(1))
         .build();
 
     // when

@@ -4,13 +4,14 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
 import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import nextstep.domain.reservation.validator.ReservationCreateValidator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReservationCommander {
@@ -23,13 +24,7 @@ public class ReservationCommander {
         createValidator -> createValidator.validate(createReq)
     );
 
-    Reservation reservation = Reservation.builder()
-        .date(createReq.date())
-        .time(createReq.time())
-        .name(Name.of(createReq.name()))
-        .build();
-
-    return reservationRepository.save(reservation);
+    return reservationRepository.save(createReq);
   }
 
   public void deleteReservation(ReservationCommandDto.Delete deleteReq) {

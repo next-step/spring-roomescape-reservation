@@ -20,7 +20,7 @@ class ReservationFinderTest {
       var reservationFixtureFactory = ReservationFixtureFactory.newInstance();
       var fixture = reservationFixtureFactory.getFixture();
 
-      if (condition.getDate().isEqual(fixture.getDate())) {
+      if (condition.date().isEqual(fixture.getDate())) {
         return List.of(fixture);
       }
 

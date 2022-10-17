@@ -7,9 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import nextstep.domain.reservation.Reservation;
 import nextstep.domain.reservation.ReservationFinder;
-import nextstep.domain.reservation.ReservationFinderImpl;
 import nextstep.domain.reservation.ReservationFixtureFactory;
-import nextstep.domain.reservation.ReservationRepository;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
 import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +27,7 @@ class SameReservationValidatorTest {
                */
               var fixture = reservationFixtureFactory.getFixture();
 
-              if (condition.getDate().isEqual(fixture.getDate())) {
+              if (condition.date().isEqual(fixture.getDate())) {
                 return List.of(fixture);
               }
 

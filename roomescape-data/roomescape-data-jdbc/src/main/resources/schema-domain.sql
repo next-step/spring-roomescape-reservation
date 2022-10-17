@@ -6,3 +6,12 @@ CREATE TABLE IF NOT EXISTS reservation
     name VARCHAR(10) NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS theme
+(
+    id          INT         NOT NULL AUTO_INCREMENT,
+    name        VARCHAR(10) NOT NULL,
+    description VARCHAR(20) NOT NULL,
+    price       INT         NOT NULL,
+    PRIMARY KEY (id)
+);

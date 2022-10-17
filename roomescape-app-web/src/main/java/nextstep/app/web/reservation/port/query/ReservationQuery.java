@@ -1,4 +1,4 @@
-package nextstep.app.web.reservation.query;
+package nextstep.app.web.reservation.port.query;
 
 import nextstep.domain.reservation.domain.model.Reservation;
 import nextstep.domain.reservation.domain.model.ReservationRepository;

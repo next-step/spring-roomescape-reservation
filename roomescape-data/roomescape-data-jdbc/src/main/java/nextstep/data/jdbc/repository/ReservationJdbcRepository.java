@@ -1,14 +1,13 @@
-package nextstep.data.jdbc.reservation;
+package nextstep.data.jdbc.repository;
 
+import nextstep.data.jdbc.repository.support.AbstractJdbcRepository;
 import nextstep.domain.reservation.domain.model.Reservation;
 import nextstep.domain.reservation.domain.model.ReservationRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -17,27 +16,25 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class ReservationJdbcRepository implements ReservationRepository {
-    private static final RowMapper<Reservation> RESERVATION_ROW_MAPPER = (rs, rowNum) -> new Reservation(
-            rs.getLong("id"),
-            rs.getObject("date", LocalDate.class),
-            rs.getObject("time", LocalTime.class),
-            rs.getString("name")
-    );
+public class ReservationJdbcRepository extends AbstractJdbcRepository<Reservation> implements ReservationRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    private SimpleJdbcInsert simpleJdbcInsert;
-
-
-    public ReservationJdbcRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    protected ReservationJdbcRepository(JdbcTemplate jdbcTemplate) {
+        super(jdbcTemplate);
     }
 
-    @PostConstruct
-    public void init() {
-        simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        simpleJdbcInsert.withTableName("reservation").usingGeneratedKeyColumns("id");
+    @Override
+    protected String tableName() {
+        return "reservation";
+    }
+
+    @Override
+    protected RowMapper<Reservation> rowMapper() {
+        return (rs, rowNum) -> new Reservation(
+                rs.getLong("id"),
+                rs.getObject("date", LocalDate.class),
+                rs.getObject("time", LocalTime.class),
+                rs.getString("name")
+        );
     }
 
     @Override
@@ -57,14 +54,14 @@ public class ReservationJdbcRepository implements ReservationRepository {
     public List<Reservation> findAllByDate(LocalDate date) {
         return jdbcTemplate.query(
                 "SELECT * FROM reservation WHERE date=?",
-                RESERVATION_ROW_MAPPER,
+                rowMapper(),
                 date
         );
     }
 
     @Override
     public void deleteAll() {
-        jdbcTemplate.update("TRUNCATE TABLE reservation");
+        super.deleteAll();
     }
 
     @Override
@@ -78,7 +75,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
             return Optional.ofNullable(
                     jdbcTemplate.queryForObject(
                             "SELECT * FROM reservation WHERE date=? AND time=?",
-                            RESERVATION_ROW_MAPPER,
+                            rowMapper(),
                             dateTime.toLocalDate(), dateTime.toLocalTime()
                     )
             );

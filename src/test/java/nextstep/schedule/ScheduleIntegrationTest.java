@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,6 +18,8 @@ import java.util.List;
 import nextstep.schedule.domain.Schedule;
 import nextstep.schedule.persistence.ScheduleDao;
 import nextstep.schedule.web.request.MakeScheduleRequest;
+import nextstep.theme.domain.Theme;
+import nextstep.theme.persistence.ThemeDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ScheduleIntegrationTest {
 
-    private static final Long THEME_ID = 1L;
     private static final String DATE_TEXT = "2022-08-11";
     private static final LocalDate DATE = LocalDate.parse(DATE_TEXT);
 
@@ -47,8 +49,12 @@ public class ScheduleIntegrationTest {
     @Autowired
     private ScheduleDao scheduleDao;
 
+    @Autowired
+    private ThemeDao themeDao;
+
     private MockMvc mockMvc;
-    private Long initialDataId;
+    private Long initialScheduleId;
+    private Long initialThemeId;
 
     @BeforeEach
     void setUp() {
@@ -60,15 +66,18 @@ public class ScheduleIntegrationTest {
 
     @BeforeEach
     void initializeData() {
-        initialDataId = scheduleDao.insert(
-            new Schedule(THEME_ID, DATE, LocalTime.parse("12:00"))
+        initialThemeId = themeDao.insert(
+            new Theme("자물쇠형", "장치나 소품없이 자물쇠만 배치된 테마", 22000L)
+        );
+        initialScheduleId = scheduleDao.insert(
+            new Schedule(initialThemeId, DATE, LocalTime.parse("12:00"))
         );
     }
 
     @Test
     void makeSchedule() throws Exception {
         String requestBody = objectMapper.writeValueAsString(
-            new MakeScheduleRequest(THEME_ID, DATE_TEXT, "13:00")
+            new MakeScheduleRequest(initialThemeId, DATE_TEXT, "13:00")
         );
 
         mockMvc.perform(
@@ -91,21 +100,35 @@ public class ScheduleIntegrationTest {
             )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$[0].id").isNumber())
-            .andExpect(jsonPath("$[0].themeId").value(1L))
+            .andExpect(jsonPath("$[0].theme.id").value(initialThemeId))
+            .andExpect(jsonPath("$[0].theme.name").value("자물쇠형"))
+            .andExpect(jsonPath("$[0].theme.desc").value("장치나 소품없이 자물쇠만 배치된 테마"))
+            .andExpect(jsonPath("$[0].theme.price").value(22000L))
             .andExpect(jsonPath("$[0].date").value("2022-08-11"))
             .andExpect(jsonPath("$[0].time").value("12:00:00"));
     }
 
     @Test
+    void listSchedulesWithNotFoundTheme() throws Exception {
+        mockMvc.perform(
+                get("/schedules")
+                    .param("themeId", "999")
+                    .param("date", "2022-08-11")
+            )
+            .andExpect(status().isNotFound())
+            .andExpect(content().string("아이디가 [999]인 테마를 찾을 수 없습니다."));
+    }
+
+    @Test
     void deleteSchedule() throws Exception {
-        mockMvc.perform(delete("/schedules/{id}", initialDataId))
+        mockMvc.perform(delete("/schedules/{id}", initialScheduleId))
             .andExpect(status().isNoContent());
 
         assertScheduleCount(0);
     }
 
     private void assertScheduleCount(int count) {
-        List<Schedule> schedules = scheduleDao.findBy(THEME_ID, DATE);
+        List<Schedule> schedules = scheduleDao.findBy(initialThemeId, DATE);
         assertThat(schedules).hasSize(count);
     }
 }

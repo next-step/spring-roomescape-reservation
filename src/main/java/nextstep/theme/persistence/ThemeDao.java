@@ -2,6 +2,7 @@ package nextstep.theme.persistence;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import nextstep.theme.domain.Theme;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -38,6 +39,13 @@ public class ThemeDao {
     public List<Theme> findAll() {
         String query = "SELECT * FROM theme";
         return jdbcTemplate.query(query, themeMapper);
+    }
+
+    public Optional<Theme> findById(Long id) {
+        String query = "SELECT * FROM theme WHERE (id = :id)";
+        return jdbcTemplate.query(query, Map.of("id", id), themeMapper)
+            .stream()
+            .findAny();
     }
 
     public void deleteById(Long id) {

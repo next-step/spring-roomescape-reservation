@@ -22,8 +22,8 @@ public class ReservationController {
 
     private final Reservations reservations;
 
-    public ReservationController() {
-        this.reservations = new Reservations();
+    public ReservationController(Reservations reservations) {
+        this.reservations = reservations;
     }
 
     @PostMapping(RESERVATION_PATH)

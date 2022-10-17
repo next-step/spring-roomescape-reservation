@@ -3,12 +3,15 @@ package nextstep;
 import nextstep.domain.Reservation;
 import nextstep.domain.ReservationTime;
 import nextstep.domain.Reservations;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
 
-public class Main {
+public class RoomEscapeConsoleApplication {
     private static final String INPUT_1 = "1";
     private static final String INPUT_2 = "2";
     private static final String INPUT_3 = "3";
@@ -16,7 +19,23 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Reservations reservations = new Reservations();
+        DataSource dataSource = DataSourceBuilder.create()
+            .driverClassName("org.h2.Driver")
+            .url("jdbc:h2:mem:test")
+            .username("sa")
+            .build();
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.execute("DROP TABLE reservation IF EXISTS");
+        jdbcTemplate.execute("""
+            CREATE TABLE reservation (
+                name VARCHAR(255),
+                reservation_date DATE,
+                reservation_time TIME,
+                CONSTRAINT reservation_date_time_unique UNIQUE (reservation_date, reservation_time)
+            )"""
+        );
+
+        Reservations reservations = new Reservations(jdbcTemplate);
 
         while (true) {
             System.out.println("메뉴를 선택하세요.");

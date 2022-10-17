@@ -42,10 +42,10 @@ public class Theme {
 
     private static final int MAX_LENGTH = 1000;
 
-    public static void validateNameRule(@NotNull String description) {
-      if (description.length() > MAX_LENGTH) {
+    public static void validateNameRule(@NotNull String name) {
+      if (!name.isBlank() && name.length() > MAX_LENGTH) {
         throw new ThemeIllegalArgumentException(
-            "테마 설명이 너무 깁니다. 테마 설명 최대 길이 : %d, 입력된 글자 길이 : %d".formatted(MAX_LENGTH, description.length()));
+            "테마 이름은 1자 이상 %d자 이하이여야 합니다. 입력된 글자 길이 : %d".formatted(MAX_LENGTH, name.length()));
       }
     }
 

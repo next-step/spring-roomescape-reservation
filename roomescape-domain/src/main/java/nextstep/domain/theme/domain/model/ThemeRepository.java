@@ -13,4 +13,6 @@ public interface ThemeRepository {
     void deleteAll();
 
     Optional<Theme> findByName(String name);
+
+    Optional<Theme> findById(Long id);
 }

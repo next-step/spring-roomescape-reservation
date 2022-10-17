@@ -15,3 +15,12 @@ CREATE TABLE IF NOT EXISTS theme
     price       INT         NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE IF NOT EXISTS schedule
+(
+    id       INT  NOT NULL AUTO_INCREMENT,
+    theme_id INT  NOT NULL,
+    date     DATE NOT NULL,
+    time     TIME NOT NULL,
+    PRIMARY KEY (id)
+);

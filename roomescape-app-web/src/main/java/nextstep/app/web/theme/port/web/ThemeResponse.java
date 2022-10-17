@@ -14,7 +14,7 @@ public record ThemeResponse(Long id,
                 .toList();
     }
 
-    private static ThemeResponse from(Theme theme) {
+    public static ThemeResponse from(Theme theme) {
         return new ThemeResponse(theme.id(), theme.name(), theme.description(), theme.price());
     }
 }

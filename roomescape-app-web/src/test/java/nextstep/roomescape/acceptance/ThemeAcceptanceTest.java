@@ -1,8 +1,7 @@
-package nextstep.roomescape.theme.acceptance;
+package nextstep.roomescape.acceptance;
 
 import nextstep.app.web.theme.port.web.ThemeCreateRequest;
 import nextstep.app.web.theme.port.web.ThemeResponse;
-import nextstep.roomescape.support.RoomEscapeAcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -63,7 +62,7 @@ class ThemeAcceptanceTest extends RoomEscapeAcceptanceTest {
                 );
     }
 
-    private ResultActions doCreateTheme(String name, String desc, Long price) throws Exception {
+    protected ResultActions doCreateTheme(String name, String desc, Long price) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.post("/themes")
                         .contentType(MediaType.APPLICATION_JSON)

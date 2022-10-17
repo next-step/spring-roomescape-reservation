@@ -1,8 +1,7 @@
-package nextstep.roomescape.reservation.acceptance;
+package nextstep.roomescape.acceptance;
 
 import nextstep.app.web.reservation.port.web.ReservationCreateRequest;
 import nextstep.app.web.reservation.port.web.ReservationResponse;
-import nextstep.roomescape.support.RoomEscapeAcceptanceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;

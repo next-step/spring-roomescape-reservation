@@ -78,4 +78,19 @@ public class ThemeJdbcRepository extends AbstractJdbcRepository<Theme> implement
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<Theme> findById(Long id) {
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject(
+                            "SELECT * FROM theme WHERE id=?",
+                            rowMapper(),
+                            id
+                    )
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
 }

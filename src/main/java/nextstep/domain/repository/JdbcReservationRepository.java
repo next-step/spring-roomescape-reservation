@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.domain.ReservationEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -48,16 +49,24 @@ public class JdbcReservationRepository implements ReservationRepository {
 
   @Override
   public List<ReservationEntity> findReservationsByDate(LocalDate date) {
-    return null;
+    var sql = "SELECT * FROM reservation where date = ?";
+    return jdbcTemplate.query(sql, rowMapper, date);
   }
 
   @Override
   public void deleteByDateAndTime(LocalDate date, LocalTime time) {
-
+    var sql = "DELETE FROM reservation where date = ? and time = ?";
+    jdbcTemplate.update(sql, date, time);
   }
 
   @Override
   public Optional<ReservationEntity> findReservationsByDateAndTime(LocalDate date, LocalTime time) {
-    return Optional.empty();
+    var sql = "SELECT * FROM reservation where date = ? and time = ?";
+    try {
+      var reservationEntity = jdbcTemplate.queryForObject(sql, rowMapper, date, time);
+      return Optional.ofNullable(reservationEntity);
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
   }
 }

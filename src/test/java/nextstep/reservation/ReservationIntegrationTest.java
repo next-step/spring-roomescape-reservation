@@ -121,6 +121,16 @@ class ReservationIntegrationTest {
     }
 
     @Test
+    void listReservationsEmpty() throws Exception {
+        mockMvc.perform(
+                get("/reservations")
+                    .param("scheduleId", "999")
+                    .param("date", "2022-08-11")
+            )
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
     void cancelReservation() throws Exception {
         mockMvc.perform(
                 delete("/reservations")
@@ -131,6 +141,20 @@ class ReservationIntegrationTest {
             .andExpect(status().isNoContent());
 
         assertReservationCount(0);
+    }
+
+    @Test
+    void cancelNotFoundReservation() throws Exception {
+        mockMvc.perform(
+                delete("/reservations")
+                    .param("scheduleId", "999")
+                    .param("date", "2022-08-11")
+                    .param("time", "03:00")
+            )
+            .andExpect(status().isNotFound())
+            .andExpect(content().string(
+                "예약이 존재하지 않습니다. [scheduleId: 999] [date: 2022-08-11] [time: 03:00]")
+            );
     }
 
     private void assertReservationCount(int count) {

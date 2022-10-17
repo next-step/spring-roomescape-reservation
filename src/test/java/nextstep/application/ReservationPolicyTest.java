@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-import nextstep.application.dto.Reservation;
+import nextstep.application.reservation.ReservationPolicy;
+import nextstep.application.reservation.RoomEscapeService;
+import nextstep.application.reservation.dto.Reservation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

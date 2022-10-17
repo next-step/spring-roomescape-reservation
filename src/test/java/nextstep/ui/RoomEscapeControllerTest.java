@@ -11,9 +11,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.util.List;
 import nextstep.ApiDocument;
-import nextstep.application.RoomEscapeService;
-import nextstep.application.dto.Reservation;
-import nextstep.application.dto.ReservationRes;
+import nextstep.application.reservation.RoomEscapeService;
+import nextstep.application.reservation.dto.Reservation;
+import nextstep.application.reservation.dto.ReservationRes;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;

@@ -3,11 +3,11 @@ package nextstep;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import nextstep.application.ReservationCreateValidation;
-import nextstep.application.ReservationPolicy;
-import nextstep.application.RoomEscapeService;
-import nextstep.application.dto.Reservation;
-import nextstep.domain.repository.MemoryReservationRepository;
+import nextstep.application.reservation.ReservationCreateValidation;
+import nextstep.application.reservation.ReservationPolicy;
+import nextstep.application.reservation.RoomEscapeService;
+import nextstep.application.reservation.dto.Reservation;
+import nextstep.domain.reservation.repository.MemoryReservationRepository;
 
 public class Main {
 

@@ -1,10 +1,10 @@
-package nextstep.domain.repository;
+package nextstep.domain.reservation.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import nextstep.domain.ReservationEntity;
+import nextstep.domain.reservation.ReservationEntity;
 
 public interface ReservationRepository {
 

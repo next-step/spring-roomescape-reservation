@@ -1,4 +1,4 @@
-package nextstep.domain.repository;
+package nextstep.domain.reservation.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import nextstep.domain.ReservationEntity;
+import nextstep.domain.reservation.ReservationEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository

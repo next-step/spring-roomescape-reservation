@@ -1,6 +1,6 @@
-package nextstep.application;
+package nextstep.application.reservation;
 
-import nextstep.application.dto.Reservation;
+import nextstep.application.reservation.dto.Reservation;
 
 public interface ReservationValidation {
 

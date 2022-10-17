@@ -1,8 +1,8 @@
-package nextstep.application;
+package nextstep.application.reservation;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.application.dto.Reservation;
+import nextstep.application.reservation.dto.Reservation;
 import org.springframework.stereotype.Service;
 
 @Service

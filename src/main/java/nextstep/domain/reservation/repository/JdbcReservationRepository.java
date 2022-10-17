@@ -1,4 +1,4 @@
-package nextstep.domain.repository;
+package nextstep.domain.reservation.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import nextstep.domain.ReservationEntity;
+import nextstep.domain.reservation.ReservationEntity;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

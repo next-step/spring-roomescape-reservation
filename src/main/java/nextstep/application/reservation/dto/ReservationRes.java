@@ -1,4 +1,4 @@
-package nextstep.application.dto;
+package nextstep.application.reservation.dto;
 
 import java.time.LocalDate;
 import lombok.Builder;

@@ -3,7 +3,8 @@ package nextstep.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
-import nextstep.application.dto.Reservation;
+import nextstep.application.reservation.RoomEscapeService;
+import nextstep.application.reservation.dto.Reservation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

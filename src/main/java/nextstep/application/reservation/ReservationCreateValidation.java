@@ -1,9 +1,9 @@
-package nextstep.application;
+package nextstep.application.reservation;
 
 import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
-import nextstep.application.dto.Reservation;
-import nextstep.domain.repository.ReservationRepository;
+import nextstep.application.reservation.dto.Reservation;
+import nextstep.domain.reservation.repository.ReservationRepository;
 import org.springframework.stereotype.Component;
 
 @Component

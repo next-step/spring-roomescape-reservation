@@ -1,7 +1,8 @@
 package nextstep.console;
 
 import nextstep.domain.Reservation;
-import nextstep.domain.Reservations;
+import nextstep.domain.ReservationMemoryRepository;
+import nextstep.domain.service.ReservationService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -14,6 +15,8 @@ public class Main {
     private static final String INPUT_4 = "4";
 
     public static void main(String[] args) {
+        final ReservationService service = new ReservationService(new ReservationMemoryRepository());
+
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -39,12 +42,13 @@ public class Main {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
-                        LocalDate.parse(date),
-                        LocalTime.parse(time + ":00"),
-                        name
+                    null,
+                    LocalDate.parse(date),
+                    LocalTime.parse(time + ":00"),
+                    name
                 );
 
-                Reservations.add(reservation);
+                service.create(reservation);
                 System.out.println("예약이 등록되었습니다.");
             }
 
@@ -59,7 +63,7 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                Reservations.removeBySchedule(date, time);
+                service.removeByDateAndTime(date, time);
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -72,7 +76,7 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                for (Reservation reservation : Reservations.findAllByDate(date)) {
+                for (Reservation reservation : service.findAllByDate(date)) {
                     System.out.println(reservation);
                 }
             }

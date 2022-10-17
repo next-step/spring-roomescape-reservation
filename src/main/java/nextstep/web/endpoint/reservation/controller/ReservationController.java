@@ -5,7 +5,7 @@ import nextstep.web.endpoint.reservation.request.ReservationCreateRequest;
 import nextstep.web.endpoint.reservation.request.ReservationDeleteRequest;
 import nextstep.web.endpoint.reservation.request.ReservationsSearchRequest;
 import nextstep.web.endpoint.reservation.response.ReservationResponse;
-import nextstep.web.endpoint.reservation.service.ReservationService;
+import nextstep.web.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

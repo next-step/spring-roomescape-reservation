@@ -57,6 +57,7 @@ Content-Type: application/json
 ```
 
 #### 예약 삭제
+
 ```http request
 DELETE /reservations?date=2022-08-11&time=13:00 HTTP/1.1
 ```
@@ -64,3 +65,9 @@ DELETE /reservations?date=2022-08-11&time=13:00 HTTP/1.1
 ```
 HTTP/1.1 204
 ```
+
+---
+
+### 기능 요구사항
+
+- [x] 메모리 대신 데이터베이스 적용

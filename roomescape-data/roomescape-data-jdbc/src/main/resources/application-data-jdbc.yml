@@ -1,0 +1,10 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+  sql:
+    init:
+      schema-locations: classpath:schema-domain.sql
+  h2:
+    console:
+      enabled: true

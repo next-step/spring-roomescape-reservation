@@ -5,4 +5,6 @@ include 'roomescape-app-web'
 include 'roomescape-domain'
 include 'roomescape-data:roomescape-data-local'
 findProject(':roomescape-data:roomescape-data-local')?.name = 'roomescape-data-local'
+include 'roomescape-data:roomescape-data-jdbc'
+findProject(':roomescape-data:roomescape-data-jdbc')?.name = 'roomescape-data-jdbc'
 

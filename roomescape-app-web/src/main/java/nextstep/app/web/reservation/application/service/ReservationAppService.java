@@ -18,12 +18,12 @@ public class ReservationAppService implements CreateReservationUseCase, DeleteRe
 
     @Override
     public CreateReservationResult create(CreateReservationCommand command) {
-        Long reservationId = reservationDomainService.create(command.reservationDateTime(), command.name());
+        Long reservationId = reservationDomainService.create(command.scheduleId(), command.reservationDateTime(), command.name());
         return new CreateReservationResult(reservationId);
     }
 
     @Override
     public void delete(DeleteReservationCommand command) {
-        reservationDomainService.delete(command.date(), command.time());
+        reservationDomainService.delete(command.scheduleId(), command.date(), command.time());
     }
 }

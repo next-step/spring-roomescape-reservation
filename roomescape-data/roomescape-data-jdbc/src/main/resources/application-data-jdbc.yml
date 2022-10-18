@@ -5,6 +5,7 @@ spring:
   sql:
     init:
       schema-locations: classpath:schema-domain.sql
+      encoding: UTF-8
   h2:
     console:
       enabled: true

@@ -4,7 +4,7 @@ import nextstep.app.web.reservation.application.dto.CreateReservationResult;
 import nextstep.app.web.reservation.application.dto.DeleteReservationCommand;
 import nextstep.app.web.reservation.application.usecase.CreateReservationUseCase;
 import nextstep.app.web.reservation.application.usecase.DeleteReservationUseCase;
-import nextstep.app.web.reservation.query.ReservationQuery;
+import nextstep.app.web.reservation.port.query.ReservationQuery;
 import nextstep.domain.reservation.domain.model.Reservation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,8 +38,8 @@ public class ReservationController {
     }
 
     @DeleteMapping("/reservations")
-    public ResponseEntity<Void> create(@RequestParam String date, @RequestParam String time) {
-        deleteReservationUseCase.delete(new DeleteReservationCommand(LocalDate.parse(date), LocalTime.parse(time)));
+    public ResponseEntity<Void> delete(@RequestParam Long scheduleId, @RequestParam String date, @RequestParam String time) {
+        deleteReservationUseCase.delete(new DeleteReservationCommand(scheduleId, LocalDate.parse(date), LocalTime.parse(time)));
         return ResponseEntity.noContent().build();
     }
 

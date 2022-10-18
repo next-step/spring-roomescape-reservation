@@ -17,6 +17,6 @@ public class ReservationCreateRequest {
     }
 
     public Reservation toEntity() {
-        return new Reservation(LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
+        return new Reservation(null, LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
     }
 }

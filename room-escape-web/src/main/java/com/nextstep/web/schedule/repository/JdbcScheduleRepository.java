@@ -1,7 +1,6 @@
 package com.nextstep.web.schedule.repository;
 
 import com.nextstep.web.schedule.repository.entity.ScheduleEntity;
-import com.nextstep.web.theme.exception.ThemeNotFoundException;
 import com.nextstep.web.theme.repository.ThemeDao;
 import nextsetp.domain.schedule.Schedule;
 import nextsetp.domain.schedule.ScheduleRepository;
@@ -13,29 +12,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class JdbcScheduleRepository<T> implements ScheduleRepository<T> {
+public class JdbcScheduleRepository implements ScheduleRepository {
     private final ScheduleDao scheduleDao;
-    private final ThemeDao themeDao;
 
-    public JdbcScheduleRepository(ScheduleDao scheduleDao, ThemeDao themeDao) {
+    public JdbcScheduleRepository(ScheduleDao scheduleDao) {
         this.scheduleDao = scheduleDao;
-        this.themeDao = themeDao;
     }
 
     @Override
-    public Long save(T schedule) {
-        if (schedule instanceof ScheduleEntity) {
-            return scheduleDao.save((ScheduleEntity) schedule);
-        }
-
-        throw new RuntimeException();
+    public Long save(Schedule schedule) {
+        return scheduleDao.save(new ScheduleEntity(null, schedule.getThemeId(),
+                schedule.getDate().toString(),
+                schedule.getTime().toString()));
     }
 
     @Override
     public List<Schedule> findAllBy(Long themeId, LocalDate date) {
         return scheduleDao.findAllBy(themeId, date.toString()).stream()
-                .map(scheduleEntity -> new Schedule(themeDao.findById(scheduleEntity.getThemeId())
-                        .orElseThrow(ThemeNotFoundException::new).toTheme(),
+                .map(scheduleEntity -> new Schedule(themeId,
                         LocalDate.parse(scheduleEntity.getDate()),
                         LocalTime.parse(scheduleEntity.getTime())))
                 .collect(Collectors.toList());

@@ -27,6 +27,7 @@ public class ReservationH2Repository implements ReservationRepository {
         this.template = template;
     }
 
+
     @Override
     public Reservation save(Reservation reservation) {
         Objects.requireNonNull(reservation);

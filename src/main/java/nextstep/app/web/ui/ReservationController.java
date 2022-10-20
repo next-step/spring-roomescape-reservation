@@ -1,7 +1,7 @@
-package nextstep.app.web;
+package nextstep.app.web.ui;
 
 import nextstep.app.web.dto.ReservationCreateRequest;
-import nextstep.app.web.dto.ReservationResponse;
+import nextstep.app.web.dto.ReservationWebResponse;
 import nextstep.core.Reservation;
 import nextstep.core.ReservationService;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +30,11 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> list(@RequestParam String date) {
+    public ResponseEntity<List<ReservationWebResponse>> list(@RequestParam String date) {
         List<Reservation> reservations = service.findAllByDate(LocalDate.parse(date));
         return ResponseEntity.ok(
                 reservations.stream()
-                        .map(ReservationResponse::from)
+                        .map(ReservationWebResponse::from)
                         .toList()
         );
     }

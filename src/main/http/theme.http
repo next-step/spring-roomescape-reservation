@@ -1,0 +1,9 @@
+### 테마 생성
+POST http://localhost:8080/themes
+Content-Type: application/json
+
+{
+  "name": "테마이름",
+  "desc": "테마설명",
+  "price": 22000
+}

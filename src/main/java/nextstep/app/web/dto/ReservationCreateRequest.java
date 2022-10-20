@@ -10,6 +10,9 @@ public class ReservationCreateRequest {
     private LocalTime time;
     private String name;
 
+    private ReservationCreateRequest() {
+    }
+
     public Reservation to() {
         return new Reservation(date, time, name);
     }

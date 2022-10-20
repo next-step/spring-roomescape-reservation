@@ -1,6 +1,6 @@
-package nextstep.core;
+package nextstep.core.theme;
 
-import nextstep.app.web.dto.ThemeCreateRequest;
+import nextstep.app.web.dto.ThemeCreateWebRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +13,7 @@ public class ThemeService {
     }
 
     @Transactional
-    public Theme save(ThemeCreateRequest request) {
+    public Theme save(ThemeCreateWebRequest request) {
         return repository.save(request.to());
     }
 }

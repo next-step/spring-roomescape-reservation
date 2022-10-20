@@ -1,7 +1,7 @@
 package nextstep.infra.noop;
 
-import nextstep.core.Reservation;
-import nextstep.core.ReservationRepository;
+import nextstep.core.reservation.Reservation;
+import nextstep.core.reservation.ReservationRepository;
 import nextstep.infra.h2.ReservationH2Repository;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Repository;

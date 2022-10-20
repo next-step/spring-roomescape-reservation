@@ -1,7 +1,7 @@
 package nextstep.infra.h2;
 
-import nextstep.core.Theme;
-import nextstep.core.ThemeRepository;
+import nextstep.core.theme.Theme;
+import nextstep.core.theme.ThemeRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;

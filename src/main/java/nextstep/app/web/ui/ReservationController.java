@@ -1,9 +1,9 @@
 package nextstep.app.web.ui;
 
-import nextstep.app.web.dto.ReservationCreateRequest;
+import nextstep.app.web.dto.ReservationCreateWebRequest;
 import nextstep.app.web.dto.ReservationWebResponse;
-import nextstep.core.Reservation;
-import nextstep.core.ReservationService;
+import nextstep.core.reservation.Reservation;
+import nextstep.core.reservation.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody ReservationCreateRequest request) {
+    public ResponseEntity<Void> create(@RequestBody ReservationCreateWebRequest request) {
         Reservation reservation = service.save(request.to());
         return ResponseEntity
                 .created(URI.create("/reservations/" + reservation.getId()))

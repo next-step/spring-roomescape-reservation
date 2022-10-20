@@ -1,8 +1,8 @@
 package nextstep.app.web.ui;
 
-import nextstep.app.web.dto.ThemeCreateRequest;
-import nextstep.core.Theme;
-import nextstep.core.ThemeService;
+import nextstep.app.web.dto.ThemeCreateWebRequest;
+import nextstep.core.theme.Theme;
+import nextstep.core.theme.ThemeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +21,7 @@ public class ThemeController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody ThemeCreateRequest request) {
+    public ResponseEntity<Void> create(@RequestBody ThemeCreateWebRequest request) {
         Theme theme = service.save(request);
         return ResponseEntity
                 .created(URI.create("/themes/" + theme.getId()))

@@ -1,6 +1,6 @@
 package nextstep.app.web.dto;
 
-import nextstep.core.Reservation;
+import nextstep.core.reservation.Reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

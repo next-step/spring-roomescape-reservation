@@ -1,16 +1,16 @@
 package nextstep.app.web.dto;
 
-import nextstep.core.Reservation;
+import nextstep.core.reservation.Reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class ReservationCreateRequest {
+public class ReservationCreateWebRequest {
     private LocalDate date;
     private LocalTime time;
     private String name;
 
-    private ReservationCreateRequest() {
+    private ReservationCreateWebRequest() {
     }
 
     public Reservation to() {

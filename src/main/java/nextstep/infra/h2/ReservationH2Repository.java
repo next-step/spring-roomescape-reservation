@@ -1,7 +1,7 @@
 package nextstep.infra.h2;
 
-import nextstep.core.Reservation;
-import nextstep.core.ReservationRepository;
+import nextstep.core.reservation.Reservation;
+import nextstep.core.reservation.ReservationRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

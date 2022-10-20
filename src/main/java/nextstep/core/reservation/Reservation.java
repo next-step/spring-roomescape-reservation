@@ -1,4 +1,4 @@
-package nextstep.core;
+package nextstep.core.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

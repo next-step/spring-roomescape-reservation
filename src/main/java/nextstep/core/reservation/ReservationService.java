@@ -1,4 +1,4 @@
-package nextstep.core;
+package nextstep.core.reservation;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

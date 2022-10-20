@@ -1,4 +1,4 @@
-package nextstep.core;
+package nextstep.core.theme;
 
 public class Theme {
     private final Long id;

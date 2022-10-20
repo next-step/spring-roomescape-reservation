@@ -1,7 +1,7 @@
 package nextstep.app.console;
 
-import nextstep.core.Reservation;
-import nextstep.core.ReservationRepository;
+import nextstep.core.reservation.Reservation;
+import nextstep.core.reservation.ReservationRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

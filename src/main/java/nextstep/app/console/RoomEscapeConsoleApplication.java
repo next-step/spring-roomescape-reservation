@@ -1,6 +1,6 @@
 package nextstep.app.console;
 
-import nextstep.core.ReservationRepository;
+import nextstep.core.reservation.ReservationRepository;
 import nextstep.infra.h2.ReservationH2Repository;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;

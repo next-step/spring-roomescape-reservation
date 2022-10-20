@@ -1,13 +1,13 @@
 package nextstep.app.web.dto;
 
-import nextstep.core.Theme;
+import nextstep.core.theme.Theme;
 
-public class ThemeCreateRequest {
+public class ThemeCreateWebRequest {
     private String name;
     private String desc;
     private Long price;
 
-    private ThemeCreateRequest() {
+    private ThemeCreateWebRequest() {
     }
 
     public Theme to() {

@@ -23,20 +23,10 @@ public class ReservationInMemoryRepository implements ReservationRepository {
     @Override
     public Reservation save(Reservation reservation) {
         Objects.requireNonNull(reservation);
-        validateSameDateAndTime(reservation);
 
         Reservation data = new Reservation(incrementor.getAndIncrement(), reservation.getDate(), reservation.getTime(), reservation.getName());
         RESERVATIONS.put(data.getId(), data);
         return reservation;
-    }
-
-    private void validateSameDateAndTime(Reservation reservation) {
-        if (RESERVATIONS.values()
-                .stream()
-                .anyMatch(it -> it.isSameDate(reservation.getDate()) && it.isSameTime(reservation.getTime()))
-        ) {
-            throw new IllegalArgumentException("동일한 날짜와 시간엔 예약할 수 없습니다.");
-        }
     }
 
     @Override
@@ -57,5 +47,10 @@ public class ReservationInMemoryRepository implements ReservationRepository {
                 .filter(it -> it.isSameDate(date) && it.isSameTime(time))
                 .map(Reservation::getId)
                 .forEach(RESERVATIONS::remove);
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        return RESERVATIONS.values().stream().toList();
     }
 }

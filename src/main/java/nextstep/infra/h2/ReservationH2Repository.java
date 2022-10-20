@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Primary
 @Repository
@@ -28,6 +29,8 @@ public class ReservationH2Repository implements ReservationRepository {
 
     @Override
     public Reservation save(Reservation reservation) {
+        Objects.requireNonNull(reservation);
+
         String query = "INSERT INTO reservation(date, time, name) VALUES (?, ?, ?)";
         template.update(query, reservation.getDate(), reservation.getTime(), reservation.getName());
 
@@ -37,13 +40,24 @@ public class ReservationH2Repository implements ReservationRepository {
 
     @Override
     public List<Reservation> findAllByDate(LocalDate date) {
+        Objects.requireNonNull(date);
+
         String query = "SELECT * FROM reservation WHERE date = ?";
         return template.query(query, ROW_MAPPER, date);
     }
 
     @Override
     public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+        Objects.requireNonNull(date);
+        Objects.requireNonNull(time);
+
         String query = "DELETE FROM reservation WHERE date = ? AND time = ?";
         template.update(query, date, time);
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        String query = "SELECT * FROM reservation";
+        return template.query(query, ROW_MAPPER);
     }
 }

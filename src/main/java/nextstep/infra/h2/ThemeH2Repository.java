@@ -39,4 +39,10 @@ public class ThemeH2Repository implements ThemeRepository {
         String query = "SELECT * FROM themes";
         return template.query(query, ROW_MAPPER);
     }
+
+    @Override
+    public void deleteById(String themeId) {
+        String query = "DELETE FROM themes WHERE id = ?";
+        template.update(query, themeId);
+    }
 }

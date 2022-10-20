@@ -36,4 +36,10 @@ public class ThemeController {
                         .toList()
         );
     }
+
+    @DeleteMapping("/{themeId}")
+    public ResponseEntity<Void> delete(@PathVariable String themeId) {
+        service.delete(themeId);
+        return ResponseEntity.noContent().build();
+    }
 }

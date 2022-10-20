@@ -23,4 +23,9 @@ public class ThemeService {
     public List<Theme> list() {
         return repository.findAll();
     }
+
+    @Transactional
+    public void delete(String themeId) {
+        repository.deleteById(themeId);
+    }
 }

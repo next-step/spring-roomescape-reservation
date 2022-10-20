@@ -1,15 +1,14 @@
 package nextstep.app.web.ui;
 
 import nextstep.app.web.dto.ThemeCreateWebRequest;
+import nextstep.app.web.dto.ThemeWebResponse;
 import nextstep.core.theme.Theme;
 import nextstep.core.theme.ThemeService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/themes")
 @RestController
@@ -26,5 +25,15 @@ public class ThemeController {
         return ResponseEntity
                 .created(URI.create("/themes/" + theme.getId()))
                 .build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ThemeWebResponse>> list() {
+        List<Theme> themes = service.list();
+        return ResponseEntity.ok(
+                themes.stream()
+                        .map(ThemeWebResponse::from)
+                        .toList()
+        );
     }
 }

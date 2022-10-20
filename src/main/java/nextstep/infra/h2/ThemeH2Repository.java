@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -31,5 +32,11 @@ public class ThemeH2Repository implements ThemeRepository {
 
         Long id = template.queryForObject("SELECT last_insert_id()", Long.class);
         return new Theme(id, theme.getName(), theme.getDesc(), theme.getPrice());
+    }
+
+    @Override
+    public List<Theme> findAll() {
+        String query = "SELECT * FROM themes";
+        return template.query(query, ROW_MAPPER);
     }
 }

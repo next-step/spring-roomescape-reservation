@@ -7,3 +7,6 @@ Content-Type: application/json
   "desc": "테마설명",
   "price": 22000
 }
+
+### 테마 목록 조회
+GET http://localhost:8080/themes

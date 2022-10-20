@@ -1,7 +1,9 @@
-package nextstep.app;
+package nextstep.infra.noop;
 
 import nextstep.core.Reservation;
 import nextstep.core.ReservationRepository;
+import nextstep.infra.h2.ReservationH2Repository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -12,6 +14,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@ConditionalOnMissingBean(ReservationH2Repository.class)
 @Repository
 public class ReservationInMemoryRepository implements ReservationRepository {
     private static final Map<Long, Reservation> RESERVATIONS = new ConcurrentHashMap<>();
@@ -20,20 +23,10 @@ public class ReservationInMemoryRepository implements ReservationRepository {
     @Override
     public Reservation save(Reservation reservation) {
         Objects.requireNonNull(reservation);
-        validateSameDateAndTime(reservation);
 
-        reservation.setId(incrementor.getAndIncrement());
-        RESERVATIONS.put(reservation.getId(), reservation);
+        Reservation data = new Reservation(incrementor.getAndIncrement(), reservation.getDate(), reservation.getTime(), reservation.getName());
+        RESERVATIONS.put(data.getId(), data);
         return reservation;
-    }
-
-    private void validateSameDateAndTime(Reservation reservation) {
-        if (RESERVATIONS.values()
-                .stream()
-                .anyMatch(it -> it.isSameDate(reservation.getDate()) && it.isSameTime(reservation.getTime()))
-        ) {
-            throw new IllegalArgumentException("동일한 날짜와 시간엔 예약할 수 없습니다.");
-        }
     }
 
     @Override
@@ -54,5 +47,10 @@ public class ReservationInMemoryRepository implements ReservationRepository {
                 .filter(it -> it.isSameDate(date) && it.isSameTime(time))
                 .map(Reservation::getId)
                 .forEach(RESERVATIONS::remove);
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        return RESERVATIONS.values().stream().toList();
     }
 }

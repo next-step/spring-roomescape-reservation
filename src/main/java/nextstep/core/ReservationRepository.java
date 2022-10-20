@@ -10,4 +10,6 @@ public interface ReservationRepository {
     List<Reservation> findAllByDate(LocalDate date);
 
     void deleteByDateAndTime(LocalDate date, LocalTime time);
+
+    List<Reservation> findAll();
 }

@@ -1,3 +1,5 @@
+drop table if exists reservation;
+
 create table reservation
 (
     id   bigint      not null primary key auto_increment comment '예약 아이디',

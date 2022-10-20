@@ -1,7 +1,9 @@
-package nextstep.app;
+package nextstep.infra.noop;
 
 import nextstep.core.Reservation;
 import nextstep.core.ReservationRepository;
+import nextstep.infra.h2.ReservationH2Repository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -12,6 +14,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@ConditionalOnMissingBean(ReservationH2Repository.class)
 @Repository
 public class ReservationInMemoryRepository implements ReservationRepository {
     private static final Map<Long, Reservation> RESERVATIONS = new ConcurrentHashMap<>();
@@ -22,8 +25,8 @@ public class ReservationInMemoryRepository implements ReservationRepository {
         Objects.requireNonNull(reservation);
         validateSameDateAndTime(reservation);
 
-        reservation.setId(incrementor.getAndIncrement());
-        RESERVATIONS.put(reservation.getId(), reservation);
+        Reservation data = new Reservation(incrementor.getAndIncrement(), reservation.getDate(), reservation.getTime(), reservation.getName());
+        RESERVATIONS.put(data.getId(), data);
         return reservation;
     }
 

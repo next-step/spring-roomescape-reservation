@@ -1,8 +1,8 @@
 package nextstep.app.console;
 
-import nextstep.app.ReservationInMemoryRepository;
 import nextstep.core.Reservation;
 import nextstep.core.ReservationRepository;
+import nextstep.infra.noop.ReservationInMemoryRepository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -25,6 +25,3 @@ create table schedules
     date     date   not null default now() comment '스케줄 날짜',
     time     time   not null default now() comment '스케줄 시간'
 );
-
-alter table schedules
-    add foreign key (theme_id) references themes (id);

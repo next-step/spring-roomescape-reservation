@@ -63,13 +63,16 @@ public class ReservationController {
                 System.out.println("취소할 예약 정보를 입력하세요.");
                 System.out.println();
 
+                System.out.println("스케줄 아이디를 입력해주세요.");
+                String scheduleId = scanner.nextLine();
+
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
-                repository.deleteByDateAndTime(LocalDate.parse(date), LocalTime.parse(time));
+                repository.deleteByDateAndTime(Long.parseLong(scheduleId), LocalDate.parse(date), LocalTime.parse(time));
                 System.out.println("예약이 취소되었습니다.");
             }
 

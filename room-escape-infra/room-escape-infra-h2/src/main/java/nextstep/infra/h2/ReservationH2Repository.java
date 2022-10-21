@@ -47,12 +47,13 @@ public class ReservationH2Repository implements ReservationRepository {
     }
 
     @Override
-    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+    public void deleteByDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
+        Objects.requireNonNull(scheduleId);
         Objects.requireNonNull(date);
         Objects.requireNonNull(time);
 
-        String query = "DELETE FROM reservation WHERE date = ? AND time = ?";
-        template.update(query, date, time);
+        String query = "DELETE FROM reservation WHERE schedule_id = ? AND date = ? AND time = ?";
+        template.update(query, scheduleId, date, time);
     }
 
     @Override

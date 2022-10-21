@@ -37,12 +37,13 @@ public class ReservationInMemoryRepository implements ReservationRepository {
     }
 
     @Override
-    public void deleteByDateAndTime(LocalDate date, LocalTime time) {
+    public void deleteByDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
+        Objects.requireNonNull(scheduleId);
         Objects.requireNonNull(date);
         Objects.requireNonNull(time);
 
         RESERVATIONS.values().stream()
-                .filter(it -> it.isSameDate(date) && it.isSameTime(time))
+                .filter(it -> it.isSameScheduleId(scheduleId) && it.isSameDate(date) && it.isSameTime(time))
                 .map(Reservation::getId)
                 .forEach(RESERVATIONS::remove);
     }

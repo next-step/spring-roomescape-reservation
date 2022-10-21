@@ -1,0 +1,16 @@
+### 스케쥴 생성
+POST http://localhost:8080/schedules
+Content-Type: application/json
+
+{
+  "themeId": 1,
+  "date": "2022-08-11",
+  "time": "13:00"
+}
+
+### 스케쥴 목록 조회
+GET http://localhost:8080/schedules?themeId=1&date=2022-08-11
+
+### 스케쥴 삭제
+DELETE http://localhost:8080/schedules/1
+Content-Type: application/json

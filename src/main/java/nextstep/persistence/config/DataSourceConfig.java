@@ -1,4 +1,4 @@
-package nextstep.persist.config;
+package nextstep.persistence.config;
 
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;

@@ -1,4 +1,4 @@
-package nextstep.persist;
+package nextstep.persistence.reservation;
 
 import nextstep.domain.reservation.model.Reservation;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class ReservationJdbcRepositoryTest {
         LocalDate date = LocalDate.of(2022, 8, 11);
         LocalTime time = LocalTime.of(11, 10);
         String name = "신지혜";
-        Reservation reservation = new Reservation(date, time, name);
+        Reservation reservation = new Reservation(1L, date, time, name);
 
         // when
         Reservation actual = sut.save(reservation);
@@ -45,7 +45,7 @@ class ReservationJdbcRepositoryTest {
         // given
         LocalDate existDate = LocalDate.of(2022, 8, 11);
         LocalTime existTime = LocalTime.of(11, 10);
-        Reservation existReservation = new Reservation(existDate, existTime, "신지혜");
+        Reservation existReservation = new Reservation(1L, existDate, existTime, "신지혜");
         sut.save(existReservation);
 
         // when
@@ -60,8 +60,8 @@ class ReservationJdbcRepositoryTest {
     void findAllByDate() {
         // given
         LocalDate existDate = LocalDate.of(2022, 8, 11);
-        Reservation reservation1 = new Reservation(1L, existDate, LocalTime.of(11, 10), "신지혜");
-        Reservation reservation2 = new Reservation(2L, existDate, LocalTime.of(12, 10), "지혜신");
+        Reservation reservation1 = new Reservation(1L, 1L, existDate, LocalTime.of(11, 10), "신지혜");
+        Reservation reservation2 = new Reservation(2L, 2L, existDate, LocalTime.of(12, 10), "지혜신");
         sut.save(reservation1);
         sut.save(reservation2);
 
@@ -78,7 +78,7 @@ class ReservationJdbcRepositoryTest {
         // given
         LocalDate existDate = LocalDate.of(2022, 8, 11);
         LocalTime existTime = LocalTime.of(11, 10);
-        Reservation existReservation = new Reservation(existDate, existTime, "신지혜");
+        Reservation existReservation = new Reservation(1L, existDate, existTime, "신지혜");
         sut.save(existReservation);
 
         // when

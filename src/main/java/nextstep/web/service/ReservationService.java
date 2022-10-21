@@ -19,7 +19,7 @@ public class ReservationService {
     }
 
     public Long create(ReservationCreateRequest request) {
-        Reservation reservation = reservationDomainService.create(request.getDate(), request.getTime(), request.getName());
+        Reservation reservation = reservationDomainService.create(request.getScheduleId(), request.getDate(), request.getTime(),request.getName());
 
         return reservation.getId();
     }

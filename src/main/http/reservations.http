@@ -3,6 +3,7 @@ POST http://localhost:8080/reservations
 Content-Type: application/json
 
 {
+  "scheduleId": 1,
   "date": "2022-08-11",
   "time": "13:00",
   "name": "신지혜"
@@ -14,8 +15,3 @@ GET http://localhost:8080/reservations?date=2022-08-11
 ### 예약 삭제
 DELETE http://localhost:8080/reservations?date=2022-08-11&time=13:00
 Content-Type: application/json
-
-{
-  "date": "2022-10-17",
-  "time": "10:00"
-}

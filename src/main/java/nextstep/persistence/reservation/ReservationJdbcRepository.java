@@ -1,4 +1,4 @@
-package nextstep.persist;
+package nextstep.persistence.reservation;
 
 import nextstep.domain.reservation.model.Reservation;
 import nextstep.domain.reservation.model.ReservationRepository;
@@ -27,6 +27,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
                 .usingGeneratedKeyColumns("id");
         this.rowMapper = (resultSet, rowNumber) -> new Reservation(
                 resultSet.getLong("id"),
+                resultSet.getLong("schedule_id"),
                 resultSet.getDate("date").toLocalDate(),
                 resultSet.getTime("time").toLocalTime(),
                 resultSet.getString("name"));
@@ -35,12 +36,13 @@ public class ReservationJdbcRepository implements ReservationRepository {
     @Override
     public Reservation save(Reservation reservation) {
         SqlParameterSource params = new MapSqlParameterSource()
+                .addValue("schedule_id", reservation.getScheduleId())
                 .addValue("date", reservation.getDate())
                 .addValue("time", reservation.getTime())
                 .addValue("name", reservation.getName());
         Long id = insertActor.executeAndReturnKey(params).longValue();
 
-        return new Reservation(id, reservation.getDate(), reservation.getTime(), reservation.getName());
+        return new Reservation(id, reservation.getScheduleId(), reservation.getDate(), reservation.getTime(), reservation.getName());
     }
 
     @Override
@@ -63,5 +65,13 @@ public class ReservationJdbcRepository implements ReservationRepository {
         String sql = "DELETE FROM reservation WHERE date = ? AND time = ?";
 
         jdbcTemplate.update(sql, date, time);
+    }
+
+    @Override
+    public Boolean existByScheduleId(Long scheduleId) {
+        String sql = "SELECT EXISTS(SELECT * FROM reservation WHERE schedule_id = ?)";
+        Boolean exists = jdbcTemplate.queryForObject(sql, Boolean.class, scheduleId);
+
+        return exists;
     }
 }

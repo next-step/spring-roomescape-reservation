@@ -2,8 +2,9 @@ package nextstep;
 
 import nextstep.domain.reservation.model.Reservation;
 import nextstep.domain.reservation.service.ReservationDomainService;
-import nextstep.persist.ReservationJdbcRepository;
-import nextstep.persist.config.DataSourceConfig;
+import nextstep.persistence.reservation.ReservationJdbcRepository;
+import nextstep.persistence.config.DataSourceConfig;
+import nextstep.persistence.schedule.ScheduleJdbcRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -22,7 +23,8 @@ public class RoomEscapeConsoleApplication {
         Scanner scanner = new Scanner(System.in);
         DataSource dataSource = DataSourceConfig.getInstance();
         ReservationDomainService reservationDomainService = new ReservationDomainService(
-                new ReservationJdbcRepository(new JdbcTemplate(dataSource), dataSource)
+                new ReservationJdbcRepository(new JdbcTemplate(dataSource), dataSource),
+                new ScheduleJdbcRepository(new JdbcTemplate(dataSource), dataSource)
         );
 
         while (true) {
@@ -44,10 +46,14 @@ public class RoomEscapeConsoleApplication {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
+                System.out.println("스케쥴 id (ex.1)");
+                String scheduleId = scanner.nextLine();
+
                 System.out.println("예약자 이름");
                 String name = scanner.nextLine();
 
                 reservationDomainService.create(
+                        Long.parseLong(scheduleId),
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name);

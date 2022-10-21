@@ -9,12 +9,13 @@ class ReservationCreateWebRequest {
     private LocalDate date;
     private LocalTime time;
     private String name;
+    private Long scheduleId;
 
     private ReservationCreateWebRequest() {
     }
 
     public ReservationCreateRequest to() {
-        return new ReservationCreateRequest(date, time, name);
+        return new ReservationCreateRequest(date, time, name, scheduleId);
     }
 
     public LocalDate getDate() {
@@ -27,5 +28,9 @@ class ReservationCreateWebRequest {
 
     public String getName() {
         return name;
+    }
+
+    public Long getScheduleId() {
+        return scheduleId;
     }
 }

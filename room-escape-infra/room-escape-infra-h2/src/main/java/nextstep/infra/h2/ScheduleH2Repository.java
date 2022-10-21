@@ -2,6 +2,7 @@ package nextstep.infra.h2;
 
 import nextstep.core.schedule.Schedule;
 import nextstep.core.schedule.out.ScheduleRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -36,5 +37,15 @@ public class ScheduleH2Repository implements ScheduleRepository {
     public List<Schedule> findByThemeIdAndDate(Long themeId, LocalDate date) {
         String query = "SELECT * FROM schedules WHERE theme_id = ? AND date = ?";
         return template.query(query, ROW_MAPPER, themeId, date);
+    }
+
+    @Override
+    public Boolean existsById(Long scheduleId) {
+        String query = "SELECT schedules.id FROM schedules WHERE schedules.id = ?";
+        try {
+            return template.queryForObject(query, Boolean.class, scheduleId);
+        } catch (EmptyResultDataAccessException e) {
+            return Boolean.FALSE;
+        }
     }
 }

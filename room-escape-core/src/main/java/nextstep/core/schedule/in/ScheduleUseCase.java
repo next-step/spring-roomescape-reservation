@@ -7,4 +7,6 @@ public interface ScheduleUseCase {
     ScheduleResponse create(ScheduleCreateRequest request);
 
     List<ScheduleResponse> list(Long themeId, LocalDate date);
+
+    boolean existsById(Long scheduleId);
 }

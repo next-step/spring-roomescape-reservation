@@ -39,4 +39,9 @@ public class ScheduleService implements ScheduleUseCase {
                 .map(ScheduleResponse::from)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public boolean existsById(Long scheduleId) {
+        return repository.existsById(scheduleId);
+    }
 }

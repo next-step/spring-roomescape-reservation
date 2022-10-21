@@ -2,6 +2,7 @@ package nextstep.infra.h2;
 
 import nextstep.core.reservation.Reservation;
 import nextstep.core.reservation.out.ReservationRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -30,8 +31,8 @@ public class ReservationH2Repository implements ReservationRepository {
     public Reservation save(Reservation reservation) {
         Objects.requireNonNull(reservation);
 
-        String query = "INSERT INTO reservation(date, time, name) VALUES (?, ?, ?)";
-        template.update(query, reservation.getDate(), reservation.getTime(), reservation.getName());
+        String query = "INSERT INTO reservation(schedule_id, date, time, name) VALUES (?, ?, ?, ?)";
+        template.update(query, reservation.getScheduleId(), reservation.getDate(), reservation.getTime(), reservation.getName());
 
         Long id = template.queryForObject("SELECT last_insert_id()", Long.class);
         return new Reservation(id, reservation.getDate(), reservation.getTime(), reservation.getName());
@@ -55,8 +56,16 @@ public class ReservationH2Repository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findAll() {
-        String query = "SELECT * FROM reservation";
-        return template.query(query, ROW_MAPPER);
+    public boolean existsByScheduleIdAndDateAndTime(Long scheduleId, LocalDate date, LocalTime time) {
+        Objects.requireNonNull(scheduleId);
+        Objects.requireNonNull(date);
+        Objects.requireNonNull(time);
+
+        String query = "SELECT reservation.id FROM reservation WHERE schedule_id = ? AND date = ? AND time = ?";
+        try {
+            return Boolean.TRUE.equals(template.queryForObject(query, Boolean.class, scheduleId, date, time));
+        } catch (EmptyResultDataAccessException e) {
+            return Boolean.FALSE;
+        }
     }
 }

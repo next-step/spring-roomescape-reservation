@@ -9,4 +9,6 @@ public interface ScheduleRepository {
     Schedule save(Schedule schedule);
 
     List<Schedule> findByThemeIdAndDate(Long themeId, LocalDate date);
+
+    Boolean existsById(Long scheduleId);
 }

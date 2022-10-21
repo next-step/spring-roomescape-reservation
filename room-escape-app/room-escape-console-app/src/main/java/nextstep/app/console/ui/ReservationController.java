@@ -35,6 +35,9 @@ public class ReservationController {
                 System.out.println("예약 정보를 입력하세요.");
                 System.out.println();
 
+                System.out.println("스케줄 아이디를 입력해주세요.");
+                String scheduleId = scanner.nextLine();
+
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
@@ -45,6 +48,7 @@ public class ReservationController {
                 String name = scanner.nextLine();
 
                 Reservation reservation = new Reservation(
+                        Long.parseLong(scheduleId),
                         LocalDate.parse(date),
                         LocalTime.parse(time + ":00"),
                         name

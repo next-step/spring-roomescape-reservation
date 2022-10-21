@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+group 'nextstep'
+version '1.0'
+
+dependencies {
+
+}

@@ -4,20 +4,15 @@ plugins {
     id "io.spring.dependency-management" version "1.0.14.RELEASE"
 }
 
-group 'nextstep'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
+allprojects {
+    repositories {
+        mavenCentral()
+    }
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+subprojects {
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
 
-    implementation 'com.h2database:h2'
-}
-
-test {
-    useJUnitPlatform()
+    test { useJUnitPlatform() }
 }

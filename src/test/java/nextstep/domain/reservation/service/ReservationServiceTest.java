@@ -19,7 +19,7 @@ class ReservationServiceTest {
 
     @DisplayName("이미 생성된 예약과 같은 날짜, 시간으로 예약을 생성할 경우 예외가 발생한다.")
     @Test
-    void create() {
+    void create_WithDuplicatedDateAndTime_ThrowException() {
         // given
         Reservation reservation = new Reservation(null, LocalDate.of(2022, 8, 11), LocalTime.of(13, 10), "example");
         service.create(reservation);

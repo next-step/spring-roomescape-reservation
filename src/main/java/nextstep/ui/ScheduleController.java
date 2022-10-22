@@ -33,9 +33,9 @@ public class ScheduleController {
   }
 
   @GetMapping
-  public ResponseEntity<List<ScheduleRes>> getSchedule(@RequestParam Long themeId,
+  public ResponseEntity<List<ScheduleRes>> getSchedules(@RequestParam Long themeId,
       @DateTimeFormat(iso = ISO.DATE) @RequestParam LocalDate date) {
-    var schedules = service.getSchedule(themeId, date);
+    var schedules = service.getSchedules(themeId, date);
     return ResponseEntity.ok(schedules);
   }
 

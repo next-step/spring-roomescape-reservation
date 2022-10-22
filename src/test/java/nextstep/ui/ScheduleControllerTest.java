@@ -68,7 +68,7 @@ class ScheduleControllerTest extends ApiDocument {
             .time(LocalTime.now())
             .build()
     );
-    given(service.getSchedule(themeId, date)).willReturn(schedule);
+    given(service.getSchedules(themeId, date)).willReturn(schedule);
     //when
     var actual = mockMvc.perform(get("/schedules?themeId={themeId}&date={date}", themeId, date)
         .contentType(MediaType.APPLICATION_JSON)
@@ -76,7 +76,7 @@ class ScheduleControllerTest extends ApiDocument {
     //then
     actual.andExpect(status().isOk())
         .andDo(print())
-        .andDo(toDocument("get-schedule"));
+        .andDo(toDocument("get-schedules"));
   }
 
   @Test

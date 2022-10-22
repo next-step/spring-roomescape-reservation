@@ -10,10 +10,10 @@ include::{snippets}/create-schedule/http-response.adoc[]
 === 스케쥴 조회
 ==== 성공
 ===== Request
-include::{snippets}/get-schedule/http-request.adoc[]
+include::{snippets}/get-schedules/http-request.adoc[]
 
 ===== Response
-include::{snippets}/get-schedule/http-response.adoc[]
+include::{snippets}/get-schedules/http-response.adoc[]
 
 === 스케쥴 삭제
 ==== 성공

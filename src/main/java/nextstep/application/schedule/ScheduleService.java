@@ -15,7 +15,7 @@ public class ScheduleService {
     return null;
   }
 
-  public List<ScheduleRes> getSchedule(Long themeId, LocalDate date) {
+  public List<ScheduleRes> getSchedules(Long themeId, LocalDate date) {
     return null;
   }
 

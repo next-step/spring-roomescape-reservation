@@ -11,6 +11,6 @@ public class GlobalControllerAdvice {
     public ResponseEntity<ErrorResponse> handle(RuntimeException exception) {
         return ResponseEntity
             .badRequest()
-            .body(ErrorResponse.of(exception));
+            .body(ErrorResponse.from(exception));
     }
 }

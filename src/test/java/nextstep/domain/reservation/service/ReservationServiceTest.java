@@ -1,6 +1,6 @@
-package nextstep.domain.service;
+package nextstep.domain.reservation.service;
 
-import nextstep.domain.Reservation;
+import nextstep.domain.reservation.model.Reservation;
 import nextstep.exception.ClientException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

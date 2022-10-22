@@ -1,7 +1,7 @@
-package nextstep.domain.service;
+package nextstep.domain.reservation.service;
 
-import nextstep.domain.Reservation;
-import nextstep.domain.ReservationRepository;
+import nextstep.domain.reservation.model.Reservation;
+import nextstep.domain.reservation.model.ReservationRepository;
 import nextstep.exception.ClientException;
 import org.springframework.stereotype.Service;
 

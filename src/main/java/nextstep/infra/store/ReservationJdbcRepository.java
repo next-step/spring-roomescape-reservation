@@ -1,7 +1,7 @@
 package nextstep.infra.store;
 
-import nextstep.domain.Reservation;
-import nextstep.domain.ReservationRepository;
+import nextstep.domain.reservation.model.Reservation;
+import nextstep.domain.reservation.model.ReservationRepository;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

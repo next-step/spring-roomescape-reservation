@@ -1,8 +1,8 @@
 package nextstep.console;
 
-import nextstep.domain.Reservation;
-import nextstep.domain.ReservationMemoryRepository;
-import nextstep.domain.service.ReservationService;
+import nextstep.domain.reservation.model.Reservation;
+import nextstep.domain.reservation.model.ReservationMemoryRepository;
+import nextstep.domain.reservation.service.ReservationService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

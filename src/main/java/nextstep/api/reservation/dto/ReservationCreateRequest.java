@@ -1,6 +1,6 @@
-package nextstep.api.dto;
+package nextstep.api.reservation.dto;
 
-import nextstep.domain.Reservation;
+import nextstep.domain.reservation.model.Reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

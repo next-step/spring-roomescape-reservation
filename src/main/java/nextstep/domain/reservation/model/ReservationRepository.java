@@ -1,4 +1,4 @@
-package nextstep.domain;
+package nextstep.domain.reservation.model;
 
 import java.util.List;
 import java.util.Optional;

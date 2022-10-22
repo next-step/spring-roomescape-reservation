@@ -1,8 +1,8 @@
-package nextstep.api;
+package nextstep.api.reservation;
 
-import nextstep.api.dto.ReservationCreateRequest;
-import nextstep.api.dto.ReservationResponse;
-import nextstep.domain.service.ReservationService;
+import nextstep.api.reservation.dto.ReservationCreateRequest;
+import nextstep.api.reservation.dto.ReservationResponse;
+import nextstep.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

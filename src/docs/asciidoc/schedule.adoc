@@ -1,0 +1,25 @@
+== 스케쥴
+=== 스케쥴 생성
+==== 성공
+===== Request
+include::{snippets}/create-schedule/http-request.adoc[]
+
+===== Response
+include::{snippets}/create-schedule/http-response.adoc[]
+
+=== 스케쥴 조회
+==== 성공
+===== Request
+include::{snippets}/get-schedule/http-request.adoc[]
+
+===== Response
+include::{snippets}/get-schedule/http-response.adoc[]
+
+=== 스케쥴 삭제
+==== 성공
+===== Request
+include::{snippets}/delete-schedule/http-request.adoc[]
+
+===== Response
+include::{snippets}/delete-schedule/http-response.adoc[]
+

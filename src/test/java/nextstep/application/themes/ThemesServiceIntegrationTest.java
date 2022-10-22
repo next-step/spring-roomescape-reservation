@@ -31,4 +31,35 @@ class ThemesServiceIntegrationTest {
     //then
     assertThat(actual).isNotNull();
   }
+
+  @Test
+  void 전체_테마_조회환다() {
+    //given
+    var themes = Themes.builder()
+        .name("테마이름")
+        .desc("테마설명")
+        .price(BigDecimal.valueOf(22000))
+        .build();
+    sut.create(themes);
+    //when
+    var actual = sut.findAllThemes();
+    //then
+    assertThat(actual).hasSize(1);
+  }
+
+  @Test
+  void 테마_삭제_성공한다() {
+    //given
+    var themes = Themes.builder()
+        .name("테마이름")
+        .desc("테마설명")
+        .price(BigDecimal.valueOf(22000))
+        .build();
+    var themesId = sut.create(themes);
+    //when
+    sut.delete(themesId);
+    var actual = sut.findAllThemes();
+    //then
+    assertThat(actual).hasSize(0);
+  }
 }

@@ -28,10 +28,18 @@ public class ThemesService {
   }
 
   public List<ThemesRes> findAllThemes() {
-    return null;
+    var themes = repository.findAllThemes();
+    return themes.stream()
+        .map(it -> ThemesRes.builder()
+            .id(it.getId())
+            .name(it.getName())
+            .desc(it.getDesc())
+            .price(it.getPrice())
+            .build())
+        .toList();
   }
 
   public void delete(Long id) {
-
+    repository.deleteById(id);
   }
 }

@@ -1,5 +1,6 @@
 package nextstep.domain.themes.repository;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.domain.themes.ThemesEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,5 +39,17 @@ public class JdbcThemesRepository implements ThemesRepository {
     return themes.toBuilder()
         .id(keyHolder.getKey().longValue())
         .build();
+  }
+
+  @Override
+  public List<ThemesEntity> findAllThemes() {
+    var sql = "select * from theme";
+    return jdbcTemplate.query(sql, rowMapper);
+  }
+
+  @Override
+  public void deleteById(Long id) {
+    var sql = "delete from theme where id = ?";
+    jdbcTemplate.update(sql, id);
   }
 }

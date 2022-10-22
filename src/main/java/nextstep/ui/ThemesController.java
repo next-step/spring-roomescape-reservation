@@ -30,7 +30,7 @@ public class ThemesController {
 
   @GetMapping
   public ResponseEntity<List<ThemesRes>> getAllThemes() {
-    List<ThemesRes> themes = service.findAllThemes();
+    var themes = service.findAllThemes();
     return ResponseEntity.ok(themes);
   }
 

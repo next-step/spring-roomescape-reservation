@@ -1,7 +1,7 @@
 package nextstep.web.reservation;
 
 import nextstep.web.reservation.dto.ReservationCreateRequest;
-import nextstep.web.reservation.dto.ReservationResponse;
+import nextstep.web.reservation.dto.ReservationWebResponse;
 import nextstep.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +25,9 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<ReservationResponse>> findAllReservationsByDate(@RequestParam String date) {
-        List<ReservationResponse> responses = service.findAllByDate(date).stream()
-            .map(ReservationResponse::new)
+    public ResponseEntity<List<ReservationWebResponse>> findAllReservationsByDate(@RequestParam String date) {
+        List<ReservationWebResponse> responses = service.findAllByDate(date).stream()
+            .map(ReservationWebResponse::new)
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(responses);

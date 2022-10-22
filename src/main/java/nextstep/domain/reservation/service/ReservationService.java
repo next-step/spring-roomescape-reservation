@@ -6,6 +6,7 @@ import nextstep.exception.ClientException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -27,7 +28,9 @@ public class ReservationService {
         repository.removeByDateAndTime(date, time);
     }
 
-    public List<Reservation> findAllByDate(String date) {
-        return repository.findAllByDate(date);
+    public List<ReservationResponse> findAllByDate(String date) {
+        return repository.findAllByDate(date).stream()
+            .map(ReservationResponse::new)
+            .collect(Collectors.toList());
     }
 }

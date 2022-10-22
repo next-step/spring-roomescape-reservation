@@ -7,7 +7,10 @@ import nextstep.domain.theme.model.ThemeRepository;
 import nextstep.exception.ClientException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleService {
@@ -27,5 +30,17 @@ public class ScheduleService {
         }
 
         return scheduleRepository.create(schedule);
+    }
+
+    public List<ScheduleResponse> findAllByThemeIdAndDate(Long themeId, String date) {
+        Optional<Theme> theme = themeRepository.findById(themeId);
+
+        if (theme.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return scheduleRepository.findAllByThemeIdAndDate(themeId, date).stream()
+            .map(it -> new ScheduleResponse(it, theme.get()))
+            .collect(Collectors.toList());
     }
 }

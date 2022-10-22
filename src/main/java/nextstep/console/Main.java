@@ -2,6 +2,7 @@ package nextstep.console;
 
 import nextstep.domain.reservation.model.Reservation;
 import nextstep.domain.reservation.model.ReservationMemoryRepository;
+import nextstep.domain.reservation.service.ReservationResponse;
 import nextstep.domain.reservation.service.ReservationService;
 
 import java.time.LocalDate;
@@ -76,8 +77,8 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
-                for (Reservation reservation : service.findAllByDate(date)) {
-                    System.out.println(reservation);
+                for (ReservationResponse response : service.findAllByDate(date)) {
+                    System.out.println(response);
                 }
             }
 

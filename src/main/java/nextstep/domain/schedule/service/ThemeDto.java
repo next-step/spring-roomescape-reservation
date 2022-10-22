@@ -1,14 +1,14 @@
-package nextstep.domain.theme.service;
+package nextstep.domain.schedule.service;
 
 import nextstep.domain.theme.model.Theme;
 
-public class ThemeResponse {
+public class ThemeDto {
     private Long id;
     private String name;
     private String desc;
     private Long price;
 
-    public ThemeResponse(Theme theme) {
+    public ThemeDto(Theme theme) {
         this.id = theme.getId();
         this.name = theme.getName();
         this.desc = theme.getDescription();

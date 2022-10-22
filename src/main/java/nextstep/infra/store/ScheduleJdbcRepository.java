@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Time;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -25,7 +26,7 @@ public class ScheduleJdbcRepository implements ScheduleRepository {
     private final RowMapper<Schedule> rowMapper = (resultSet, rowNum) -> {
         Schedule schedule = new Schedule(
             resultSet.getLong("id"),
-            resultSet.getLong("themeId"),
+            resultSet.getLong("theme_id"),
             resultSet.getDate("date").toLocalDate(),
             resultSet.getTime("time").toLocalTime()
         );
@@ -47,5 +48,12 @@ public class ScheduleJdbcRepository implements ScheduleRepository {
         }, keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    @Override
+    public List<Schedule> findAllByThemeIdAndDate(Long themeId, String date) {
+        final String query = "SELECT * FROM schedules WHERE theme_id = ? AND date = ?";
+
+        return jdbcTemplate.query(query, rowMapper, themeId, date);
     }
 }

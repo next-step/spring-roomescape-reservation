@@ -1,13 +1,14 @@
 package nextstep.web.schedule;
 
-import nextstep.web.schedule.dto.ScheduleCreateRequest;
 import nextstep.domain.schedule.service.ScheduleService;
+import nextstep.web.schedule.dto.ScheduleCreateRequest;
+import nextstep.web.schedule.dto.ScheduleWebResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ScheduleController {
@@ -22,5 +23,14 @@ public class ScheduleController {
         Long id = scheduleService.create(request.toEntity());
 
         return ResponseEntity.created(URI.create("/schedules/" + id)).build();
+    }
+
+    @GetMapping("/schedules")
+    public ResponseEntity<List<ScheduleWebResponse>> findAllByThemeIdAndDate(@RequestParam Long themeId, @RequestParam String date) {
+        List<ScheduleWebResponse> responses = scheduleService.findAllByThemeIdAndDate(themeId, date).stream()
+            .map(ScheduleWebResponse::new)
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responses);
     }
 }

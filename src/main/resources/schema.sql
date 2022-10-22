@@ -11,10 +11,10 @@ CREATE TABLE themes
 
 CREATE TABLE schedules
 (
-    id   INT         NOT NULL AUTO_INCREMENT,
-    theme_id   INT         NOT NULL,
-    date DATE        NOT NULL,
-    time TIME        NOT NULL,
+    id       INT  NOT NULL AUTO_INCREMENT,
+    theme_id INT  NOT NULL,
+    date     DATE NOT NULL,
+    time     TIME NOT NULL,
     PRIMARY KEY (id)
 );
 

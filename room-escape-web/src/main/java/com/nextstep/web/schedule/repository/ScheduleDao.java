@@ -37,6 +37,13 @@ public class ScheduleDao {
         return (long) jdbcInsert.execute(parameters);
     }
 
+    public List<ScheduleEntity> findAllBy(String date) {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE themeid = :themeId AND date = :date";
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("date", date);
+        return jdbcTemplate.query(query, namedParameters, rowMapper);
+    }
+
     public List<ScheduleEntity> findAllBy(Long themeId, String date) {
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE themeid = :themeId AND date = :date";
         SqlParameterSource namedParameters = new MapSqlParameterSource()

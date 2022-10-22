@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @Repository
 public class MemoryReservationRepository implements ReservationRepository {
@@ -19,11 +20,6 @@ public class MemoryReservationRepository implements ReservationRepository {
     private final AtomicLong id = new AtomicLong(1L);
 
     @Override
-    public List<Reservation> findByDate(String date) {
-        return null;
-    }
-
-    @Override
     public long save(LocalDate date, LocalTime time, String name) {
         Map<LocalTime, Reservation> localTimeReservationMap = dataBase.computeIfAbsent(date, k -> new ConcurrentHashMap<>());
         // checkedException RuntimeException 차이
@@ -32,6 +28,12 @@ public class MemoryReservationRepository implements ReservationRepository {
         }
         Reservation reservation = localTimeReservationMap.computeIfAbsent(time, k -> new Reservation(id.getAndIncrement(), date, time, name));
         return reservation.getId();
+    }
+
+    @Override
+    public List<Reservation> findReservationsByDate(LocalDate date) {
+        Map<LocalTime, Reservation> localTimeReservationMap = dataBase.computeIfAbsent(date, k -> new ConcurrentHashMap<>());
+        return new ArrayList<>(localTimeReservationMap.values());
     }
 
     //    @Override

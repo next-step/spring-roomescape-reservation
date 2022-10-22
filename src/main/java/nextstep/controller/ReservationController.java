@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class ReservationController {
@@ -25,9 +27,9 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    ResponseEntity<Reservation> getReservations(@RequestParam String date) {
-        System.out.println("date = " + date);
-        return ResponseEntity.ok().body(new Reservation());
+    ResponseEntity<List<Reservation>> getReservations(@RequestParam String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        return ResponseEntity.ok().body(reservationService.findReservationsByDate(localDate));
     }
 
     @DeleteMapping("/reservations")

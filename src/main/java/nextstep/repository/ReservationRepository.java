@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReservationRepository {
 
-    List<Reservation> findByDate(String date);
+    List<Reservation> findReservationsByDate(LocalDate date);
 
     long save(LocalDate date, LocalTime time, String name);
 }

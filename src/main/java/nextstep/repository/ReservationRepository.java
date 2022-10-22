@@ -1,10 +1,14 @@
 package nextstep.repository;
 
-import nextstep.Reservation;
+import nextstep.domain.Reservation;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface ReservationRepository {
-    Reservation save(Reservation reservation);
+
     List<Reservation> findByDate(String date);
+
+    long save(LocalDate date, LocalTime time, String name);
 }

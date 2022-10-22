@@ -1,4 +1,4 @@
-package nextstep;
+package nextstep.domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,6 +11,13 @@ public class Reservation {
     private String name;
 
     public Reservation() {
+    }
+
+    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
+        this.id = id;
+        this.date = date;
+        this.time = time;
+        this.name = name;
     }
 
     public Reservation(LocalDate date, LocalTime time, String name) {

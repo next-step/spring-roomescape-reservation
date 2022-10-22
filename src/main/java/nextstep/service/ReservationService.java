@@ -1,12 +1,11 @@
 package nextstep.service;
 
-import nextstep.Reservation;
 import nextstep.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Service
 public class ReservationService {
@@ -19,13 +18,11 @@ public class ReservationService {
     }
 
     // 예약 생성
-    public Long create(Reservation reservation) {
-        Reservation res = reservationRepository.save(reservation);
-        return res.getId();
+    public long create(LocalDate date, LocalTime time, String name) {
+        return reservationRepository.save(date, time, name);
     }
     // 예약 조회
 
     // 예약 취소
 
 }
-// 형님 카카오톡 장애나서 대응하러 갑니다.

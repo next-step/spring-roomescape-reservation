@@ -1,6 +1,5 @@
-package nextstep.domain;
+package nextstep.domain.reservation.model;
 
-import nextstep.domain.reservation.model.Identity;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

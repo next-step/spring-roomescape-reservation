@@ -2,6 +2,7 @@ package com.nextstep.web.reservation.repository;
 
 import com.nextstep.web.reservation.repository.entity.ReservationEntity;
 import nextsetp.domain.reservation.Reservation;
+import org.springframework.cglib.core.Local;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +37,8 @@ public class ReservationDao {
 
     public Long save(Reservation reservation) {
         Map<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("DATE", reservation.getDate());
-        parameters.put("TIME", reservation.getTime());
+        parameters.put("scheduleId", reservation.getScheduleId());
+        parameters.put("reservationTime", reservation.getReservationTime());
         parameters.put("NAME", reservation.getName());
 
         return (long) jdbcInsert.execute(parameters);
@@ -50,19 +52,18 @@ public class ReservationDao {
         return jdbcTemplate.query(query, namedParameters, rowMapper).stream().findFirst();
     }
 
-    public List<ReservationEntity> findAllBy(String date) {
-        String query = "SELECT * FROM RESERVATION WHERE date = :date";
+    public List<ReservationEntity> findAllBy(List<Long> scheduleIds) {
+        String query = "SELECT * FROM RESERVATION WHERE scheduleId IN :scheduleIds";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("date", LocalDate.parse(date));
+                .addValue("scheduleId", scheduleIds);
 
         return jdbcTemplate.query(query, namedParameters, rowMapper);
     }
 
-    public void delete(String date, String time) {
-        String query = "DELETE FROM RESERVATION WHERE date = :date AND time = :time";
+    public void delete(Long id) {
+        String query = "DELETE FROM RESERVATION WHERE id = :id AND time = :time";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("date", LocalDate.parse(date))
-                .addValue("time", LocalTime.parse(time));
+                .addValue("id", id);
         jdbcTemplate.update(query, namedParameters);
     }
 
@@ -71,8 +72,8 @@ public class ReservationDao {
         public ReservationEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
             ReservationEntity reservationEntity = new ReservationEntity(
                     rs.getLong("ID"),
-                    rs.getString("date"),
-                    rs.getString("time"),
+                    rs.getLong("themeId"),
+                    rs.getObject("reservationTime", LocalDateTime.class),
                     rs.getString("name")
             );
             return reservationEntity;

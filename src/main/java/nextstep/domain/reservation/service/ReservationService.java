@@ -25,6 +25,10 @@ public class ReservationService {
     }
 
     public void removeByDateAndTime(String date, String time) {
+        if (repository.findByDateAndTime(date, time).isEmpty()) {
+            throw new ClientException("존재하지 않는 예약을 삭제할 수 없습니다.");
+        }
+
         repository.removeByDateAndTime(date, time);
     }
 

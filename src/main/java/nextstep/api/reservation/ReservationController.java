@@ -26,11 +26,11 @@ public class ReservationController {
 
     @GetMapping("/reservations")
     public ResponseEntity<List<ReservationResponse>> findAllReservationsByDate(@RequestParam String date) {
-        List<ReservationResponse> reservations = service.findAllByDate(date).stream()
+        List<ReservationResponse> responses = service.findAllByDate(date).stream()
             .map(ReservationResponse::new)
             .collect(Collectors.toList());
 
-        return ResponseEntity.ok(reservations);
+        return ResponseEntity.ok(responses);
     }
 
     @DeleteMapping("/reservations")

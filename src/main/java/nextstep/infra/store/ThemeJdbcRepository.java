@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
@@ -46,5 +47,11 @@ public class ThemeJdbcRepository implements ThemeRepository {
         }, keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    @Override
+    public List<Theme> findAll() {
+       final String query = "SELECT * FROM themes";
+       return jdbcTemplate.query(query, rowMapper);
     }
 }

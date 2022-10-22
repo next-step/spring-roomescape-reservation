@@ -23,10 +23,8 @@ class ReservationCommandServiceTest {
     @Autowired
     private ReservationCommandService reservationCommandService;
 
-    String testDate = "2022-08-11";
-    String testTime = "13:00";
     CreateReservationRequest testRequest = new CreateReservationRequest
-            (LocalDate.parse(testDate), LocalTime.parse(testTime), "a");
+            (1L,"a");
 
     @BeforeEach
     void setUp() {
@@ -35,7 +33,7 @@ class ReservationCommandServiceTest {
 
     @AfterEach
     void tearDown() {
-        reservationCommandService.delete(testDate, testTime);
+        reservationCommandService.delete(1L);
     }
 
     @DisplayName("예약을 생성한다.")
@@ -43,8 +41,7 @@ class ReservationCommandServiceTest {
     void save() {
         String date = "2022-01-01";
         String time = "00:00";
-        CreateReservationRequest request = new CreateReservationRequest
-                (LocalDate.parse(date), LocalTime.parse(time), "a");
+        CreateReservationRequest request = new CreateReservationRequest();
         Long id = reservationCommandService.save(request);
         Assertions.assertThat(id).isNotNull();
     }
@@ -52,7 +49,7 @@ class ReservationCommandServiceTest {
     @DisplayName("해당 날짜와 시간의 예약을 삭제한다.")
     @Test
     void delete() {
-        reservationCommandService.delete(testDate, testTime);
+        reservationCommandService.delete(1L);
         Long id = reservationCommandService.save(testRequest);
         Assertions.assertThat(id).isNotNull();
     }
@@ -63,7 +60,7 @@ class ReservationCommandServiceTest {
         String duplicateDate = "2022-08-11";
         String duplicateTime = "13:00";
         CreateReservationRequest failRequest = new CreateReservationRequest
-                (LocalDate.parse(duplicateDate), LocalTime.parse(duplicateTime), "b");
+                (1L, "b");
 
         Assertions.assertThatThrownBy(() -> {
             reservationCommandService.save(failRequest);

@@ -1,23 +1,21 @@
 package nextsetp.domain.schedule;
 
-import nextsetp.domain.theme.Theme;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Schedule {
-    private Theme theme;
+    private Long themeId;
     private LocalDate date;
     private LocalTime time;
 
-    public Schedule(Theme theme, LocalDate date, LocalTime time) {
-        this.theme = theme;
+    public Schedule(Long themeId, LocalDate date, LocalTime time) {
+        this.themeId = themeId;
         this.date = date;
         this.time = time;
     }
 
-    public Theme getTheme() {
-        return theme;
+    public Long getThemeId() {
+        return themeId;
     }
 
     public LocalDate getDate() {

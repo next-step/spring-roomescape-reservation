@@ -1,14 +1,5 @@
 DROP TABLE IF EXISTS reservations;
 
-CREATE TABLE reservations
-(
-    id   INT         NOT NULL AUTO_INCREMENT,
-    date DATE        NOT NULL,
-    time TIME        NOT NULL,
-    name VARCHAR(20) NOT NULL,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE themes
 (
     id          INT          NOT NULL AUTO_INCREMENT,
@@ -18,3 +9,20 @@ CREATE TABLE themes
     PRIMARY KEY (id)
 );
 
+CREATE TABLE schedules
+(
+    id   INT         NOT NULL AUTO_INCREMENT,
+    theme_id   INT         NOT NULL,
+    date DATE        NOT NULL,
+    time TIME        NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE reservations
+(
+    id   INT         NOT NULL AUTO_INCREMENT,
+    date DATE        NOT NULL,
+    time TIME        NOT NULL,
+    name VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+);

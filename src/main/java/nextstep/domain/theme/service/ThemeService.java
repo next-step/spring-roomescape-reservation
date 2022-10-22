@@ -21,4 +21,8 @@ public class ThemeService {
     public List<Theme> findAll() {
         return repository.findAll();
     }
+
+    public void remove(Long id) {
+        repository.remove(id);
+    }
 }

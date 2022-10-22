@@ -54,7 +54,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
 
     @Override
     public void removeByDateAndTime(String date, String time) {
-        final String query = "DELETE FROM reservations WHERE date =? AND time = ?";
+        final String query = "DELETE FROM reservations WHERE date = ? AND time = ?";
         jdbcTemplate.update(query, date, time);
     }
 

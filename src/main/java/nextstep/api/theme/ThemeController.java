@@ -4,10 +4,7 @@ import nextstep.api.theme.dto.ThemeCreateRequest;
 import nextstep.api.theme.dto.ThemeResponse;
 import nextstep.domain.theme.service.ThemeService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -24,6 +21,7 @@ public class ThemeController {
     @PostMapping("/themes")
     public ResponseEntity<Void> create(@RequestBody ThemeCreateRequest request) {
         Long id = themeService.create(request.toEntity());
+
         return ResponseEntity.created(URI.create("/themes/" + id)).build();
     }
 
@@ -34,5 +32,12 @@ public class ThemeController {
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(responses);
+    }
+
+    @DeleteMapping("/themes/{id}")
+    public ResponseEntity<Void> remove(@PathVariable Long id) {
+        themeService.remove(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

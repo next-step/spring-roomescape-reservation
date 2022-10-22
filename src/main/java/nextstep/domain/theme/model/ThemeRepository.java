@@ -5,4 +5,5 @@ import java.util.List;
 public interface ThemeRepository {
     Long create(Theme theme);
     List<Theme> findAll();
+    void  remove(Long id);
 }

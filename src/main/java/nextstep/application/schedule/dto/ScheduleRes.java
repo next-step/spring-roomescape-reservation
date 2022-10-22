@@ -6,11 +6,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
-import nextstep.application.themes.dto.ThemesRes;
+import nextstep.application.themes.dto.ThemeRes;
 
 @Builder
 @Jacksonized
-public record ScheduleRes(Long id, ThemesRes theme, LocalDate date,
+public record ScheduleRes(Long id, ThemeRes theme, LocalDate date,
                           @JsonFormat(shape = Shape.STRING, pattern = "hh-mm-ss")
                           LocalTime time
 ) {

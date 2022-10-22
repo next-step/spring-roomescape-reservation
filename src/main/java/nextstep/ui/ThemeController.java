@@ -3,9 +3,9 @@ package nextstep.ui;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.application.themes.ThemesService;
-import nextstep.application.themes.dto.Themes;
-import nextstep.application.themes.dto.ThemesRes;
+import nextstep.application.themes.ThemeService;
+import nextstep.application.themes.dto.Theme;
+import nextstep.application.themes.dto.ThemeRes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/themes")
 @RequiredArgsConstructor
-public class ThemesController {
+public class ThemeController {
 
-  private final ThemesService service;
+  private final ThemeService service;
 
   @PostMapping
-  public ResponseEntity<Void> create(@RequestBody Themes themes) {
-    var id = service.create(themes);
+  public ResponseEntity<Void> create(@RequestBody Theme theme) {
+    var id = service.create(theme);
     return ResponseEntity.created(URI.create("/themes/" + id)).build();
   }
 
   @GetMapping
-  public ResponseEntity<List<ThemesRes>> getAllThemes() {
-    var themes = service.findAllThemes();
+  public ResponseEntity<List<ThemeRes>> getThemes() {
+    var themes = service.getThemes();
     return ResponseEntity.ok(themes);
   }
 

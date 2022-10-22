@@ -16,7 +16,7 @@ import nextstep.ApiDocument;
 import nextstep.application.schedule.ScheduleService;
 import nextstep.application.schedule.dto.Schedule;
 import nextstep.application.schedule.dto.ScheduleRes;
-import nextstep.application.themes.dto.ThemesRes;
+import nextstep.application.themes.dto.ThemeRes;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -57,7 +57,7 @@ class ScheduleControllerTest extends ApiDocument {
         ScheduleRes.builder()
             .id(1L)
             .theme(
-                ThemesRes.builder()
+                ThemeRes.builder()
                     .id(1L)
                     .name("테마이름")
                     .desc("테마설명")

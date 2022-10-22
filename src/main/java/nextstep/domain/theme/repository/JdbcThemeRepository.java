@@ -1,8 +1,8 @@
-package nextstep.domain.themes.repository;
+package nextstep.domain.theme.repository;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.domain.themes.ThemesEntity;
+import nextstep.domain.theme.ThemeEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcThemesRepository implements ThemesRepository {
+public class JdbcThemeRepository implements ThemeRepository {
 
   private final JdbcTemplate jdbcTemplate;
 
-  private final RowMapper<ThemesEntity> rowMapper = (resultSet, rowNum) -> {
-    var entity = ThemesEntity.builder()
+  private final RowMapper<ThemeEntity> rowMapper = (resultSet, rowNum) -> {
+    var entity = ThemeEntity.builder()
         .id(resultSet.getLong("id"))
         .name(resultSet.getString("name"))
         .desc(resultSet.getString("desc"))
@@ -25,7 +25,7 @@ public class JdbcThemesRepository implements ThemesRepository {
   };
 
   @Override
-  public ThemesEntity save(ThemesEntity themes) {
+  public ThemeEntity save(ThemeEntity themes) {
     var keyHolder = new GeneratedKeyHolder();
 
     var sql = "insert into theme (name, desc, price) values (?, ?, ?)";
@@ -42,7 +42,7 @@ public class JdbcThemesRepository implements ThemesRepository {
   }
 
   @Override
-  public List<ThemesEntity> findAllThemes() {
+  public List<ThemeEntity> findAllThemes() {
     var sql = "select * from theme";
     return jdbcTemplate.query(sql, rowMapper);
   }

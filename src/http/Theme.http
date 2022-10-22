@@ -1,5 +1,5 @@
 ### 테마 생성
-POST {{themes-api}}/themes
+POST {{theme-api}}/theme
 content-type: application/json; charset=UTF-8
 
 {
@@ -9,8 +9,8 @@ content-type: application/json; charset=UTF-8
 }
 
 ### 테마 전체 조회
-GET {{themes-api}}/themes
+GET {{theme-api}}/theme
 content-type: application/json
 
 ### 테마 삭제
-DELETE {{themes-api}}/themes/1
+DELETE {{theme-api}}/theme/1

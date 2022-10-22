@@ -11,5 +11,5 @@ endif::[]
 
 == Room-Escape
 include::roomescape.adoc[]
-include::themes.adoc[]
+include::theme.adoc[]
 include::schedule.adoc[]

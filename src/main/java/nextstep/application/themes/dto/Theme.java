@@ -6,6 +6,6 @@ import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Jacksonized
-public record ThemesRes(Long id, String name, String desc, BigDecimal price) {
+public record Theme(String name, String desc, BigDecimal price) {
 
 }

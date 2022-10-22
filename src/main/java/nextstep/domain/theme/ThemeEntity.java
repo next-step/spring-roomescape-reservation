@@ -1,4 +1,4 @@
-package nextstep.domain.themes;
+package nextstep.domain.theme;
 
 import java.math.BigDecimal;
 import lombok.AccessLevel;
@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Builder(toBuilder = true)
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class ThemesEntity {
+public class ThemeEntity {
 
   Long id;
   String name;

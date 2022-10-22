@@ -2,23 +2,23 @@ package nextstep.application.themes;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import nextstep.application.themes.dto.Themes;
-import nextstep.application.themes.dto.ThemesRes;
-import nextstep.domain.themes.ThemesEntity;
-import nextstep.domain.themes.repository.ThemesRepository;
+import nextstep.application.themes.dto.Theme;
+import nextstep.application.themes.dto.ThemeRes;
+import nextstep.domain.theme.ThemeEntity;
+import nextstep.domain.theme.repository.ThemeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ThemesService {
+public class ThemeService {
 
-  private final ThemesRepository repository;
+  private final ThemeRepository repository;
 
   @Transactional
-  public Long create(Themes req) {
-    var themes = ThemesEntity.builder()
+  public Long create(Theme req) {
+    var themes = ThemeEntity.builder()
         .name(req.name())
         .desc(req.desc())
         .price(req.price())
@@ -27,10 +27,10 @@ public class ThemesService {
     return entity.getId();
   }
 
-  public List<ThemesRes> findAllThemes() {
+  public List<ThemeRes> getThemes() {
     var themes = repository.findAllThemes();
     return themes.stream()
-        .map(it -> ThemesRes.builder()
+        .map(it -> ThemeRes.builder()
             .id(it.getId())
             .name(it.getName())
             .desc(it.getDesc())

@@ -1,12 +1,9 @@
 package nextsetp.domain.reservation;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class InmemoryReservationRepository implements ReservationRepository {
     List<Reservation> reservations = new ArrayList<>();
@@ -18,26 +15,19 @@ public class InmemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public Optional<Reservation> findBy(String date, String time) {
+    public Optional<Reservation> findByScheduleId(Long scheduleId) {
         return reservations.stream()
-                .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date))
-                        && Objects.equals(it.getTime(), LocalTime.parse(time)))
+                .filter(it -> Objects.equals(it.getScheduleId(), scheduleId))
                 .findFirst();
     }
 
     @Override
     public List<Reservation> findAllBy(String date) {
-        return reservations.stream()
-                .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
-    public void delete(String date, String time) {
-        reservations.stream()
-                .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date))
-                        && Objects.equals(it.getTime(), LocalTime.parse(time)))
-                .findFirst()
-                .ifPresent(reservations::remove);
+    public void delete(Long id) {
+        reservations.remove(id);
     }
 }

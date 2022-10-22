@@ -7,6 +7,8 @@ import nextsetp.domain.reservation.exception.DuplicationReservationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional
 public class ReservationCommandService {
@@ -17,15 +19,16 @@ public class ReservationCommandService {
     }
 
     public Long save(CreateReservationRequest request) {
-        reservationRepository.findBy(request.getDate().toString(), request.getTime().toString()).ifPresent((reservation -> {
+        reservationRepository.findByScheduleId(request.getScheduleId()).ifPresent((reservation -> {
             throw new DuplicationReservationException();
         }));
 
-        Reservation reservation = new Reservation(request.getDate(), request.getTime(), request.getName());
+        Reservation reservation = new Reservation(request.getScheduleId(), LocalDateTime.now(),
+                request.getName());
         return reservationRepository.save(reservation);
     }
 
-    public void delete(String date, String time) {
-        reservationRepository.delete(date, time);
+    public void delete(Long id) {
+        reservationRepository.delete(id);
     }
 }

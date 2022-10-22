@@ -11,7 +11,7 @@ import nextstep.application.themes.dto.ThemeRes;
 @Builder
 @Jacksonized
 public record ScheduleRes(Long id, ThemeRes theme, LocalDate date,
-                          @JsonFormat(shape = Shape.STRING, pattern = "hh-mm-ss")
+                          @JsonFormat(shape = Shape.STRING, pattern = "HH-mm-ss")
                           LocalTime time
 ) {
 

@@ -1,7 +1,7 @@
 package nextstep.web.theme;
 
 import nextstep.web.theme.dto.ThemeCreateRequest;
-import nextstep.web.theme.dto.ThemeResponse;
+import nextstep.web.theme.dto.ThemeWebResponse;
 import nextstep.domain.theme.service.ThemeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +26,9 @@ public class ThemeController {
     }
 
     @GetMapping("/themes")
-    public ResponseEntity<List<ThemeResponse>> findAll() {
-        List<ThemeResponse> responses = themeService.findAll().stream()
-            .map(ThemeResponse::new)
+    public ResponseEntity<List<ThemeWebResponse>> findAll() {
+        List<ThemeWebResponse> responses = themeService.findAll().stream()
+            .map(ThemeWebResponse::new)
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(responses);

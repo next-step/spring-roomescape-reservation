@@ -1,4 +1,4 @@
-package nextstep.web.theme.dto;
+package nextstep.domain.theme.service;
 
 import nextstep.domain.theme.model.Theme;
 
@@ -13,5 +13,21 @@ public class ThemeResponse {
         this.name = theme.getName();
         this.desc = theme.getDescription();
         this.price = theme.getPrice();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 }

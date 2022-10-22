@@ -5,6 +5,7 @@ import nextstep.domain.theme.model.ThemeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ThemeService {
@@ -18,8 +19,10 @@ public class ThemeService {
         return repository.create(theme);
     }
 
-    public List<Theme> findAll() {
-        return repository.findAll();
+    public List<ThemeResponse> findAll() {
+        return repository.findAll().stream()
+            .map(ThemeResponse::new)
+            .collect(Collectors.toList());
     }
 
     public void remove(Long id) {

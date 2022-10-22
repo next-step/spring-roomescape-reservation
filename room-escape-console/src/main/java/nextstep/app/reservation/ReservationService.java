@@ -1,11 +1,10 @@
-package nextstep;
+package nextstep.app.reservation;
 
 import nextsetp.domain.reservation.Reservation;
 import nextsetp.domain.reservation.ReservationRepository;
 import nextsetp.domain.reservation.exception.DuplicationReservationException;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReservationService {
@@ -15,14 +14,14 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public void save(String date, String time, String name) {
-        reservationRepository.findBy(date, time).ifPresent((reservation -> {
+    public void save(Long scheduleId, String name) {
+        reservationRepository.findByScheduleId(scheduleId).ifPresent((reservation -> {
             throw new DuplicationReservationException();
         }));
 
         Reservation reservation = new Reservation(
-                LocalDate.parse(date),
-                LocalTime.parse(time + ":00"),
+                scheduleId,
+                LocalDateTime.now(),
                 name);
 
         reservationRepository.save(reservation);
@@ -32,7 +31,7 @@ public class ReservationService {
         return reservationRepository.findAllBy(date);
     }
 
-    public void delete(String date, String time) {
-        reservationRepository.delete(date, time);
+    public void delete(Long reservationId) {
+        reservationRepository.delete(reservationId);
     }
 }

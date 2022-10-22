@@ -1,25 +1,24 @@
 package nextsetp.domain.reservation;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Reservation {
-    private LocalDate date;
-    private LocalTime time;
+    private Long scheduleId;
+    private LocalDateTime reservationTime;
     private String name;
 
-    public Reservation(LocalDate date, LocalTime time, String name) {
-        this.date = date;
-        this.time = time;
+    public Reservation(Long scheduleId, LocalDateTime reservationTime, String name) {
+        this.scheduleId = scheduleId;
+        this.reservationTime = reservationTime;
         this.name = name;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Long getScheduleId() {
+        return scheduleId;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public LocalDateTime getReservationTime() {
+        return reservationTime;
     }
 
     public String getName() {

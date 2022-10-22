@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface ReservationRepository {
      Long save(Reservation reservation);
-     Optional<Reservation> findBy(String date, String time);
+     Optional<Reservation> findByScheduleId(Long id);
      List<Reservation> findAllBy(String date);
-     void delete(String date, String time);
+     void delete(Long id);
 }

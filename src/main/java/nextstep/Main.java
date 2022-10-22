@@ -1,5 +1,7 @@
 package nextstep;
 
+import nextstep.controller.ReservationController;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -46,6 +48,8 @@ public class Main {
                         name
                 );
 
+                // 예약 생성
+
                 reservations.add(reservation);
                 System.out.println("예약이 등록되었습니다.");
             }
@@ -61,10 +65,13 @@ public class Main {
                 System.out.println("시간 (ex.13:00)");
                 String time = scanner.nextLine();
 
+                // 예약 정보 삭제
+
                 reservations.stream()
                         .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalDate.parse(time)))
                         .findFirst()
                         .ifPresent(reservations::remove);
+
 
                 System.out.println("예약이 취소되었습니다.");
             }
@@ -77,10 +84,13 @@ public class Main {
                 System.out.println("날짜 (ex.2022-08-11)");
                 String date = scanner.nextLine();
 
+                // 예약 정보 조회
+
                 reservations.stream()
                         .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
                         .collect(Collectors.toList())
                         .forEach(System.out::println);
+
             }
 
             if (INPUT_4.equals(menuInput)) {

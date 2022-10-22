@@ -1,4 +1,4 @@
-package nextstep.api.reservation.dto;
+package nextstep.web.reservation.dto;
 
 import nextstep.domain.reservation.model.Reservation;
 

@@ -1,6 +1,6 @@
-package nextstep.api.schedule;
+package nextstep.web.schedule;
 
-import nextstep.api.schedule.dto.ScheduleCreateRequest;
+import nextstep.web.schedule.dto.ScheduleCreateRequest;
 import nextstep.domain.schedule.service.ScheduleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

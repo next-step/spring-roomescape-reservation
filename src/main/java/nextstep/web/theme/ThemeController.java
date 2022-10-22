@@ -1,7 +1,7 @@
-package nextstep.api.theme;
+package nextstep.web.theme;
 
-import nextstep.api.theme.dto.ThemeCreateRequest;
-import nextstep.api.theme.dto.ThemeResponse;
+import nextstep.web.theme.dto.ThemeCreateRequest;
+import nextstep.web.theme.dto.ThemeResponse;
 import nextstep.domain.theme.service.ThemeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package nextstep.api.theme.dto;
+package nextstep.web.theme.dto;
 
 import nextstep.domain.theme.model.Theme;
 

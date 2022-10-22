@@ -1,4 +1,4 @@
-package nextstep.api.schedule.dto;
+package nextstep.web.schedule.dto;
 
 import nextstep.domain.schedule.model.Schedule;
 

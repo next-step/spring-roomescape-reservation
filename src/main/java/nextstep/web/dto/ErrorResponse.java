@@ -1,4 +1,4 @@
-package nextstep.api.dto;
+package nextstep.web.dto;
 
 public class ErrorResponse {
     private String message;

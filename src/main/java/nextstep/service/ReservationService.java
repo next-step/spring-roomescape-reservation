@@ -30,5 +30,7 @@ public class ReservationService {
     }
 
     // 예약 취소
-
+    public void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
+        reservationRepository.deleteByLocalDateAndLocalTime(date, time);
+    }
 }

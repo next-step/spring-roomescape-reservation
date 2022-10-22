@@ -11,4 +11,6 @@ public interface ReservationRepository {
     List<Reservation> findReservationsByDate(LocalDate date);
 
     long save(LocalDate date, LocalTime time, String name);
+
+    void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time);
 }

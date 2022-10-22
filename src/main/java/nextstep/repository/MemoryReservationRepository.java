@@ -36,19 +36,9 @@ public class MemoryReservationRepository implements ReservationRepository {
         return new ArrayList<>(localTimeReservationMap.values());
     }
 
-    //    @Override
-//    public List<Reservation> findByDate(String date) {
-//        return store.values().stream()
-//                .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-//                .collect(Collectors.toList());
-//    }
-//
-//    public void deleteByDateAndTime(String date, String time) {
-//        for (long key : store.keySet()) {
-//            Reservation res = store.get(key);
-//            if (Objects.equals(res.getDate(), LocalDate.parse(date)) && Objects.equals(res.getTime(), LocalDate.parse(time))) {
-//                store.remove(key);
-//            }
-//        }
-//    }
+    @Override
+    public void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
+        Map<LocalTime, Reservation> localTimeReservationMap = dataBase.computeIfAbsent(date, k -> new ConcurrentHashMap<>());
+        localTimeReservationMap.remove(time);
+    }
 }

@@ -1,0 +1,15 @@
+### 테마 생성
+POST http://localhost:8080/themes
+Content-Type: application/json
+
+{
+  "name": "테마이름",
+  "desc": "테마설명",
+  "price": 22000
+}
+
+### 테마 목록 조회
+GET http://localhost:8080/themes
+
+### 테마 삭제
+DELETE http://localhost:8080/themes/1

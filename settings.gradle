@@ -1,2 +1,6 @@
 rootProject.name = 'room-escape'
-
+include 'room-escape-app:room-escape-console-app'
+include 'room-escape-app:room-escape-web-app'
+include 'room-escape-core'
+include 'room-escape-infra:room-escape-infra-noop'
+include 'room-escape-infra:room-escape-infra-h2'

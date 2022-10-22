@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    include:
+      - core
+      - h2
+  h2:
+    console:
+      enabled: true

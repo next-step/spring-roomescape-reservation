@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'com.h2database:h2'
+}
+
+bootJar { enabled = false }
+jar { enabled = true }

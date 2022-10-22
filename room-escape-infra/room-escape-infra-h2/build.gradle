@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation project(":room-escape-core")
+
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "org.springframework:spring-jdbc"
+}
+
+bootJar { enabled = false }
+jar { enabled = true }

@@ -17,4 +17,6 @@ public interface ReservationRepository {
   Optional<ReservationEntity> findReservationsByDateAndTime(LocalDate date, LocalTime time);
 
   Optional<ReservationEntity> getReservation(Long id);
+
+  Optional<ReservationEntity> findReservationByThemeId(Long themeId);
 }

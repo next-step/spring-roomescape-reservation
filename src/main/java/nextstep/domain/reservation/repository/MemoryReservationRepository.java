@@ -52,4 +52,11 @@ public class MemoryReservationRepository implements ReservationRepository {
         .filter(it -> Objects.equals(it.getId(), id))
         .findFirst();
   }
+
+  @Override
+  public Optional<ReservationEntity> findReservationByThemeId(Long themeId) {
+    return STORE.values().stream()
+        .filter(it -> Objects.equals(it.getThemeId(), themeId))
+        .findFirst();
+  }
 }

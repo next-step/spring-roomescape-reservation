@@ -27,6 +27,7 @@ public class ReservationService {
   public Long create(Reservation req) {
     createPolicy.checkValid(req);
     var reservation = ReservationEntity.builder()
+        .scheduleId(req.scheduleId())
         .date(req.date())
         .time(LocalTime.parse(req.time()))
         .name(req.name())

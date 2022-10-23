@@ -33,12 +33,13 @@ public class JdbcReservationRepository implements ReservationRepository {
   public ReservationEntity save(ReservationEntity reservation) {
     var keyHolder = new GeneratedKeyHolder();
 
-    var sql = "INSERT INTO reservation (date, time, name) values (?, ?, ?)";
+    var sql = "INSERT INTO reservation (schedule_id, date, time, name) values (?, ?, ?, ?)";
     jdbcTemplate.update(con -> {
       var ps = con.prepareStatement(sql, new String[]{"id"});
-      ps.setObject(1, reservation.getDate());
-      ps.setString(2, reservation.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-      ps.setString(3, reservation.getName());
+      ps.setObject(1, reservation.getScheduleId());
+      ps.setObject(2, reservation.getDate());
+      ps.setString(3, reservation.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+      ps.setString(4, reservation.getName());
       return ps;
     }, keyHolder);
 

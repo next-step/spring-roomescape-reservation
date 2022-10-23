@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class ReservationEntity {
 
   Long id;
+  Long scheduleId;
   LocalDate date;
   LocalTime time;
   String name;

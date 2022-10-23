@@ -30,6 +30,7 @@ public class ReservationService {
     createPolicy.checkValid(req);
     var reservation = ReservationEntity.builder()
         .scheduleId(req.scheduleId())
+        .themeId(req.themeId())
         .date(req.date())
         .time(req.time())
         .name(req.name())

@@ -35,6 +35,7 @@ class ReservationControllerTest extends ApiDocument {
     //given
     var reservationReq = Reservation.builder()
         .scheduleId(1L)
+        .themeId(1L)
         .date(LocalDate.now())
         .time(LocalTime.now())
         .name("gump")

@@ -22,6 +22,7 @@ public class JdbcReservationRepository implements ReservationRepository {
     var entity = ReservationEntity.builder()
         .id(resultSet.getLong("id"))
         .scheduleId(resultSet.getLong("schedule_id"))
+        .themeId(resultSet.getLong("theme_id"))
         .date(resultSet.getObject("date", LocalDate.class))
         .time(resultSet.getObject("time", LocalTime.class))
         .name(resultSet.getString("name"))
@@ -33,13 +34,14 @@ public class JdbcReservationRepository implements ReservationRepository {
   public ReservationEntity save(ReservationEntity reservation) {
     var keyHolder = new GeneratedKeyHolder();
 
-    var sql = "INSERT INTO reservation (schedule_id, date, time, name) values (?, ?, ?, ?)";
+    var sql = "INSERT INTO reservation (schedule_id, theme_id, date, time, name) values (?, ?, ?, ?, ?)";
     jdbcTemplate.update(con -> {
       var ps = con.prepareStatement(sql, new String[]{"id"});
       ps.setObject(1, reservation.getScheduleId());
-      ps.setObject(2, reservation.getDate());
-      ps.setObject(3, reservation.getTime());
-      ps.setString(4, reservation.getName());
+      ps.setObject(2, reservation.getThemeId());
+      ps.setObject(3, reservation.getDate());
+      ps.setObject(4, reservation.getTime());
+      ps.setString(5, reservation.getName());
       return ps;
     }, keyHolder);
 

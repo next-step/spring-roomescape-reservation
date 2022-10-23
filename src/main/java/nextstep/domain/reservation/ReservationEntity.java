@@ -16,6 +16,7 @@ public class ReservationEntity {
 
   Long id;
   Long scheduleId;
+  Long themeId;
   LocalDate date;
   LocalTime time;
   String name;

@@ -34,7 +34,7 @@ class ScheduleControllerTest extends ApiDocument {
     var schedule = Schedule.builder()
         .themeId(1L)
         .date(LocalDate.now())
-        .time("13:00")
+        .time(LocalTime.parse("13:00"))
         .build();
     given(service.create(schedule)).willReturn(1L);
     //when

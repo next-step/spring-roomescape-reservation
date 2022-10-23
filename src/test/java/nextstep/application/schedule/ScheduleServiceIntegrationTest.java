@@ -3,6 +3,7 @@ package nextstep.application.schedule;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import nextstep.application.schedule.dto.Schedule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ class ScheduleServiceIntegrationTest {
     var schedule = Schedule.builder()
         .themeId(1L)
         .date(LocalDate.now())
-        .time("13:00")
+        .time(LocalTime.parse("13:00"))
         .build();
     //when
     var actual = sut.create(schedule);

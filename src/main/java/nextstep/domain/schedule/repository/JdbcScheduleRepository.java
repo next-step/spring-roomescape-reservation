@@ -56,8 +56,25 @@ public class JdbcScheduleRepository implements ScheduleRepository {
   }
 
   @Override
+  public Optional<ScheduleEntity> findSchedule(Long id) {
+    var sql = "select * from schedule where id = ?";
+    try {
+      var entity = jdbcTemplate.queryForObject(sql, rowMapper, id);
+      return Optional.ofNullable(entity);
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
+
+  @Override
   public List<ScheduleEntity> findSchedules(Long themeId, LocalDate date) {
     var sql = "select * from schedule where theme_id = ? and date = ?";
     return jdbcTemplate.query(sql, rowMapper, themeId, date);
+  }
+
+  @Override
+  public void deleteSchedule(Long id) {
+    var sql = "delete from schedule where id = ?";
+    jdbcTemplate.update(sql, id);
   }
 }

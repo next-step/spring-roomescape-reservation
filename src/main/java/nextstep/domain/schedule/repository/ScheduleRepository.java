@@ -12,5 +12,9 @@ public interface ScheduleRepository {
 
   Optional<ScheduleEntity> findSchedule(Long themeId, LocalDate date, LocalTime time);
 
+  Optional<ScheduleEntity> findSchedule(Long id);
+
   List<ScheduleEntity> findSchedules(Long themeId, LocalDate date);
+
+  void deleteSchedule(Long id);
 }

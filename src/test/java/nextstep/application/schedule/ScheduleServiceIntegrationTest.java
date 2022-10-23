@@ -57,10 +57,10 @@ class ScheduleServiceIntegrationTest {
     var date = LocalDate.now();
     var time = LocalTime.now();
     var themeId = 테마_생성된다();
-    var schedule = 스케쥴_생성된다(themeId, date, time);
+    스케쥴_생성된다(themeId, date, time);
     //when
     //then
-    assertThatThrownBy(() -> sut.create(schedule))
+    assertThatThrownBy(() -> 스케쥴_생성된다(themeId, date, time))
         .isInstanceOf(IllegalArgumentException.class);
   }
 
@@ -70,7 +70,6 @@ class ScheduleServiceIntegrationTest {
     var themeId = 테마_생성된다();
     var date = LocalDate.now();
     var time = LocalTime.now();
-
     스케쥴_생성된다(themeId, date, time);
     스케쥴_생성된다(themeId, date, time.minus(1, ChronoUnit.HOURS));
     //when
@@ -79,14 +78,27 @@ class ScheduleServiceIntegrationTest {
     assertThat(actual).hasSize(2);
   }
 
-  private Schedule 스케쥴_생성된다(Long themeId, LocalDate date, LocalTime time) {
+  @Test
+  void 스케쥴_삭제한다() {
+    //given
+    var themeId = 테마_생성된다();
+    var date = LocalDate.now();
+    var time = LocalTime.now();
+    var scheduleId = 스케쥴_생성된다(themeId, date, time);
+    //when
+    sut.deleteSchedule(scheduleId);
+    var actual = sut.getSchedule(scheduleId);
+    //then
+    assertThat(actual).isNotPresent();
+  }
+
+  private Long 스케쥴_생성된다(Long themeId, LocalDate date, LocalTime time) {
     var schedule = Schedule.builder()
         .themeId(themeId)
         .date(date)
         .time(time)
         .build();
-    sut.create(schedule);
-    return schedule;
+    return sut.create(schedule);
   }
 
   private Long 테마_생성된다() {

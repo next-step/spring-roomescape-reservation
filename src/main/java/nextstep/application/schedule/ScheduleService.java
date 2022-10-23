@@ -2,6 +2,7 @@ package nextstep.application.schedule;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.schedule.dto.Schedule;
 import nextstep.application.schedule.dto.ScheduleRes;
@@ -46,7 +47,24 @@ public class ScheduleService {
         .toList();
   }
 
-  public void deleteSchedule(Long id) {
+  public Optional<ScheduleRes> getSchedule(Long scheduleId) {
+    var entity = repository.findSchedule(scheduleId);
+    if (entity.isPresent()) {
+      var schedule = entity.get();
+      return Optional.ofNullable(
+          ScheduleRes.builder()
+              .id(schedule.getId())
+              .theme(themeService.getTheme(schedule.getThemeId())
+                  .orElseThrow(() -> new IllegalArgumentException("테마를 찾을 수 없습니다")))
+              .date(schedule.getDate())
+              .time(schedule.getTime())
+              .build()
+      );
+    }
+    return Optional.empty();
+  }
 
+  public void deleteSchedule(Long id) {
+    repository.deleteSchedule(id);
   }
 }

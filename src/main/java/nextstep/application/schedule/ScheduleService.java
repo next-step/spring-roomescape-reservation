@@ -21,7 +21,7 @@ public class ScheduleService {
 
   private final ScheduleRepository repository;
 
-  private final SchedulePolicy policy;
+  private final ScheduleCreatePolicy policy;
 
   @Transactional
   public Long create(Schedule req) {

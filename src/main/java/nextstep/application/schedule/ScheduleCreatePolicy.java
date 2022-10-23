@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SchedulePolicy {
+public class ScheduleCreatePolicy {
 
-  private final List<ScheduleValidation> validations;
+  private final List<ScheduleCreateValidation> validations;
 
   public void checkValid(Schedule schedule) {
     validations.forEach(it -> it.checkValid(schedule));

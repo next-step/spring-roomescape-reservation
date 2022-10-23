@@ -2,21 +2,16 @@ package nextstep.web.reservation.dto;
 
 import nextstep.domain.reservation.model.Reservation;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class ReservationCreateRequest {
-    private String date;
-    private String time;
     private String name;
+    private Long scheduleId;
 
-    public ReservationCreateRequest(String date, String time, String name) {
-        this.date = date;
-        this.time = time;
+    public ReservationCreateRequest(String name, Long scheduleId) {
         this.name = name;
+        this.scheduleId = scheduleId;
     }
 
     public Reservation toEntity() {
-        return new Reservation(null, LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
+        return new Reservation(null, name, scheduleId);
     }
 }

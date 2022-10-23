@@ -1,6 +1,7 @@
 package nextstep.domain.schedule.service;
 
 import nextstep.domain.schedule.model.Schedule;
+import nextstep.domain.theme.service.ThemeService;
 import nextstep.exception.ClientException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ class ScheduleServiceTest {
 
     @Autowired
     private ScheduleService service;
+
+    @Autowired
+    private ThemeService themeService;
 
     @DisplayName("존재 하지 않는 테마 ID로 생성 요청시 클라이언트 예외가 발생한다.")
     @Test

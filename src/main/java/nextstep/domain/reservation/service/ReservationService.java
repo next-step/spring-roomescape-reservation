@@ -2,39 +2,54 @@ package nextstep.domain.reservation.service;
 
 import nextstep.domain.reservation.model.Reservation;
 import nextstep.domain.reservation.model.ReservationRepository;
+import nextstep.domain.schedule.model.Schedule;
+import nextstep.domain.schedule.model.ScheduleRepository;
 import nextstep.exception.ClientException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
-    private final ReservationRepository repository;
+    private final ReservationRepository reservationRepository;
+    private final ScheduleRepository scheduleRepository;
 
-    public ReservationService(ReservationRepository repository) {
-        this.repository = repository;
+    public ReservationService(ReservationRepository reservationRepository, ScheduleRepository scheduleRepository) {
+        this.reservationRepository = reservationRepository;
+        this.scheduleRepository = scheduleRepository;
     }
 
     public Long create(Reservation reservation) {
-        if (repository.findByDateAndTime(reservation.getDate().toString(), reservation.getTime().toString()).isPresent()) {
-            throw new ClientException("해당 날짜와 시간에 이미 예약이 존재합니다.");
+        if (scheduleRepository.findById(reservation.getScheduleId()).isEmpty()) {
+            throw new ClientException("존재하지 않는 일정에 예약할 수 없습니다.");
         }
 
-        return repository.create(reservation);
+        if (reservationRepository.findByScheduleId(reservation.getScheduleId()).isPresent()) {
+            throw new ClientException("해당 일정에 이미 존재하는 예약이 있습니다.");
+        }
+
+        return reservationRepository.create(reservation);
     }
 
-    public void removeByDateAndTime(String date, String time) {
-        if (repository.findByDateAndTime(date, time).isEmpty()) {
-            throw new ClientException("존재하지 않는 예약을 삭제할 수 없습니다.");
+    public void removeByScheduleId(Long scheduleId) {
+        if (reservationRepository.findByScheduleId(scheduleId).isEmpty()) {
+            throw new ClientException(String.format("해당 일정(ID:%d)에 대해 존재하지 않는 예약을 삭제할 수 없습니다.", scheduleId));
         }
 
-        repository.removeByDateAndTime(date, time);
+        reservationRepository.removeByScheduleId(scheduleId);
     }
 
     public List<ReservationResponse> findAllByDate(String date) {
-        return repository.findAllByDate(date).stream()
-            .map(ReservationResponse::new)
+        List<Schedule> schedules = scheduleRepository.findAllByDate(date);
+
+        List<Long> scheduleIds = schedules.stream()
+            .map(Schedule::getId)
+            .collect(Collectors.toList());
+
+        return reservationRepository.findAllByScheduledIds(scheduleIds).stream()
+            .map(reservation -> new ReservationResponse(reservation, schedules.stream().filter(schedule -> Objects.equals(schedule.getId(), reservation.getScheduleId())).findFirst().get()))
             .collect(Collectors.toList());
     }
 }

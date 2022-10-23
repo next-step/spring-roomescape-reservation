@@ -1,4 +1,4 @@
-package nextstep.domain.reservation.model;
+package nextstep.domain;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

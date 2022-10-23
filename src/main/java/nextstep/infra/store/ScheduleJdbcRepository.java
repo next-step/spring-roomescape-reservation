@@ -2,6 +2,7 @@ package nextstep.infra.store;
 
 import nextstep.domain.schedule.model.Schedule;
 import nextstep.domain.schedule.model.ScheduleRepository;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,6 +15,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 public class ScheduleJdbcRepository implements ScheduleRepository {
@@ -48,6 +50,25 @@ public class ScheduleJdbcRepository implements ScheduleRepository {
         }, keyHolder);
 
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
+    }
+
+    @Override
+    public Optional<Schedule> findById(Long id) {
+        final String query = "SELECT * FROM schedules WHERE id = ?";
+
+        try {
+            var theme = jdbcTemplate.queryForObject(query, rowMapper, id);
+            return Optional.ofNullable(theme);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<Schedule> findAllByDate(String date) {
+        final String query = "SELECT * FROM schedules WHERE date = ?";
+
+        return jdbcTemplate.query(query, rowMapper, date);
     }
 
     @Override

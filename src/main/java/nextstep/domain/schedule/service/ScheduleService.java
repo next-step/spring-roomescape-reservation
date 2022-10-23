@@ -43,4 +43,13 @@ public class ScheduleService {
             .map(it -> new ScheduleResponse(it, theme.get()))
             .collect(Collectors.toList());
     }
+
+    public List<ScheduleResponse> findAllByDate(String date) {
+        return scheduleRepository.findAllByDate(date).stream()
+            .map(schedule -> {
+                Theme theme = themeRepository.findById(schedule.getThemeId()).orElseThrow(() -> new ClientException(String.format("조회한 테마(ID:%d)가 존재하지 않습니다.", schedule.getThemeId())));
+                return new ScheduleResponse(schedule, theme);
+            })
+            .collect(Collectors.toList());
+    }
 }

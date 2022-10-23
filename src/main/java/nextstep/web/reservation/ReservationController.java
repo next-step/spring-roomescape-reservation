@@ -34,8 +34,8 @@ public class ReservationController {
     }
 
     @DeleteMapping("/reservations")
-    public ResponseEntity<Void> removeReservation(@RequestParam String date, @RequestParam String time) {
-        service.removeByDateAndTime(date, time);
+    public ResponseEntity<Void> removeReservationByScheduleId(@RequestParam Long scheduleId) {
+        service.removeByScheduleId(scheduleId);
         return ResponseEntity.noContent().build();
     }
 }

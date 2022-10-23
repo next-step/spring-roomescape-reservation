@@ -1,5 +1,7 @@
 package nextstep.domain.theme.model;
 
+import nextstep.domain.Identity;
+
 public class Theme {
     private Long id;
     private String name;
@@ -11,6 +13,11 @@ public class Theme {
         this.name = name;
         this.description = description;
         this.price = price;
+    }
+
+    public Theme withId() {
+        this.id = Identity.getId(Theme.class);
+        return this;
     }
 
     public Long getId() {

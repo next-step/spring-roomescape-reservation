@@ -1,4 +1,4 @@
-package nextstep.domain.reservation.model;
+package nextstep.domain;
 
 import java.util.HashMap;
 import java.util.Map;

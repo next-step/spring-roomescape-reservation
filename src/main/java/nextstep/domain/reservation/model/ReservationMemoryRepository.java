@@ -1,7 +1,5 @@
 package nextstep.domain.reservation.model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,25 +9,31 @@ import java.util.stream.Collectors;
 public class ReservationMemoryRepository implements ReservationRepository {
     private static final List<Reservation> reservations = new ArrayList<>();
 
+    @Override
     public Long create(Reservation reservation) {
-        reservations.add(reservation.withId());
+        Reservation reservationWithId = reservation.withId();
 
-        return (long) reservations.size();
+        reservations.add(reservation);
+
+        return reservationWithId.getId();
     }
 
-    public Optional<Reservation> findByDateAndTime(String date, String time) {
+    @Override
+    public Optional<Reservation> findByScheduleId(Long scheduleId) {
         return reservations.stream()
-            .filter(it -> Objects.equals(it.getDate(), LocalDate.parse(date)) && Objects.equals(it.getTime(), LocalTime.parse(time)))
+            .filter(it -> Objects.equals(it.getScheduleId(), scheduleId))
             .findFirst();
     }
 
-    public void removeByDateAndTime(String date, String time) {
-        findByDateAndTime(date, time).ifPresent(reservations::remove);
+    @Override
+    public List<Reservation> findAllByScheduledIds(List<Long> scheduleIds) {
+        return reservations.stream()
+            .filter(it -> scheduleIds.contains(it.getScheduleId()))
+            .collect(Collectors.toList());
     }
 
-    public List<Reservation> findAllByDate(String date) {
-        return reservations.stream()
-            .filter(it -> it.getDate().isEqual(LocalDate.parse(date)))
-            .collect(Collectors.toList());
+    @Override
+    public void removeByScheduleId(Long scheduleId) {
+        findByScheduleId(scheduleId).ifPresent(reservations::remove);
     }
 }

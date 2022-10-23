@@ -1,5 +1,7 @@
 package nextstep.domain.schedule.model;
 
+import nextstep.domain.Identity;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -14,6 +16,11 @@ public class Schedule {
         this.themeId = themeId;
         this.date = date;
         this.time = time;
+    }
+
+    public Schedule withId() {
+        this.id = Identity.getId(Schedule.class);
+        return this;
     }
 
     public Long getId() {

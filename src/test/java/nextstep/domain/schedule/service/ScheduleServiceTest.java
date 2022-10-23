@@ -32,7 +32,8 @@ class ScheduleServiceTest {
     @Test
     void create_WithNotExistedThemeId_ThrowException() {
         // given
-        Schedule schedule = new Schedule(null, 1L, LocalDate.of(2022, 8, 11), LocalTime.of(13, 10));
+        Long notExistedThemeId = 0L;
+        Schedule schedule = new Schedule(null, notExistedThemeId, LocalDate.of(2022, 8, 11), LocalTime.of(13, 10));
 
         // when, then
         assertThrows(ClientException.class, () -> scheduleService.create(schedule));

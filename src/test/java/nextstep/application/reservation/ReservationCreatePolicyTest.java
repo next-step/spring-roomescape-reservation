@@ -6,10 +6,12 @@ import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.application.schedule.ScheduleService;
+import nextstep.application.schedule.dto.ScheduleRes;
 import nextstep.domain.reservation.ReservationEntity;
 import nextstep.domain.reservation.repository.ReservationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -56,6 +58,31 @@ class ReservationCreatePolicyTest {
         .name("gump")
         .build();
     given(scheduleService.getSchedule(reservation.scheduleId())).willReturn(Optional.empty());
+    //when
+    //then
+    assertThatThrownBy(() -> sut.checkValid(reservation))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void 스케줄이랑_예약시각이_다르면_예외_발생한다() {
+    var sut = new ReservationCreatePolicy(
+        List.of(new ReservationCreateScheduleDateTimeNotSameValidation(scheduleService))
+    );
+    var date = LocalDate.now();
+    var time = LocalTime.parse("13:00:00");
+    var reservation = Reservation.builder()
+        .scheduleId(1L)
+        .date(date)
+        .time(time)
+        .name("gump")
+        .build();
+    given(scheduleService.getSchedule(reservation.scheduleId())).willReturn(Optional.of(
+        ScheduleRes.builder()
+            .date(date.minus(1, ChronoUnit.DAYS))
+            .time(time)
+            .build()
+    ));
     //when
     //then
     assertThatThrownBy(() -> sut.checkValid(reservation))

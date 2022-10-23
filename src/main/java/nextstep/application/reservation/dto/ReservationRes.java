@@ -11,8 +11,7 @@ import nextstep.application.schedule.dto.ScheduleRes;
 @Builder
 @Jacksonized
 public record ReservationRes(Long id, ScheduleRes schedule, LocalDate date,
-                             @JsonFormat(shape = Shape.STRING, pattern = "HH-mm-ss")
-                             LocalTime time,
+                             @JsonFormat(shape = Shape.STRING, pattern = "HH-mm-ss") LocalTime time,
                              String name) {
 
 }

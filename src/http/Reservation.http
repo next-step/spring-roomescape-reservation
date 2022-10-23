@@ -3,7 +3,8 @@ POST {{reservation-api}}/reservations
 content-type: application/json; charset=UTF-8
 
 {
-  "scheduleId" : 1,
+  "scheduleId": 1,
+  "themeId": 1,
   "date": "2022-08-11",
   "time": "13:00",
   "name": "name"

@@ -2,18 +2,18 @@ package nextstep.application.reservation;
 
 import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.dto.Reservation;
-import nextstep.application.schedule.ScheduleService;
+import nextstep.application.schedule.ScheduleQueryService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationCreateScheduleNotExistValidation implements ReservationCreateValidation {
 
-  private final ScheduleService scheduleService;
+  private final ScheduleQueryService scheduleQueryService;
 
   @Override
   public void checkValid(Reservation reservation) {
-    var schedule = scheduleService.getSchedule(reservation.scheduleId());
+    var schedule = scheduleQueryService.getSchedule(reservation.scheduleId());
     if (schedule.isEmpty()) {
       throw new IllegalArgumentException(String.format("스케쥴이 존재하지 않습니다. 스케쥴ID: %s", reservation.scheduleId()));
     }

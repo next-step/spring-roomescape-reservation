@@ -5,19 +5,19 @@ import java.time.LocalTime;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.dto.Reservation;
-import nextstep.application.schedule.ScheduleService;
+import nextstep.application.schedule.ScheduleQueryService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationCreateScheduleDateTimeNotSameValidation implements ReservationCreateValidation {
 
-  private final ScheduleService scheduleService;
+  private final ScheduleQueryService scheduleQueryService;
 
   @Override
   public void checkValid(Reservation reservation) {
     // 2번 validation에 존재하지 않음을 증명하기에, get으로 가져옴.
-    var schedule = scheduleService.getSchedule(reservation.scheduleId()).get();
+    var schedule = scheduleQueryService.getSchedule(reservation.scheduleId()).get();
     var reservationDate = reservation.date();
     var reservationTime = reservation.time();
     var scheduleDate = schedule.date();

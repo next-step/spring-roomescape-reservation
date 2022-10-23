@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import nextstep.application.reservation.dto.Reservation;
-import nextstep.application.schedule.ScheduleService;
+import nextstep.application.schedule.ScheduleQueryService;
 import nextstep.application.schedule.dto.ScheduleRes;
 import nextstep.domain.reservation.ReservationEntity;
 import nextstep.domain.reservation.repository.ReservationRepository;
@@ -29,7 +29,7 @@ class ReservationCreatePolicyTest {
   private ReservationRepository repository;
 
   @Mock
-  private ScheduleService scheduleService;
+  private ScheduleQueryService scheduleQueryService;
 
   @Test
   void 이미존재하는_예약이_있을시_예외_발생한다() {
@@ -50,14 +50,15 @@ class ReservationCreatePolicyTest {
 
   @Test
   void 스케줄이_존재하지_않으면_예외_발생한다() {
-    var sut = new ReservationCreatePolicy(List.of(new ReservationCreateScheduleNotExistValidation(scheduleService)));
+    var sut = new ReservationCreatePolicy(
+        List.of(new ReservationCreateScheduleNotExistValidation(scheduleQueryService)));
     var reservation = Reservation.builder()
         .scheduleId(1L)
         .date(LocalDate.now())
         .time(LocalTime.now())
         .name("gump")
         .build();
-    given(scheduleService.getSchedule(reservation.scheduleId())).willReturn(Optional.empty());
+    given(scheduleQueryService.getSchedule(reservation.scheduleId())).willReturn(Optional.empty());
     //when
     //then
     assertThatThrownBy(() -> sut.checkValid(reservation))
@@ -67,7 +68,7 @@ class ReservationCreatePolicyTest {
   @Test
   void 스케줄이랑_예약시각이_다르면_예외_발생한다() {
     var sut = new ReservationCreatePolicy(
-        List.of(new ReservationCreateScheduleDateTimeNotSameValidation(scheduleService))
+        List.of(new ReservationCreateScheduleDateTimeNotSameValidation(scheduleQueryService))
     );
     var date = LocalDate.now();
     var time = LocalTime.parse("13:00:00");
@@ -77,7 +78,7 @@ class ReservationCreatePolicyTest {
         .time(time)
         .name("gump")
         .build();
-    given(scheduleService.getSchedule(reservation.scheduleId())).willReturn(Optional.of(
+    given(scheduleQueryService.getSchedule(reservation.scheduleId())).willReturn(Optional.of(
         ScheduleRes.builder()
             .date(date.minus(1, ChronoUnit.DAYS))
             .time(time)

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.themes.dto.Theme;
+import nextstep.application.themes.dto.ThemeDeleteValidationDto;
 import nextstep.application.themes.dto.ThemeRes;
 import nextstep.domain.theme.ThemeEntity;
 import nextstep.domain.theme.repository.ThemeRepository;
@@ -16,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ThemeService {
 
   private final ThemeRepository repository;
+  private final ThemeQueryService themeQueryService;
+
+  private final ThemeDeletePolicy deletePolicy;
 
   @Transactional
   public Long create(Theme req) {
@@ -29,33 +33,17 @@ public class ThemeService {
   }
 
   public List<ThemeRes> getThemes() {
-    var themes = repository.findAllThemes();
-    return themes.stream()
-        .map(it -> ThemeRes.builder()
-            .id(it.getId())
-            .name(it.getName())
-            .desc(it.getDesc())
-            .price(it.getPrice())
-            .build())
-        .toList();
+    return themeQueryService.getThemes();
   }
 
   public void delete(Long id) {
+    deletePolicy.checkValid(ThemeDeleteValidationDto.builder()
+        .id(id)
+        .build());
     repository.deleteById(id);
   }
 
   public Optional<ThemeRes> getTheme(Long themeId) {
-    var entity = repository.findTheme(themeId);
-    if (entity.isPresent()) {
-      var theme = entity.get();
-      return Optional.ofNullable(ThemeRes.builder()
-          .id(theme.getId())
-          .name(theme.getName())
-          .desc(theme.getDesc())
-          .price(theme.getPrice())
-          .build());
-    }
-    return Optional.empty();
+    return themeQueryService.getTheme(themeId);
   }
-
 }

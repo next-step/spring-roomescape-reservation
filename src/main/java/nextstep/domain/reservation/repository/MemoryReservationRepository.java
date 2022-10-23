@@ -59,4 +59,11 @@ public class MemoryReservationRepository implements ReservationRepository {
         .filter(it -> Objects.equals(it.getThemeId(), themeId))
         .findFirst();
   }
+
+  @Override
+  public Optional<ReservationEntity> findReservationByScheduleId(Long scheduleId) {
+    return STORE.values().stream()
+        .filter(it -> Objects.equals(it.getScheduleId(), scheduleId))
+        .findFirst();
+  }
 }

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.application.reservation.dto.ReservationDeleteValidationDto;
 import nextstep.application.reservation.dto.ReservationRes;
-import nextstep.application.schedule.ScheduleService;
 import nextstep.domain.reservation.ReservationEntity;
 import nextstep.domain.reservation.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ReservationService {
 
-  private final ScheduleService scheduleService;
+  private final ReservationQueryService reservationQueryService;
 
   private final ReservationRepository repository;
 
@@ -41,18 +40,7 @@ public class ReservationService {
   }
 
   public List<ReservationRes> findReservations(LocalDate date) {
-    var reservations = repository.findReservationsByDate(date);
-    return reservations.stream()
-        .map(it -> ReservationRes.builder()
-            .id(it.getId())
-            .schedule(scheduleService.getSchedule(it.getScheduleId()).orElseThrow(
-                () -> new IllegalArgumentException(String.format("스케쥴을 찾을 수 없습니다. 스케쥴ID: %s", it.getScheduleId())))
-            )
-            .date(it.getDate())
-            .time(it.getTime())
-            .name(it.getName())
-            .build())
-        .toList();
+    return reservationQueryService.findReservations(date);
   }
 
   @Transactional
@@ -65,22 +53,10 @@ public class ReservationService {
   }
 
   public Optional<ReservationRes> getReservationByThemeId(Long themeId) {
-    var entity = repository.findReservationByThemeId(themeId);
-    if (entity.isPresent()) {
-      var reservation = entity.get();
-      Optional.ofNullable(ReservationRes.builder()
-          .id(reservation.getId())
-          .schedule(scheduleService.getSchedule(reservation.getScheduleId()).orElseThrow(
-              () -> new IllegalArgumentException(
-                  String.format("스케쥴을 찾을 수 없습니다. 스케쥴ID: %s", reservation.getScheduleId())))
-          )
-          .date(reservation.getDate())
-          .time(reservation.getTime())
-          .name(reservation.getName())
-          .build());
-
-    }
-    return Optional.empty();
+    return reservationQueryService.getReservationByThemeId(themeId);
   }
 
+  public Optional<ReservationRes> getReservationByScheduleId(Long scheduleId) {
+    return reservationQueryService.getReservationByScheduleId(scheduleId);
+  }
 }

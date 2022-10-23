@@ -19,4 +19,6 @@ public interface ReservationRepository {
   Optional<ReservationEntity> getReservation(Long id);
 
   Optional<ReservationEntity> findReservationByThemeId(Long themeId);
+
+  Optional<ReservationEntity> findReservationByScheduleId(Long scheduleId);
 }

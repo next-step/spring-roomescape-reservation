@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
         final ReservationService reservationService = new ReservationService(new ReservationMemoryRepository(), new ScheduleMemoryRepository());
         final ScheduleService scheduleService = new ScheduleService(new ScheduleMemoryRepository(), new ThemeMemoryRepository(), new ReservationMemoryRepository());
-        final ThemeService themeService = new ThemeService(new ThemeMemoryRepository());
+        final ThemeService themeService = new ThemeService(new ThemeMemoryRepository(), new ScheduleMemoryRepository(), new ReservationMemoryRepository());
 
         createFixtures(scheduleService, themeService);
 

@@ -72,6 +72,13 @@ public class ScheduleJdbcRepository implements ScheduleRepository {
     }
 
     @Override
+    public List<Schedule> findAllByThemeId(Long themeId) {
+        final String query = "SELECT * FROM schedules WHERE theme_id = ?";
+
+        return jdbcTemplate.query(query, rowMapper, themeId);
+    }
+
+    @Override
     public List<Schedule> findAllByThemeIdAndDate(Long themeId, String date) {
         final String query = "SELECT * FROM schedules WHERE theme_id = ? AND date = ?";
 

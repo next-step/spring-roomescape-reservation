@@ -30,6 +30,13 @@ public class ScheduleMemoryRepository implements ScheduleRepository {
     }
 
     @Override
+    public List<Schedule> findAllByThemeId(Long themeId) {
+        return schedules.stream()
+            .filter(it -> Objects.equals(it.getThemeId(), themeId))
+            .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Schedule> findAllByThemeIdAndDate(Long themeId, String date) {
         return schedules.stream()
             .filter(it -> Objects.equals(it.getThemeId(), themeId) && Objects.equals(it.getDate().toString(), date))

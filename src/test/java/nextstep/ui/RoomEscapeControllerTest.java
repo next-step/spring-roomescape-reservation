@@ -8,12 +8,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import nextstep.ApiDocument;
 import nextstep.application.reservation.RoomEscapeService;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.application.reservation.dto.ReservationRes;
+import nextstep.application.schedule.dto.ScheduleRes;
+import nextstep.application.themes.dto.ThemeRes;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +34,7 @@ class RoomEscapeControllerTest extends ApiDocument {
   void 예약_생성한다() throws Exception {
     //given
     var reservationReq = Reservation.builder()
+        .scheduleId(1L)
         .date(LocalDate.now())
         .time("13:00")
         .name("gump")
@@ -58,8 +63,22 @@ class RoomEscapeControllerTest extends ApiDocument {
   void 예약_목록_조회한다() throws Exception {
     //given
     var date = LocalDate.now();
+    var scheduleRes = ScheduleRes.builder()
+        .id(1L)
+        .theme(
+            ThemeRes.builder()
+                .id(1L)
+                .name("테마이름")
+                .desc("테마설명")
+                .price(BigDecimal.valueOf(22000))
+                .build()
+        )
+        .date(date)
+        .time(LocalTime.parse("13:00"))
+        .build();
     var reservationRes = List.of(ReservationRes.builder()
         .id(1L)
+        .schedule(scheduleRes)
         .date(date)
         .time("13:00")
         .name("gump")

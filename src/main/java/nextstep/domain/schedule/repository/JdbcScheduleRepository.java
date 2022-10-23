@@ -2,6 +2,7 @@ package nextstep.domain.schedule.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.domain.schedule.ScheduleEntity;
@@ -52,5 +53,11 @@ public class JdbcScheduleRepository implements ScheduleRepository {
     } catch (EmptyResultDataAccessException e) {
       return Optional.empty();
     }
+  }
+
+  @Override
+  public List<ScheduleEntity> findSchedules(Long themeId, LocalDate date) {
+    var sql = "select * from schedule where theme_id = ? and date = ?";
+    return jdbcTemplate.query(sql, rowMapper, themeId, date);
   }
 }

@@ -5,18 +5,24 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.schedule.dto.Schedule;
 import nextstep.application.schedule.dto.ScheduleRes;
+import nextstep.application.themes.ThemeService;
 import nextstep.domain.schedule.ScheduleEntity;
 import nextstep.domain.schedule.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ScheduleService {
+
+  private final ThemeService themeService;
 
   private final ScheduleRepository repository;
 
   private final SchedulePolicy policy;
 
+  @Transactional
   public Long create(Schedule req) {
     policy.checkValid(req);
     var schedule = ScheduleEntity.builder()
@@ -29,7 +35,15 @@ public class ScheduleService {
   }
 
   public List<ScheduleRes> getSchedules(Long themeId, LocalDate date) {
-    return null;
+    var schedules = repository.findSchedules(themeId, date);
+    return schedules.stream()
+        .map(it -> ScheduleRes.builder()
+            .id(it.getId())
+            .theme(themeService.getTheme(themeId).orElseThrow(() -> new IllegalArgumentException("테마를 찾을 수 없습니다")))
+            .date(it.getDate())
+            .time(it.getTime())
+            .build())
+        .toList();
   }
 
   public void deleteSchedule(Long id) {

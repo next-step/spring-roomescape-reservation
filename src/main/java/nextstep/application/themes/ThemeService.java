@@ -1,6 +1,7 @@
 package nextstep.application.themes;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.themes.dto.Theme;
 import nextstep.application.themes.dto.ThemeRes;
@@ -42,4 +43,19 @@ public class ThemeService {
   public void delete(Long id) {
     repository.deleteById(id);
   }
+
+  public Optional<ThemeRes> getTheme(Long themeId) {
+    var entity = repository.findTheme(themeId);
+    if (entity.isPresent()) {
+      var theme = entity.get();
+      return Optional.ofNullable(ThemeRes.builder()
+          .id(theme.getId())
+          .name(theme.getName())
+          .desc(theme.getDesc())
+          .price(theme.getPrice())
+          .build());
+    }
+    return Optional.empty();
+  }
+
 }

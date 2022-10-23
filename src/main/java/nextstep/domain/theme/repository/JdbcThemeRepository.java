@@ -1,8 +1,10 @@
 package nextstep.domain.theme.repository;
 
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.domain.theme.ThemeEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -51,5 +53,16 @@ public class JdbcThemeRepository implements ThemeRepository {
   public void deleteById(Long id) {
     var sql = "delete from theme where id = ?";
     jdbcTemplate.update(sql, id);
+  }
+
+  @Override
+  public Optional<ThemeEntity> findTheme(Long id) {
+    var sql = "select * from theme where id = ?";
+    try {
+      var entity = jdbcTemplate.queryForObject(sql, rowMapper, id);
+      return Optional.ofNullable(entity);
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
   }
 }

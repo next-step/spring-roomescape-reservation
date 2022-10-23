@@ -1,20 +1,12 @@
 package nextstep.domain.reservation.dto;
 
-import static nextstep.domain.reservation.Reservation.adjustReservationTimeRule;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 import lombok.Builder;
-import lombok.extern.jackson.Jacksonized;
 
 public record ReservationFindCondition(
-    LocalDate date,
-    LocalTime time
+    Long scheduleId
 ) {
 
-  @Builder(toBuilder = true)
-  @Jacksonized
+  @Builder
   public ReservationFindCondition {
-    time = adjustReservationTimeRule(time);
   }
 }

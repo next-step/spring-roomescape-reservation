@@ -2,11 +2,15 @@ package nextstep.domain.theme;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import nextstep.domain.theme.dto.ThemeCommandDto.Create;
 import nextstep.domain.theme.dto.ThemeCommandDto.Delete;
+import nextstep.domain.theme.validator.ThemeDeleteValidator;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -25,6 +29,7 @@ public class ThemeRepositoryImpl implements ThemeRepository {
       .build();
 
   JdbcTemplate jdbcTemplate;
+  Set<ThemeDeleteValidator> deleteValidators;
 
   @Override
   public Theme save(Create createReq) {
@@ -61,12 +66,29 @@ public class ThemeRepositoryImpl implements ThemeRepository {
     return jdbcTemplate.query(sql, themeRowMapper);
   }
 
+  @Override
+  public Optional<Theme> findById(Long id) {
+    String sql = """
+        select id, name, price, description
+        from theme 
+        where id = ? 
+        """;
+
+    try {
+      return Optional.ofNullable(jdbcTemplate.queryForObject(sql, themeRowMapper, id));
+    } catch (IncorrectResultSizeDataAccessException e) {
+      return Optional.empty();
+    }
+  }
+
   /**
    * @param deleteReq
    * @return 실제로 삭제 되었는지 여부. 삭제 되었으면 true, 그렇지 않으면 false
    */
   @Override
   public boolean delete(Delete deleteReq) {
+    deleteValidators.forEach(validator -> validator.validate(deleteReq));
+
     String sql = """
         delete 
         from theme 

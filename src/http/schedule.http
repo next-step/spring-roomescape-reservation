@@ -4,12 +4,12 @@ Content-Type: application/json
 
 {
   "themeId": 1,
-  "date": "2022-10-17",
+  "date": "2022-10-24",
   "time": "10:00"
 }
 
 ### 스케줄 삭제
-DELETE http://localhost:8080/schedules/1
+DELETE http://localhost:8080/schedules/2
 Content-Type: application/json
 
 ### 스케줄 조회

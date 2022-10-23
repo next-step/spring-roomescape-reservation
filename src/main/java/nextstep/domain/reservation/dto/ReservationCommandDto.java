@@ -10,16 +10,9 @@ import lombok.extern.jackson.Jacksonized;
 public class ReservationCommandDto {
 
   public record Create(
-      LocalDate date,
-      LocalTime time,
+      Long scheduleId,
       String name
   ) {
-
-    @Jacksonized
-    @Builder(toBuilder = true)
-    public Create {
-      time = adjustReservationTimeRule(time);
-    }
   }
 
   public record Delete(

@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import nextstep.controller.dto.ScheduleViewResponse;
 import nextstep.domain.schedule.Schedule;
 import nextstep.domain.schedule.ScheduleRepository;
+import nextstep.domain.schedule.dto.ScheduleFindCondition;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ public class ScheduleQueryController {
 
   @GetMapping
   public ResponseEntity<List<ScheduleViewResponse.Schedule>> getSchedules() {
-    List<Schedule> schedules = scheduleRepository.findAll();
+    List<Schedule> schedules = scheduleRepository.findAll(ScheduleFindCondition.EMPTY);
     List<ScheduleViewResponse.Schedule> responses = schedules.stream()
         .map(ScheduleViewResponse.Schedule::of)
         .toList();

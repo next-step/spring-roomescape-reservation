@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import nextstep.domain.theme.Theme;
 
 @Getter
 @EqualsAndHashCode
@@ -17,14 +18,14 @@ import lombok.experimental.FieldDefaults;
 public class Schedule {
 
   Long id;
-  Long themeId;
+  Theme theme;
   LocalDate date;
   LocalTime time;
 
   @Builder(toBuilder = true)
-  public Schedule(Long id, Long themeId, LocalDate date, LocalTime time) {
+  public Schedule(Long id, Theme theme, LocalDate date, LocalTime time) {
     this.id = id;
-    this.themeId = themeId;
+    this.theme = theme;
     this.date = date;
     this.time = adjustReservationTimeRule(time);
   }

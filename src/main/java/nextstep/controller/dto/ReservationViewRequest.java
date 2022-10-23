@@ -8,21 +8,17 @@ import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 import nextstep.domain.reservation.dto.ReservationCommandDto;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class ReservationViewRequest {
 
   private static final String DATE_ERROR_MESSAGE = "일자는 비어있을 수 없습니다.";
   private static final String TIME_ERROR_MESSAGE = "시간은 비어있을 수 없습니다.";
+  private static final String SCHEDULE_ERROR_MESSAGE = "스케줄 ID는 비어있을 수 없습니다.";
   private static final String NAME_ERROR_MESSAGE = "이름은 비어있을 수 없습니다.";
 
   public record FindCondition(
-      @NotNull(message = DATE_ERROR_MESSAGE)
-      @DateTimeFormat(pattern = "yyyy-MM-dd")
-      LocalDate date,
-      @NotNull(message = TIME_ERROR_MESSAGE)
-      @DateTimeFormat(pattern = "HH:mm")
-      LocalTime time
+      @NotNull(message = SCHEDULE_ERROR_MESSAGE)
+      Long scheduleId
   ) {
 
     @Builder(toBuilder = true)
@@ -32,17 +28,14 @@ public class ReservationViewRequest {
 
     public ReservationFindCondition toDomainCondition() {
       return ReservationFindCondition.builder()
-          .date(date)
-          .time(time)
+          .scheduleId(scheduleId)
           .build();
     }
   }
 
   public record Create(
-      @NotNull(message = DATE_ERROR_MESSAGE)
-      LocalDate date,
-      @NotNull(message = TIME_ERROR_MESSAGE)
-      LocalTime time,
+      @NotNull(message = SCHEDULE_ERROR_MESSAGE)
+      Long scheduleId,
       @NotBlank(message = NAME_ERROR_MESSAGE)
       String name
   ) {
@@ -52,7 +45,7 @@ public class ReservationViewRequest {
     }
 
     public ReservationCommandDto.Create toDomainCommand() {
-      return new ReservationCommandDto.Create(date, time, name);
+      return new ReservationCommandDto.Create(scheduleId, name);
     }
   }
 

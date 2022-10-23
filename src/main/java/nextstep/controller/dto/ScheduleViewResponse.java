@@ -7,13 +7,22 @@ public class ScheduleViewResponse {
 
   public record Schedule(
       Long id,
-      Long themeId,
+      ThemeViewResponse.Theme theme,
       LocalDate date,
       LocalTime time
   ) {
 
     public static Schedule of(nextstep.domain.schedule.Schedule domain) {
-      return new Schedule(domain.getId(), domain.getThemeId(), domain.getDate(), domain.getTime());
+      return new Schedule(domain.getId(), ThemeViewResponse.Theme.of(domain.getTheme()), domain.getDate(), domain.getTime());
+    }
+  }
+
+  public record SimpleSchedule(
+      Long id
+  ) {
+
+    public static SimpleSchedule of(nextstep.domain.schedule.Schedule domain) {
+      return new SimpleSchedule(domain.getId());
     }
   }
 }

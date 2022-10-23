@@ -1,6 +1,5 @@
 package nextstep.domain.reservation;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import lombok.AccessLevel;
@@ -9,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
+import nextstep.domain.schedule.Schedule;
 import nextstep.exception.ReservationIllegalArgumentException;
 
 @Getter
@@ -18,16 +18,14 @@ import nextstep.exception.ReservationIllegalArgumentException;
 public class Reservation {
 
   Long id;
-  LocalDate date;
-  LocalTime time;
   Name name;
+  Schedule schedule;
 
   @Builder(toBuilder = true)
-  public Reservation(Long id, LocalDate date, LocalTime time, Name name) {
+  private Reservation(Long id, Name name, Schedule schedule) {
     this.id = id;
-    this.date = date;
-    this.time = adjustReservationTimeRule(time);
     this.name = name;
+    this.schedule = schedule;
   }
 
   public static LocalTime adjustReservationTimeRule(LocalTime time) {
@@ -48,11 +46,7 @@ public class Reservation {
     }
   }
 
-  public boolean hasSameDateTime(Reservation that) {
-    return hasSameDateTime(that.date, that.time);
-  }
-
-  public boolean hasSameDateTime(LocalDate date, LocalTime time) {
-    return this.date.equals(date) && this.time.equals(time);
+  public boolean hasSameSchedule(Reservation that) {
+    return this.schedule.equals(that.schedule);
   }
 }

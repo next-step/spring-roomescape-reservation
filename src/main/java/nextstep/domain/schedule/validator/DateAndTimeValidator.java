@@ -1,24 +1,24 @@
-package nextstep.domain.reservation.validator;
+package nextstep.domain.schedule.validator;
 
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
-import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
+import nextstep.domain.schedule.dto.ScheduleCommandDto.Create;
 import nextstep.exception.ReservationIllegalArgumentException;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class DateAndTimeValidator implements ReservationCreateValidator {
+public class DateAndTimeValidator implements ScheduleCreateValidator {
 
   @Override
-  public void validate(Create createReq) {
+  public void validate(Create create) {
     var now = LocalDateTime.now();
 
     var criteriaDate = now.toLocalDate();
     var criteriaTime = now.toLocalTime();
 
-    var requestDate = createReq.date();
-    var requestTime = createReq.time();
+    var requestDate = create.date();
+    var requestTime = create.time();
 
     if (criteriaDate.isAfter(requestDate)) {
       var message = "이미 지난 날짜에 대해 예약할 수 없습니다. 현재 날짜 : %s, 요청 날짜 : %s".formatted(requestDate, criteriaDate);

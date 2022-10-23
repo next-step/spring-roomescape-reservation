@@ -3,8 +3,7 @@ POST http://localhost:8080/reservations
 Content-Type: application/json
 
 {
-  "date": "2022-10-17",
-  "time": "10:00",
+  "scheduleId": "2",
   "name": "성시형"
 }
 
@@ -18,5 +17,5 @@ Content-Type: application/json
 }
 
 ### 예약 조회
-GET http://localhost:8080/reservations?date=2022-10-17&time=10:00
+GET http://localhost:8080/reservations?scheduleId=2
 

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class MemoryReservationRepository implements ReservationRepository {
 
   private static final Map<Long, ReservationEntity> STORE = new ConcurrentHashMap<>();
-  private static AtomicLong sequence = new AtomicLong(1L);
+  private static final AtomicLong sequence = new AtomicLong(1L);
 
   @Override
   public ReservationEntity save(ReservationEntity reservation) {
@@ -43,6 +43,13 @@ public class MemoryReservationRepository implements ReservationRepository {
   public Optional<ReservationEntity> findReservationsByDateAndTime(LocalDate date, LocalTime time) {
     return STORE.values().stream()
         .filter(it -> it.getDate().isEqual(date) && Objects.equals(it.getTime(), time))
+        .findFirst();
+  }
+
+  @Override
+  public Optional<ReservationEntity> getReservation(Long id) {
+    return STORE.values().stream()
+        .filter(it -> Objects.equals(it.getId(), id))
         .findFirst();
   }
 }

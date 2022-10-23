@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.dto.Reservation;
+import nextstep.application.reservation.dto.ReservationDeleteValidationDto;
 import nextstep.application.reservation.dto.ReservationRes;
 import nextstep.domain.reservation.ReservationEntity;
 import nextstep.domain.reservation.repository.ReservationRepository;
@@ -19,11 +20,12 @@ public class RoomEscapeService {
 
   private final ReservationRepository repository;
 
-  private final ReservationCreatePolicy policy;
+  private final ReservationCreatePolicy createPolicy;
+  private final ReservationDeletePolicy deletePolicy;
 
   @Transactional
   public Long create(Reservation req) {
-    policy.checkValid(req);
+    createPolicy.checkValid(req);
     var reservation = ReservationEntity.builder()
         .date(req.date())
         .time(LocalTime.parse(req.time()))
@@ -48,6 +50,10 @@ public class RoomEscapeService {
   @Transactional
   public void removeReservation(LocalDate date, String time) {
     var targetTime = LocalTime.parse(time);
+    deletePolicy.checkValid(ReservationDeleteValidationDto.builder()
+        .date(date)
+        .time(targetTime)
+        .build());
     repository.deleteByDateAndTime(date, targetTime);
   }
 

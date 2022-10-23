@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Scanner;
 import nextstep.application.reservation.ReservationCreateExistValidation;
 import nextstep.application.reservation.ReservationCreatePolicy;
+import nextstep.application.reservation.ReservationDeleteNotExistValidation;
+import nextstep.application.reservation.ReservationDeletePolicy;
 import nextstep.application.reservation.RoomEscapeService;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.domain.reservation.repository.MemoryReservationRepository;
@@ -19,7 +21,9 @@ public class Main {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     RoomEscapeService service = new RoomEscapeService(new MemoryReservationRepository(),
-        new ReservationCreatePolicy(List.of(new ReservationCreateExistValidation(new MemoryReservationRepository()))));
+        new ReservationCreatePolicy(List.of(new ReservationCreateExistValidation(new MemoryReservationRepository()))),
+        new ReservationDeletePolicy(List.of(new ReservationDeleteNotExistValidation(new MemoryReservationRepository())))
+    );
 
     while (true) {
       System.out.println("메뉴를 선택하세요.");

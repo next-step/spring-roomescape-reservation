@@ -69,4 +69,15 @@ public class JdbcReservationRepository implements ReservationRepository {
       return Optional.empty();
     }
   }
+
+  @Override
+  public Optional<ReservationEntity> getReservation(Long id) {
+    var sql = "SELECT * FROM reservation where id = ?";
+    try {
+      var reservationEntity = jdbcTemplate.queryForObject(sql, rowMapper, id);
+      return Optional.ofNullable(reservationEntity);
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
+  }
 }

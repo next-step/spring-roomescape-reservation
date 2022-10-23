@@ -15,4 +15,6 @@ public interface ReservationRepository {
   void deleteByDateAndTime(LocalDate date, LocalTime time);
 
   Optional<ReservationEntity> findReservationsByDateAndTime(LocalDate date, LocalTime time);
+
+  Optional<ReservationEntity> getReservation(Long id);
 }

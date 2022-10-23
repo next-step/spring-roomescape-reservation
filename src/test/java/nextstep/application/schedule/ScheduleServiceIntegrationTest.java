@@ -1,6 +1,7 @@
 package nextstep.application.schedule;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -31,5 +32,20 @@ class ScheduleServiceIntegrationTest {
     var actual = sut.create(schedule);
     //then
     assertThat(actual).isNotNull();
+  }
+
+  @Test
+  void 동일시각에_동일한_테마를_가지는_스케쥴을_생성시_예외가_발생한다() {
+    //given
+    var schedule = Schedule.builder()
+        .themeId(1L)
+        .date(LocalDate.now())
+        .time(LocalTime.parse("13:00"))
+        .build();
+    sut.create(schedule);
+    //when
+    //then
+    assertThatThrownBy(() -> sut.create(schedule))
+        .isInstanceOf(IllegalArgumentException.class);
   }
 }

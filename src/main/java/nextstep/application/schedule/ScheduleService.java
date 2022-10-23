@@ -15,7 +15,10 @@ public class ScheduleService {
 
   private final ScheduleRepository repository;
 
+  private final SchedulePolicy policy;
+
   public Long create(Schedule req) {
+    policy.checkValid(req);
     var schedule = ScheduleEntity.builder()
         .themeId(req.themeId())
         .date(req.date())

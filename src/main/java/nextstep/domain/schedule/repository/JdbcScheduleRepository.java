@@ -2,8 +2,10 @@ package nextstep.domain.schedule.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import nextstep.domain.schedule.ScheduleEntity;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -39,5 +41,16 @@ public class JdbcScheduleRepository implements ScheduleRepository {
     return schedule.toBuilder()
         .id(keyHolder.getKey().longValue())
         .build();
+  }
+
+  @Override
+  public Optional<ScheduleEntity> findSchedule(Long themeId, LocalDate date, LocalTime time) {
+    var sql = "select * from schedule where theme_id = ? and date = ? and time = ?";
+    try {
+      var entity = jdbcTemplate.queryForObject(sql, rowMapper, themeId, date, time);
+      return Optional.ofNullable(entity);
+    } catch (EmptyResultDataAccessException e) {
+      return Optional.empty();
+    }
   }
 }

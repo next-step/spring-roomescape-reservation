@@ -1,6 +1,6 @@
-package nextstep.domain.reservation.exception;
+package nextstep.exception;
 
-public class ReservationIllegalArgumentException extends IllegalArgumentException {
+public class ReservationIllegalArgumentException extends DomainIllegalArgumentException {
 
   public ReservationIllegalArgumentException(String message) {
     super(message);

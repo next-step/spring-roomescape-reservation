@@ -1,0 +1,17 @@
+### 테마 등록
+POST http://localhost:8080/themes
+Content-Type: application/json
+
+{
+  "name": "넥스트스탭 코딩지옥",
+  "price": 22000,
+  "desc": "100만년 동안 코딩을 해야 탈출할 수 있다. 리뷰어 5만명의 approve를 받아라!"
+}
+
+### 테마 삭제
+DELETE http://localhost:8080/themes/1
+Content-Type: application/json
+
+### 테마 조회
+GET http://localhost:8080/themes
+Content-Type: application/json

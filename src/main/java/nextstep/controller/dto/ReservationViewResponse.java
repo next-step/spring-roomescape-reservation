@@ -1,19 +1,16 @@
 package nextstep.controller.dto;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import nextstep.domain.reservation.Reservation.Name;
 
 public class ReservationViewResponse {
 
   public record Reservation(
-      LocalDate date,
-      LocalTime time,
+      ScheduleViewResponse.SimpleSchedule schedule,
       Name name
   ) {
 
     public static Reservation of(nextstep.domain.reservation.Reservation domain) {
-      return new Reservation(domain.getDate(), domain.getTime(), domain.getName());
+      return new Reservation(ScheduleViewResponse.SimpleSchedule.of(domain.getSchedule()), domain.getName());
     }
   }
 }

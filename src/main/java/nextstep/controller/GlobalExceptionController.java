@@ -5,7 +5,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

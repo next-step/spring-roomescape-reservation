@@ -10,6 +10,8 @@ import nextstep.domain.reservation.Reservation.Name;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Create;
 import nextstep.domain.reservation.dto.ReservationCommandDto.Delete;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
+import nextstep.domain.schedule.Schedule;
+import nextstep.domain.schedule.ScheduleRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -19,10 +21,17 @@ import org.springframework.stereotype.Repository;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class ReservationRepositoryImpl implements ReservationRepository {
 
-  static RowMapper<Reservation> reservationRowMapper = (resultSet, rowNum) -> Reservation.builder()
-      .id(resultSet.getLong("id"))
+  ScheduleRepository scheduleRepository;
+
+  static RowMapper<Schedule> scheduleRowMapper = (resultSet, rowNum) -> Schedule.builder()
+      .id(resultSet.getLong("schedule_id"))
       .date(resultSet.getDate("date").toLocalDate())
       .time(resultSet.getTime("time").toLocalTime())
+      .build();
+
+  static RowMapper<Reservation> reservationRowMapper = (resultSet, rowNum) -> Reservation.builder()
+      .id(resultSet.getLong("id"))
+      .schedule(scheduleRowMapper.mapRow(resultSet, rowNum))
       .name(Name.of(resultSet.getString("name")))
       .build();
 
@@ -30,24 +39,22 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
   @Override
   public Reservation save(Create create) {
-    LocalDate date = create.date();
-    LocalTime time = create.time();
+    Long scheduleId = create.scheduleId();
     String name = create.name();
 
+    Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow();
     String saveQuery = """
-        insert into reservation (date, time, name) values (?, ?, ?)
+        insert into reservation (schedule_id, name) values (?, ?)
         """;
-
-    jdbcTemplate.update(saveQuery, date, time, name);
 
     String getIdQuery = "select last_insert_id ()";
     Long entityId = jdbcTemplate.queryForObject(getIdQuery, Long.class);
 
+    jdbcTemplate.update(saveQuery, scheduleId, name);
     return Reservation.builder()
         .id(entityId)
+        .schedule(schedule)
         .name(Name.of(name))
-        .date(date)
-        .time(time)
         .build();
   }
 
@@ -55,13 +62,15 @@ public class ReservationRepositoryImpl implements ReservationRepository {
   @Override
   public List<Reservation> findAll(ReservationFindCondition condition) {
     String sql = """
-        select id, date, time, name 
-        from reservation 
-        where date = ?
+        select r.id, r.schedule_id, r.name, s.id schedule_id, s.date, s.time, s.theme_id
+        from reservation r
+          inner join schedule s
+            on r.schedule_id = s.id
+        where r.schedule_id = ?
         order by date
         """;
 
-    return jdbcTemplate.query(sql, reservationRowMapper, condition.date());
+    return jdbcTemplate.query(sql, reservationRowMapper, condition.scheduleId());
   }
 
   /**
@@ -76,7 +85,12 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     String sql = """
         delete 
         from reservation 
-        where date = ? and time = ?
+        where 
+          schedule_id in (
+            select id 
+            from schedule 
+            where date = ? and time = ?
+          )
         """;
     int update = jdbcTemplate.update(sql, date, time);
     return update > 0;

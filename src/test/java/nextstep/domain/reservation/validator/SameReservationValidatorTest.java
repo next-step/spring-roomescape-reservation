@@ -9,7 +9,7 @@ import nextstep.domain.reservation.Reservation;
 import nextstep.domain.reservation.ReservationFinder;
 import nextstep.domain.reservation.ReservationFixtureFactory;
 import nextstep.domain.reservation.dto.ReservationFindCondition;
-import nextstep.domain.reservation.exception.ReservationIllegalArgumentException;
+import nextstep.exception.ReservationIllegalArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,6 @@
 package nextstep.domain.schedule.service;
 
+import nextstep.domain.reservation.model.ReservationRepository;
 import nextstep.domain.schedule.model.Schedule;
 import nextstep.domain.schedule.model.ScheduleRepository;
 import nextstep.domain.theme.model.Theme;
@@ -16,10 +17,12 @@ import java.util.stream.Collectors;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ThemeRepository themeRepository;
+    private final ReservationRepository reservationRepository;
 
-    public ScheduleService(ScheduleRepository scheduleRepository, ThemeRepository themeRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, ThemeRepository themeRepository, ReservationRepository reservationRepository) {
         this.scheduleRepository = scheduleRepository;
         this.themeRepository = themeRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public Long create(Schedule schedule) {
@@ -51,5 +54,13 @@ public class ScheduleService {
                 return new ScheduleResponse(schedule, theme);
             })
             .collect(Collectors.toList());
+    }
+
+    public void remove(Long id) {
+        if (reservationRepository.findByScheduleId(id).isPresent()) {
+            throw new ClientException("예약이 존재하는 일정은 제거할 수 없습니다");
+        }
+
+        scheduleRepository.removeById(id);
     }
 }

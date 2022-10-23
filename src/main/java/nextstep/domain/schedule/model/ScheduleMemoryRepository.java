@@ -3,7 +3,7 @@ package nextstep.domain.schedule.model;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ScheduleMemoryRepository implements ScheduleRepository{
+public class ScheduleMemoryRepository implements ScheduleRepository {
     private static final List<Schedule> schedules = new ArrayList<>();
 
     @Override
@@ -34,5 +34,10 @@ public class ScheduleMemoryRepository implements ScheduleRepository{
         return schedules.stream()
             .filter(it -> Objects.equals(it.getThemeId(), themeId) && Objects.equals(it.getDate().toString(), date))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public void removeById(Long id) {
+        schedules.removeIf(it -> Objects.equals(it.getId(), id));
     }
 }

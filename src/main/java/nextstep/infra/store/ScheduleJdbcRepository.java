@@ -77,4 +77,10 @@ public class ScheduleJdbcRepository implements ScheduleRepository {
 
         return jdbcTemplate.query(query, rowMapper, themeId, date);
     }
+
+    @Override
+    public void removeById(Long id) {
+        final String query = "DELETE FROM schedule WHERE id = ?";
+        jdbcTemplate.update(query, id);
+    }
 }

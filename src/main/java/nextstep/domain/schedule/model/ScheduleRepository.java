@@ -8,4 +8,6 @@ public interface ScheduleRepository {
     Optional<Schedule> findById(Long id);
     List<Schedule> findAllByDate(String date);
     List<Schedule> findAllByThemeIdAndDate(Long themeId, String date);
+
+    void removeById(Long id);
 }

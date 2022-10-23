@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import nextstep.ApiDocument;
-import nextstep.application.reservation.RoomEscapeService;
+import nextstep.application.reservation.ReservationService;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.application.reservation.dto.ReservationRes;
 import nextstep.application.schedule.dto.ScheduleRes;
@@ -24,11 +24,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-@WebMvcTest(RoomEscapeController.class)
-class RoomEscapeControllerTest extends ApiDocument {
+@WebMvcTest(ReservationController.class)
+class ReservationControllerTest extends ApiDocument {
 
   @MockBean
-  private RoomEscapeService service;
+  private ReservationService service;
 
   @Test
   void 예약_생성한다() throws Exception {

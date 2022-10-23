@@ -20,7 +20,7 @@ class ReservationCreatePolicyTest {
   ReservationCreatePolicy policy;
 
   @Autowired
-  RoomEscapeService service;
+  ReservationService service;
 
   @Test
   void reservation_validation_통과한다() {

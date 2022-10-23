@@ -28,9 +28,21 @@ class ScheduleServiceIntegrationTest {
   private ThemeService themeService;
 
   @Test
-  void 스케쥴_생성한다() {
+  void 스케쥴_생성시_테마가_존재하지_않으면_예외가_발생한다() {
     //given
     var themeId = 1L;
+    var date = LocalDate.now();
+    var time = LocalTime.now();
+    //when
+    //then
+    assertThatThrownBy(() -> 스케쥴_생성된다(themeId, date, time))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void 스케쥴_생성한다() {
+    //given
+    var themeId = 테마_생성된다();
     var date = LocalDate.now();
     var time = LocalTime.now();
     //when
@@ -42,9 +54,9 @@ class ScheduleServiceIntegrationTest {
   @Test
   void 동일시각에_동일한_테마를_가지는_스케쥴을_생성시_예외가_발생한다() {
     //given
-    var themeId = 1L;
     var date = LocalDate.now();
     var time = LocalTime.now();
+    var themeId = 테마_생성된다();
     var schedule = 스케쥴_생성된다(themeId, date, time);
     //when
     //then

@@ -1,28 +1,34 @@
-package nextstep.domain;
+package nextstep.domain.schedule.model;
+
+import nextstep.domain.Identity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Reservation {
+public class Schedule {
     private Long id;
+    private Long themeId;
     private LocalDate date;
     private LocalTime time;
-    private String name;
 
-    public Reservation(Long id, LocalDate date, LocalTime time, String name) {
+    public Schedule(Long id, Long themeId, LocalDate date, LocalTime time) {
         this.id = id;
+        this.themeId = themeId;
         this.date = date;
         this.time = time;
-        this.name = name;
     }
 
-    public Reservation withId() {
-        this.id = Identity.getId(Reservation.class);
+    public Schedule withId() {
+        this.id = Identity.getId(Schedule.class);
         return this;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Long getThemeId() {
+        return themeId;
     }
 
     public LocalDate getDate() {
@@ -31,9 +37,5 @@ public class Reservation {
 
     public LocalTime getTime() {
         return time;
-    }
-
-    public String getName() {
-        return name;
     }
 }

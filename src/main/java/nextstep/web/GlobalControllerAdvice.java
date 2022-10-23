@@ -1,6 +1,6 @@
-package nextstep.api;
+package nextstep.web;
 
-import nextstep.api.dto.ErrorResponse;
+import nextstep.web.dto.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,6 +11,6 @@ public class GlobalControllerAdvice {
     public ResponseEntity<ErrorResponse> handle(RuntimeException exception) {
         return ResponseEntity
             .badRequest()
-            .body(ErrorResponse.of(exception));
+            .body(ErrorResponse.from(exception));
     }
 }

@@ -1,4 +1,4 @@
-package nextstep.api.dto;
+package nextstep.web.dto;
 
 public class ErrorResponse {
     private String message;
@@ -14,7 +14,7 @@ public class ErrorResponse {
         return message;
     }
 
-    public static ErrorResponse of(Exception e) {
+    public static ErrorResponse from(Exception e) {
         return new ErrorResponse(e.getMessage());
     }
 }

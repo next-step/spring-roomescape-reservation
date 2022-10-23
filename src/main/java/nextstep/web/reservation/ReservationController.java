@@ -1,8 +1,8 @@
-package nextstep.api;
+package nextstep.web.reservation;
 
-import nextstep.api.dto.ReservationCreateRequest;
-import nextstep.api.dto.ReservationResponse;
-import nextstep.domain.service.ReservationService;
+import nextstep.web.reservation.dto.ReservationCreateRequest;
+import nextstep.web.reservation.dto.ReservationWebResponse;
+import nextstep.domain.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,17 +25,17 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<ReservationResponse>> findAllReservationsByDate(@RequestParam String date) {
-        List<ReservationResponse> reservations = service.findAllByDate(date).stream()
-            .map(ReservationResponse::new)
+    public ResponseEntity<List<ReservationWebResponse>> findAllReservationsByDate(@RequestParam String date) {
+        List<ReservationWebResponse> responses = service.findAllByDate(date).stream()
+            .map(ReservationWebResponse::new)
             .collect(Collectors.toList());
 
-        return ResponseEntity.ok(reservations);
+        return ResponseEntity.ok(responses);
     }
 
     @DeleteMapping("/reservations")
-    public ResponseEntity<Void> removeReservation(@RequestParam String date, @RequestParam String time) {
-        service.removeByDateAndTime(date, time);
+    public ResponseEntity<Void> removeReservationByScheduleId(@RequestParam Long scheduleId) {
+        service.removeByScheduleId(scheduleId);
         return ResponseEntity.noContent().build();
     }
 }

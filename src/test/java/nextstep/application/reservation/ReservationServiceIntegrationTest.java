@@ -33,11 +33,14 @@ class ReservationServiceIntegrationTest {
   @Test
   void 에약_생성한다() {
     //given
-    var scheduleId = 1L;
+    var date = LocalDate.now();
+    var time = LocalTime.now();
+    var themeId = 테마_생성된다();
+    var scheduleId = 스케쥴_생성된다(themeId, date, time);
     var reservation = Reservation.builder()
         .scheduleId(scheduleId)
-        .date(LocalDate.now())
-        .time(LocalTime.now())
+        .date(date)
+        .time(time)
         .name("gump")
         .build();
     //when
@@ -71,7 +74,10 @@ class ReservationServiceIntegrationTest {
     //given
     var date = LocalDate.now();
     var time = LocalTime.now();
+    var themeId = 테마_생성된다();
+    var scheduleId = 스케쥴_생성된다(themeId, date, time);
     var reservation = Reservation.builder()
+        .scheduleId(scheduleId)
         .date(date)
         .time(time)
         .name("gump")

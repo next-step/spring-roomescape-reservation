@@ -2,12 +2,12 @@ package nextstep.application.reservation;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.application.reservation.dto.ReservationDeleteValidationDto;
 import nextstep.application.reservation.dto.ReservationRes;
+import nextstep.application.schedule.ScheduleService;
 import nextstep.domain.reservation.ReservationEntity;
 import nextstep.domain.reservation.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ReservationService {
+
+  private final ScheduleService scheduleService;
 
   private final ReservationRepository repository;
 
@@ -29,7 +31,7 @@ public class ReservationService {
     var reservation = ReservationEntity.builder()
         .scheduleId(req.scheduleId())
         .date(req.date())
-        .time(LocalTime.parse(req.time()))
+        .time(req.time())
         .name(req.name())
         .build();
     var entity = repository.save(reservation);
@@ -41,21 +43,23 @@ public class ReservationService {
     return reservations.stream()
         .map(it -> ReservationRes.builder()
             .id(it.getId())
+            .schedule(scheduleService.getSchedule(it.getScheduleId()).orElseThrow(
+                () -> new IllegalArgumentException(String.format("스케쥴을 찾을 수 없습니다. 스케쥴ID: %s", it.getScheduleId())))
+            )
             .date(it.getDate())
-            .time(it.getTime().format(DateTimeFormatter.ofPattern("HH:mm")))
+            .time(it.getTime())
             .name(it.getName())
             .build())
         .toList();
   }
 
   @Transactional
-  public void removeReservation(LocalDate date, String time) {
-    var targetTime = LocalTime.parse(time);
+  public void removeReservation(LocalDate date, LocalTime time) {
     deletePolicy.checkValid(ReservationDeleteValidationDto.builder()
         .date(date)
-        .time(targetTime)
+        .time(time)
         .build());
-    repository.deleteByDateAndTime(date, targetTime);
+    repository.deleteByDateAndTime(date, time);
   }
 
 }

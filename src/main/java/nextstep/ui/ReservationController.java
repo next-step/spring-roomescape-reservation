@@ -2,6 +2,7 @@ package nextstep.ui;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.ReservationService;
@@ -43,7 +44,8 @@ public class ReservationController {
 
   @DeleteMapping
   public ResponseEntity<Void> removeReservation(
-      @DateTimeFormat(iso = ISO.DATE) @RequestParam LocalDate date, String time) {
+      @DateTimeFormat(iso = ISO.DATE) @RequestParam LocalDate date,
+      @DateTimeFormat(iso = ISO.TIME, pattern = "HH:mm") @RequestParam LocalTime time) {
     service.removeReservation(date, time);
     return ResponseEntity.noContent().build();
   }

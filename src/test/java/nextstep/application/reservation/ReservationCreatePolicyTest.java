@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import nextstep.application.reservation.dto.Reservation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class ReservationCreatePolicyTest {
     //given
     var reservation = Reservation.builder()
         .date(LocalDate.now())
-        .time("13:00")
+        .time(LocalTime.now())
         .name("gump")
         .build();
     //when
@@ -39,7 +40,7 @@ class ReservationCreatePolicyTest {
   void reservation_validation_예외_발생한다() {
     var reservation = Reservation.builder()
         .date(LocalDate.now())
-        .time("13:00")
+        .time(LocalTime.now())
         .name("gump")
         .build();
     //when

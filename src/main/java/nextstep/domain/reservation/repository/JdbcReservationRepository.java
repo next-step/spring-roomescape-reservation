@@ -2,7 +2,6 @@ package nextstep.domain.reservation.repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ public class JdbcReservationRepository implements ReservationRepository {
   private final RowMapper<ReservationEntity> rowMapper = (resultSet, rowNum) -> {
     var entity = ReservationEntity.builder()
         .id(resultSet.getLong("id"))
+        .scheduleId(resultSet.getLong("schedule_id"))
         .date(resultSet.getObject("date", LocalDate.class))
         .time(resultSet.getObject("time", LocalTime.class))
         .name(resultSet.getString("name"))
@@ -38,7 +38,7 @@ public class JdbcReservationRepository implements ReservationRepository {
       var ps = con.prepareStatement(sql, new String[]{"id"});
       ps.setObject(1, reservation.getScheduleId());
       ps.setObject(2, reservation.getDate());
-      ps.setString(3, reservation.getTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+      ps.setObject(3, reservation.getTime());
       ps.setString(4, reservation.getName());
       return ps;
     }, keyHolder);

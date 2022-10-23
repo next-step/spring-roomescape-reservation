@@ -36,7 +36,7 @@ class ReservationControllerTest extends ApiDocument {
     var reservationReq = Reservation.builder()
         .scheduleId(1L)
         .date(LocalDate.now())
-        .time("13:00")
+        .time(LocalTime.now())
         .name("gump")
         .build();
     given(service.create(reservationReq)).willReturn(1L);
@@ -63,6 +63,7 @@ class ReservationControllerTest extends ApiDocument {
   void 예약_목록_조회한다() throws Exception {
     //given
     var date = LocalDate.now();
+    var time = LocalTime.now();
     var scheduleRes = ScheduleRes.builder()
         .id(1L)
         .theme(
@@ -74,13 +75,13 @@ class ReservationControllerTest extends ApiDocument {
                 .build()
         )
         .date(date)
-        .time(LocalTime.parse("13:00"))
+        .time(time)
         .build();
     var reservationRes = List.of(ReservationRes.builder()
         .id(1L)
         .schedule(scheduleRes)
         .date(date)
-        .time("13:00")
+        .time(time)
         .name("gump")
         .build());
     given(service.findReservations(date)).willReturn(reservationRes);
@@ -99,7 +100,7 @@ class ReservationControllerTest extends ApiDocument {
   void 예약_삭제한다() throws Exception {
     //given
     var date = LocalDate.now();
-    var time = "13:00";
+    var time = LocalTime.parse("13:00");
     willDoNothing().given(service).removeReservation(date, time);
     //when
     var actual = mockMvc.perform(delete("/reservations?date={date}&time={time}", date, time));

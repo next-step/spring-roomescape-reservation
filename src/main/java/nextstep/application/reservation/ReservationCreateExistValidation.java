@@ -1,6 +1,5 @@
 package nextstep.application.reservation;
 
-import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import nextstep.application.reservation.dto.Reservation;
 import nextstep.domain.reservation.repository.ReservationRepository;
@@ -14,8 +13,7 @@ public class ReservationCreateExistValidation implements ReservationCreateValida
 
   @Override
   public void checkValid(Reservation reservation) {
-    var entity = repository.findReservationsByDateAndTime(reservation.date(),
-        LocalTime.parse(reservation.time()));
+    var entity = repository.findReservationsByDateAndTime(reservation.date(), reservation.time());
     if (entity.isPresent()) {
       throw new IllegalArgumentException("이미 해당 날짜, 시간에 예약이 존재합니다.");
     }

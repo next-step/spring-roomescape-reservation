@@ -19,7 +19,7 @@ public class RoomEscapeService {
 
   private final ReservationRepository repository;
 
-  private final ReservationPolicy policy;
+  private final ReservationCreatePolicy policy;
 
   @Transactional
   public Long create(Reservation req) {

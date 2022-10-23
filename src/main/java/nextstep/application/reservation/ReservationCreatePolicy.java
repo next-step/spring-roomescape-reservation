@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ReservationPolicy {
+public class ReservationCreatePolicy {
 
-  private final List<ReservationValidation> reservationValidations;
+  private final List<ReservationCreateValidation> reservationCreateValidations;
 
   public void checkValid(Reservation reservation) {
-    reservationValidations.forEach(it -> it.checkValid(reservation));
+    reservationCreateValidations.forEach(it -> it.checkValid(reservation));
   }
 }

@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalDate;
-import nextstep.application.reservation.ReservationPolicy;
-import nextstep.application.reservation.RoomEscapeService;
 import nextstep.application.reservation.dto.Reservation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +14,10 @@ import org.springframework.test.context.jdbc.Sql;
 @Sql("/truncate.sql")
 @SpringBootTest
 @DisplayName("Reservation 정책 테스트")
-class ReservationPolicyTest {
+class ReservationCreatePolicyTest {
 
   @Autowired
-  ReservationPolicy policy;
+  ReservationCreatePolicy policy;
 
   @Autowired
   RoomEscapeService service;

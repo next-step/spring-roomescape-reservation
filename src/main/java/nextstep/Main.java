@@ -1,3 +1,4 @@
+/*
 package nextstep;
 
 import java.time.LocalDate;
@@ -9,6 +10,8 @@ import nextstep.application.reservation.ReservationDeleteNotExistValidation;
 import nextstep.application.reservation.ReservationDeletePolicy;
 import nextstep.application.reservation.ReservationService;
 import nextstep.application.reservation.dto.Reservation;
+import nextstep.application.schedule.ScheduleService;
+import nextstep.application.themes.ThemeService;
 import nextstep.domain.reservation.repository.MemoryReservationRepository;
 
 public class Main {
@@ -20,7 +23,7 @@ public class Main {
 
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    ReservationService service = new ReservationService(new MemoryReservationRepository(),
+    ReservationService service = new ReservationService(new ScheduleService(new ThemeService(J)), new MemoryReservationRepository(),
         new ReservationCreatePolicy(List.of(new ReservationCreateExistValidation(new MemoryReservationRepository()))),
         new ReservationDeletePolicy(List.of(new ReservationDeleteNotExistValidation(new MemoryReservationRepository())))
     );
@@ -95,3 +98,4 @@ public class Main {
     }
   }
 }
+*/

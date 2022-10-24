@@ -1,0 +1,16 @@
+### 스케쥴 생성
+POST {{schedule-api}}/schedules
+content-type: application/json; charset=UTF-8
+
+{
+    "themeId": 1,
+    "date": "2022-08-11",
+    "time": "13:00"
+}
+
+### 스케쥴 조회
+GET {{schedule-api}}/schedules?themeId=1&date=2022-08-11
+content-type: application/json
+
+### 스케쥴 삭제
+DELETE {{schedule-api}}/schedules/1

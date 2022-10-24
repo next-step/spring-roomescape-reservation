@@ -1,13 +1,18 @@
+/*
 package nextstep;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-import nextstep.application.ReservationCreateValidation;
-import nextstep.application.ReservationPolicy;
-import nextstep.application.RoomEscapeService;
-import nextstep.application.dto.Reservation;
-import nextstep.domain.repository.MemoryReservationRepository;
+import nextstep.application.reservation.ReservationCreateExistValidation;
+import nextstep.application.reservation.ReservationCreatePolicy;
+import nextstep.application.reservation.ReservationDeleteNotExistValidation;
+import nextstep.application.reservation.ReservationDeletePolicy;
+import nextstep.application.reservation.ReservationService;
+import nextstep.application.reservation.dto.Reservation;
+import nextstep.application.schedule.ScheduleService;
+import nextstep.application.themes.ThemeService;
+import nextstep.domain.reservation.repository.MemoryReservationRepository;
 
 public class Main {
 
@@ -18,8 +23,10 @@ public class Main {
 
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    RoomEscapeService service = new RoomEscapeService(new MemoryReservationRepository(),
-        new ReservationPolicy(List.of(new ReservationCreateValidation(new MemoryReservationRepository()))));
+    ReservationService service = new ReservationService(new ScheduleService(new ThemeService(J)), new MemoryReservationRepository(),
+        new ReservationCreatePolicy(List.of(new ReservationCreateExistValidation(new MemoryReservationRepository()))),
+        new ReservationDeletePolicy(List.of(new ReservationDeleteNotExistValidation(new MemoryReservationRepository())))
+    );
 
     while (true) {
       System.out.println("메뉴를 선택하세요.");
@@ -91,3 +98,4 @@ public class Main {
     }
   }
 }
+*/

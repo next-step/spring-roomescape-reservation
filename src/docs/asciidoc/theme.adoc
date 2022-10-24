@@ -1,0 +1,24 @@
+== 테마
+=== 테마 생성
+==== 성공
+===== Request
+include::{snippets}/create-theme/http-request.adoc[]
+
+===== Response
+include::{snippets}/create-theme/http-response.adoc[]
+
+=== 테마 전체 조회
+==== 성공
+===== Request
+include::{snippets}/get-themes/http-request.adoc[]
+
+===== Response
+include::{snippets}/get-themes/http-response.adoc[]
+
+=== 태마 삭제
+==== 성공
+===== Request
+include::{snippets}/remove-theme/http-request.adoc[]
+
+===== Response
+include::{snippets}/remove-theme/http-response.adoc[]

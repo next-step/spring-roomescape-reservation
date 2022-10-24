@@ -10,4 +10,6 @@ endif::[]
 :email: xowjd41@gmail.com
 
 == Room-Escape
-include::roomescape.adoc[]
+include::reservation.adoc[]
+include::theme.adoc[]
+include::schedule.adoc[]

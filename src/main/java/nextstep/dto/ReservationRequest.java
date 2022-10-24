@@ -1,14 +1,18 @@
-package nextstep;
+package nextstep.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Reservation {
+public class ReservationRequest {
+
     private LocalDate date;
     private LocalTime time;
     private String name;
 
-    public Reservation(LocalDate date, LocalTime time, String name) {
+    public ReservationRequest() {
+    }
+
+    public ReservationRequest(LocalDate date, LocalTime time, String name) {
         this.date = date;
         this.time = time;
         this.name = name;

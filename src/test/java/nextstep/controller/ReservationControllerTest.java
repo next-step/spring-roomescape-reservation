@@ -99,7 +99,8 @@ class ReservationControllerTest {
             .param("date", date)
             .when().get("/reservations")
             .then().log().all()
-            .extract().body().as(new TypeRef<>() {});
+            .extract().body().as(new TypeRef<>() {
+            });
     }
 
     private ExtractableResponse<Response> deleteReservation(String date, String time) {

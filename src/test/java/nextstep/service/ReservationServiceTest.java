@@ -8,13 +8,12 @@ import java.time.LocalTime;
 import java.util.List;
 import nextstep.domain.Reservation;
 import nextstep.dto.ReservationRequest;
-import nextstep.repository.MemoryReservationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {ReservationService.class, MemoryReservationRepository.class})
+@SpringBootTest()
 class ReservationServiceTest {
 
     @Autowired
@@ -48,7 +47,8 @@ class ReservationServiceTest {
         ReservationRequest request = createRequest(date);
         long id = reservationService
             .save(request.getDate(), request.getTime(), request.getName());
-        final Reservation expected = new Reservation(id, request.getDate(), request.getTime(), request.getName());
+        final Reservation expected = new Reservation(id, request.getDate(), request.getTime(),
+            request.getName());
 
         List<Reservation> reservations = reservationService
             .findReservationsByDate(date);

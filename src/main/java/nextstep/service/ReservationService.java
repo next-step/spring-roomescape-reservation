@@ -20,7 +20,7 @@ public class ReservationService {
     }
 
     // 예약 생성
-    public long create(LocalDate date, LocalTime time, String name) {
+    public long save(LocalDate date, LocalTime time, String name) {
         return reservationRepository.save(date, time, name);
     }
 

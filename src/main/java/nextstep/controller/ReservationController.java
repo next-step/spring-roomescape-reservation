@@ -1,7 +1,7 @@
 package nextstep.controller;
 
 import nextstep.domain.Reservation;
-import nextstep.domain.ReservationRequest;
+import nextstep.dto.ReservationRequest;
 import nextstep.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class ReservationController {
 
     @PostMapping
     ResponseEntity<String> createReservations(@RequestBody ReservationRequest reservationRequest) throws URISyntaxException {
-        long id = reservationService.create(reservationRequest.getDate(), reservationRequest.getTime(), reservationRequest.getName());
+        long id = reservationService.save(reservationRequest.getDate(), reservationRequest.getTime(), reservationRequest.getName());
         return ResponseEntity.created(new URI("/reservations/" + id)).build();
     }
 

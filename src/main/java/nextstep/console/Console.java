@@ -46,7 +46,7 @@ public class Console {
                 String name = scanner.nextLine();
 
                 // 예약 생성
-                reservationService.create(LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
+                reservationService.save(LocalDate.parse(date), LocalTime.parse(time + ":00"), name);
                 System.out.println("예약이 등록되었습니다.");
             }
 

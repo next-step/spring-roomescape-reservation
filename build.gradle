@@ -11,9 +11,11 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.4'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.7.5'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.5'
     testImplementation 'org.assertj:assertj-core:3.23.1'
     testImplementation 'io.rest-assured:rest-assured:5.2.0'
+    runtimeOnly 'com.h2database:h2:2.1.214'
 }
 
 test {

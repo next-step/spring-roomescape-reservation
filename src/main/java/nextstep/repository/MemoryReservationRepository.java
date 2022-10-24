@@ -1,8 +1,5 @@
 package nextstep.repository;
 
-import nextstep.domain.Reservation;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -10,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import nextstep.domain.Reservation;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class MemoryReservationRepository implements ReservationRepository {
@@ -19,23 +18,31 @@ public class MemoryReservationRepository implements ReservationRepository {
 
     @Override
     public long save(LocalDate date, LocalTime time, String name) {
-        Map<LocalTime, Reservation> localTimeReservationMap = dataBase.computeIfAbsent(date, k -> new ConcurrentHashMap<>());
-        if (localTimeReservationMap.containsKey(time)) {
-            throw new IllegalArgumentException("중복된 시간에 등록이 되어 있습니다.");
-        }
-        Reservation reservation = localTimeReservationMap.computeIfAbsent(time, k -> new Reservation(id.getAndIncrement(), date, time, name));
+        Map<LocalTime, Reservation> localTimeReservationMap = dataBase
+            .computeIfAbsent(date, k -> new ConcurrentHashMap<>());
+        Reservation reservation = localTimeReservationMap
+            .computeIfAbsent(time, k -> new Reservation(id.getAndIncrement(), date, time, name));
         return reservation.getId();
     }
 
     @Override
     public List<Reservation> findReservationsByDate(LocalDate date) {
-        Map<LocalTime, Reservation> localTimeReservationMap = dataBase.computeIfAbsent(date, k -> new ConcurrentHashMap<>());
+        Map<LocalTime, Reservation> localTimeReservationMap = dataBase
+            .computeIfAbsent(date, k -> new ConcurrentHashMap<>());
         return new ArrayList<>(localTimeReservationMap.values());
     }
 
     @Override
     public void deleteByLocalDateAndLocalTime(LocalDate date, LocalTime time) {
-        Map<LocalTime, Reservation> localTimeReservationMap = dataBase.computeIfAbsent(date, k -> new ConcurrentHashMap<>());
+        Map<LocalTime, Reservation> localTimeReservationMap = dataBase
+            .computeIfAbsent(date, k -> new ConcurrentHashMap<>());
         localTimeReservationMap.remove(time);
+    }
+
+    @Override
+    public boolean existReservationByDateAndTime(LocalDate date, LocalTime time) {
+        Map<LocalTime, Reservation> localTimeReservationMap = dataBase
+            .computeIfAbsent(date, k -> new ConcurrentHashMap<>());
+        return localTimeReservationMap.containsKey(time);
     }
 }

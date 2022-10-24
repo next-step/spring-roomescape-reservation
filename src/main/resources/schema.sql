@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS reservation;
+
+CREATE TABLE reservation (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    date DATE NOT NULL,
+    time TIME NOT NULL,
+    name VARCHAR(20) NOT NULL,
+    PRIMARY KEY(id)
+)

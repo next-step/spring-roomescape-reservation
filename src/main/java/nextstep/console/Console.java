@@ -1,11 +1,10 @@
 package nextstep.console;
 
-import nextstep.domain.Reservation;
-import nextstep.service.ReservationService;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Scanner;
+import nextstep.domain.Reservation;
+import nextstep.service.ReservationService;
 
 public class Console {
 
@@ -62,7 +61,8 @@ public class Console {
                 String time = scanner.nextLine();
 
                 // 예약 정보 삭제
-                reservationService.deleteByLocalDateAndLocalTime(LocalDate.parse(date), LocalTime.parse(time));
+                reservationService
+                    .deleteByLocalDateAndLocalTime(LocalDate.parse(date), LocalTime.parse(time));
                 System.out.println("예약이 취소되었습니다.");
             }
 
@@ -75,7 +75,8 @@ public class Console {
                 String date = scanner.nextLine();
 
                 // 예약 정보 조회
-                for (Reservation reservation : reservationService.findReservationsByDate(LocalDate.parse(date))) {
+                for (Reservation reservation : reservationService
+                    .findReservationsByDate(LocalDate.parse(date))) {
                     System.out.println(reservation);
                 }
             }

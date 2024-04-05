@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>방탈출 어드민</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">
+    <img src="/image/admin-logo.png" alt="LOGO" style="height: 40px;">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="/reservation">Reservation</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/time">Time</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="content-container">
+  <h2 class="content-container-title">시간 관리 페이지</h2>
+  <div class="table-header">
+    <button id="add-button" class="btn btn-custom mb-2 float-right">예약 추가</button>
+  </div>
+  <div class="table-container"/>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">순서</th>
+      <th scope="col">시간</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
+</div>
+
+<script src="/js/time.js"></script>
+</body>
+</html>

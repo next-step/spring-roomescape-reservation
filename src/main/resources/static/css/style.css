@@ -1,0 +1,62 @@
+.profile-image {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 5px; /* 이름과의 간격 조정 */
+}
+
+.nav-item .dropdown-toggle::after {
+    display: none; /* 드롭다운 화살표 제거 */
+}
+
+.nav-item {
+    margin-right: 10px; /* 네비게이션 간격 조정 */
+}
+
+.content-container {
+    width: 70%;
+    margin: 50px auto;
+}
+
+.content-container-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Solid 버튼 */
+.btn-custom {
+    background-color: #0a3711; /* 버튼 기본 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    border: 1px solid #0a3711; /* 테두리 색상 일치 */
+}
+
+.btn-custom:hover {
+    background-color: #083d0f; /* 호버 상태에서의 배경색 */
+    color: white; /* 호버 상태에서의 텍스트 색상 */
+    border: 1px solid #083d0f; /* 호버 상태에서의 테두리 색상 */
+}
+
+/* Outline 버튼 */
+.btn-outline-custom {
+    background-color: transparent; /* 버튼 기본 배경색 투명 */
+    color: #0a3711; /* 버튼 텍스트 색상 */
+    border: 1px solid #0a3711; /* 테두리 색상 */
+}
+
+.btn-outline-custom:hover {
+    background-color: #0a3711; /* 호버 상태에서의 배경색 */
+    color: white; /* 호버 상태에서의 텍스트 색상 */
+    border: 1px solid #0a3711; /* 호버 상태에서의 테두리 색상 유지 */
+}
+
+.cursor-pointer{
+    cursor: pointer;
+}

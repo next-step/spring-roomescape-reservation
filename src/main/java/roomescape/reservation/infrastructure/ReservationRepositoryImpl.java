@@ -17,6 +17,13 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     private static long sequence = 0L;
 
     @Override
+    public Reservation save(Reservation reservation) {
+        reservation.setId(++sequence);
+        store.put(reservation.getId(), reservation);
+        return reservation;
+    }
+
+    @Override
     public List<Reservation> findAll() {
         return new ArrayList<>(store.values());
     }

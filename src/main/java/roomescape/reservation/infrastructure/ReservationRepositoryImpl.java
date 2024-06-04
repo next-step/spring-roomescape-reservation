@@ -27,4 +27,14 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     public List<Reservation> findAll() {
         return new ArrayList<>(store.values());
     }
+
+    @Override
+    public void deleteById(Long reservationId) {
+        store.remove(reservationId);
+    }
+
+    @Override
+    public boolean existsById(Long reservationId) {
+        return store.containsKey(reservationId);
+    }
 }

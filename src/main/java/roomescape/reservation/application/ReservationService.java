@@ -23,4 +23,11 @@ public class ReservationService {
     public List<Reservation> getReservations() {
         return reservationRepository.findAll();
     }
+
+    public void cancelReservation(Long reservationId) {
+        if (!reservationRepository.existsById(reservationId)) {
+            throw new IllegalArgumentException("존재하지 않는 예약입니다.");
+        }
+        reservationRepository.deleteById(reservationId);
+    }
 }

@@ -5,9 +5,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.util.HashMap;
-import java.util.Map;
+import roomescape.reservation.ReservationRequest;
 
 import static org.hamcrest.Matchers.is;
 
@@ -25,10 +23,7 @@ public class MissionStepTest {
 
     @Test
     void reservation() {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", "브라운");
-        params.put("date", "2023-08-05");
-        params.put("time", "15:40");
+        ReservationRequest params = new ReservationRequest("브라운", "2023-08-05", "15:40");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

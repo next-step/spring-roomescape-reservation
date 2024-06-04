@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public class ReservationRepository {
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
 
 	public ReservationRepository(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;

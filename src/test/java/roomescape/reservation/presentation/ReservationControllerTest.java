@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -32,7 +33,7 @@ class ReservationControllerTest {
         RestAssured.given().log().all()
                 .when().get("/reservations")
                 .then().log().all()
-                .statusCode(200);
+                .statusCode(HttpStatus.OK.value());
     }
 
     @Test
@@ -54,7 +55,7 @@ class ReservationControllerTest {
                 .extract();
 
         // then
-        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getLong("id")).isEqualTo(1L);
     }
 }

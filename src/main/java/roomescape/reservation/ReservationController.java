@@ -2,25 +2,32 @@ package roomescape.reservation;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import roomescape.reservation.data.ReservationSearchResponse;
+import org.springframework.web.bind.annotation.*;
+import roomescape.entities.Reservation;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/reservation")
 public class ReservationController {
-    private final ReservationService reservationService;
 
-    @Autowired
+    @Autowired private final ReservationService reservationService;
+    private List<Reservation> reservations = new ArrayList<>();
+    private AtomicLong index = new AtomicLong();
+
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
     @GetMapping("/all")
-    public List<ReservationSearchResponse> searchReservations(){
-        return reservationService.searchAllReservations();
+    public List<Reservation> searchReservations(){
+        return this.reservations;
+    }
+
+    @PostMapping("/add")
+    public void addReservation(@RequestBody Reservation reservation) {
+        this.reservations.add(reservation);
     }
 }

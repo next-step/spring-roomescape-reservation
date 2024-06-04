@@ -43,4 +43,32 @@ class ReservationControllerTest {
         assertThat(responseDto.getDate()).isEqualTo(request.getDate());
         assertThat(responseDto.getTime()).isEqualTo(request.getTime());
     }
+
+    @Test
+    void deleteReservation(){
+        // given
+        final ReservationDto request = new ReservationDto("메이븐", "2023-08-05", "15:40");
+
+        // when
+        var response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        ReservationDto responseDto = response.as(ReservationDto.class);
+        assertThat(responseDto.getName()).isEqualTo(request.getName());
+        assertThat(responseDto.getDate()).isEqualTo(request.getDate());
+        assertThat(responseDto.getTime()).isEqualTo(request.getTime());
+
+        // when
+        var response2 = RestAssured.given().log().all()
+                .when().delete("/reservations/1")
+                .then().log().all().extract();
+
+        // then
+        assertThat(response2.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
 }

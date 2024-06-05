@@ -1,6 +1,5 @@
 package roomescape.reservation;
 
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,8 +7,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
-	@Resource
 	private ReservationRepository reservationRepository;
+
+	public ReservationService(ReservationRepository reservationRepository) {
+		this.reservationRepository = reservationRepository;
+	}
 
 	public List<ReservationResponse> getReservations() {
 		return reservationRepository.findReservation().stream()

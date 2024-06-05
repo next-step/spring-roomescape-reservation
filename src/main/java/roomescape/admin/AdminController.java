@@ -12,6 +12,6 @@ public class AdminController {
 
 	@GetMapping("/admin/reservation")
 	public String home() {
-		return "admin/reservation-legacy.html";
+		return "admin/reservation.html";
 	}
 }

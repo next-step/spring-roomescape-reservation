@@ -56,4 +56,21 @@ class ReservationTimeControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("size()", is(1));
     }
+
+    @Test
+    @DisplayName("시간을 삭제한다.")
+    void testDeleteReservationTime() {
+        Map<String, String> params = Map.of("startAt", "10:00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all();
+
+        RestAssured.given().log().all()
+                .when().delete("/times/1")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
 }

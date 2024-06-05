@@ -30,16 +30,16 @@ class ReservationIntegrationTests {
 
 		// create reservation time
 		// given
-		ReservationTimeRequest timeRequest = new ReservationTimeRequest("10:00");
+		ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("10:00");
 
 		// when
-		ResponseEntity<ReservationTimeResponse> createTimeResponse = this.restTemplate
-			.postForEntity("http://localhost:" + this.port + "/times", timeRequest, ReservationTimeResponse.class);
+		var createReservationTime = this.restTemplate.postForEntity("http://localhost:" + this.port + "/times",
+				reservationTimeRequest, ReservationTimeResponse.class);
 
 		// then
-		assertThat(createTimeResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(createReservationTime.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-		ReservationTimeResponse reservationTimeResponse = createTimeResponse.getBody();
+		var reservationTimeResponse = createReservationTime.getBody();
 		assertThat(reservationTimeResponse).isNotNull();
 		assertThat(reservationTimeResponse.startAt()).isEqualTo("10:00");
 
@@ -48,24 +48,24 @@ class ReservationIntegrationTests {
 		ReservationRequest reservationRequest = new ReservationRequest("tester", "2024-06-06", 1L);
 
 		// when
-		ResponseEntity<ReservationResponse> createResponse = this.restTemplate.postForEntity(
-				"http://localhost:" + this.port + "/reservations", reservationRequest, ReservationResponse.class);
+		var createReservation = this.restTemplate.postForEntity("http://localhost:" + this.port + "/reservations",
+				reservationRequest, ReservationResponse.class);
 
 		// then
-		assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(createReservation.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-		ReservationResponse reservationResponse = createResponse.getBody();
+		ReservationResponse reservationResponse = createReservation.getBody();
 		assertThat(reservationResponse).isNotNull();
 		assertThat(reservationResponse.name()).isEqualTo("tester");
 
 		// get reservations
 		// when
-		ResponseEntity<List> getReservationsResponse = this.restTemplate
-			.getForEntity("http://localhost:" + this.port + "/reservations", List.class);
+		var getReservations = this.restTemplate.getForEntity("http://localhost:" + this.port + "/reservations",
+				List.class);
 
 		// then
-		assertThat(getReservationsResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-		List<ReservationResponse> reservations = getReservationsResponse.getBody();
+		assertThat(getReservations.getStatusCode()).isEqualTo(HttpStatus.OK);
+		var reservations = getReservations.getBody();
 		assertThat(reservations).isNotNull();
 		assertThat(reservations.size()).isGreaterThan(0);
 
@@ -82,11 +82,10 @@ class ReservationIntegrationTests {
 		assertThat(cancelResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		// check reservation
-		getReservationsResponse = this.restTemplate
-				.getForEntity("http://localhost:" + this.port + "/reservations", List.class);
+		getReservations = this.restTemplate.getForEntity("http://localhost:" + this.port + "/reservations", List.class);
 
-		assertThat(getReservationsResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-		reservations = getReservationsResponse.getBody();
+		assertThat(getReservations.getStatusCode()).isEqualTo(HttpStatus.OK);
+		reservations = getReservations.getBody();
 		assertThat(reservations).isNotNull();
 		assertThat(reservations.size()).isEqualTo(0);
 
@@ -95,11 +94,11 @@ class ReservationIntegrationTests {
 		Long reservationTimeId = reservationTimeResponse.id();
 
 		// when
-		ResponseEntity<Void> deleteResponse = this.restTemplate.exchange(
+		var deleteReservationTime = this.restTemplate.exchange(
 				"http://localhost:" + this.port + "/times/" + reservationTimeId, HttpMethod.DELETE, null, Void.class);
 
 		// then
-		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(deleteReservationTime.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 	}
 
@@ -110,23 +109,23 @@ class ReservationIntegrationTests {
 		ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("10:10");
 
 		// when
-		ResponseEntity<ReservationTimeResponse> createResponse = this.restTemplate.postForEntity(
+		ResponseEntity<ReservationTimeResponse> createReservationTime = this.restTemplate.postForEntity(
 				"http://localhost:" + this.port + "/times", reservationTimeRequest, ReservationTimeResponse.class);
 
 		// then
-		assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-		ReservationTimeResponse reservationTimeResponse = createResponse.getBody();
+		assertThat(createReservationTime.getStatusCode()).isEqualTo(HttpStatus.OK);
+		ReservationTimeResponse reservationTimeResponse = createReservationTime.getBody();
 		assertThat(reservationTimeResponse).isNotNull();
 		assertThat(reservationTimeResponse.startAt()).isEqualTo("10:10");
 
 		// get reservation times
 		// when
-		ResponseEntity<List> getReservationTimesResponse = this.restTemplate
-			.getForEntity("http://localhost:" + this.port + "/times", List.class);
+		var getReservationTimes = this.restTemplate.getForEntity("http://localhost:" + this.port + "/times",
+				List.class);
 
 		// then
-		assertThat(getReservationTimesResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-		List<ReservationTimeResponse> reservationTimes = getReservationTimesResponse.getBody();
+		assertThat(getReservationTimes.getStatusCode()).isEqualTo(HttpStatus.OK);
+		var reservationTimes = getReservationTimes.getBody();
 		assertThat(reservationTimes).isNotNull();
 		assertThat(reservationTimes.size()).isGreaterThan(0);
 
@@ -135,19 +134,18 @@ class ReservationIntegrationTests {
 		Long reservationTimeId = reservationTimeResponse.id();
 
 		// when
-		ResponseEntity<Void> deleteResponse = this.restTemplate.exchange(
+		var deleteReservationTime = this.restTemplate.exchange(
 				"http://localhost:" + this.port + "/times/" + reservationTimeId, HttpMethod.DELETE, null, Void.class);
 
 		// then
-		assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(deleteReservationTime.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		// check reservation time
-		getReservationTimesResponse = this.restTemplate
-				.getForEntity("http://localhost:" + this.port + "/times", List.class);
+		getReservationTimes = this.restTemplate.getForEntity("http://localhost:" + this.port + "/times", List.class);
 
 		// then
-		assertThat(getReservationTimesResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-		reservationTimes = getReservationTimesResponse.getBody();
+		assertThat(getReservationTimes.getStatusCode()).isEqualTo(HttpStatus.OK);
+		reservationTimes = getReservationTimes.getBody();
 		assertThat(reservationTimes).isNotNull();
 		assertThat(reservationTimes.size()).isLessThan(1);
 

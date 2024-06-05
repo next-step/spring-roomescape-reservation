@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
+import roomescape.time.domain.ReservationTime;
 
 @Repository
 public class JdbcReservationRepository implements ReservationRepository {
@@ -22,14 +23,14 @@ public class JdbcReservationRepository implements ReservationRepository {
 
     @Override
     public Reservation save(Reservation reservation) {
-        String sql = "INSERT INTO reservation(name, date, time) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO reservation(name, date, time_id) VALUES (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, reservation.getName());
             ps.setString(2, reservation.getDate().toString());
-            ps.setString(3, reservation.getTime().toString());
+            ps.setLong(3, reservation.getTime().getId());
             return ps;
         }, keyHolder);
 
@@ -40,12 +41,15 @@ public class JdbcReservationRepository implements ReservationRepository {
 
     @Override
     public List<Reservation> findAll() {
-        String sql = "SELECT id, name, date, time FROM reservation";
+        String sql = "SELECT r.id, r.name, r.date, t.id as time_id, t.start_at FROM reservation as r INNER JOIN reservation_time as t ON r.time_id = t.id";
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> new Reservation(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
                 resultSet.getString("date"),
-                resultSet.getString("time")
+                new ReservationTime(
+                        resultSet.getLong("time_id"),
+                        resultSet.getString("start_at")
+                )
         ));
     }
 

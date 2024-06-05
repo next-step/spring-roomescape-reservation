@@ -10,6 +10,9 @@ public class Reservation {
     private LocalDate date;
     private LocalTime time;
 
+    protected Reservation() {
+    }
+
     public Reservation(Long id, String name, String date, String time) {
         this(id, name, LocalDate.parse(date), LocalTime.parse(time));
     }

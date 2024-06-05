@@ -4,12 +4,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 @RestController
 public class ReservationController {
 
-    private static final HashMap<Long, Reservation> reservations = new HashMap<>();
+    private static final Map<Long, Reservation> reservations = new HashMap<>();
     private final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", "15:40");
     private final Reservation reservation2 = new Reservation("심슨", "2023-08-05", "15:40");
 

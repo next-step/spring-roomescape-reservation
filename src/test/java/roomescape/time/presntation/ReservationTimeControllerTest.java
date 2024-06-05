@@ -1,5 +1,7 @@
 package roomescape.time.presntation;
 
+import static org.hamcrest.Matchers.is;
+
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -35,5 +37,23 @@ class ReservationTimeControllerTest {
                 .when().post("/times")
                 .then().log().all()
                 .statusCode(HttpStatus.OK.value());
+    }
+    
+    @Test
+    @DisplayName("모든 시간을 조회한다.")
+    void testGetReservationTimes() {
+        Map<String, String> params = Map.of("startAt", "10:00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all();
+
+        RestAssured.given().log().all()
+                .when().get("/times")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(1));
     }
 }

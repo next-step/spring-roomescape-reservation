@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class IndexController {
+public class AdminController {
 
     @GetMapping("/")
     public String index() {
@@ -13,6 +13,11 @@ public class IndexController {
 
     @GetMapping("/admin/reservation")
     public String reservation() {
-        return "admin/reservation-legacy";
+        return "admin/reservation";
+    }
+
+    @GetMapping("/admin/time")
+    public String time() {
+        return "admin/time";
     }
 }

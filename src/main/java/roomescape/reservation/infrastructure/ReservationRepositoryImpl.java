@@ -5,12 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.stereotype.Repository;
-
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
 
-@Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
 
     private static Map<Long, Reservation> store = new HashMap<>();

@@ -3,39 +3,61 @@ package roomescape.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class ReservationController {
 
-    private AtomicLong index = new AtomicLong();
-    private List<Reservation> reservations = List.of(
-            new Reservation(index.incrementAndGet(), "브라운", "2023-08-05", "15:40"),
-            new Reservation(index.incrementAndGet(), "코니", "2023-08-05", "15:40"));
+    private static final HashMap<Long, Reservation> reservations = new HashMap<>();
+    private final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", "15:40");
+    private final Reservation reservation2 = new Reservation("심슨", "2023-08-05", "15:40");
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<ReservationDto>> getReservations() {
+    public ResponseEntity<List<ReservationResponseDto>> getReservations() {
+        reservations.put(reservation1.getId(), reservation1);
+        reservations.put(reservation2.getId(), reservation2);
 
-        final List<ReservationDto> reservationDtos = reservations.stream().map(Reservation::toDto).toList();
-        return ResponseEntity.ok().body(reservationDtos);
+        final List<ReservationResponseDto> reservationResponseDtos = reservations.values().stream()
+                .map(
+                        reservation -> new ReservationResponseDto.Builder()
+                                .id(reservation.getId())
+                                .name(reservation.getName())
+                                .date(reservation.getDate())
+                                .time(reservation.getTime())
+                                .build()
+                ).toList();
+
+        return ResponseEntity.ok().body(reservationResponseDtos);
 
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<ReservationDto> createReservation(@RequestBody ReservationDto reservationDto) {
-        final Reservation reservation = reservationDto.toEntity();
-        reservations = new ArrayList<>(reservations);
-        reservations.add(reservation);
-        return ResponseEntity.ok().body(reservation.toDto());
+    public ResponseEntity<ReservationResponseDto> createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
+        final Reservation reservation = new Reservation(
+                        reservationRequestDto.getName(),
+                        reservationRequestDto.getDate(),
+                        reservationRequestDto.getTime());
+        reservations.put(reservation.getId(), reservation);
+        final Reservation savedReservation = reservations.get(reservation.getId());
+
+        ReservationResponseDto responseDto = new ReservationResponseDto.Builder()
+                .id(savedReservation.getId())
+                .name(savedReservation.getName())
+                .date(savedReservation.getDate())
+                .time(savedReservation.getTime())
+                .build();
+
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity deleteReservation(@PathVariable Long id) {
-        reservations = reservations.stream()
-                .filter(reservation -> !reservation.getId().equals(id))
-                .toList();
-        return ResponseEntity.ok().build();
+        if (!reservations.containsKey(id)) {
+            return ResponseEntity.notFound().build();
+        } else {
+            reservations.remove(id);
+            return ResponseEntity.ok().build();
+        }
     }
 }

@@ -1,4 +1,23 @@
 package roomescape.admin;
 
-public record ReadReservationResponse() {
+import java.util.List;
+import java.util.stream.Collectors;
+
+public record ReadReservationResponse(Long id,
+                                      String name,
+                                      String date,
+                                      String time) {
+
+    private ReadReservationResponse(Reservation reservation) {
+        this(reservation.getId(),
+                reservation.getName(),
+                reservation.getDate(),
+                reservation.getTime());
+    }
+
+    public static List<ReadReservationResponse> entityToList(List<Reservation> reservations){
+        return reservations.stream()
+                .map(ReadReservationResponse::new)
+                .collect(Collectors.toList());
+    }
 }

@@ -54,7 +54,16 @@ public class MissionStepTest {
 
     @Test
     void reservation() {
-        ReservationRequest params = new ReservationRequest("브라운", "2023-08-05", "15:40");
+        ReservationTimeRequest request = new ReservationTimeRequest("12:00");
+        ReservationRequest params = new ReservationRequest("브라운", "2023-08-05", 1L);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("id", is(1));
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

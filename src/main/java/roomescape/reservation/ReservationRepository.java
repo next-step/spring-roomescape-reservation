@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.reservationTime.ReservationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -17,33 +18,52 @@ public class ReservationRepository {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	public List<Reservation> findReservation() {
-		return jdbcTemplate.query("SELECT id, name, date, time FROM reservation",
+	public List<Reservation> find() {
+		String sql = "SELECT \n" +
+				"    r.id as reservation_id, \n" +
+				"    r.name as reservation_name, \n" +
+				"    r.date as reservation_date, \n" +
+				"    t.id as time_id, \n" +
+				"    t.start_at as time_start_at \n" +
+				"FROM reservation as r \n" +
+				"inner join reservation_time as t \n" +
+				"on r.time_id = t.id";
+		return jdbcTemplate.query(sql,
 				(rs, rowNum) ->
-						new Reservation(rs.getLong("id"),
-								rs.getString("name"),
-								rs.getString("date"),
-								rs.getString("time"))
+						new Reservation(rs.getLong("reservation_id"),
+								rs.getString("reservation_name"),
+								rs.getString("reservation_date"),
+								new ReservationTime(rs.getLong("time_id"), rs.getString("time_start_at")))
 		);
 	}
 
-	public Reservation findReservationByKey(Long id) {
+	public Reservation findByKey(Long id) {
+		String sql = "SELECT \n" +
+				"    r.id as reservation_id, \n" +
+				"    r.name as reservation_name, \n" +
+				"    r.date as reservation_date, \n" +
+				"    t.id as time_id, \n" +
+				"    t.start_at as time_start_at \n" +
+				"FROM reservation as r \n" +
+				"inner join reservation_time as t \n" +
+				"on r.time_id = t.id \n" +
+				"WHERE r.id = ?";
 		RowMapper<Reservation> rowMapper = (rs, rowNum) -> new Reservation(
 				rs.getLong(1),
 				rs.getString(2),
 				rs.getString(3),
-				rs.getString(4));
-		return jdbcTemplate.queryForObject("SELECT id, name, date, time FROM reservation where id = ?", rowMapper, id);
+				new ReservationTime(rs.getLong(4), rs.getString(5)));
+		return jdbcTemplate.queryForObject(sql, rowMapper, id);
 	}
 
-	public Long saveReservation(String name, String date, String time) {
+	public Long save(String name, String date, Long timeId) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(con -> {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO reservation(name, date, time) VALUES (?, ?, ?)", new String[]{"id"});
+			PreparedStatement ps = con.prepareStatement("INSERT INTO reservation(name, date, time_id) VALUES (?, ?, ?)", new String[]{"id"});
 			ps.setString(1, name);
 			ps.setString(2, date);
-			ps.setString(3, time);
+			ps.setLong(3, timeId);
 
 			return ps;
 		}, keyHolder);
@@ -51,7 +71,7 @@ public class ReservationRepository {
 		return keyHolder.getKey().longValue();
 	}
 
-	public void deleteReservation(long id) {
+	public void delete(long id) {
 		jdbcTemplate.update("DELETE FROM reservation WHERE id = ?", id);
 	}
 }

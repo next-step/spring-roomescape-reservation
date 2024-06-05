@@ -8,7 +8,7 @@ import java.util.List;
 
 @Controller
 public class ReservationController {
-	private ReservationService reservationService;
+	private final ReservationService reservationService;
 
 	public ReservationController(ReservationService reservationService) {
 		this.reservationService = reservationService;
@@ -16,12 +16,13 @@ public class ReservationController {
 
 	@GetMapping("/reservations")
 	public ResponseEntity<List<ReservationResponse>> getReservations() {
-		return ResponseEntity.ok().body(reservationService.getReservations());
+		return ResponseEntity.ok().body(reservationService.findReservations());
 	}
 
 	@PostMapping("/reservations")
 	public ResponseEntity<ReservationResponse> saveReservations(@RequestBody ReservationRequest request) {
-		return ResponseEntity.ok().body(reservationService.saveReservation(request));
+		Long id = reservationService.saveReservation(request);
+		return ResponseEntity.ok().body(reservationService.findReservation(id));
 	}
 
 

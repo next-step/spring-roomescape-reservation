@@ -5,12 +5,12 @@ public class ReservationRequest {
 
 	private String date;
 
-	private String time;
+	private Long timeId;
 
-	public ReservationRequest(String name, String date, String time) {
+	public ReservationRequest(String name, String date, Long timeId) {
 		this.name = name;
 		this.date = date;
-		this.time = time;
+		this.timeId = timeId;
 	}
 
 	public String getName() {
@@ -21,7 +21,7 @@ public class ReservationRequest {
 		return date;
 	}
 
-	public String getTime() {
-		return time;
+	public Long getTimeId() {
+		return timeId;
 	}
 }

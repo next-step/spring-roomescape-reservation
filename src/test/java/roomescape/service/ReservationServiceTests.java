@@ -71,7 +71,7 @@ class ReservationServiceTests {
 	}
 
 	@Test
-	void create() {
+	void createReservation() {
 		// given
 		ReservationRequest request = new ReservationRequest("tester", "2024-06-06", 1L);
 
@@ -102,7 +102,7 @@ class ReservationServiceTests {
 	}
 
 	@Test
-	void cancel() {
+	void cancelReservation() {
 		// given
 		long id = 1L;
 

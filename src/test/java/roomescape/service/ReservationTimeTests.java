@@ -55,7 +55,7 @@ class ReservationTimeTests {
 	}
 
 	@Test
-	void delete() {
+	void deleteReservationTime() {
 		// given
 		long id = 1L;
 

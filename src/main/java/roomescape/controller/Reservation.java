@@ -1,21 +1,26 @@
 package roomescape.controller;
 
-public class Reservation {
+import java.util.concurrent.atomic.AtomicLong;
 
+public class Reservation {
+    private static final AtomicLong index = new AtomicLong(1L);
     private Long id;
     private String name;
     private String date;
     private String time;
+
+    public Reservation(String name, String date, String time) {
+        this.id = index.incrementAndGet();
+        this.name = name;
+        this.date = date;
+        this.time = time;
+    }
 
     public Reservation(Long id, String name, String date, String time) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.time = time;
-    }
-
-    public ReservationDto toDto() {
-        return new ReservationDto(name, date, time);
     }
 
     public Long getId() {
@@ -33,7 +38,5 @@ public class Reservation {
     public String getTime() {
         return time;
     }
-
-    public Reservation() {
-    }
+    
 }

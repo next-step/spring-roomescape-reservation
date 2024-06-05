@@ -51,11 +51,14 @@ public class JdbcReservationRepository implements ReservationRepository {
 
     @Override
     public void deleteById(Long reservationId) {
-
+        String sql = "DELETE FROM reservation WHERE id = ?";
+        jdbcTemplate.update(sql, reservationId);
     }
 
     @Override
     public boolean existsById(Long reservationId) {
-        return false;
+        String sql = "SELECT COUNT(*) FROM reservation WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, reservationId);
+        return count != null && count.equals(1);
     }
 }

@@ -9,22 +9,13 @@ import java.util.List;
 public class AdminService {
 
     public List<ReadReservationResponse> readReservation() {
-        Reservation.init();
-        insertTempData();
-        return read();
+        return ReadReservationResponse.entityToList(Reservation.getReservations());
     }
 
-    private void insertTempData(){
-        SaveReservationRequest Reservation1 = new SaveReservationRequest("브라운", "2023-01-01", "10:00");
-        SaveReservationRequest Reservation2 = new SaveReservationRequest("브라운", "2023-01-02", "11:00");
+    public ReadReservationResponse saveReservation(SaveReservationRequest saveReservationRequest) {
+        Reservation reservation = Reservation.add(saveReservationRequest);
 
-        Reservation.add(Reservation1);
-        Reservation.add(Reservation2);
-    }
-    public List<ReadReservationResponse> saveReservation(SaveReservationRequest saveReservationRequest) {
-        Reservation.init();
-        Reservation.add(saveReservationRequest);
-        return read();
+        return new ReadReservationResponse(reservation);
     }
 
     private List<ReadReservationResponse> read(){
@@ -32,8 +23,6 @@ public class AdminService {
     }
 
     public void deleteReservation(Long id) {
-        Reservation.init();
-        insertTempData();
         Reservation.delete(id);
     }
 }

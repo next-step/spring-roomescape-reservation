@@ -32,8 +32,8 @@ public class AdminController {
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<List<ReadReservationResponse>> saveReservation(@RequestBody SaveReservationRequest saveReservationRequest){
-        List<ReadReservationResponse> response = this.adminService.saveReservation(saveReservationRequest);
+    public ResponseEntity<ReadReservationResponse> saveReservation(@RequestBody SaveReservationRequest saveReservationRequest){
+        ReadReservationResponse response = this.adminService.saveReservation(saveReservationRequest);
 
         return ResponseEntity.ok().body(response);
     }

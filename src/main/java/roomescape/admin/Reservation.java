@@ -16,8 +16,8 @@ public class Reservation {
     private String date;
     private String time;
 
-    public static void add(SaveReservationRequest saveReservationRequest){
-        new Reservation(saveReservationRequest);
+    public static Reservation add(SaveReservationRequest saveReservationRequest){
+        return new Reservation(saveReservationRequest);
     }
 
     private Reservation(SaveReservationRequest saveReservationRequest) {
@@ -31,11 +31,6 @@ public class Reservation {
 
     public static List<Reservation> getReservations() {
         return Collections.unmodifiableList(Reservations);
-    }
-
-    public static void init(){
-        Reservations.clear();
-        autoIncrement.set(1);
     }
 
     public static void delete(Long id) {

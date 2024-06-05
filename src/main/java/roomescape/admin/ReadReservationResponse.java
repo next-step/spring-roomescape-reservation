@@ -8,7 +8,7 @@ public record ReadReservationResponse(Long id,
                                       String date,
                                       String time) {
 
-    private ReadReservationResponse(Reservation reservation) {
+    public ReadReservationResponse(Reservation reservation) {
         this(reservation.getId(),
                 reservation.getName(),
                 reservation.getDate(),

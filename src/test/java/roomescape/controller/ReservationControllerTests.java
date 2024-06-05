@@ -52,7 +52,7 @@ class ReservationControllerTests {
 	}
 
 	@Test
-	void create() {
+	void createReservation() {
 		// given
 		var reservationRequest = new ReservationRequest("tester", "2024-06-06", 1L);
 		var reservationTimeResponse = new ReservationTimeResponse(1L, "10:00");
@@ -69,7 +69,7 @@ class ReservationControllerTests {
 	}
 
 	@Test
-	void cancel() {
+	void cancelReservation() {
 		// given
 		long id = 1L;
 

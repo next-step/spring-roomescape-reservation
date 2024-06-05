@@ -54,7 +54,7 @@ class ReservationRepositoryTests {
 	}
 
 	@Test
-	void findAll() {
+	void findAllReservation() {
 		// given
 		List<Reservation> reservations = new ArrayList<>();
 
@@ -68,7 +68,7 @@ class ReservationRepositoryTests {
 	}
 
 	@Test
-	void save() {
+	void saveReservation() {
 
 		// given
 		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();
@@ -91,7 +91,7 @@ class ReservationRepositoryTests {
 	}
 
 	@Test
-	void delete() {
+	void deleteReservation() {
 		// given
 		long id = 1L;
 		given(this.jdbcTemplate.update(anyString(), any(Object[].class))).willReturn(1);
@@ -104,7 +104,7 @@ class ReservationRepositoryTests {
 	}
 
 	@Test
-	void deleteException() {
+	void deleteReservationException() {
 
 		// given
 		long id = 1L;

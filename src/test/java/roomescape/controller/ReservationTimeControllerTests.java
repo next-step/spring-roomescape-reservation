@@ -33,7 +33,7 @@ class ReservationTimeControllerTests {
 	}
 
 	@Test
-	void create() {
+	void createReservationTime() {
 		// given
 		var reservationTimeRequest = new ReservationTimeRequest("10:10");
 		var reservationTimeResponse = new ReservationTimeResponse(1L, "10:10");
@@ -66,7 +66,7 @@ class ReservationTimeControllerTests {
 	}
 
 	@Test
-	void delete() {
+	void deleteReservationTime() {
 		// given
 		long id = 1L;
 

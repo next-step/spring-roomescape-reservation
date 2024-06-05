@@ -52,7 +52,7 @@ class ReservationTimeRepositoryTests {
 	}
 
 	@Test
-	void save() {
+	void saveReservationTime() {
 		// given
 		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();
 
@@ -67,7 +67,7 @@ class ReservationTimeRepositoryTests {
 	}
 
 	@Test
-	void delete() {
+	void deleteReservationTime() {
 		// given
 		long id = 1L;
 		given(this.jdbcTemplate.update(anyString(), any(Object[].class))).willReturn(1);
@@ -80,7 +80,7 @@ class ReservationTimeRepositoryTests {
 	}
 
 	@Test
-	void deleteException() {
+	void deleteReservationTimeException() {
 
 		// given
 		long id = 1L;
@@ -91,7 +91,7 @@ class ReservationTimeRepositoryTests {
 	}
 
 	@Test
-	void findById() {
+	void findReservationTimeById() {
 		// given
 		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();
 

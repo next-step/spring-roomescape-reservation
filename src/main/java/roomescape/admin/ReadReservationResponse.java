@@ -6,20 +6,17 @@ import java.util.stream.Collectors;
 public record ReadReservationResponse(Long id,
                                       String name,
                                       String date,
-                                      String time) {
+                                      ReservationTime time) {
 
-    public ReadReservationResponse(Long id, Reservation reservation) {
-        this(id,
+    private ReadReservationResponse(Reservation reservation) {
+        this(reservation.getId(),
             reservation.getName(),
             reservation.getDate(),
             reservation.getTime());
     }
 
-    public ReadReservationResponse(Reservation reservation) {
-        this(reservation.getId(),
-                reservation.getName(),
-                reservation.getDate(),
-                reservation.getTime());
+    public static ReadReservationResponse entityToDTO(Reservation reservation){
+        return new ReadReservationResponse(reservation);
     }
 
     public static List<ReadReservationResponse> entityToList(List<Reservation> reservations){

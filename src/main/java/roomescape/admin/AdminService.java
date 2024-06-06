@@ -36,10 +36,10 @@ public class AdminService {
     }
 
     public ReadReservationResponse saveReservation(SaveReservationRequest saveReservationRequest) {
-        Reservation reservation = Reservation.add(saveReservationRequest);
         Long id = this.adminRepository.saveReservation(saveReservationRequest);
+        Reservation reservation = this.adminRepository.readReservationById(id);
 
-        return new ReadReservationResponse(id, reservation);
+        return ReadReservationResponse.entityToDTO(reservation);
     }
 
     public void deleteReservation(Long id) {

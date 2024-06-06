@@ -8,7 +8,7 @@ public class Reservation {
     private Long id;
     private String name;
     private String date;
-    private String time;
+    private ReservationTime time;
 
     public static Reservation add(SaveReservationRequest saveReservationRequest){
         return new Reservation(saveReservationRequest);
@@ -17,7 +17,6 @@ public class Reservation {
     private Reservation(SaveReservationRequest saveReservationRequest) {
         this.name = saveReservationRequest.name();
         this.date = saveReservationRequest.date();
-        this.time = saveReservationRequest.time();
     }
 
     public static Reservation read(ResultSet rs){
@@ -26,10 +25,10 @@ public class Reservation {
 
     private Reservation(ResultSet rs) {
         try {
-            this.id = rs.getLong("id");
-            this.name = rs.getString("name");
-            this.date = rs.getString("date");
-            this.time = rs.getString("time");
+            this.id = rs.getLong("reservation_id");
+            this.name = rs.getString("reservation_name");
+            this.date = rs.getString("reservation_date");
+            this.time = ReservationTime.read(rs);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -47,8 +46,7 @@ public class Reservation {
         return date;
     }
 
-    public String getTime() {
+    public ReservationTime getTime() {
         return time;
     }
-
 }

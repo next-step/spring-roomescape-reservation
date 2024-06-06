@@ -1,4 +1,4 @@
-package roomescape.controller;
+package roomescape.reservation;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package roomescape.controller;
+package roomescape.reservation;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -38,5 +38,14 @@ public class Reservation {
     public String getTime() {
         return time;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                '}';
+    }
 }

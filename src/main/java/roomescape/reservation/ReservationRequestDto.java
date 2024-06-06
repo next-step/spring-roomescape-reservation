@@ -1,21 +1,10 @@
-package roomescape.controller;
+package roomescape.reservation;
 
-public class ReservationResponseDto {
-    private Long id;
+public class ReservationRequestDto {
     private String name;
     private String date;
     private String time;
 
-    public ReservationResponseDto(Long id, String name, String date, String time) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.time = time;
-    }
-
-    public Long getId() {
-        return id;
-    }
 
     public String getName() {
         return name;
@@ -29,16 +18,17 @@ public class ReservationResponseDto {
         return time;
     }
 
+    public ReservationRequestDto(String name, String date, String time) {
+        this.name = name;
+        this.date = date;
+        this.time = time;
+    }
+
+
     public static class Builder {
-        private Long id;
         private String name;
         private String date;
         private String time;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder name(String name) {
             this.name = name;
@@ -55,8 +45,8 @@ public class ReservationResponseDto {
             return this;
         }
 
-        public ReservationResponseDto build() {
-            return new ReservationResponseDto(id, name, date, time);
+        public ReservationRequestDto build() {
+            return new ReservationRequestDto(name, date, time);
         }
     }
 }

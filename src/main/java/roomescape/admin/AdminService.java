@@ -13,15 +13,20 @@ public class AdminService {
     private AdminRepository adminRepository;
 
     public List<ReadReservationTimeResponse> readReservationTime() {
-        return null;
+        List<ReservationTime> reservationTime = this.adminRepository.readReservationTime();
+
+        return ReadReservationTimeResponse.entityToList(reservationTime);
     }
 
     public ReadReservationTimeResponse saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
-        return null;
+        Long id = this.adminRepository.saveReservationTime(saveReservationTimeRequest);
+        ReservationTime reservationTime = this.adminRepository.readReservationTimeById(id);
+
+        return ReadReservationTimeResponse.entityToDTO(reservationTime);
     }
 
     public void deleteReservationTime(Long id) {
-
+        this.adminRepository.deleteReservationTime(id);
     }
 
     public List<ReadReservationResponse> readReservation() {

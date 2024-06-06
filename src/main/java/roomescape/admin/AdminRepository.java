@@ -16,6 +16,23 @@ public class AdminRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    public List<ReservationTime> readReservationTime() {
+        return null;
+    }
+
+    public ReservationTime readReservationTimeById(Long id) {
+        return null;
+    }
+
+    public Long saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
+        return null;
+    }
+
+
+    public void deleteReservationTime(Long id) {
+
+    }
+
     public List<Reservation> readReservation() {
         String readQuery = "select id, name, date, time from reservation";
         List<Reservation> data = this.jdbcTemplate.query(readQuery, readRowMapper());

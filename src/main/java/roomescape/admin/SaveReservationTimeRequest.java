@@ -1,4 +1,4 @@
 package roomescape.admin;
 
-public record SaveReservationTimeRequest() {
+public record SaveReservationTimeRequest(String startAt) {
 }

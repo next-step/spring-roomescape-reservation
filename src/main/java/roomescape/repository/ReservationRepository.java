@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReservationRepository {
 
+	private static final RowMapper<Reservation> RESERVATION_ROW_MAPPER;
+
 	private final JdbcTemplate jdbcTemplate;
 
 	private SimpleJdbcInsert jdbcInsert;
@@ -42,21 +44,7 @@ public class ReservationRepository {
 						INNER JOIN reservation_time AS rt
 								ON r.time_id = rt.id
 				""";
-		return this.jdbcTemplate.query(sql, reservationRowMapper());
-	}
-
-	private RowMapper<Reservation> reservationRowMapper() {
-		return (resultSet, rowNum) -> {
-			long timeId = resultSet.getLong("time_id");
-			String timeStartAt = resultSet.getString("time_start_at");
-			ReservationTime reservationTime = ReservationTime.builder().id(timeId).startAt(timeStartAt).build();
-
-			long id = resultSet.getLong("id");
-			String name = resultSet.getString("name");
-			String date = resultSet.getString("date");
-
-			return Reservation.builder().id(id).name(name).date(date).time(reservationTime).build();
-		};
+		return this.jdbcTemplate.query(sql, RESERVATION_ROW_MAPPER);
 	}
 
 	public Reservation save(Reservation reservation) {
@@ -77,6 +65,20 @@ public class ReservationRepository {
 		if (result == 0) {
 			throw new RuntimeException("No data found for ID: " + id);
 		}
+	}
+
+	static {
+		RESERVATION_ROW_MAPPER = (resultSet, rowNum) -> {
+			long timeId = resultSet.getLong("time_id");
+			String timeStartAt = resultSet.getString("time_start_at");
+			ReservationTime reservationTime = ReservationTime.builder().id(timeId).startAt(timeStartAt).build();
+
+			long id = resultSet.getLong("id");
+			String name = resultSet.getString("name");
+			String date = resultSet.getString("date");
+
+			return Reservation.builder().id(id).name(name).date(date).time(reservationTime).build();
+		};
 	}
 
 }

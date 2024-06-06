@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ReservationTimeRepository {
 
+	private static final RowMapper<ReservationTime> RESERVATION_TIME_ROW_MAPPER;
+
 	private final JdbcTemplate jdbcTemplate;
 
 	private SimpleJdbcInsert jdbcInsert;
@@ -40,16 +42,7 @@ public class ReservationTimeRepository {
 
 	public List<ReservationTime> findAll() {
 		String sql = "SELECT rt.id, rt.start_at FROM reservation_time rt";
-		return this.jdbcTemplate.query(sql, reservationTimeRowMapper());
-	}
-
-	private RowMapper<ReservationTime> reservationTimeRowMapper() {
-		return (resultSet, rowNum) -> {
-			long id = resultSet.getLong("id");
-			String startAt = resultSet.getString("start_at");
-
-			return ReservationTime.builder().id(id).startAt(startAt).build();
-		};
+		return this.jdbcTemplate.query(sql, RESERVATION_TIME_ROW_MAPPER);
 	}
 
 	public void delete(long id) {
@@ -63,7 +56,16 @@ public class ReservationTimeRepository {
 
 	public ReservationTime findById(long id) {
 		String sql = "SELECT rt.id, rt.start_at FROM reservation_time rt WHERE rt.id = ?";
-		return this.jdbcTemplate.queryForObject(sql, reservationTimeRowMapper(), id);
+		return this.jdbcTemplate.queryForObject(sql, RESERVATION_TIME_ROW_MAPPER, id);
+	}
+
+	static {
+		RESERVATION_TIME_ROW_MAPPER = (resultSet, rowNum) -> {
+			long id = resultSet.getLong("id");
+			String startAt = resultSet.getString("start_at");
+
+			return ReservationTime.builder().id(id).startAt(startAt).build();
+		};
 	}
 
 }

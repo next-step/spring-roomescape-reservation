@@ -56,7 +56,6 @@ public class ReservationRepository {
 
     public Reservation findById(Long id) {
         final String sql = "select id, name, date, time from reservation where id = ?";
-
         final Reservation reservation = jdbcTemplate.queryForObject(sql,
                 (resultSet, rowNum) -> {
                     Reservation reservation1 = new Reservation(

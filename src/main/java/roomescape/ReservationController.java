@@ -30,6 +30,11 @@ public class ReservationController {
         );
     };
 
+    @GetMapping("/admin/reservation")
+    public String showAdminPage() {
+        return "admin/reservation-legacy";
+    }
+
     @GetMapping("reservations")
     public ResponseEntity<List<Reservation>> read() {
         String sql = "select * from reservation";

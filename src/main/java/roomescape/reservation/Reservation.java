@@ -76,6 +76,37 @@ public class Reservation {
         }
     }
 
+    public static class Builder {
+        private Long id;
+        private String name;
+        private String date;
+        private String time;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder date(String date) {
+            this.date = date;
+            return this;
+        }
+
+        public Builder time(String time) {
+            this.time = time;
+            return this;
+        }
+
+        public Reservation build() {
+            return new Reservation(id, name, date, time);
+        }
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +

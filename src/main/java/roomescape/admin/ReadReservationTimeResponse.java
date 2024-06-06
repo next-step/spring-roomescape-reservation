@@ -1,13 +1,22 @@
 package roomescape.admin;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public record ReadReservationTimeResponse() {
-    public static List<ReadReservationTimeResponse> entityToList(List<ReservationTime> reservationTime) {
-        return null;
+public record ReadReservationTimeResponse(Long id,
+                                          String startAt) {
+
+    private ReadReservationTimeResponse(ReservationTime reservationTime){
+        this(reservationTime.getId(), reservationTime.getStartAt());
     }
 
-    public static ReadReservationTimeResponse entityToDTO(ReservationTime reservationTime) {
-        return null;
+    public static ReadReservationTimeResponse entityToDTO(ReservationTime reservationTime){
+        return new ReadReservationTimeResponse(reservationTime);
+    }
+
+    public static List<ReadReservationTimeResponse> entityToList(List<ReservationTime> reservations) {
+        return reservations.stream()
+                .map(ReadReservationTimeResponse::new)
+                .collect(Collectors.toList());
     }
 }

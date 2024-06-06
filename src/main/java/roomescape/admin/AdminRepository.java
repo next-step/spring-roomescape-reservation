@@ -16,21 +16,38 @@ public class AdminRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
     public List<ReservationTime> readReservationTime() {
-        return null;
+        return this.jdbcTemplate.query("select id as time_id, start_at as time_start_at from reservation_time", readReservationTimeRowMapper());
     }
 
     public ReservationTime readReservationTimeById(Long id) {
-        return null;
+        return this.jdbcTemplate.queryForObject("select id as time_id, start_at as time_start_at from reservation_time where id = ?", readReservationTimeRowMapper(),id);
+    }
+
+    private RowMapper<ReservationTime> readReservationTimeRowMapper() {
+        return (resultSet, rowNum) -> ReservationTime.read(resultSet);
     }
 
     public Long saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
-        return null;
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        this.jdbcTemplate.update(con -> saveReserveTimeStatement(con, saveReservationTimeRequest), keyHolder);
+        long id = keyHolder.getKey().longValue();
+
+        return id;
     }
 
 
-    public void deleteReservationTime(Long id) {
+    private PreparedStatement saveReserveTimeStatement(Connection con, SaveReservationTimeRequest saveReservationTimeRequest) throws SQLException {
+        String startAt = saveReservationTimeRequest.startAt();
+        PreparedStatement ps = con.prepareStatement("insert into reservation_time(start_at) values(?)", new String[]{"id"});
+        ps.setString(1, startAt);
 
+        return ps;
+    }
+
+    public void deleteReservationTime(Long id) {
+        this.jdbcTemplate.update("delete from reservation_time where id = ?", id);
     }
 
     public List<Reservation> readReservation() {

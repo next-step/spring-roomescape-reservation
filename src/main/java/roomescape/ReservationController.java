@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 public class ReservationController {
@@ -32,9 +29,6 @@ public class ReservationController {
                 resultSet.getTime("time").toLocalTime()
         );
     };
-
-    private List<Reservation> reservations = new ArrayList<>();
-    private AtomicLong index = new AtomicLong(1);
 
     @GetMapping("reservations")
     public ResponseEntity<List<Reservation>> read() {
@@ -64,18 +58,12 @@ public class ReservationController {
 
     @DeleteMapping("reservations/{id}")
     public ResponseEntity<Void> remove(@PathVariable("id") Long id) {
-        Reservation removedReservation;
+        String sql = "delete from reservation where id = ?";
+        long deleteCount = jdbcTemplate.update(sql, id);
 
-        try {
-             removedReservation = reservations.stream()
-                    .filter(reservation -> Objects.equals(reservation.getId(), id))
-                    .findFirst()
-                    .orElseThrow(RuntimeException::new);
-        }
-        catch (RuntimeException e) {
+        if (deleteCount == 0) {
             return ResponseEntity.notFound().build();
         }
-        reservations.remove(removedReservation);
         return ResponseEntity.ok().build();
     }
 }

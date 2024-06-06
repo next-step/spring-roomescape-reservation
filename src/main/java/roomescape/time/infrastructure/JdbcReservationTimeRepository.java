@@ -1,6 +1,7 @@
 package roomescape.time.infrastructure;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -28,6 +29,15 @@ public class JdbcReservationTimeRepository {
         SqlParameterSource params = new BeanPropertySqlParameterSource(reservationTime);
         Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
         return new ReservationTime(id, reservationTime.getStartAt());
+    }
+
+    public Optional<ReservationTime> findById(Long reservationTimeId) {
+        String sql = "SELECT * FROM reservation_time WHERE id = ?";
+        ReservationTime findReservationTime = jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> new ReservationTime(
+                resultSet.getLong("id"),
+                resultSet.getString("start_at")
+        ), reservationTimeId);
+        return Optional.ofNullable(findReservationTime);
     }
 
     public List<ReservationTime> findAll() {

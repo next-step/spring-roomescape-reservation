@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import roomescape.reservation.application.dto.ReservationResponse;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
 import roomescape.reservation.presentation.dto.ReservationCreateRequest;
@@ -21,15 +22,18 @@ public class ReservationService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public Reservation save(ReservationCreateRequest request) {
-        ReservationTime reservationTime = request.toReservationTime();
-        ReservationTime savedReservationTime = reservationTimeRepository.save(reservationTime);
-        Reservation reservation = request.toReservation(savedReservationTime);
-        return reservationRepository.save(reservation);
+    public ReservationResponse save(ReservationCreateRequest request) {
+        ReservationTime savedReservationTime = reservationTimeRepository.findById(request.timeId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 시간입니다."));
+        Reservation reservation = reservationRepository.save(request.toReservation(savedReservationTime));
+        return ReservationResponse.from(reservation);
     }
 
-    public List<Reservation> getReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationResponse> getReservations() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        return reservations.stream()
+                .map(ReservationResponse::from)
+                .toList();
     }
 
     public void cancelReservation(Long reservationId) {

@@ -16,12 +16,16 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTime createReservationTime(ReservationTime reservationTime) {
-        return reservationTimeRepository.save(reservationTime);
+    public ReservationTimeResponse createReservationTime(ReservationTime reservationTime) {
+        ReservationTime savedResponseTime = reservationTimeRepository.save(reservationTime);
+        return ReservationTimeResponse.from(savedResponseTime);
     }
 
-    public List<ReservationTime> getReservationTimes() {
-        return reservationTimeRepository.findAll();
+    public List<ReservationTimeResponse> getReservationTimes() {
+        List<ReservationTime> reservationTimes = reservationTimeRepository.findAll();
+        return reservationTimes.stream()
+                .map(ReservationTimeResponse::from)
+                .toList();
     }
 
     public void deleteReservationTime(Long reservationId) {

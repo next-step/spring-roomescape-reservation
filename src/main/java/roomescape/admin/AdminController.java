@@ -19,9 +19,14 @@ public class AdminController {
         return BASE_PATH+"/index.html";
     }
 
-    @GetMapping("/admin/reservation")
+    @GetMapping(BASE_PATH+"/reservation")
     public String reservation(){
         return BASE_PATH+"/reservation-legacy.html";
+    }
+
+    @GetMapping(BASE_PATH+"/time")
+    public String time(){
+        return BASE_PATH+"/time.html";
     }
 
     @GetMapping("/reservations")

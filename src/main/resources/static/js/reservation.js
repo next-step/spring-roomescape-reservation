@@ -23,7 +23,7 @@ function render(data) {
     row.insertCell(0).textContent = item.id;
     row.insertCell(1).textContent = item.name;
     row.insertCell(2).textContent = item.date;
-    row.insertCell(3).textContent = item.time.startAt;
+    row.insertCell(3).textContent = item.time;
 
     const actionCell = row.insertCell(row.cells.length);
     actionCell.appendChild(createActionButton('삭제', 'btn-danger', deleteRow));

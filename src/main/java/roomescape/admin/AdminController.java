@@ -11,7 +11,12 @@ public class AdminController {
 	}
 
 	@GetMapping("/admin/reservation")
-	public String home() {
+	public String reservation() {
 		return "admin/reservation.html";
+	}
+
+	@GetMapping("/admin/time")
+	public String time() {
+		return "admin/time.html";
 	}
 }

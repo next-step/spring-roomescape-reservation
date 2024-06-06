@@ -1,7 +1,9 @@
 package roomescape.admin;
 
-public class Reservation {
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+public class Reservation {
 
     private Long id;
     private String name;
@@ -16,6 +18,21 @@ public class Reservation {
         this.name = saveReservationRequest.name();
         this.date = saveReservationRequest.date();
         this.time = saveReservationRequest.time();
+    }
+
+    public static Reservation read(ResultSet rs){
+        return new Reservation(rs);
+    }
+
+    private Reservation(ResultSet rs) {
+        try {
+            this.id = rs.getLong("id");
+            this.name = rs.getString("name");
+            this.date = rs.getString("date");
+            this.time = rs.getString("time");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Long getId() {

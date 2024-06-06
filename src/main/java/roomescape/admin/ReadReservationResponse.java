@@ -8,6 +8,13 @@ public record ReadReservationResponse(Long id,
                                       String date,
                                       String time) {
 
+    public ReadReservationResponse(Long id, Reservation reservation) {
+        this(id,
+            reservation.getName(),
+            reservation.getDate(),
+            reservation.getTime());
+    }
+
     public ReadReservationResponse(Reservation reservation) {
         this(reservation.getId(),
                 reservation.getName(),

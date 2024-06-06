@@ -20,9 +20,9 @@ public class AdminService {
 
     public ReadReservationResponse saveReservation(SaveReservationRequest saveReservationRequest) {
         Reservation reservation = Reservation.add(saveReservationRequest);
-        this.adminRepository.saveReservation(saveReservationRequest);
+        Long id = this.adminRepository.saveReservation(saveReservationRequest);
 
-        return new ReadReservationResponse(reservation);
+        return new ReadReservationResponse(id, reservation);
     }
 
     public void deleteReservation(Long id) {

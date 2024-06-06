@@ -1,4 +1,4 @@
-package roomescape.admin;
+package roomescape.admin.repository;
 
 public class ReservationQuery {
     public static final String READ_ALL = "SELECT \n" +

@@ -1,4 +1,7 @@
-package roomescape.admin;
+package roomescape.admin.dto;
+
+import roomescape.admin.entity.Reservation;
+import roomescape.admin.entity.ReservationTime;
 
 import java.util.List;
 import java.util.stream.Collectors;

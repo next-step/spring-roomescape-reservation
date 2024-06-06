@@ -1,4 +1,4 @@
-package roomescape.admin;
+package roomescape.admin.dto;
 
 public record SaveReservationRequest(String name,
                                      String date,

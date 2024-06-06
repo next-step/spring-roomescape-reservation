@@ -1,10 +1,14 @@
-package roomescape.admin;
+package roomescape.admin.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.admin.dto.SaveReservationRequest;
+import roomescape.admin.dto.SaveReservationTimeRequest;
+import roomescape.admin.entity.Reservation;
+import roomescape.admin.entity.ReservationTime;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

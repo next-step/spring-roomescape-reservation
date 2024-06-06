@@ -1,4 +1,6 @@
-package roomescape.admin;
+package roomescape.admin.entity;
+
+import roomescape.admin.dto.SaveReservationTimeRequest;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

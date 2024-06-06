@@ -12,6 +12,18 @@ public class AdminService {
     @Autowired
     private AdminRepository adminRepository;
 
+    public List<ReadReservationTimeResponse> readReservationTime() {
+        return null;
+    }
+
+    public ReadReservationTimeResponse saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
+        return null;
+    }
+
+    public void deleteReservationTime(Long id) {
+
+    }
+
     public List<ReadReservationResponse> readReservation() {
         List<Reservation> reservation = this.adminRepository.readReservation();
 

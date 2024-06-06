@@ -21,12 +21,33 @@ public class AdminController {
 
     @GetMapping(BASE_PATH+"/reservation")
     public String reservation(){
-        return BASE_PATH+"/reservation-legacy.html";
+        return BASE_PATH+"/reservation.html";
     }
 
     @GetMapping(BASE_PATH+"/time")
     public String time(){
         return BASE_PATH+"/time.html";
+    }
+
+    @GetMapping("/times")
+    public ResponseEntity<List<ReadReservationTimeResponse>> readReservationTime(){
+        List<ReadReservationTimeResponse> response = this.adminService.readReservationTime();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/times")
+    public ResponseEntity<ReadReservationTimeResponse> saveReservationTime(@RequestBody SaveReservationTimeRequest saveReservationTimeRequest){
+        ReadReservationTimeResponse response = this.adminService.saveReservationTime(saveReservationTimeRequest);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/times/{id}")
+    public ResponseEntity<Void> deleteReservationTime(@PathVariable(name = "id") Long id){
+        this.adminService.deleteReservationTime(id);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/reservations")

@@ -7,7 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.apply.reservation.domain.Reservation;
-import roomescape.apply.time.domain.ReservationTime;
+import roomescape.apply.reservationtime.domain.ReservationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -90,7 +90,7 @@ public class ReservationJDBCRepository implements ReservationRepository {
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteById(long id) {
         template.update(DELETE_SQL, id);
     }
 

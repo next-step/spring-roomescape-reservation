@@ -1,13 +1,13 @@
-package roomescape.apply.time.ui;
+package roomescape.apply.reservationtime.ui;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import roomescape.apply.time.application.ReservationTimeDeleter;
-import roomescape.apply.time.application.ReservationTimeFinder;
-import roomescape.apply.time.application.ReservationTimeSaver;
-import roomescape.apply.time.ui.dto.ReservationTimeRequest;
-import roomescape.apply.time.ui.dto.ReservationTimeResponse;
+import roomescape.apply.reservationtime.application.ReservationTimeDeleter;
+import roomescape.apply.reservationtime.application.ReservationTimeFinder;
+import roomescape.apply.reservationtime.application.ReservationTimeSaver;
+import roomescape.apply.reservationtime.ui.dto.ReservationTimeRequest;
+import roomescape.apply.reservationtime.ui.dto.ReservationTimeResponse;
 
 import java.util.List;
 

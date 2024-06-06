@@ -1,4 +1,4 @@
-package roomescape.apply.time.domain.repository;
+package roomescape.apply.reservationtime.domain.repository;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.apply.time.domain.ReservationTime;
+import roomescape.apply.reservationtime.domain.ReservationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -83,7 +83,7 @@ public class ReservationTimeJDBCRepository implements ReservationTimeRepository 
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         template.update(DELETE_SQL, id);
     }
 

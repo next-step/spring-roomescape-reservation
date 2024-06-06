@@ -1,13 +1,13 @@
-package roomescape.apply.time.application;
+package roomescape.apply.reservationtime.application;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import roomescape.apply.time.domain.repository.ReservationTimeJDBCRepository;
-import roomescape.apply.time.domain.repository.ReservationTimeRepository;
-import roomescape.apply.time.ui.dto.ReservationTimeResponse;
+import roomescape.apply.reservationtime.domain.repository.ReservationTimeJDBCRepository;
+import roomescape.apply.reservationtime.domain.repository.ReservationTimeRepository;
+import roomescape.apply.reservationtime.ui.dto.ReservationTimeResponse;
 import roomescape.support.BaseTestService;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package roomescape.apply.time.ui.dto;
+package roomescape.apply.reservationtime.ui.dto;
 
 import org.springframework.util.StringUtils;
 

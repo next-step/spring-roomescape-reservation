@@ -8,10 +8,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import roomescape.apply.reservation.domain.repository.ReservationJDBCRepository;
 import roomescape.apply.reservation.ui.dto.ReservationRequest;
 import roomescape.apply.reservation.ui.dto.ReservationResponse;
-import roomescape.apply.time.application.ReservationTimeFinder;
-import roomescape.apply.time.domain.ReservationTime;
-import roomescape.apply.time.domain.repository.ReservationTimeJDBCRepository;
-import roomescape.apply.time.domain.repository.ReservationTimeRepository;
+import roomescape.apply.reservationtime.application.ReservationTimeFinder;
+import roomescape.apply.reservationtime.domain.ReservationTime;
+import roomescape.apply.reservationtime.domain.repository.ReservationTimeJDBCRepository;
+import roomescape.apply.reservationtime.domain.repository.ReservationTimeRepository;
 import roomescape.support.BaseTestService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,10 +46,11 @@ class ReservationRecorderTest extends BaseTestService {
         // then
         assertThat(response).isNotNull();
         assertThat(response.id()).isNotZero();
-        assertThat(response.name()).isEqualTo(request.name());
-        assertThat(response.date()).isEqualTo(request.date());
-        assertThat(response.time().id()).isEqualTo(time.getId());
-        assertThat(response.time().startAt()).isEqualTo(time.getStartAt());
+        assertThat(response).usingRecursiveComparison()
+                .ignoringFields("id", "time")
+                .isEqualTo(request);
+        assertThat(response.time()).usingRecursiveComparison()
+                .isEqualTo(time);
     }
 
 }

@@ -8,9 +8,9 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import roomescape.apply.reservation.domain.repository.ReservationJDBCRepository;
 import roomescape.apply.reservation.domain.repository.ReservationRepository;
 import roomescape.apply.reservation.ui.dto.ReservationResponse;
-import roomescape.apply.time.domain.ReservationTime;
-import roomescape.apply.time.domain.repository.ReservationTimeJDBCRepository;
-import roomescape.apply.time.domain.repository.ReservationTimeRepository;
+import roomescape.apply.reservationtime.domain.ReservationTime;
+import roomescape.apply.reservationtime.domain.repository.ReservationTimeJDBCRepository;
+import roomescape.apply.reservationtime.domain.repository.ReservationTimeRepository;
 import roomescape.support.BaseTestService;
 
 import java.util.List;

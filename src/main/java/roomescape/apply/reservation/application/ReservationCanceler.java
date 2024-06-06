@@ -16,6 +16,6 @@ public class ReservationCanceler {
 
     public void cancelReservation(long id) {
         final long reservationId = reservationRepository.checkIdExists(id).orElseThrow(NoSuchElementException::new);
-        reservationRepository.delete(reservationId);
+        reservationRepository.deleteById(reservationId);
     }
 }

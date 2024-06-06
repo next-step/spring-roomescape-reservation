@@ -2,8 +2,8 @@ package roomescape.support;
 
 import roomescape.apply.reservation.domain.Reservation;
 import roomescape.apply.reservation.ui.dto.ReservationRequest;
-import roomescape.apply.time.domain.ReservationTime;
-import roomescape.apply.time.ui.dto.ReservationTimeRequest;
+import roomescape.apply.reservationtime.domain.ReservationTime;
+import roomescape.apply.reservationtime.ui.dto.ReservationTimeRequest;
 
 public class ReservationsFixture {
 

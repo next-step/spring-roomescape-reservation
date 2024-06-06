@@ -1,6 +1,6 @@
 package roomescape.apply.reservation.domain;
 
-import roomescape.apply.time.domain.ReservationTime;
+import roomescape.apply.reservationtime.domain.ReservationTime;
 
 public class Reservation {
 

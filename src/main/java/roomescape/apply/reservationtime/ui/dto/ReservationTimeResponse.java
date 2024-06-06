@@ -1,6 +1,6 @@
-package roomescape.apply.time.ui.dto;
+package roomescape.apply.reservationtime.ui.dto;
 
-import roomescape.apply.time.domain.ReservationTime;
+import roomescape.apply.reservationtime.domain.ReservationTime;
 
 public record ReservationTimeResponse(
         long id,

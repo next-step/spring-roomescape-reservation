@@ -10,33 +10,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import roomescape.time.application.ReservationTimeService;
 import roomescape.time.domain.ReservationTime;
-import roomescape.time.infrastructure.JdbcReservationTimeRepository;
 
 @RestController
 public class ReservationTimeController {
 
-    private final JdbcReservationTimeRepository reservationTimeRepository;
+    private final ReservationTimeService reservationTimeService;
 
-    public ReservationTimeController(JdbcReservationTimeRepository reservationTimeRepository) {
-        this.reservationTimeRepository = reservationTimeRepository;
+    public ReservationTimeController(ReservationTimeService reservationTimeService) {
+        this.reservationTimeService = reservationTimeService;
     }
 
     @PostMapping("/times")
-    public ResponseEntity<ReservationTime> create(@RequestBody ReservationTime reservationTime) {
-        ReservationTime savedReservationTime = reservationTimeRepository.save(reservationTime);
+    public ResponseEntity<ReservationTime> createReservationTime(@RequestBody ReservationTime reservationTime) {
+        ReservationTime savedReservationTime = reservationTimeService.createReservationTime(reservationTime);
         return ResponseEntity.ok(savedReservationTime);
     }
 
     @GetMapping("times")
     public ResponseEntity<List<ReservationTime>> getReservationTimes() {
-        List<ReservationTime> reservationTimes = reservationTimeRepository.findAll();
+        List<ReservationTime> reservationTimes = reservationTimeService.getReservationTimes();
         return ResponseEntity.ok(reservationTimes);
     }
 
     @DeleteMapping("/times/{reservationTimeId}")
     public ResponseEntity<Void> deleteReservationTime(@PathVariable Long reservationTimeId) {
-        reservationTimeRepository.delete(reservationTimeId);
+        reservationTimeService.deleteReservationTime(reservationTimeId);
         return ResponseEntity.ok().build();
     }
 }

@@ -3,9 +3,15 @@ package roomescape;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.sql.PreparedStatement;
+import java.sql.Time;
 import java.util.List;
 
 @Controller
@@ -28,5 +34,21 @@ public class ReservationTimeController {
         String sql = "select * from reservation_time";
         List<ReservationTime> reservationTimes = jdbcTemplate.query(sql, reservationTimeRowMapper);
         return ResponseEntity.ok().body(reservationTimes);
+    }
+
+    @PostMapping("times")
+    public ResponseEntity<ReservationTime> create(@RequestBody ReservationTime newReservationTime) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connect -> {
+            String sql = "insert into reservation_time (start_at) values (?)";
+            PreparedStatement ps = connect.prepareStatement(sql, new String[]{"id"});
+            ps.setTime(1, Time.valueOf(newReservationTime.getStartAt()));
+            return ps;
+        }, keyHolder);
+        Long createId = keyHolder.getKey().longValue();
+
+        String sql = "select * from reservation_time where id = ?";
+        ReservationTime reservationTime = jdbcTemplate.queryForObject(sql, reservationTimeRowMapper, createId);
+        return ResponseEntity.ok().body(reservationTime);
     }
 }

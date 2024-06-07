@@ -15,7 +15,7 @@ import org.springframework.test.annotation.DirtiesContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @DisplayName("예약시간 테스트")
-public class ReservationTimeApiTest {
+public class ReservationTimeTest {
 
     @Test
     @DisplayName("예약시간을 생성한다.")

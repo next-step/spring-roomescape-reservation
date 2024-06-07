@@ -1,4 +1,4 @@
-package roomescape.controller;
+package roomescape.controller.api;
 
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import roomescape.service.ReservationTimeService;
 
 @RestController
 @RequestMapping("/times")
-public class ReservationTimeApiController {
+public class ReservationTimeController {
 
     private final ReservationTimeService reservationTimeService;
 
-    public ReservationTimeApiController(ReservationTimeService reservationTimeService) {
+    public ReservationTimeController(ReservationTimeService reservationTimeService) {
         this.reservationTimeService = reservationTimeService;
     }
 

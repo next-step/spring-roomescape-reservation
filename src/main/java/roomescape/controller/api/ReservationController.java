@@ -1,4 +1,4 @@
-package roomescape.controller;
+package roomescape.controller.api;
 
 
 import java.util.List;
@@ -16,11 +16,11 @@ import roomescape.service.ReservationService;
 
 @RestController
 @RequestMapping("/reservations")
-public class ReservationApiController {
+public class ReservationController {
 
     private final ReservationService reservationService;
 
-    public ReservationApiController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 

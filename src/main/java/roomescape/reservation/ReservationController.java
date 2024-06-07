@@ -8,7 +8,7 @@ import roomescape.entities.Reservation;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/reservations")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -17,17 +17,17 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping("/reservations")
+    @GetMapping
     public List<Reservation> searchReservations(){
         return reservationService.searchAllReservations();
     }
 
-    @PostMapping("/reservations")
+    @PostMapping
     public void addReservation(@RequestBody Reservation reservation) {
         reservationService.addReservation(reservation);
     }
 
-    @DeleteMapping("/reservations/{id}")
+    @DeleteMapping("/{id}")
     public void cancelReservation(@PathVariable Long id) {
         reservationService.cancelReservation(id);
     }

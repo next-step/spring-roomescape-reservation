@@ -1,24 +1,17 @@
-package roomescape.domain;
+package roomescape.dto.response;
 
-public class ReservationTime {
+public class ReservationTimeResponse {
 
     private Long id;
     private String startAt;
 
-    public ReservationTime() {
-
+    public ReservationTimeResponse() {
     }
 
-    public ReservationTime(Long id, String startAt) {
+    public ReservationTimeResponse(Long id, String startAt) {
         this.id = id;
         this.startAt = startAt;
     }
-
-    public ReservationTime(String startAt) {
-        this.startAt = startAt;
-    }
-
-
 
     public Long getId() {
         return id;

@@ -1,8 +1,8 @@
 package roomescape.service;
 
 import java.util.List;
-import roomescape.dto.ReservationRequest;
-import roomescape.dto.ReservationResponse;
+import roomescape.dto.request.ReservationRequest;
+import roomescape.dto.response.ReservationResponse;
 
 public interface ReservationService {
 

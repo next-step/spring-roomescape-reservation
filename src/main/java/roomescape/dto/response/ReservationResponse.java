@@ -1,4 +1,4 @@
-package roomescape.dto;
+package roomescape.dto.response;
 
 public class ReservationResponse {
 

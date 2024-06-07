@@ -1,14 +1,13 @@
 package roomescape;
 
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.PreparedStatement;
 import java.sql.Time;
@@ -50,5 +49,16 @@ public class ReservationTimeController {
         String sql = "select * from reservation_time where id = ?";
         ReservationTime reservationTime = jdbcTemplate.queryForObject(sql, reservationTimeRowMapper, createId);
         return ResponseEntity.ok().body(reservationTime);
+    }
+
+    @DeleteMapping("times/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        String sql = "delete from reservation_time where id = ?";
+        long deleteCount = jdbcTemplate.update(sql, id);
+
+        if (deleteCount == 0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

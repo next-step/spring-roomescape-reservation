@@ -1,6 +1,5 @@
 package roomescape;
 
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.PreparedStatement;
-import java.sql.Time;
 import java.util.List;
 
 @Controller
@@ -24,7 +22,7 @@ public class ReservationTimeController {
     private final RowMapper<ReservationTime> reservationTimeRowMapper = (resultSet, rowNum) -> {
         return new ReservationTime(
           resultSet.getLong("id"),
-          resultSet.getTime("start_at").toLocalTime()
+          resultSet.getString("start_at")
         );
     };
 
@@ -41,7 +39,7 @@ public class ReservationTimeController {
         jdbcTemplate.update(connect -> {
             String sql = "insert into reservation_time (start_at) values (?)";
             PreparedStatement ps = connect.prepareStatement(sql, new String[]{"id"});
-            ps.setTime(1, Time.valueOf(newReservationTime.getStartAt()));
+            ps.setString(1, newReservationTime.getStartAt());
             return ps;
         }, keyHolder);
         Long createId = keyHolder.getKey().longValue();

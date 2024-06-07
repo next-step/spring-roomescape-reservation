@@ -1,20 +1,26 @@
 package roomescape.reservation.web.dto;
 
-import roomescape.reservation.domain.Reservation;
-
 public class ReservationRequest {
 
     private final String name;
     private final String date;
-    private final String time;
+    private final Long timeId;
 
-    public ReservationRequest(String name, String date, String time) {
+    public ReservationRequest(String name, String date, Long timeId) {
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
     }
 
-    public Reservation toEntity() {
-        return new Reservation(null, this.name, this.date, this.time);
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public Long getTimeId() {
+        return timeId;
     }
 }

@@ -7,6 +7,8 @@ import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.service.ReservationService;
 import roomescape.reservation.web.dto.ReservationRequest;
 import roomescape.reservation.web.dto.ReservationResponse;
+import roomescape.time.domain.Time;
+import roomescape.time.service.TimeService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,14 +17,16 @@ import java.util.stream.Collectors;
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final TimeService timeService;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, TimeService timeService) {
         this.reservationService = reservationService;
+        this.timeService = timeService;
     }
 
     @GetMapping("/admin/reservation")
     public String reservation() {
-        return "admin/reservation-legacy";
+        return "admin/reservation";
     }
 
     @GetMapping("/reservations")
@@ -36,7 +40,8 @@ public class ReservationController {
     @PostMapping("/reservations")
     @ResponseBody
     public ResponseEntity<ReservationResponse> save(@RequestBody ReservationRequest request) {
-        Reservation reservation = reservationService.save(request.toEntity());
+        Time time = timeService.findById(request.getTimeId());
+        Reservation reservation = reservationService.save(new Reservation(null, request.getName(), request.getDate(), time));
         return ResponseEntity.ok().body(new ReservationResponse(reservation));
     }
 

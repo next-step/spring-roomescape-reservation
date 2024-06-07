@@ -12,8 +12,8 @@ public class Reservation {
     private LocalDate date;
     private LocalTime time;
 
-    public static Reservation toEntity(Long id,ReservationDto dto) {
-        return new Reservation(id, dto.getName(), LocalDate.parse(dto.getDate()), LocalTime.parse(dto.getTime()));
+    public static Reservation toEntity(Long id,String name, String date, String time) {
+        return new Reservation(id, name, LocalDate.parse(date), LocalTime.parse(time));
     }
 
     public Reservation() {
@@ -26,10 +26,10 @@ public class Reservation {
         this.time = time;
     }
 
-    public Reservation(String name, LocalDate date, LocalTime time) {
+    public Reservation(String name, String date, String time) {
         this.name = name;
-        this.date = date;
-        this.time = time;
+        this.date = LocalDate.parse(date);
+        this.time = LocalTime.parse(time);
     }
 
     public Long getId() {

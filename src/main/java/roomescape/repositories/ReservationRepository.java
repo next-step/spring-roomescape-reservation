@@ -40,4 +40,9 @@ public class ReservationRepository {
         });
         return reservations;
     }
+
+    public void deleteById(Long id){
+        String sql = "DELETE FROM RESERVATION WHERE id = ?";
+        jdbcTemplate.update(sql, id);
+    }
 }

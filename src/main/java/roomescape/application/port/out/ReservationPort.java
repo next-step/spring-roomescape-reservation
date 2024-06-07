@@ -7,7 +7,7 @@ public interface ReservationPort {
 
   List<Reservation> findReservations();
 
-  Reservation saveReservations(Reservation reservation);
+  Reservation saveReservation(Reservation reservation);
 
   void deleteReservation(Long id);
 }

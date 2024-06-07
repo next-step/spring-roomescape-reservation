@@ -13,6 +13,7 @@ import roomescape.adapter.mapper.ReservationMapper;
 import roomescape.adapter.out.ReservationEntity;
 import roomescape.application.port.out.ReservationPort;
 import roomescape.domain.Reservation;
+import roomescape.domain.ReservationTime;
 
 @Component
 public class ReservationInMemoryRepository implements ReservationPort {
@@ -25,8 +26,10 @@ public class ReservationInMemoryRepository implements ReservationPort {
     index = new AtomicLong(0);
     reservationMap = new HashMap<>();
 
-    saveReservations(new Reservation(null, "브라운", "2024-06-06", "12:30"));
-    saveReservations(new Reservation(null, "블랙", "2024-07-06", "11:00"));
+    ReservationTime reservationTime1 = new ReservationTime(1L, "12:30");
+    ReservationTime reservationTime2 = new ReservationTime(2L, "11:00");
+    saveReservation(new Reservation(null, "브라운", "2024-06-06", reservationTime1));
+    saveReservation(new Reservation(null, "블랙", "2024-07-06", reservationTime2));
   }
 
   @Override
@@ -38,7 +41,7 @@ public class ReservationInMemoryRepository implements ReservationPort {
   }
 
   @Override
-  public Reservation saveReservations(Reservation reservation) {
+  public Reservation saveReservation(Reservation reservation) {
     Long newIndex = index.incrementAndGet();
     ReservationEntity registerReservation = mapToEntity(reservation.addId(newIndex));
 

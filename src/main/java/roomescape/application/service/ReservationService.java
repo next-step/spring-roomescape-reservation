@@ -25,7 +25,7 @@ public class ReservationService implements ReservationUseCase {
 
   @Override
   public Reservation registerReservation(Reservation reservation) {
-    return reservationPort.saveReservations(reservation);
+    return reservationPort.saveReservation(reservation);
   }
 
   @Override

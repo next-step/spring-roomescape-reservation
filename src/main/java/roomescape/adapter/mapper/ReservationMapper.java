@@ -4,6 +4,7 @@ import roomescape.adapter.in.web.dto.ReservationCommand;
 import roomescape.adapter.in.web.dto.ReservationResponse;
 import roomescape.adapter.out.ReservationEntity;
 import roomescape.domain.Reservation;
+import roomescape.domain.ReservationTime;
 
 public class ReservationMapper {
 
@@ -13,20 +14,22 @@ public class ReservationMapper {
 
   public static ReservationResponse mapToResponse(Reservation reservation) {
     return ReservationResponse.of(reservation.getId(), reservation.getName(), reservation.getDate(),
-      reservation.getDate());
+      reservation.getTime()
+                 .getStartAt());
   }
 
   public static Reservation mapToDomain(ReservationCommand reservationCommand) {
-    return Reservation.of(reservationCommand.name(), reservationCommand.date(), reservationCommand.time());
+    return Reservation.of(reservationCommand.name(), reservationCommand.date(), ReservationTime.of(
+      reservationCommand.time()));
   }
 
   public static Reservation mapToDomain(ReservationEntity reservationEntity) {
     return Reservation.of(reservationEntity.getId(), reservationEntity.getName(), reservationEntity.getDate(),
-      reservationEntity.getTime());
+      ReservationTimeMapper.mapToDomain(reservationEntity.getTime()));
   }
 
   public static ReservationEntity mapToEntity(Reservation reservation) {
     return ReservationEntity.of(reservation.getId(), reservation.getName(), reservation.getDate(),
-      reservation.getTime());
+      ReservationTimeMapper.mapToEntity(reservation.getTime()));
   }
 }

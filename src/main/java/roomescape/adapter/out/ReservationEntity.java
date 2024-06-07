@@ -5,9 +5,9 @@ public class ReservationEntity {
   private final Long id;
   private final String name;
   private final String date;
-  private final String time;
+  private final ReservationTimeEntity time;
 
-  public ReservationEntity(Long id, String name, String date, String time) {
+  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity time) {
     this.id = id;
     this.name = name;
     this.date = date;
@@ -26,11 +26,11 @@ public class ReservationEntity {
     return date;
   }
 
-  public String getTime() {
+  public ReservationTimeEntity getTime() {
     return time;
   }
 
-  public static ReservationEntity of(Long id, String name, String date, String time) {
+  public static ReservationEntity of(Long id, String name, String date, ReservationTimeEntity time) {
     return new ReservationEntity(id, name, date, time);
   }
 }

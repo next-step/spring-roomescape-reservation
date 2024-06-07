@@ -2,6 +2,7 @@ package roomescape.repository;
 
 import roomescape.domain.Reservation;
 import roomescape.dto.ReservationDto;
+import roomescape.dto.ReservationTimeDto;
 
 import java.util.List;
 
@@ -9,9 +10,9 @@ public interface ReservationRepository {
 
     List<ReservationDto> findReservations();
 
-    Long create(ReservationDto dto);
+    Reservation create(ReservationDto dto, ReservationTimeDto timeDto);
 
-    ReservationDto findReservationByid(Long id);
+//    ReservationDto findReservationById(Long id);
 
     void deleteReservation(Long id);
 }

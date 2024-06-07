@@ -10,26 +10,28 @@ public class Reservation {
     private Long id;
     private String name;
     private LocalDate date;
-    private LocalTime time;
 
-    public static Reservation toEntity(Long id,String name, String date, String time) {
-        return new Reservation(id, name, LocalDate.parse(date), LocalTime.parse(time));
+    private ReservationTime time;
+
+    public static Reservation toEntity(Long id,String name, String date, Long timeId, String startAt) {
+        return new Reservation(id, name, LocalDate.parse(date), new ReservationTime(timeId, startAt));
     }
 
     public Reservation() {
     }
 
-    public Reservation(Long id, String name, LocalDate date, LocalTime time) {
+    //create 들어옴.
+    public Reservation(String name, String date, ReservationTime reservationTime) {
+        this.name = name;
+        this.date = LocalDate.parse(date);
+        this.time = reservationTime;
+    }
+
+    public Reservation(Long id, String name, LocalDate date, ReservationTime reservationTime) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
-    }
-
-    public Reservation(String name, String date, String time) {
-        this.name = name;
-        this.date = LocalDate.parse(date);
-        this.time = LocalTime.parse(time);
+        this.time = reservationTime;
     }
 
     public Long getId() {
@@ -44,7 +46,17 @@ public class Reservation {
         return date;
     }
 
-    public LocalTime getTime() {
+    public ReservationTime getTime() {
         return time;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", date=" + date +
+                ", time=" + time +
+                '}';
     }
 }

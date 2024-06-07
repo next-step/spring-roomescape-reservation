@@ -20,7 +20,7 @@ class ReservationControllerTest {
     void create() {
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationDto("hardy", "2024-06-06", "10:00"))
+//                .body(new ReservationDto("hardy", "2024-06-06", "10:00"))
                 .contentType(ContentType.JSON)
                 .when().post("create/reservation")
                 .then().log().all().extract();

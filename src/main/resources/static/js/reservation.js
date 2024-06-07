@@ -18,6 +18,8 @@ function render(data) {
   tableBody.innerHTML = '';
 
   data.forEach(item => {
+   console.log('Time object:', item.time);
+   console.log('Start at:', item.time.startAt);
     const row = tableBody.insertRow();
 
     row.insertCell(0).textContent = item.id;

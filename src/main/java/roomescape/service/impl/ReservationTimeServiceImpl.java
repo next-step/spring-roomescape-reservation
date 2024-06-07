@@ -19,7 +19,7 @@ public class ReservationTimeServiceImpl implements ReservationTimeService {
     }
 
     @Override
-    public ReservationTime create(ReservationTime reservationTime) {
+    public ReservationTime createReservationTime(ReservationTime reservationTime) {
         final String sql = "INSERT INTO reservation_time (start_at) values (?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -33,21 +33,18 @@ public class ReservationTimeServiceImpl implements ReservationTimeService {
     }
 
     @Override
-    public List<ReservationTime> read() {
+    public List<ReservationTime> findAllReservationTimes() {
         final String sql = "SELECT id, start_at FROM reservation_time";
-
-        List<ReservationTime> reservationTimes = jdbcTemplate.query(sql,
+        return jdbcTemplate.query(sql,
                 (rs, rowNum) -> new ReservationTime(
                         rs.getLong("id")
                         , rs.getString("start_at")
                 )
         );
-
-        return reservationTimes;
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteReservationTime(Long id) {
         final String sql = "DELETE FROM reservation_time WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }

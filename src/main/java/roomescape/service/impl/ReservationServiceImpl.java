@@ -6,8 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
-import roomescape.domain.Reservation;
-import roomescape.domain.ReservationTime;
 import roomescape.dto.ReservationRequest;
 import roomescape.dto.ReservationResponse;
 import roomescape.service.ReservationService;
@@ -22,7 +20,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationResponse create(ReservationRequest request) {
+    public ReservationResponse createReservation(ReservationRequest request) {
         final String sql = "INSERT INTO reservation (name, \"date\", time_id) values (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -40,35 +38,28 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservation> read() {
+    public List<ReservationResponse> findAllReservations() {
         final String sql = "SELECT "
                 + "r.id as reservation_id"
                 + ", r.name as reservation_name"
                 + ", r.\"date\" as reservation_date"
-                + ", t.id as time_id"
                 + ", t.start_at as time_start_at"
                 + " FROM reservation as r"
                 + " inner join reservation_time as t"
                 + " on r.time_id = t.id";
 
-        List<Reservation> reservations = jdbcTemplate.query(sql, (resultSet, rowNum) -> {
-                    ReservationTime reservationTime = new ReservationTime(
-                            resultSet.getLong("time_id"),
-                            resultSet.getString("time_start_at")
-                    );
-
-                    return new Reservation(resultSet.getLong("id")
-                            , resultSet.getString("name")
-                            , resultSet.getString("date")
-                            , reservationTime);
-                }
+        List<ReservationResponse> reservations = jdbcTemplate.query(sql, (resultSet, rowNum) ->
+                new ReservationResponse(resultSet.getLong("id")
+                        , resultSet.getString("name")
+                        , resultSet.getString("date")
+                        , resultSet.getString("time_start_at"))
         );
 
         return reservations;
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteReservation(Long id) {
         final String sql = "DELETE FROM reservation where id = ?";
         jdbcTemplate.update(sql, id);
     }

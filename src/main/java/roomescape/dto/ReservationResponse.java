@@ -5,19 +5,19 @@ public class ReservationResponse {
     private Long id;
     private String name;
     private String date;
-    private String timeId;
+    private String time;
 
-    public ReservationResponse(Long id, String name, String date, String timeId) {
+    public ReservationResponse(Long id, String name, String date, String time) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.timeId = timeId;
+        this.time = time;
     }
 
-    public ReservationResponse(String name, String date, String timeId) {
+    public ReservationResponse(String name, String date, String time) {
         this.name = name;
         this.date = date;
-        this.timeId = timeId;
+        this.time = time;
     }
 
     public ReservationResponse() {
@@ -31,11 +31,7 @@ public class ReservationResponse {
         return name;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public String getTimeId() {
-        return timeId;
+    public String getTime() {
+        return time;
     }
 }

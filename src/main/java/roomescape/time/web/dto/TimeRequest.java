@@ -8,8 +8,9 @@ public class TimeRequest {
 
     private final String startAt;
 
+
     @JsonCreator
-    public TimeRequest(@JsonProperty("start_at") String startAt) {
+    public TimeRequest(@JsonProperty("startAt") String startAt) {
         this.startAt = startAt;
     }
 

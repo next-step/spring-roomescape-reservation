@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import roomescape.time.domain.Time;
 import roomescape.time.domain.TimeRepository;
 
+import java.util.List;
+
 @Service
 public class TimeService {
 
@@ -16,5 +18,9 @@ public class TimeService {
     public Time save(Time time) {
         Long id = timeRepository.save(time);
         return timeRepository.findById(id);
+    }
+
+    public List<Time> findAll() {
+        return timeRepository.findAll();
     }
 }

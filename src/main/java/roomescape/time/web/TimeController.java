@@ -11,6 +11,8 @@ import roomescape.time.service.TimeService;
 import roomescape.time.web.dto.TimeRequest;
 import roomescape.time.web.dto.TimeResponse;
 
+import java.util.List;
+
 @Controller
 public class TimeController {
 
@@ -30,5 +32,13 @@ public class TimeController {
     public ResponseEntity<TimeResponse> save(@RequestBody TimeRequest request) {
         Time time = timeService.save(request.toEntity());
         return ResponseEntity.ok().body(new TimeResponse(time));
+    }
+
+    @GetMapping("/times")
+    @ResponseBody
+    public ResponseEntity<List<TimeResponse>> findAll() {
+        List<Time> times = timeService.findAll();
+        List<TimeResponse> responses = times.stream().map(TimeResponse::new).toList();
+        return ResponseEntity.ok().body(responses);
     }
 }

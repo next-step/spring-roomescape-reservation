@@ -2,10 +2,7 @@ package roomescape.time.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import roomescape.time.domain.Time;
 import roomescape.time.service.TimeService;
 import roomescape.time.web.dto.TimeRequest;
@@ -40,5 +37,12 @@ public class TimeController {
         List<Time> times = timeService.findAll();
         List<TimeResponse> responses = times.stream().map(TimeResponse::new).toList();
         return ResponseEntity.ok().body(responses);
+    }
+
+    @DeleteMapping("/times/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        timeService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

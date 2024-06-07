@@ -26,6 +26,11 @@ public class ReservationTimeController {
         );
     };
 
+    @GetMapping("/admin/time")
+    public String showAdminPage() {
+        return "admin/time";
+    }
+
     @GetMapping("times")
     public ResponseEntity<List<ReservationTime>> read() {
         String sql = "select * from reservation_time";

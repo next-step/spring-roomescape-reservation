@@ -88,6 +88,7 @@ function saveRow(event) {
   const dateInput = row.querySelector('input[type="date"]');
   const timeInput = row.querySelector('input[type="time"]');
 
+
   const reservation = {
     name: nameInput.value,
     date: dateInput.value,

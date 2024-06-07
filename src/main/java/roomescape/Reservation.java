@@ -1,5 +1,7 @@
 package roomescape;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Reservation {
     private Long id;
     private String name;
@@ -31,5 +33,10 @@ public class Reservation {
 
     public ReservationTime getTime() {
         return time;
+    }
+
+    @JsonProperty("timeId")
+    public void setTimeById(Long timeId) {
+        this.time = new ReservationTime(timeId, null);
     }
 }

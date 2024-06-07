@@ -1,9 +1,8 @@
 package roomescape.adapter.mapper;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import roomescape.adapter.in.web.dto.ReservationCommand;
 import roomescape.adapter.in.web.dto.ReservationResponse;
+import roomescape.adapter.out.ReservationEntity;
 import roomescape.domain.Reservation;
 
 public class ReservationMapper {
@@ -13,21 +12,21 @@ public class ReservationMapper {
   }
 
   public static ReservationResponse mapToResponse(Reservation reservation) {
-    LocalDateTime dateTime = reservation.getDateTime();
-    String[] dateTimes = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
-                                 .split(" ");
-
-    return ReservationResponse.of(reservation.getId(), reservation.getName(), dateTimes[0], dateTimes[1]);
+    return ReservationResponse.of(reservation.getId(), reservation.getName(), reservation.getDate(),
+      reservation.getDate());
   }
 
   public static Reservation mapToDomain(ReservationCommand reservationCommand) {
-
-    return Reservation.of(reservationCommand.name(),
-      createLocalDateTime(reservationCommand.date(), reservationCommand.time()));
+    return Reservation.of(reservationCommand.name(), reservationCommand.date(), reservationCommand.time());
   }
 
-  private static LocalDateTime createLocalDateTime(String date, String time) {
-    String dateTimeStr = String.format("%s %s", date, time);
-    return LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+  public static Reservation mapToDomain(ReservationEntity reservationEntity) {
+    return Reservation.of(reservationEntity.getId(), reservationEntity.getName(), reservationEntity.getDate(),
+      reservationEntity.getTime());
+  }
+
+  public static ReservationEntity mapToEntity(Reservation reservation) {
+    return ReservationEntity.of(reservation.getId(), reservation.getName(), reservation.getDate(),
+      reservation.getTime());
   }
 }

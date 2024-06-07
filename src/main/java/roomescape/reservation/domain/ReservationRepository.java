@@ -15,6 +15,7 @@ public class ReservationRepository {
     private static final String FIND_BY_ID_SQL = "select * from reservation where id = ?";
     private static final String SAVE_SQL = "insert into reservation (name, date, time) values (?, ?, ?)";
     private static final String FIND_ALL_SQL = "select * from reservation";
+    private static final String DELETE_SQL = "delete from reservation where id = ?";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_DATE = "date";
@@ -57,5 +58,9 @@ public class ReservationRepository {
 
     public List<Reservation> findAll() {
         return jdbcTemplate.query(FIND_ALL_SQL, (rs, rowNum) -> new Reservation(rs.getLong(COLUMN_ID), rs.getString(COLUMN_NAME), rs.getString(COLUMN_DATE), rs.getString(COLUMN_TIME)));
+    }
+
+    public void delete(Long id) {
+        jdbcTemplate.update(DELETE_SQL, id);
     }
 }

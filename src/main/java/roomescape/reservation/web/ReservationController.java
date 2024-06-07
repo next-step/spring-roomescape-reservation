@@ -2,10 +2,7 @@ package roomescape.reservation.web;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.service.ReservationService;
 import roomescape.reservation.web.dto.ReservationRequest;
@@ -24,13 +21,13 @@ public class ReservationController {
     }
 
     @GetMapping("/admin/reservation")
-    String reservation() {
+    public String reservation() {
         return "admin/reservation-legacy";
     }
 
     @GetMapping("/reservations")
     @ResponseBody
-    ResponseEntity<List<ReservationResponse>> getReservations() {
+    public ResponseEntity<List<ReservationResponse>> getReservations() {
         List<Reservation> reservations = reservationService.findAll();
         List<ReservationResponse> responses = reservations.stream().map(ReservationResponse::new).collect(Collectors.toList());
         return ResponseEntity.ok().body(responses);
@@ -38,8 +35,15 @@ public class ReservationController {
 
     @PostMapping("/reservations")
     @ResponseBody
-    ResponseEntity<ReservationResponse> save(@RequestBody ReservationRequest request) {
+    public ResponseEntity<ReservationResponse> save(@RequestBody ReservationRequest request) {
         Reservation reservation = reservationService.save(request.toEntity());
         return ResponseEntity.ok().body(new ReservationResponse(reservation));
+    }
+
+    @DeleteMapping("/reservations/{id}")
+    @ResponseBody
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        reservationService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -27,4 +27,8 @@ public class ReservationService {
     public List<Reservation> findAll() {
         return reservationRepository.findAll();
     }
+
+    public void delete(Long id) {
+        reservationRepository.delete(id);
+    }
 }

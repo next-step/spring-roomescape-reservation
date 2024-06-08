@@ -1,7 +1,5 @@
 package roomescape.repository.entity;
 
-import roomescape.domain.reservation.Reservation;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -17,20 +15,8 @@ public class ReservationEntity {
         this.reservationDateTime = reservationDateTime;
     }
 
-    public static ReservationEntity from(Reservation reservation) {
-        return new ReservationEntity(
-                reservation.getId(),
-                reservation.getReservationName(),
-                reservation.getReservationDateTime()
-        );
-    }
-
     public ReservationEntity changeId(Long id) {
         return new ReservationEntity(id, this.reservationName, this.reservationDateTime);
-    }
-
-    public boolean isSaved() {
-        return Objects.nonNull(id);
     }
 
     public boolean isSameId(ReservationEntity reservationEntity) {

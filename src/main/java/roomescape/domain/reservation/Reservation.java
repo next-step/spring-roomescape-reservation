@@ -42,14 +42,6 @@ public class Reservation {
     }
 
     public LocalDateTime getReservationDateTime() {
-        return reservationDateTime.getReservationDateTime();
-    }
-
-    public Reservation changeId(Long id) {
-        return new Reservation(
-                new ReservationId(id),
-                this.reservationName,
-                this.reservationDateTime
-        );
+        return reservationDateTime.reservationDateTime();
     }
 }

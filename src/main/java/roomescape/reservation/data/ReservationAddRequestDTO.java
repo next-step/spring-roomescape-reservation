@@ -1,18 +1,35 @@
 package roomescape.reservation.data;
 
-import java.time.Instant;
-import java.time.LocalDate;
-
 public class ReservationAddRequestDTO {
-    private Long id;
     private String name;
-    private LocalDate date;
-    private Instant time;
+    private String date;
+    private Long reservationTimeId;
 
-    public ReservationAddRequestDTO(Long id, String name, LocalDate date, Instant time) {
-        this.id = id;
+    private String startAt;
+
+    public ReservationAddRequestDTO() {
+    }
+
+    public ReservationAddRequestDTO(String name, String date, Long reservationTimeId, String startAt) {
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.reservationTimeId = reservationTimeId;
+        this.startAt = startAt;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDate() {
+        return this.date;
+    }
+
+    public Long getReservationTimeId() {
+        return this.reservationTimeId;
+    }
+
+    public String getStartAt() {
+        return this.startAt;
     }
 }

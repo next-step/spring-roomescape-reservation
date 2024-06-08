@@ -18,6 +18,11 @@ public class ReservationTime {
         this.startAt = startAt;
     }
 
+    public ReservationTime(Long reservationTimeId, String startAt) {
+        this.id = reservationTimeId;
+        this.startAt = startAt;
+    }
+
     public Long getId() {
         return this.id;
     }

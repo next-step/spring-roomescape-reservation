@@ -4,6 +4,7 @@ package roomescape.reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import roomescape.entities.Reservation;
+import roomescape.reservation.data.ReservationAddRequestDTO;
 
 import java.util.List;
 
@@ -23,8 +24,9 @@ public class ReservationController {
     }
 
     @PostMapping
-    public void addReservation(@RequestBody Reservation reservation) {
-        reservationService.addReservation(reservation);
+    public void addReservation(@RequestBody ReservationAddRequestDTO reservationAddRequestDTO) {
+        Reservation newReservation = new Reservation(reservationAddRequestDTO);
+        reservationService.addReservation(newReservation);
     }
 
     @DeleteMapping("/{id}")

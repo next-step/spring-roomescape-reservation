@@ -20,8 +20,8 @@ public class ReservationRepository {
     }
 
     public Reservation save(Reservation reservation){
-        String sql = "INSERT INTO RESERVATION(id, date, time, name) VALUES(?, ?, ?, ?)";
-        jdbcTemplate.update(sql, reservation.getId(), reservation.getDate(), reservation.getTime(), reservation.getName());
+        String sql = "INSERT INTO RESERVATION(date, time_id, name) VALUES(?, ?, ?)";
+        jdbcTemplate.update(sql, reservation.getDate(), reservation.getTime().getId(), reservation.getName());
         return reservation;
     }
 
@@ -39,6 +39,7 @@ public class ReservationRepository {
             @Override
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Reservation reservation = new Reservation(
+                    rs.getLong("reservation_id"),
                     rs.getString("date"),
                     rs.getString("name"),
                     new ReservationTime(rs.getString("time_start_at"))

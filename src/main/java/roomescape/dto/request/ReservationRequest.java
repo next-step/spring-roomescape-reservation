@@ -5,6 +5,7 @@ public class ReservationRequest {
     private String name;
     private String date;
     private String timeId;
+    private String themeId;
 
     public ReservationRequest() {
     }
@@ -36,5 +37,9 @@ public class ReservationRequest {
 
     public String getTimeId() {
         return timeId;
+    }
+
+    public String getThemeId() {
+        return themeId;
     }
 }

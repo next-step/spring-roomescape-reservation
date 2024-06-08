@@ -21,7 +21,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationResponse createReservation(ReservationRequest request) {
-        final String sql = "INSERT INTO reservation (name, \"date\", time_id) values (?, ?, ?)";
+        final String sql = "INSERT INTO reservation (name, \"date\", time_id, theme_id) values (?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -29,12 +29,17 @@ public class ReservationServiceImpl implements ReservationService {
             ps.setString(1, request.getName());
             ps.setString(2, request.getDate());
             ps.setString(3, request.getTimeId());
+            ps.setString(4, request.getThemeId());
 
             return ps;
         }, keyHolder);
 
-        return new ReservationResponse(keyHolder.getKey().longValue(), request.getName(), request.getDate(),
-                request.getTimeId());
+        return new ReservationResponse(keyHolder.getKey().longValue()
+                , request.getName()
+                , request.getDate()
+                , request.getTimeId()
+                , request.getThemeId()
+        );
     }
 
     @Override
@@ -44,18 +49,18 @@ public class ReservationServiceImpl implements ReservationService {
                 + ", r.name as reservation_name"
                 + ", r.\"date\" as reservation_date"
                 + ", t.start_at as time_start_at"
+                + ", theme.name as theme_name"
                 + " FROM reservation as r"
-                + " inner join reservation_time as t"
-                + " on r.time_id = t.id";
+                + " INNER JOIN reservation_time as t ON r.time_id = t.id"
+                + " INNER JOIN theme ON r.theme_id = theme.id";
 
-        List<ReservationResponse> reservations = jdbcTemplate.query(sql, (resultSet, rowNum) ->
+        return jdbcTemplate.query(sql, (resultSet, rowNum) ->
                 new ReservationResponse(resultSet.getLong("id")
                         , resultSet.getString("name")
-                        , resultSet.getString("date")
-                        , resultSet.getString("time_start_at"))
+                        , resultSet.getString("reservation_date")
+                        , resultSet.getString("time_start_at")
+                        , resultSet.getString("theme_name"))
         );
-
-        return reservations;
     }
 
     @Override

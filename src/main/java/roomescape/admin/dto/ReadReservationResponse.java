@@ -18,11 +18,11 @@ public record ReadReservationResponse(Long id,
             reservation.getTime());
     }
 
-    public static ReadReservationResponse entityToDTO(Reservation reservation){
+    public static ReadReservationResponse from(Reservation reservation){
         return new ReadReservationResponse(reservation);
     }
 
-    public static List<ReadReservationResponse> entityToList(List<Reservation> reservations){
+    public static List<ReadReservationResponse> from(List<Reservation> reservations){
         return reservations.stream()
                 .map(ReadReservationResponse::new)
                 .collect(Collectors.toList());

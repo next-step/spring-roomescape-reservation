@@ -25,20 +25,14 @@ class MissionStepTest {
 
     @Test
     void reservation() {
-        Map<String, String> timeParams = new HashMap<>();
-        timeParams.put("startAt", "10:00");
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(timeParams)
-                .when().post("/times")
-                .then().log().all()
-                .statusCode(200)
-                .body("id", is(1));
+        sendSaveThemeRequest();
+        sendSaveReservationTimeRequest();
 
         Map<String, String> reservationParams = new HashMap<>();
         reservationParams.put("name", "브라운");
         reservationParams.put("date", "2026-08-05");
         reservationParams.put("timeId", "1");
+        reservationParams.put("themeId", "1");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
@@ -68,15 +62,7 @@ class MissionStepTest {
 
     @Test
     void reservationTime() {
-        Map<String, String> timeParams = new HashMap<>();
-        timeParams.put("startAt", "10:00");
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(timeParams)
-                .when().post("/times")
-                .then().log().all()
-                .statusCode(200)
-                .body("id", is(1));
+        sendSaveReservationTimeRequest();
 
         RestAssured.given().log().all()
                 .when().get("/times")
@@ -96,4 +82,52 @@ class MissionStepTest {
                 .body("size()", is(0));
     }
 
+    @Test
+    void themes() {
+        sendSaveThemeRequest();
+
+        RestAssured.given().log().all()
+                .when().get("/themes")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(1));
+
+        RestAssured.given().log().all()
+                .when().delete("/themes/1")
+                .then().log().all()
+                .statusCode(200);
+
+        RestAssured.given().log().all()
+                .when().get("/themes")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(0));
+    }
+
+    private void sendSaveReservationTimeRequest() {
+        Map<String, String> timeParams = new HashMap<>();
+        timeParams.put("startAt", "10:00");
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(timeParams)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("id", is(1));
+    }
+
+    private void sendSaveThemeRequest() {
+        Map<String, String> themeParams = new HashMap<>();
+        themeParams.put("name", "레벨2 탈출");
+        themeParams.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
+        themeParams.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(themeParams)
+                .when().post("/themes")
+                .then().log().all()
+                .statusCode(200)
+                .body("id", is(1));
+    }
 }

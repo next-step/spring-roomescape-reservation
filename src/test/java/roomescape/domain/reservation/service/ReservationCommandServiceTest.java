@@ -1,5 +1,6 @@
 package roomescape.domain.reservation.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,29 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         // when & then
         assertThatThrownBy(() -> sut.reserve(request))
                 .isInstanceOf(DuplicatedReservationException.class);
+    }
+
+    @DisplayName("같은 이름 & 날짜/시간으로 예약이 존재하지만 비활성화 상태(취소)인 경우 예외 발생하지 않는다.")
+    @Test
+    void reserve_no_exception() {
+        // given
+        final Reservation reservation = Reservation.builder()
+                .id(1L)
+                .name(new ReservationGuestName("brie"))
+                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .status(ReservationStatus.CANCELED)
+                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .build();
+        repository.save(reservation);
+
+        final ReserveRequest request = ReserveRequest.builder()
+                .name("brie")
+                .date(LocalDate.of(2024, 6, 8))
+                .time(LocalTime.of(12, 0))
+                .build();
+
+        // when & then
+        Assertions.assertDoesNotThrow(() -> sut.reserve(request));
     }
 
 }

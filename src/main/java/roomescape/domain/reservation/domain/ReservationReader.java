@@ -27,12 +27,12 @@ public class ReservationReader {
         return repository.findAll();
     }
 
-    public boolean existsBy(final ReservationSearchKey key) {
-        return findByKey(key).isPresent();
+    public boolean activeReservationExists(final ReservationSearchKey key) {
+        return findActiveReservationBy(key).isPresent();
     }
 
-    public Reservation getBy(final ReservationSearchKey key) {
-        return findByKey(key).orElseThrow(() ->
+    public Reservation getActiveReservationBy(final ReservationSearchKey key) {
+        return findActiveReservationBy(key).orElseThrow(() ->
                 new ReservationNotFoundException("Cannot find Reservation for key=%s".formatted(key.toString()))
         );
     }
@@ -41,9 +41,10 @@ public class ReservationReader {
         return repository.findById(id.value());
     }
 
-    private Optional<Reservation> findByKey(ReservationSearchKey key) {
+    private Optional<Reservation> findActiveReservationBy(ReservationSearchKey key) {
         return findAll().stream()
                 .filter(reservation -> matchesKey(key, reservation))
+                .filter(Reservation::isActive)
                 .findFirst();
     }
 

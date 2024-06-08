@@ -80,8 +80,12 @@ public class Reservation {
         return this.timeStamp.equals(timeStamp);
     }
 
-    public boolean confirmed() {
-        return this.status.isConfirmed();
+    public boolean isActive() {
+        return !canceled();
+    }
+
+    public boolean canceled() {
+        return this.status.isCanceled();
     }
 
     @Override

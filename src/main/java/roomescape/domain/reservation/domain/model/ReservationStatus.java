@@ -10,4 +10,7 @@ public enum ReservationStatus {
         return this == CONFIRMED;
     }
 
+    public boolean isCanceled() {
+        return this == CANCELED;
+    }
 }

@@ -33,8 +33,8 @@ public class ReservationCommandService {
     }
 
     private void verifyDuplicatedReservationNotExist(final ReserveRequest request) {
-        if (reader.existsBy(ReservationSearchKey.from(request))) {
-            final Reservation reservation = reader.getBy(ReservationSearchKey.from(request));
+        if (reader.activeReservationExists(ReservationSearchKey.from(request))) {
+            final Reservation reservation = reader.getActiveReservationBy(ReservationSearchKey.from(request));
             throw DuplicatedReservationException.fromId(ReservationId.from(reservation));
         }
     }

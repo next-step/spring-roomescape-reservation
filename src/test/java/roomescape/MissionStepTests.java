@@ -17,12 +17,12 @@ import static org.hamcrest.Matchers.is;
 public class MissionStepTests {
 
 	@Test
-	void page() {
+	void accessPage() {
 		RestAssured.given().log().all().when().get("/").then().log().all().statusCode(200);
 	}
 
 	@Test
-	void reservation() {
+	void crdReservation() {
 		createReservationTime();
 		Map<String, String> params = new HashMap<>();
 		params.put("name", "브라운");
@@ -68,7 +68,7 @@ public class MissionStepTests {
 	}
 
 	@Test
-	void time() {
+	void crdReservationTime() {
 		createReservationTime();
 
 		RestAssured.given().log().all().when().get("/times").then().log().all().statusCode(200).body("size()", is(1));

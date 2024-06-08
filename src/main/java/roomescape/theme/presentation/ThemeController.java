@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,5 +35,11 @@ public class ThemeController {
     public ResponseEntity<List<ThemeResponse>> getThemes() {
         List<ThemeResponse> themes = themeService.getThemes();
         return ResponseEntity.ok(themes);
+    }
+
+    @DeleteMapping("/{themaId}")
+    public ResponseEntity<Void> deleteTheme(Long themeId) {
+        themeService.deleteTheme(themeId);
+        return ResponseEntity.noContent().build();
     }
 }

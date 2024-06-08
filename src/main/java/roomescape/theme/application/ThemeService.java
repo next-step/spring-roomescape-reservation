@@ -29,4 +29,8 @@ public class ThemeService {
                 .map(ThemeResponse::from)
                 .toList();
     }
+
+    public void deleteTheme(Long themeId) {
+
+    }
 }

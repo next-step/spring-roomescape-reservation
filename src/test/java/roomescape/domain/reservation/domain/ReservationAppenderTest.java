@@ -6,6 +6,7 @@ import roomescape.domain.reservation.domain.model.Reservation;
 import roomescape.domain.reservation.domain.model.ReservationGuestName;
 import roomescape.domain.reservation.domain.model.ReservationStatus;
 import roomescape.domain.reservation.domain.model.ReservationTimeStamp;
+import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.global.infrastructure.ClockHolder;
 import roomescape.mock.FakeClockHolder;
@@ -34,10 +35,10 @@ class ReservationAppenderTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        final Long actual = sut.append(append);
+        final ReservationId actual = sut.append(append);
 
         // then
-        assertThat(actual).isNotNull();
+        assertThat(actual.value()).isNotNull();
         final List<Reservation> reservations = reservationRepository.findAll();
 
         assertThat(reservations).hasSize(1)

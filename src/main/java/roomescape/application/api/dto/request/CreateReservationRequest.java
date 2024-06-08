@@ -26,4 +26,16 @@ public class CreateReservationRequest {
     public CreateReservationCommand toCreateReservationCommand() {
         return new CreateReservationCommand(name, LocalDateTime.of(date, time));
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
 }

@@ -1,13 +1,13 @@
-package roomescape.controller;
+package roomescape.application.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import roomescape.application.api.ReservationQueryApi;
 import roomescape.application.api.dto.response.FindReservationsResponse;
 import roomescape.application.service.ReservationService;
 import roomescape.domain.reservation.Reservation;
@@ -27,19 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ReservationQueryApi.class)
 class ReservationQueryApiTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @MockBean
     private ReservationService reservationService;
-
     @Autowired
     private MockMvc mockMvc;
-
     private Reservations reservations;
-
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        objectMapper = new ObjectMapper();
         Reservation reservation = new Reservation(
                 new ReservationId(1L),
                 new ReservationName("kilian"),
@@ -50,7 +46,8 @@ class ReservationQueryApiTest {
     }
 
     @Test
-    void findReservations() throws Exception {
+    @DisplayName("예약 전체 조회 API 컨트롤러 테스트")
+    void findReservationsTest() throws Exception {
         given(reservationService.findAllReservations()).willReturn(reservations);
         List<FindReservationsResponse> response =
                 FindReservationsResponse.toFindReservationsResponses(reservations);

@@ -45,4 +45,16 @@ public class InMemoryReservationRepository implements ReservationRepository {
                 .filter(reservationEntity -> !reservationEntity.isSameId(reservationId))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ReservationEntity findById(Long id) {
+        return reservationEntities.stream()
+                .filter(reservationEntity -> reservationEntity.isSameId(id))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format(
+                                "[id:%d] id에 해당하는 reservation 엔티티가 존재하지 않습니다.", id
+                        )
+                ));
+    }
 }

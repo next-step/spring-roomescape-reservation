@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -21,12 +22,9 @@ import roomescape.domain.ReservationTime;
 public class ReservationJdbcRepository implements ReservationPort {
 
   private final JdbcTemplate jdbcTemplate;
-  private final ReservationTimeJdbcRepository reservationTimeJdbcRepository;
 
-  public ReservationJdbcRepository(JdbcTemplate jdbcTemplate,
-    ReservationTimeJdbcRepository reservationTimeJdbcRepository) {
+  public ReservationJdbcRepository(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
-    this.reservationTimeJdbcRepository = reservationTimeJdbcRepository;
   }
 
   @Override
@@ -45,7 +43,8 @@ public class ReservationJdbcRepository implements ReservationPort {
           resultSet.getLong("id"),
           resultSet.getString("name"),
           resultSet.getString("date"),
-          reservationTimeEntity
+          reservationTimeEntity,
+          null
         );
 
         return reservationEntity;
@@ -59,11 +58,40 @@ public class ReservationJdbcRepository implements ReservationPort {
   }
 
   @Override
-  public Reservation saveReservation(Reservation reservation) {
+  public Optional<Reservation> findReservationByReservationTime(ReservationTime reservationTime) {
+    String sql =
+      "select reservation.id, reservation.name, reservation.date, reservation.time_id, reservation_time.start_at from reservation INNER JOIN reservation_time on reservation.time_id = reservation_time.id WHERE reservation_time.start_at = ?";
 
-    ReservationTime reservationTime = reservationTimeJdbcRepository.saveReservationTime(ReservationTime.of(
-      reservation.getTime()
-                 .getStartAt()));
+    List<ReservationEntity> reservationEntities = jdbcTemplate.query(
+      sql, (resultSet, rowNum) -> {
+        Long id = resultSet.getLong("time_id");
+        String time = resultSet.getString("start_at");
+
+        ReservationTimeEntity reservationTimeEntity = ReservationTimeEntity.of(id, time);
+
+        ReservationEntity reservationEntity = new ReservationEntity(
+          resultSet.getLong("id"),
+          resultSet.getString("name"),
+          resultSet.getString("date"),
+          reservationTimeEntity,
+          null
+        );
+
+        return reservationEntity;
+      }, reservationTime.getStartAt()
+    );
+
+    Reservation reservation = null;
+
+    if (!reservationEntities.isEmpty()) {
+      reservation = ReservationMapper.mapToDomain(reservationEntities.get(0));
+    }
+
+    return Optional.ofNullable(reservation);
+  }
+
+  @Override
+  public Reservation saveReservation(Reservation reservation, ReservationTime reservationTime) {
 
     String sql = "INSERT INTO reservation(name, date, time_id) VALUES(?, ?, ?)";
     KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -85,5 +113,12 @@ public class ReservationJdbcRepository implements ReservationPort {
     String sql = "DELETE FROM reservation WHERE id = ?";
 
     jdbcTemplate.update(sql, id);
+  }
+
+  @Override
+  public Integer countReservationById(Long id) {
+    String sql = "SELECT COUNT(*) FROM reservation WHERE id = ?";
+
+    return jdbcTemplate.queryForObject(sql, Integer.class, id);
   }
 }

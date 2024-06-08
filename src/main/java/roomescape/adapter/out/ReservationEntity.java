@@ -6,12 +6,14 @@ public class ReservationEntity {
   private final String name;
   private final String date;
   private final ReservationTimeEntity time;
+  private final ThemeEntity theme;
 
-  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity time) {
+  public ReservationEntity(Long id, String name, String date, ReservationTimeEntity time, ThemeEntity theme) {
     this.id = id;
     this.name = name;
     this.date = date;
     this.time = time;
+    this.theme = theme;
   }
 
   public Long getId() {
@@ -30,7 +32,11 @@ public class ReservationEntity {
     return time;
   }
 
+  public ThemeEntity getTheme() {
+    return theme;
+  }
+
   public static ReservationEntity of(Long id, String name, String date, ReservationTimeEntity time) {
-    return new ReservationEntity(id, name, date, time);
+    return new ReservationEntity(id, name, date, time, null);
   }
 }

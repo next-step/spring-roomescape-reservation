@@ -19,13 +19,13 @@ public class ReservationMapper {
   }
 
   public static Reservation mapToDomain(ReservationCommand reservationCommand) {
-    return Reservation.of(reservationCommand.name(), reservationCommand.date(), ReservationTime.of(
-      reservationCommand.time()));
+    return Reservation.of(null, reservationCommand.name(), reservationCommand.date(), ReservationTime.of(
+      null, reservationCommand.time()), null);
   }
 
   public static Reservation mapToDomain(ReservationEntity reservationEntity) {
     return Reservation.of(reservationEntity.getId(), reservationEntity.getName(), reservationEntity.getDate(),
-      ReservationTimeMapper.mapToDomain(reservationEntity.getTime()));
+      ReservationTimeMapper.mapToDomain(reservationEntity.getTime()), null);
   }
 
   public static ReservationEntity mapToEntity(Reservation reservation) {

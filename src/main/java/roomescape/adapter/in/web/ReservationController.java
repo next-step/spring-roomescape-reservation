@@ -18,6 +18,7 @@ import roomescape.adapter.in.web.dto.ReservationCommand;
 import roomescape.adapter.in.web.dto.ReservationResponse;
 import roomescape.adapter.mapper.ReservationMapper;
 import roomescape.application.port.in.ReservationUseCase;
+import roomescape.validator.DateTimeValidator;
 
 @RestController
 @RequestMapping("/reservations")
@@ -42,6 +43,7 @@ public class ReservationController {
 
   @PostMapping
   public ResponseEntity<ReservationResponse> createReservation(@RequestBody ReservationCommand reservationCommand) {
+    DateTimeValidator.previousDateTimeCheck(reservationCommand.date(), reservationCommand.time());
     return ResponseEntity.ok()
                          .body(mapToResponse(reservationUseCase.registerReservation(mapToDomain(reservationCommand))));
   }

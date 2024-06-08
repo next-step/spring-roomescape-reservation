@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -39,7 +40,7 @@ public class ReservationTimeJdbcRepository implements ReservationTimePort {
 
   @Override
   public List<ReservationTime> findReservationTimes() {
-    String sql = "select id, start_at from reservation_time";
+    String sql = "SELECT id, start_at FROM reservation_time";
 
     List<ReservationTimeEntity> reservationTimeEntities = jdbcTemplate.query(
       sql, (resultSet, rowNum) -> {
@@ -62,5 +63,47 @@ public class ReservationTimeJdbcRepository implements ReservationTimePort {
     String sql = "DELETE FROM reservation_time WHERE id = ?";
 
     jdbcTemplate.update(sql, id);
+  }
+
+  @Override
+  public Optional<ReservationTime> findReservationTimeById(Long id) {
+    String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
+
+    List<ReservationTimeEntity> reservationTimeEntities = jdbcTemplate.query(
+      sql, (resultSet, rowNum) ->
+        new ReservationTimeEntity(
+          resultSet.getLong("id"),
+          resultSet.getString("start_at")
+        ),
+      id
+    );
+
+    ReservationTime reservationTime = null;
+    if (!reservationTimeEntities.isEmpty()) {
+      reservationTime = ReservationTimeMapper.mapToDomain(reservationTimeEntities.get(0));
+    }
+
+    return Optional.ofNullable(reservationTime);
+  }
+
+  @Override
+  public Optional<ReservationTime> findReservationTimeByStartAt(String startAt) {
+    String sql = "SELECT id, start_at FROM reservation_time WHERE start_at = ?";
+
+    List<ReservationTimeEntity> reservationTimeEntities = jdbcTemplate.query(
+      sql, (resultSet, rowNum) ->
+        new ReservationTimeEntity(
+          resultSet.getLong("id"),
+          resultSet.getString("start_at")
+        ),
+      startAt
+    );
+
+    ReservationTime reservationTime = null;
+    if (!reservationTimeEntities.isEmpty()) {
+      reservationTime = ReservationTimeMapper.mapToDomain(reservationTimeEntities.get(0));
+    }
+
+    return Optional.ofNullable(reservationTime);
   }
 }

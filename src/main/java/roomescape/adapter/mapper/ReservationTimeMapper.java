@@ -13,7 +13,7 @@ public class ReservationTimeMapper {
   }
 
   public static ReservationTime mapToDomain(ReservationTimeCommand reservationTimeCommand) {
-    return ReservationTime.of(reservationTimeCommand.startAt());
+    return ReservationTime.of(null, reservationTimeCommand.startAt());
   }
 
   public static ReservationTime mapToDomain(ReservationTimeEntity reservationTimeEntity) {

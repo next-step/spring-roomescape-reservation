@@ -1,5 +1,8 @@
 package roomescape.adapter.in.web.dto;
 
-public record ReservationCommand(String name, String date, String time) {
+import roomescape.annotation.DateCheck;
+import roomescape.annotation.TimeCheck;
+
+public record ReservationCommand(String name, @DateCheck String date, @TimeCheck String time) {
 
 }

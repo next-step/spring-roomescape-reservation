@@ -5,10 +5,7 @@ import org.springframework.stereotype.Repository;
 import roomescape.domain.reservation.domain.model.Reservation;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
@@ -20,10 +17,20 @@ public class MemoryReservationRepository implements ReservationRepository {
 
     @Override
     public Long save(final Reservation reservation) {
+        if (Objects.nonNull(reservation.getId())) {
+            this.reservations.remove(reservation);
+            this.reservations.add(reservation);
+            return reservation.getId();
+        }
+
+        return saveNewReservation(reservation);
+    }
+
+    private long saveNewReservation(final Reservation reservation) {
         final long reservationId = this.reservationIdIndex.incrementAndGet();
         setReservationId(reservation, reservationId);
 
-        this.reservations.add(reservation); // fixme 같은 Id 가 있을 때 exception or update 처리
+        this.reservations.add(reservation);
 
         return reservationId;
     }

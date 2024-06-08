@@ -7,6 +7,7 @@ import roomescape.global.infrastructure.ClockHolder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Getter
 public class Reservation {
@@ -69,6 +70,19 @@ public class Reservation {
 
     public boolean matchesId(final Long id) {
         return this.id.equals(id);
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        final Reservation that = (Reservation) object;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

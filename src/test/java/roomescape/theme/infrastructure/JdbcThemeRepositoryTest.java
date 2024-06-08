@@ -61,4 +61,27 @@ class JdbcThemeRepositoryTest {
         // then
         assertThat(themes).hasSize(1);
     }
+
+    @Test
+    @DisplayName("테마가 존재하면 TRUE를 반환한다.")
+    void existsById_ReturnTrue() {
+        // given
+        Theme theme = new Theme("레벨2 탈출","우테코 레벨2를 탈출하는 내용입니다.",
+                "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        Theme savedTheme = jdbcThemeRepository.save(theme);
+
+        // when
+        boolean result = jdbcThemeRepository.existsById(savedTheme.getId());
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("테마가 존재하면 FALSE를 반환한다.")
+    void existsById_ReturnFalse() {
+        boolean result = jdbcThemeRepository.existsById(1L);
+
+        assertThat(result).isFalse();
+    }
 }

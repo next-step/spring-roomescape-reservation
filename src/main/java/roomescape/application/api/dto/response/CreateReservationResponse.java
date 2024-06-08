@@ -1,12 +1,8 @@
-package roomescape.controller.dto.response;
+package roomescape.application.api.dto.response;
 
 import roomescape.domain.reservation.Reservation;
-import roomescape.domain.reservation.Reservations;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class FindReservationsResponse {
+public class CreateReservationResponse {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String TIME_FORMAT = "HH:mm";
@@ -19,27 +15,20 @@ public class FindReservationsResponse {
 
     private final String time;
 
-    private FindReservationsResponse(Long id, String name, String date, String time) {
+    public CreateReservationResponse(Long id, String name, String date, String time) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.time = time;
     }
 
-    public static FindReservationsResponse from(Reservation reservation) {
-        return new FindReservationsResponse(
+    public static CreateReservationResponse from(Reservation reservation) {
+        return new CreateReservationResponse(
                 reservation.getId(),
-                reservation.getName(),
+                reservation.getReservationName(),
                 reservation.fetchReservationDateTime(DATE_FORMAT),
                 reservation.fetchReservationDateTime(TIME_FORMAT)
         );
-    }
-
-    public static List<FindReservationsResponse> toFindReservationsResponses(Reservations reservations) {
-        return reservations.fetchReservations()
-                .stream()
-                .map(FindReservationsResponse::from)
-                .collect(Collectors.toList());
     }
 
     public Long getId() {

@@ -17,4 +17,8 @@ public class ReservationDateTime {
     public String fetchReservationDateTime(String pattern) {
         return reservationDateTime.format(DateTimeFormatter.ofPattern(pattern));
     }
+
+    public LocalDateTime getReservationDateTime() {
+        return reservationDateTime;
+    }
 }

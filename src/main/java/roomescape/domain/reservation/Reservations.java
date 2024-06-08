@@ -1,7 +1,6 @@
 package roomescape.domain.reservation;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Reservations {
@@ -10,10 +9,6 @@ public class Reservations {
 
     public Reservations(List<Reservation> reservations) {
         this.reservations = reservations;
-    }
-
-    public static Reservations createEmpty() {
-        return new Reservations(Collections.emptyList());
     }
 
     public List<Reservation> fetchReservations() {

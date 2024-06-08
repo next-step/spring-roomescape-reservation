@@ -41,4 +41,8 @@ public class Reservation {
                 .build();
     }
 
+    public boolean matchesId(final Long id) {
+        return this.id.equals(id);
+    }
+
 }

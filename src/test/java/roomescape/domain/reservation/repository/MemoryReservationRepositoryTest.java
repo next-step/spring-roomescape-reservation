@@ -9,8 +9,10 @@ import roomescape.support.IntegrationTestSupport;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class MemoryReservationRepositoryTest extends IntegrationTestSupport {
 
@@ -35,6 +37,27 @@ class MemoryReservationRepositoryTest extends IntegrationTestSupport {
         final List<Reservation> actual = sut.findAll();
 
         assertThat(actual).hasSize(2);
+    }
+
+    @Test
+    void findById_exist() {
+        final Long reservationId = sut.save(createReservation("name", LocalDateTime.of(2024, 6, 8, 12, 0)));
+
+        final Optional<Reservation> actual = sut.findById(reservationId);
+
+        assertThat(actual).isNotEmpty();
+
+        final Reservation reservation = actual.get();
+        assertAll(
+                () -> assertThat(reservation.getName()).isEqualTo(new ReservationGuestName("name")),
+                () -> assertThat(reservation.getTimeStamp()).isEqualTo(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
+        );
+    }
+
+    @Test
+    void findById_empty() {
+        final Optional<Reservation> actual = sut.findById(1L);
+        assertThat(actual).isEmpty();
     }
 
     private Reservation createReservation(final String name, LocalDateTime timestamp) {

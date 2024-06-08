@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
@@ -30,6 +31,13 @@ public class MemoryReservationRepository implements ReservationRepository {
     @Override
     public List<Reservation> findAll() {
         return List.copyOf(this.reservations);
+    }
+
+    @Override
+    public Optional<Reservation> findById(Long reservationId) {
+        return this.reservations.stream()
+                .filter(reservation -> reservation.matchesId(reservationId))
+                .findFirst();
     }
 
     public void clearAll() {

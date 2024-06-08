@@ -66,7 +66,7 @@ class ReservationControllerTest {
                 .extract();
 
         // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
         assertThat(response.jsonPath().getLong("reservationId")).isEqualTo(1L);
     }
 
@@ -85,6 +85,6 @@ class ReservationControllerTest {
         RestAssured.given().log().all()
                 .when().delete("/reservations/{reservationId}", 1L)
                 .then().log().all()
-                .statusCode(HttpStatus.OK.value());
+                .statusCode(HttpStatus.NO_CONTENT.value());
     }
 }

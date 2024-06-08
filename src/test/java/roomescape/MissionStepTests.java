@@ -14,20 +14,22 @@ import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class MissionStepTests {
+class MissionStepTests {
 
 	@Test
 	void accessPage() {
-		RestAssured.given().log().all().when().get("/").then().log().all().statusCode(200);
+		RestAssured.given().log().all().when().get("/admin/").then().log().all().statusCode(200);
 	}
 
 	@Test
 	void crdReservation() {
+		createTheme();
 		createReservationTime();
 		Map<String, String> params = new HashMap<>();
 		params.put("name", "브라운");
 		params.put("date", "2023-08-05");
 		params.put("timeId", "1");
+		params.put("themeId", "1");
 
 		RestAssured.given()
 			.log()
@@ -92,6 +94,26 @@ public class MissionStepTests {
 			.all()
 			.statusCode(200)
 			.body("id", is(1));
+	}
+
+	private void createTheme() {
+		Map<String, String> params = new HashMap<>();
+		params.put("name", "테마1");
+		params.put("description", "첫번째테마");
+		params.put("thumbnail", "테마이미지");
+
+		RestAssured.given()
+				.log()
+				.all()
+				.contentType(ContentType.JSON)
+				.body(params)
+				.when()
+				.post("/themes")
+				.then()
+				.log()
+				.all()
+				.statusCode(200)
+				.body("id", is(1));
 	}
 
 }

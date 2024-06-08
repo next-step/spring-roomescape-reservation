@@ -12,6 +12,8 @@ public class Reservation {
 
 	private ReservationTime time;
 
+	private Theme theme;
+
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -46,6 +48,14 @@ public class Reservation {
 
 	public void setTime(ReservationTime time) {
 		this.time = time;
+	}
+
+	public Theme getTheme() {
+		return this.theme;
+	}
+
+	public void setTheme(Theme theme) {
+		this.theme = theme;
 	}
 
 	@Override
@@ -90,6 +100,11 @@ public class Reservation {
 
 		public Builder time(ReservationTime time) {
 			this.reservation.time = time;
+			return this;
+		}
+
+		public Builder theme(Theme theme) {
+			this.reservation.theme = theme;
 			return this;
 		}
 

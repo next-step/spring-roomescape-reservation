@@ -7,6 +7,7 @@ import java.util.Map;
 import jakarta.annotation.PostConstruct;
 import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTime;
+import roomescape.domain.Theme;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -39,10 +40,16 @@ public class ReservationRepository {
 							r.name AS reservation_name,
 							r.date AS reservation_date,
 							rt.id AS time_id,
-							rt.start_at AS time_start_at
+							rt.start_at AS time_start_at,
+							t.id AS theme_id,
+							t.name AS theme_name,
+							t.description AS theme_description,
+							t.thumbnail AS theme_thumbnail
 						FROM reservation AS r
 						INNER JOIN reservation_time AS rt
 								ON r.time_id = rt.id
+						INNER JOIN theme AS t
+								ON r.theme_id = t.id
 				""";
 		return this.jdbcTemplate.query(sql, RESERVATION_ROW_MAPPER);
 	}
@@ -52,6 +59,7 @@ public class ReservationRepository {
 		parameters.put("name", reservation.getName());
 		parameters.put("date", reservation.getDate());
 		parameters.put("time_id", reservation.getTime().getId());
+		parameters.put("theme_id", reservation.getTheme().getId());
 
 		Number generatedId = this.jdbcInsert.executeAndReturnKey(parameters);
 		reservation.setId(generatedId.longValue());
@@ -77,7 +85,18 @@ public class ReservationRepository {
 			String name = resultSet.getString("name");
 			String date = resultSet.getString("date");
 
-			return Reservation.builder().id(id).name(name).date(date).time(reservationTime).build();
+			long themeId = resultSet.getLong("theme_id");
+			String themeName = resultSet.getString("theme_name");
+			String themeDescription = resultSet.getString("theme_description");
+			String themeThumbnail = resultSet.getString("theme_thumbnail");
+			Theme theme = Theme.builder()
+				.id(themeId)
+				.name(themeName)
+				.description(themeDescription)
+				.thumbnail(themeThumbnail)
+				.build();
+
+			return Reservation.builder().id(id).name(name).date(date).time(reservationTime).theme(theme).build();
 		};
 	}
 

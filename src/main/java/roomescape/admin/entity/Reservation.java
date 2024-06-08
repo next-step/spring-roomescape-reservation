@@ -1,39 +1,21 @@
 package roomescape.admin.entity;
 
-import roomescape.admin.dto.SaveReservationRequest;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 public class Reservation {
 
     private Long id;
     private String name;
     private String date;
-    private ReservationTime time;
+    private ReservationTime reservationTime;
 
-    public static Reservation add(SaveReservationRequest saveReservationRequest){
-        return new Reservation(saveReservationRequest);
+    public static Reservation of(Long id, String name, String date, ReservationTime reservationTime){
+        return new Reservation(id, name, date, reservationTime);
     }
 
-    private Reservation(SaveReservationRequest saveReservationRequest) {
-        this.name = saveReservationRequest.name();
-        this.date = saveReservationRequest.date();
-    }
-
-    public static Reservation read(ResultSet rs){
-        return new Reservation(rs);
-    }
-
-    private Reservation(ResultSet rs) {
-        try {
-            this.id = rs.getLong("reservation_id");
-            this.name = rs.getString("reservation_name");
-            this.date = rs.getString("reservation_date");
-            this.time = ReservationTime.read(rs);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    private Reservation(Long id, String name, String date, ReservationTime reservationTime){
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.reservationTime = reservationTime;
     }
 
     public Long getId() {
@@ -49,6 +31,6 @@ public class Reservation {
     }
 
     public ReservationTime getTime() {
-        return time;
+        return reservationTime;
     }
 }

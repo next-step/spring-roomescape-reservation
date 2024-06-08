@@ -30,7 +30,7 @@ public class AdminRepository {
     }
 
     private RowMapper<ReservationTime> readReservationTimeRowMapper() {
-        return (resultSet, rowNum) -> ReservationTime.read(resultSet);
+        return null;
     }
 
     public Long saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
@@ -62,7 +62,7 @@ public class AdminRepository {
     }
 
     private RowMapper<Reservation> readReservationRowMapper() {
-        return (resultSet, rowNum) -> Reservation.read(resultSet);
+        return null;
     }
 
     public Long saveReservation(SaveReservationRequest saveReservationRequest) {

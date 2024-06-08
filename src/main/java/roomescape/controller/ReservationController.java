@@ -3,6 +3,7 @@ package roomescape.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import roomescape.dto.ReservationRequest;
 import roomescape.model.Reservation;
 import roomescape.service.ReservationService;
 
@@ -27,8 +28,8 @@ public class ReservationController {
 
     // 예약 추가
     @PostMapping
-    public ResponseEntity<Reservation> addReservation(@RequestBody Reservation reservation) {
-        reservationService.addReservation(reservation);
+    public ResponseEntity<Reservation> addReservation(@RequestBody ReservationRequest reservationRequest) {
+        Reservation reservation = reservationService.addReservation(reservationRequest);
         return ResponseEntity.ok().body(reservation);
     }
 

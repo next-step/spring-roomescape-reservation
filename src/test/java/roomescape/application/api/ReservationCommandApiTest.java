@@ -24,6 +24,8 @@ import java.time.LocalTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,5 +68,18 @@ class ReservationCommandApiTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(expectedResponse)));
+    }
+
+    @Test
+    @DisplayName("예약 삭제 API 컨트롤러 테스트")
+    void deleteReservationTest() throws Exception {
+        Long reservationId = 1L;
+
+        doNothing().when(reservationService).deleteReservation(any());
+
+        mockMvc.perform(
+                        delete("/reservations/{reservationId}", reservationId)
+                )
+                .andExpect(status().isOk());
     }
 }

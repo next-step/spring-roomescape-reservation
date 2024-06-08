@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import roomescape.entities.Reservation;
+import roomescape.entities.ReservationTime;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -25,14 +26,22 @@ public class ReservationRepository {
     }
 
     public List<Reservation> findAll(){
-        String sql = "SELECT * FROM RESERVATION";
+        String sql = "SELECT \n" +
+                "    r.id as reservation_id, \n" +
+                "    r.name as reservation_name, \n" +
+                "    r.date as reservation_date, \n" +
+                "    t.id as time_id, \n" +
+                "    t.start_at as time_start_at \n" +
+                "FROM reservation as r \n" +
+                "inner join reservation_time as t \n" +
+                "on r.time_id = t.id\n";
         List<Reservation> reservations = jdbcTemplate.query(sql, new RowMapper<Reservation>() {
             @Override
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Reservation reservation = new Reservation(
                     rs.getString("date"),
                     rs.getString("name"),
-                    rs.getString("time")
+                    new ReservationTime(rs.getString("time_start_at"))
                 );
                 reservation.setId(rs.getLong("id"));
                 return reservation;

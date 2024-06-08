@@ -28,7 +28,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public void cancelReservation(@PathVariable Long id) {
+    public void cancelReservation(@PathVariable("id") Long id) {
         reservationService.cancelReservation(id);
     }
 }

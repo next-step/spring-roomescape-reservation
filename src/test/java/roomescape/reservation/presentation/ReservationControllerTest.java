@@ -30,6 +30,16 @@ class ReservationControllerTest {
                 .body(param)
                 .when().post("/times")
                 .then().log().all();
+
+        Map<String, String> params = Map.of("name", "레벨1 탈출",
+                "description", "우테코 레벨1을 탈출하는 내용입니다.",
+                "thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/themes")
+                .then().log().all();
     }
 
     @Test
@@ -45,7 +55,7 @@ class ReservationControllerTest {
     @DisplayName("예약을 생성한다.")
     void testCreateReservation() {
         // given
-        ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L);
+        ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L, 1L);
 
         // when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -63,7 +73,7 @@ class ReservationControllerTest {
     @Test
     @DisplayName("예약을 취소한다.")
     void testCancelReservations() {
-        ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L);
+        ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L, 1L);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

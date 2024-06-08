@@ -8,6 +8,8 @@ import roomescape.reservation.application.dto.ReservationResponse;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
 import roomescape.reservation.presentation.dto.ReservationCreateRequest;
+import roomescape.theme.domain.Theme;
+import roomescape.theme.infrastructure.JdbcThemeRepository;
 import roomescape.time.domain.ReservationTime;
 import roomescape.time.infrastructure.JdbcReservationTimeRepository;
 
@@ -16,16 +18,22 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final JdbcReservationTimeRepository reservationTimeRepository;
+    private final JdbcThemeRepository themeRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, JdbcReservationTimeRepository reservationTimeRepository) {
+    public ReservationService(ReservationRepository reservationRepository,
+            JdbcReservationTimeRepository reservationTimeRepository,
+            JdbcThemeRepository themeRepository) {
         this.reservationRepository = reservationRepository;
         this.reservationTimeRepository = reservationTimeRepository;
+        this.themeRepository = themeRepository;
     }
 
     public ReservationResponse save(ReservationCreateRequest request) {
-        ReservationTime savedReservationTime = reservationTimeRepository.findById(request.timeId())
+        ReservationTime findReservationTime = reservationTimeRepository.findById(request.timeId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 시간입니다."));
-        Reservation reservation = reservationRepository.save(request.toReservation(savedReservationTime));
+        Theme findTheme = themeRepository.findById(request.themeId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 테마입니다."));
+        Reservation reservation = reservationRepository.save(request.toReservation(findReservationTime, findTheme));
         return ReservationResponse.from(reservation);
     }
 

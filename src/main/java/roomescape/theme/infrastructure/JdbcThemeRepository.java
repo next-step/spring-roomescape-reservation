@@ -1,6 +1,7 @@
 package roomescape.theme.infrastructure;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -27,6 +28,17 @@ public class JdbcThemeRepository {
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(theme);
         long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
         return new Theme(id, theme.getName(), theme.getDescription(), theme.getThumbnail());
+    }
+
+    public Optional<Theme> findById(Long themeId) {
+        String sql = "SELECT * FROM theme WHERE id = ?";
+        Theme findTheme = jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> new Theme(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getString("description"),
+                resultSet.getString("thumbnail")
+        ), themeId);
+        return Optional.ofNullable(findTheme);
     }
 
     public List<Theme> findAll() {

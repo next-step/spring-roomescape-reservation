@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
+import roomescape.theme.domain.Theme;
 import roomescape.time.domain.ReservationTime;
 
 @JdbcTest
@@ -34,9 +35,12 @@ class JdbcReservationRepositoryTest {
         reservationRepository = new JdbcReservationRepository(jdbcTemplate, dataSource);
         jdbcTemplate.execute("ALTER TABLE reservation ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.execute("ALTER TABLE reservation_time ALTER COLUMN id RESTART WITH 1");
+        jdbcTemplate.execute("ALTER TABLE theme ALTER COLUMN id RESTART WITH 1");
 
         jdbcTemplate.execute("INSERT INTO reservation_time(start_at) VALUES ('15:40')");
-        jdbcTemplate.execute("INSERT INTO reservation(name, date, time_id) VALUES ('브라운', '2023-08-05', 1)");
+        jdbcTemplate.execute("INSERT INTO theme(name, description, thumbnail)"
+                + " VALUES ('레벨1 탈출', '우테코 레벨1을 탈출하는 내용입니다.', 'https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg')");
+        jdbcTemplate.execute("INSERT INTO reservation(name, date, time_id, theme_id) VALUES ('브라운', '2023-08-05', 1, 1)");
     }
 
     @Test
@@ -44,7 +48,9 @@ class JdbcReservationRepositoryTest {
     void testSaveReservation() {
         // given
         ReservationTime reservationTime = new ReservationTime(LocalTime.parse("15:40"));
-        Reservation reservation = new Reservation("브라운", LocalDate.parse("2023-08-05"), reservationTime);
+        Theme theme = new Theme("레벨2 탈출", "우테코 레벨2를 탈출하는 내용입니다.",
+                "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        Reservation reservation = new Reservation("브라운", LocalDate.parse("2023-08-05"), reservationTime, theme);
 
         // when
         Reservation savedReservation = reservationRepository.save(reservation);

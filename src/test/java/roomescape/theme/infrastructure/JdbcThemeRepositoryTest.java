@@ -48,6 +48,23 @@ class JdbcThemeRepositoryTest {
     }
 
     @Test
+    @DisplayName("테마를 조회한다.")
+    void findById() {
+        // given
+        Theme theme = new Theme("레벨2 탈출","우테코 레벨2를 탈출하는 내용입니다.",
+                "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        Theme savedTheme = jdbcThemeRepository.save(theme);
+
+        // when
+        Theme findTheme = jdbcThemeRepository.findById(savedTheme.getId()).get();
+
+        // then
+        assertThat(findTheme).usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(theme);
+    }
+
+    @Test
     @DisplayName("모든 테마를 조회한다.")
     void findAll() {
         // given

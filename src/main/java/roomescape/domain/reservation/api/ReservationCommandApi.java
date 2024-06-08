@@ -26,7 +26,7 @@ public class ReservationCommandApi {
 
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<Void> cancel(
-            @PathVariable Long reservationId
+            @PathVariable(name = "reservationId") Long reservationId
     ) {
         commandService.cancel(new ReservationId(reservationId));
         return ResponseEntity.ok().build();

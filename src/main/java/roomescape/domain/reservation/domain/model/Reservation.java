@@ -80,6 +80,10 @@ public class Reservation {
         return this.timeStamp.equals(timeStamp);
     }
 
+    public boolean confirmed() {
+        return this.status.isConfirmed();
+    }
+
     @Override
     public boolean equals(final Object object) {
         if (this == object) return true;

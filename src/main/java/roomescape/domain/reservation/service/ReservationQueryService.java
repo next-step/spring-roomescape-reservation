@@ -16,7 +16,12 @@ public class ReservationQueryService {
 
     public List<ReservationQueryResponse> findAll() {
         final List<Reservation> reservations = reader.findAll();
-        return ReservationQueryResponse.from(reservations);
+
+        final List<Reservation> confirmedReservations = reservations.stream()
+                .filter(Reservation::isActive)
+                .toList();
+
+        return ReservationQueryResponse.from(confirmedReservations);
     }
 
 }

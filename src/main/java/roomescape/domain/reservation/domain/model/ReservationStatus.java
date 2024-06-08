@@ -6,4 +6,8 @@ public enum ReservationStatus {
     CANCELED
     ;
 
+    public boolean isConfirmed() {
+        return this == CONFIRMED;
+    }
+
 }

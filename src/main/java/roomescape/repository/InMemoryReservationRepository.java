@@ -15,14 +15,14 @@ public class InMemoryReservationRepository implements ReservationRepository {
     private List<ReservationEntity> reservationEntities = new ArrayList<>();
 
     public ReservationEntity save(ReservationEntity reservationEntity) {
-        if (!reservationEntity.isSaved()) {
+        if (!this.containSameId(reservationEntity.getId())) {
             ReservationEntity savedEntity = reservationEntity.changeId(index.incrementAndGet());
-            reservationEntities.add(savedEntity);
+            this.reservationEntities.add(savedEntity);
 
             return savedEntity;
         }
 
-        reservationEntities = reservationEntities.stream()
+        this.reservationEntities = this.reservationEntities.stream()
                 .map(reservation -> {
                     if (reservationEntity.isSameId(reservationEntity)) {
                         return reservationEntity;
@@ -41,14 +41,14 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public void delete(Long reservationId) {
-        reservationEntities = reservationEntities.stream()
+        this.reservationEntities = this.reservationEntities.stream()
                 .filter(reservationEntity -> !reservationEntity.isSameId(reservationId))
                 .collect(Collectors.toList());
     }
 
     @Override
     public ReservationEntity findById(Long id) {
-        return reservationEntities.stream()
+        return this.reservationEntities.stream()
                 .filter(reservationEntity -> reservationEntity.isSameId(id))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -56,5 +56,10 @@ public class InMemoryReservationRepository implements ReservationRepository {
                                 "[id:%d] id에 해당하는 reservation 엔티티가 존재하지 않습니다.", id
                         )
                 ));
+    }
+
+    private boolean containSameId(Long id) {
+        return this.reservationEntities.stream()
+                .anyMatch(reservationEntity -> reservationEntity.isSameId(id));
     }
 }

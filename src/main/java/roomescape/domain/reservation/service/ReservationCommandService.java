@@ -7,6 +7,8 @@ import roomescape.domain.reservation.domain.ReservationCanceler;
 import roomescape.domain.reservation.domain.ReservationReader;
 import roomescape.domain.reservation.domain.model.Reservation;
 import roomescape.domain.reservation.dto.ReservationId;
+import roomescape.domain.reservation.dto.ReservationSearchKey;
+import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.service.request.ReserveRequest;
 import roomescape.domain.reservation.service.response.ReserveResponse;
 
@@ -19,6 +21,8 @@ public class ReservationCommandService {
     private final ReservationCanceler canceler;
 
     public ReserveResponse reserve(final ReserveRequest request) {
+        verifyDuplicatedReservationNotExist(request);
+
         final ReservationId id = appender.append(request.toReservationAppend());
         final Reservation reservation = reader.getById(id);
         return ReserveResponse.from(reservation);
@@ -26,6 +30,13 @@ public class ReservationCommandService {
 
     public void cancel(final ReservationId reservationId) {
         canceler.cancel(reservationId);
+    }
+
+    private void verifyDuplicatedReservationNotExist(final ReserveRequest request) {
+        if (reader.existsBy(ReservationSearchKey.from(request))) {
+            final Reservation reservation = reader.getBy(ReservationSearchKey.from(request));
+            throw DuplicatedReservationException.fromId(ReservationId.from(reservation));
+        }
     }
 
 }

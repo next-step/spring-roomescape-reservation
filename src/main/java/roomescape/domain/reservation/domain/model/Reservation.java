@@ -72,6 +72,14 @@ public class Reservation {
         return this.id.equals(id);
     }
 
+    public boolean matchesName(final ReservationGuestName name) {
+        return this.name.equals(name);
+    }
+
+    public boolean matchesTimestamp(final ReservationTimeStamp timeStamp) {
+        return this.timeStamp.equals(timeStamp);
+    }
+
     @Override
     public boolean equals(final Object object) {
         if (this == object) return true;

@@ -16,6 +16,10 @@ public class ReservationTimeStamp {
         this.value = value;
     }
 
+    public static ReservationTimeStamp of(LocalDate date, LocalTime time) {
+        return new ReservationTimeStamp(LocalDateTime.of(date, time));
+    }
+
     @Override
     public boolean equals(final Object object) {
         if (this == object) return true;

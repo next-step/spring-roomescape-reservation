@@ -31,7 +31,7 @@ public record ThemeController(ThemeSaver themeSaver,
 
     @DeleteMapping("/{id}")
     public HttpEntity<Void> deleteTime(@PathVariable("id") long id) {
-        themeDeleter.deleteReservationTimeBy(id);
+        themeDeleter.deleteThemeBy(id);
         return ResponseEntity.ok().build();
     }
 }

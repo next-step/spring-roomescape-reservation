@@ -13,7 +13,7 @@ public class ThemeDeleter {
         this.themeRepository = themeRepository;
     }
 
-    public void deleteReservationTimeBy(long id) {
+    public void deleteThemeBy(long id) {
         final long existId = themeRepository.checkIdExists(id).orElseThrow(NotFoundThemeException::new);
         themeRepository.deleteById(existId);
     }

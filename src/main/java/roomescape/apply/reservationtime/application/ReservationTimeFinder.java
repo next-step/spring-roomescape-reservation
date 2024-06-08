@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import roomescape.apply.reservationtime.domain.ReservationTime;
 import roomescape.apply.reservationtime.domain.repository.ReservationTimeRepository;
 import roomescape.apply.reservationtime.ui.dto.ReservationTimeResponse;
+import roomescape.apply.reservationtime.application.exception.NotFoundReservationTimeException;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class ReservationTimeFinder {
@@ -26,6 +26,6 @@ public class ReservationTimeFinder {
     }
 
     public ReservationTime findOneById(long timeId) {
-        return reservationTimeRepository.findById(timeId).orElseThrow(NoSuchElementException::new);
+        return reservationTimeRepository.findById(timeId).orElseThrow(NotFoundReservationTimeException::new);
     }
 }

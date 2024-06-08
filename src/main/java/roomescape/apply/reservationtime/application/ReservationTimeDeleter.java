@@ -2,8 +2,7 @@ package roomescape.apply.reservationtime.application;
 
 import org.springframework.stereotype.Service;
 import roomescape.apply.reservationtime.domain.repository.ReservationTimeRepository;
-
-import java.util.NoSuchElementException;
+import roomescape.apply.reservationtime.application.exception.NotFoundReservationTimeException;
 
 @Service
 public class ReservationTimeDeleter {
@@ -15,7 +14,7 @@ public class ReservationTimeDeleter {
     }
 
     public void deleteReservationTimeBy(long id) {
-        final long existId = reservationTimeRepository.checkIdExists(id).orElseThrow(NoSuchElementException::new);
+        final long existId = reservationTimeRepository.checkIdExists(id).orElseThrow(NotFoundReservationTimeException::new);
         reservationTimeRepository.deleteById(existId);
     }
 }

@@ -13,7 +13,7 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     private final AtomicLong index = new AtomicLong(0);
     private List<ReservationEntity> reservationEntities = new ArrayList<>();
-    
+
     public ReservationEntity save(ReservationEntity reservationEntity) {
         if (!reservationEntity.isSaved()) {
             ReservationEntity savedEntity = reservationEntity.changeId(index.incrementAndGet());
@@ -37,5 +37,12 @@ public class InMemoryReservationRepository implements ReservationRepository {
     @Override
     public List<ReservationEntity> findAll() {
         return List.copyOf(this.reservationEntities);
+    }
+
+    @Override
+    public void delete(Long reservationId) {
+        reservationEntities = reservationEntities.stream()
+                .filter(reservationEntity -> !reservationEntity.isSameId(reservationId))
+                .collect(Collectors.toList());
     }
 }

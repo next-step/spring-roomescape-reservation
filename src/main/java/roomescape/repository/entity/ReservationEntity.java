@@ -37,6 +37,10 @@ public class ReservationEntity {
         return Objects.nonNull(this.id) && this.id.equals(reservationEntity.id);
     }
 
+    public boolean isSameId(Long id) {
+        return Objects.nonNull(this.id) && this.id.equals(id);
+    }
+
     public Long getId() {
         return id;
     }

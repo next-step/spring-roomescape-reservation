@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import roomescape.application.mapper.ReservationEntityMapper;
 import roomescape.application.mapper.ReservationMapper;
 import roomescape.application.service.command.CreateReservationCommand;
+import roomescape.application.service.command.DeleteReservationCommand;
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.Reservations;
 import roomescape.repository.ReservationRepository;
@@ -33,5 +34,9 @@ public class ReservationService {
         ReservationEntity savedEntity = reservationRepository.save(ReservationEntityMapper.toReservationEntity(reservation));
 
         return ReservationMapper.toReservation(savedEntity);
+    }
+
+    public void deleteReservation(DeleteReservationCommand deleteReservationCommand) {
+        reservationRepository.delete(deleteReservationCommand.getReservationId());
     }
 }

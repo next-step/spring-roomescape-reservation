@@ -2,7 +2,9 @@ package roomescape.domain.reservation.domain.model;
 
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Getter
@@ -25,6 +27,14 @@ public class ReservationTimeStamp {
     @Override
     public int hashCode() {
         return Objects.hash(value);
+    }
+
+    public LocalDate getDate() {
+        return this.value.toLocalDate();
+    }
+
+    public LocalTime getTime() {
+        return this.value.toLocalTime();
     }
 
 }

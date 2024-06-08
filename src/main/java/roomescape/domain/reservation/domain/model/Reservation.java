@@ -4,7 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import roomescape.global.infrastructure.ClockHolder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 public class Reservation {
@@ -39,6 +41,14 @@ public class Reservation {
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(clockHolder.getCurrentSeoulTime())
                 .build();
+    }
+
+    public LocalDate fetchReservationDate() {
+        return this.timeStamp.getDate();
+    }
+
+    public LocalTime fetchReservationTime() {
+        return this.timeStamp.getTime();
     }
 
     public boolean matchesId(final Long id) {

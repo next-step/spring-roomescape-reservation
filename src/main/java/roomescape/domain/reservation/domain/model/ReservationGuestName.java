@@ -15,6 +15,10 @@ public class ReservationGuestName {
         this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public boolean equals(final Object object) {
         if (this == object) return true;

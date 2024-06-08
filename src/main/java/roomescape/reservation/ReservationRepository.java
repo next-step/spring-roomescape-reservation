@@ -1,50 +1,42 @@
 package roomescape.reservation;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
 public class ReservationRepository {
-
     private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert simpleJdbcInsert;
+    private final RowMapper<Reservation> reservationRowMapper;
 
     public ReservationRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+        this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("reservation")
+                .usingGeneratedKeyColumns("id");
+        this.reservationRowMapper = (resultSet, rowNum) -> new Reservation(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getString("date"),
+                resultSet.getString("time")
+        );
     }
 
     public List<Reservation> findAll() {
         final String sql = "select id, name, date, time from reservation";
-
-        final List<Reservation> reservations = jdbcTemplate.query(sql,
-                (rs, rowNum) -> new Reservation(
-                        rs.getLong("id"),
-                        rs.getString("name"),
-                        rs.getString("date"),
-                        rs.getString("time")
-                )
-        );
-
-        return reservations;
+        return jdbcTemplate.query(sql, reservationRowMapper);
 
     }
 
     public Long save(Reservation reservation) {
-        final KeyHolder keyHolder = new GeneratedKeyHolder();
-        final String sql = "insert into reservation(name, date, time) values(?,?,?)";
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, reservation.getName());
-            ps.setString(2, reservation.getDate());
-            ps.setString(3, reservation.getTime());
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().longValue();
+        final SqlParameterSource parameters = new BeanPropertySqlParameterSource(reservation);
+        return simpleJdbcInsert.executeAndReturnKey(parameters).longValue();
     }
 
     public void deleteById(Long id) {
@@ -53,22 +45,14 @@ public class ReservationRepository {
     }
 
 
-
     public Reservation findById(Long id) {
         final String sql = "select id, name, date, time from reservation where id = ?";
-        final Reservation reservation = jdbcTemplate.queryForObject(sql,
-                (resultSet, rowNum) -> {
-                    Reservation reservation1 = new Reservation(
-                            resultSet.getLong("id"),
-                            resultSet.getString("name"),
-                            resultSet.getString("date"),
-                            resultSet.getString("time")
-                    );
-                    return reservation1;
-                }, id);
-
-        return reservation;
+        return jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
     }
 
+    public boolean existsById(Long id) {
+        final String sql = "select exists(select 1 from reservation where id = ?)";
+        return jdbcTemplate.queryForObject(sql, Boolean.class, id);
+    }
 
 }

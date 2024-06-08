@@ -49,11 +49,10 @@ public class ReservationService {
 
     @Transactional
     public void delete(Long id) {
-        try {
-            final Reservation savedReservaion = reservationRepository.findById(id);
-            reservationRepository.deleteById(savedReservaion.getId());
-        } catch (Exception e) {
+        if(!reservationRepository.existsById(id)) {
             throw new IllegalArgumentException("해당 예약이 존재하지 않습니다.");
+        } else if (reservationRepository.existsById(id)) {
+            reservationRepository.deleteById(id);
         }
     }
 

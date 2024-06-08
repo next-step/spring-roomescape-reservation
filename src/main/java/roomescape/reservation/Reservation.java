@@ -1,5 +1,6 @@
 package roomescape.reservation;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Reservation {
@@ -37,6 +38,19 @@ public class Reservation {
 
     public String getTime() {
         return time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
     public static class Builder {

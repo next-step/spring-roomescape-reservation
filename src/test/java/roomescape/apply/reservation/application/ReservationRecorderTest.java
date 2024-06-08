@@ -12,22 +12,29 @@ import roomescape.apply.reservationtime.application.ReservationTimeFinder;
 import roomescape.apply.reservationtime.domain.ReservationTime;
 import roomescape.apply.reservationtime.domain.repository.ReservationTimeJDBCRepository;
 import roomescape.apply.reservationtime.domain.repository.ReservationTimeRepository;
+import roomescape.apply.theme.application.ThemeFinder;
+import roomescape.apply.theme.domain.Theme;
+import roomescape.apply.theme.domain.repository.ThemeJDBCRepository;
+import roomescape.apply.theme.domain.repository.ThemeRepository;
 import roomescape.support.BaseTestService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static roomescape.support.ReservationsFixture.reservationRequest;
-import static roomescape.support.ReservationsFixture.reservationTime;
+import static roomescape.support.ReservationsFixture.*;
 
 class ReservationRecorderTest extends BaseTestService {
 
     private ReservationRecorder reservationRecorder;
     private ReservationTimeRepository reservationTimeRepository;
+    private ThemeRepository themeRepository;
 
     @BeforeEach
     void setUp() {
         transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         reservationTimeRepository = new ReservationTimeJDBCRepository(template);
-        reservationRecorder = new ReservationRecorder(new ReservationJDBCRepository(template), new ReservationTimeFinder(reservationTimeRepository));
+        themeRepository = new ThemeJDBCRepository(template);
+        var reservationTimeFinder = new ReservationTimeFinder(reservationTimeRepository);
+        var themeFinder = new ThemeFinder(themeRepository);
+        reservationRecorder = new ReservationRecorder(new ReservationJDBCRepository(template), reservationTimeFinder, themeFinder);
     }
 
     @AfterEach
@@ -40,17 +47,20 @@ class ReservationRecorderTest extends BaseTestService {
     void recordReservationBy() {
         // given
         ReservationTime time = reservationTimeRepository.save(reservationTime());
-        ReservationRequest request = reservationRequest(time.getId());
+        Theme theme = themeRepository.save(theme());
+        ReservationRequest request = reservationRequest(time.getId(), theme.getId());
         // when
         ReservationResponse response = reservationRecorder.recordReservationBy(request);
         // then
         assertThat(response).isNotNull();
         assertThat(response.id()).isNotZero();
         assertThat(response).usingRecursiveComparison()
-                .ignoringFields("id", "time")
+                .ignoringFields("id", "time", "theme")
                 .isEqualTo(request);
         assertThat(response.time()).usingRecursiveComparison()
                 .isEqualTo(time);
+        assertThat(response.theme()).usingRecursiveComparison()
+                .isEqualTo(theme);
     }
 
 }

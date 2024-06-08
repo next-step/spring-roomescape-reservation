@@ -6,7 +6,8 @@ import roomescape.support.ReservationDateChecker;
 public record ReservationRequest(
         String name,
         String date,
-        long timeId
+        long timeId,
+        long themeId
 ) {
 
     public ReservationRequest {

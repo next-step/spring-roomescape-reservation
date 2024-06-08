@@ -18,7 +18,7 @@ public class ReservationFinder {
     public List<ReservationResponse> findAll() {
         return reservationRepository.findAll()
                 .stream()
-                .map(it -> ReservationResponse.from(it, it.getTime()))
+                .map(it -> ReservationResponse.from(it, it.getTheme(), it.getTime()))
                 .toList();
     }
 

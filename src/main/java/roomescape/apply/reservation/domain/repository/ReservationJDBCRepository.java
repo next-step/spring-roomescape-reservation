@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.apply.reservation.domain.Reservation;
 import roomescape.apply.reservationtime.domain.ReservationTime;
+import roomescape.apply.theme.domain.Theme;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -18,8 +19,8 @@ import java.util.Optional;
 public class ReservationJDBCRepository implements ReservationRepository {
 
     private static final String INSERT_SQL = """
-        INSERT INTO reservation (name, date, time_id)
-        VALUES (?, ?, ?)
+        INSERT INTO reservation (name, date, time_id, theme_id)
+        VALUES (?, ?, ?, ?)
     """;
 
     private static final String SELECT_ALL_SQL = """
@@ -27,11 +28,17 @@ public class ReservationJDBCRepository implements ReservationRepository {
             r.id as reservation_id,
             r.name as reservation_name,
             r.date as reservation_date,
-            t.id as time_id,
-            t.start_at as time_start_at
+            rt.id as time_id,
+            rt.start_at as time_start_at,
+            th.id as theme_id,
+            th.name as theme_name,
+            th.description as theme_description,
+            th.thumbnail as theme_thumbnail
         FROM reservation as r
-        inner join reservation_time as t
-            on r.time_id = t.id
+        inner join reservation_time as rt
+            on r.time_id = rt.id
+        inner join theme as th
+            on r.theme_id = th.id
     """;
 
     private static final String CHECK_ID_EXISTS_SQL = """
@@ -65,6 +72,7 @@ public class ReservationJDBCRepository implements ReservationRepository {
             ps.setString(1, reservation.getName());
             ps.setString(2, reservation.getDate());
             ps.setLong(3, reservation.getTime().getId());
+            ps.setLong(4, reservation.getTheme().getId());
             return ps;
         }, keyHolder);
 
@@ -99,12 +107,18 @@ public class ReservationJDBCRepository implements ReservationRepository {
             long timeId = rs.getLong("time_id");
             String timeStartAt = rs.getString("time_start_at");
             ReservationTime reservationTime = new ReservationTime(timeId, timeStartAt);
+            long themeId = rs.getLong("theme_id");
+            String themeName = rs.getString("theme_name");
+            String themeDescription = rs.getString("theme_description");
+            String themeThumbnail = rs.getString("theme_thumbnail");
+            Theme theme = new Theme(themeId, themeName, themeDescription, themeThumbnail);
 
             return new Reservation(
                     rs.getLong("reservation_id"),
                     rs.getString("reservation_name"),
                     rs.getString("reservation_date"),
-                    reservationTime
+                    reservationTime,
+                    theme
             );
         };
     }

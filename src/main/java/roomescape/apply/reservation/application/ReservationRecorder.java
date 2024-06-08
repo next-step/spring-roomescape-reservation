@@ -7,22 +7,28 @@ import roomescape.apply.reservation.ui.dto.ReservationRequest;
 import roomescape.apply.reservation.ui.dto.ReservationResponse;
 import roomescape.apply.reservationtime.application.ReservationTimeFinder;
 import roomescape.apply.reservationtime.domain.ReservationTime;
+import roomescape.apply.theme.application.ThemeFinder;
+import roomescape.apply.theme.domain.Theme;
 
 @Service
 public class ReservationRecorder {
 
     private final ReservationRepository reservationRepository;
     private final ReservationTimeFinder reservationTimeFinder;
+    private final ThemeFinder themeFinder;
 
-    public ReservationRecorder(ReservationRepository reservationRepository, ReservationTimeFinder reservationTimeFinder) {
+    public ReservationRecorder(ReservationRepository reservationRepository, ReservationTimeFinder reservationTimeFinder,
+                               ThemeFinder themeFinder) {
         this.reservationRepository = reservationRepository;
         this.reservationTimeFinder = reservationTimeFinder;
+        this.themeFinder = themeFinder;
     }
 
     public ReservationResponse recordReservationBy(ReservationRequest request) {
         final ReservationTime time = reservationTimeFinder.findOneById(request.timeId());
-        final Reservation reservation = Reservation.of(request.name(), request.date(), time);
+        final Theme theme = themeFinder.findOneById(request.themeId());
+        final Reservation reservation = Reservation.of(request.name(), request.date(), time, theme);
         final Reservation saved = reservationRepository.save(reservation);
-        return ReservationResponse.from(saved, time);
+        return ReservationResponse.from(saved, theme, time);
     }
 }

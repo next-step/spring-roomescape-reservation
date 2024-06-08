@@ -1,5 +1,7 @@
 package roomescape;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static roomescape.DataTimeFormatterUtils.getFormattedTomorrowDate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = "spring.datasource.url=jdbc:h2:mem:testdb")
@@ -67,7 +70,7 @@ class ReservationIntegrationTests {
 
 		// create reservation
 		// given
-		ReservationRequest reservationRequest = new ReservationRequest("tester", "2024-06-06", 1L, 1L);
+		ReservationRequest reservationRequest = new ReservationRequest("tester", getFormattedTomorrowDate(), 1L, 1L);
 
 		// when
 		var createReservation = this.restTemplate.postForEntity("http://localhost:" + this.port + "/reservations",

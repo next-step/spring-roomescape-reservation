@@ -80,17 +80,6 @@ class ReservationTimeRepositoryTests {
 	}
 
 	@Test
-	void deleteReservationTimeException() {
-
-		// given
-		long id = 1L;
-
-		// when, then
-		assertThatThrownBy(() -> this.reservationTimeRepository.delete(id)).isInstanceOf(RuntimeException.class)
-			.hasMessage("No data found for ID: " + id);
-	}
-
-	@Test
 	void findReservationTimeById() {
 		// given
 		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();

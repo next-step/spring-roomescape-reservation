@@ -5,6 +5,8 @@ import java.util.List;
 import roomescape.controller.dto.ThemeRequest;
 import roomescape.controller.dto.ThemeResponse;
 import roomescape.domain.Theme;
+import roomescape.exception.ErrorCode;
+import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ThemeRepository;
 
 import org.springframework.stereotype.Service;
@@ -33,7 +35,13 @@ public class ThemeService {
 	}
 
 	public void delete(long id) {
-		this.themeRepository.delete(id);
+		var isExist = this.themeRepository.isExistId(id);
+		if (isExist) {
+			this.themeRepository.delete(id);
+		}
+		else {
+			throw new RoomEscapeException(ErrorCode.NOT_FOUND_THEME);
+		}
 	}
 
 	public Theme getThemeById(long id) {

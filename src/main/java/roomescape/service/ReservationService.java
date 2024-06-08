@@ -5,9 +5,13 @@ import java.util.List;
 import roomescape.controller.dto.ReservationRequest;
 import roomescape.controller.dto.ReservationResponse;
 import roomescape.domain.Reservation;
+import roomescape.exception.ErrorCode;
+import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ReservationRepository;
 
 import org.springframework.stereotype.Service;
+
+import static roomescape.controller.dto.ReservationRequest.validateReservation;
 
 @Service
 public class ReservationService {
@@ -33,7 +37,15 @@ public class ReservationService {
 	}
 
 	public ReservationResponse create(ReservationRequest request) {
+
 		var reservationTime = this.reservationTimeService.getReservationTimeById(request.timeId());
+
+		validateReservation(request, reservationTime.getStartAt());
+
+		if (this.reservationRepository.isDuplicateReservation(request)) {
+			throw new RoomEscapeException(ErrorCode.DUPLICATE_RESERVATION);
+		}
+
 		var theme = this.themeService.getThemeById(request.themeId());
 		var reservation = Reservation.builder()
 			.name(request.name())
@@ -46,7 +58,13 @@ public class ReservationService {
 	}
 
 	public void cancel(long id) {
-		this.reservationRepository.delete(id);
+		var isExist = this.reservationRepository.isExistId(id);
+		if (isExist) {
+			this.reservationRepository.delete(id);
+		}
+		else {
+			throw new RoomEscapeException(ErrorCode.NOT_FOUND_RESERVATION);
+		}
 	}
 
 }

@@ -28,7 +28,7 @@ public class AdminControllerTest {
 
     @Nested
     @DisplayName("방탈출 예약은")
-    class Describe_Resevation{
+    class Describe_Reservation{
 
         @Test
         @DisplayName("사전 예약 등록 후 예약할 수 있습니다")
@@ -68,7 +68,7 @@ public class AdminControllerTest {
             List<Object> reservations = objectMapper.readValue(jsonResponse, new TypeReference<List<Object>>() {});
 
             assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            assertThat(reservations.size()).isGreaterThan(0);
+            assertThat(reservations.size()).isPositive();
         }
 
         @Nested
@@ -125,28 +125,7 @@ public class AdminControllerTest {
             List<Object> reservations = objectMapper.readValue(jsonResponse, new TypeReference<List<Object>>() {});
 
             assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            assertThat(reservations.size()).isEqualTo(2);
-        }
-
-        @Nested
-        @DisplayName("사전에 예약자가 취소 하려는 시간으로 예약하지 않았다면")
-        class Context_Not_Use_For_Reservation{
-
-            @Test
-            @DisplayName("취소하실 수 있습니다.")
-            @Rollback
-            void delete_reservation_time(){
-                /*
-                save_reservation_time(given_예약시간_13_20);
-
-                var response = RestAssured
-                        .given().log().all()
-                        .contentType(ContentType.JSON)
-                        .when().delete("/times/1")
-                        .then().log().all().extract();
-
-                assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());*/
-            }
+            assertThat(reservations).hasSize(2);
         }
 
         @Nested
@@ -157,7 +136,7 @@ public class AdminControllerTest {
             @DisplayName("취소할 수 없습니다.")
             @Rollback
             void not_delete_reservation_time(){
-                Describe_Resevation resevation = new Describe_Resevation();
+                Describe_Reservation resevation = new Describe_Reservation();
                 resevation.save_reservation();
 
                 var response = RestAssured

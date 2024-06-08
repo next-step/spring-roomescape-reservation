@@ -20,7 +20,7 @@ public class ThemeService {
 
     public ThemeResponse createTheme(ThemeCreateRequest request) {
         Theme theme = jdbcThemeRepository.save(request.toTheme());
-        return ThemeResponse.of(theme.getId(), theme.getName(), theme.getDescription(), theme.getThumbnail());
+        return ThemeResponse.from(theme);
     }
 
     public List<ThemeResponse> getThemes() {

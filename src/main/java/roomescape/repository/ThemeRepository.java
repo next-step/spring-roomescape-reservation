@@ -42,6 +42,12 @@ public class ThemeRepository {
 		return this.jdbcTemplate.queryForObject(sql, THEME_ROW_MAPPER, id);
 	}
 
+	public boolean isExistId(long id) {
+		String sql = "SELECT COUNT(*) FROM theme WHERE id = ?";
+		int count = this.jdbcTemplate.queryForObject(sql, Integer.class, id);
+		return count > 0;
+	}
+
 	public Theme save(Theme theme) {
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("name", theme.getName());
@@ -55,11 +61,7 @@ public class ThemeRepository {
 
 	public void delete(long id) {
 		String sql = "DELETE FROM theme WHERE id = ?";
-		int result = this.jdbcTemplate.update(sql, id);
-
-		if (result == 0) {
-			throw new RuntimeException("No data found for ID: " + id);
-		}
+		this.jdbcTemplate.update(sql, id);
 	}
 
 	static {

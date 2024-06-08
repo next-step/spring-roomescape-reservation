@@ -1,5 +1,7 @@
 package roomescape;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
 import static org.hamcrest.Matchers.is;
+import static roomescape.DataTimeFormatterUtils.getFormattedTomorrowDate;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -23,11 +26,12 @@ class MissionStepTests {
 
 	@Test
 	void crdReservation() {
+
 		createTheme();
 		createReservationTime();
 		Map<String, String> params = new HashMap<>();
 		params.put("name", "브라운");
-		params.put("date", "2023-08-05");
+		params.put("date", getFormattedTomorrowDate());
 		params.put("timeId", "1");
 		params.put("themeId", "1");
 

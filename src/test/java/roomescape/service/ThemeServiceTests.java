@@ -10,9 +10,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import roomescape.controller.dto.ThemeRequest;
 import roomescape.domain.Theme;
+import roomescape.exception.ErrorCode;
+import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ThemeRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -81,15 +84,13 @@ class ThemeServiceTests {
 	}
 
 	@Test
-	void delete() {
+	void deleteException() {
 		// given
 		long id = 1L;
 
-		// when
-		this.themeService.delete(id);
-
-		// then
-		verify(this.themeRepository, times(1)).delete(id);
+		// when, then
+		assertThatThrownBy(() -> this.themeService.delete(id)).isInstanceOf(RoomEscapeException.class)
+				.hasMessage(ErrorCode.NOT_FOUND_THEME.getMessage());
 	}
 
 	@Test

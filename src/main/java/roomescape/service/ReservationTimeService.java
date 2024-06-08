@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import roomescape.controller.dto.ReservationTimeRequest;
 import roomescape.controller.dto.ReservationTimeResponse;
 import roomescape.domain.ReservationTime;
+import roomescape.exception.ErrorCode;
+import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ReservationTimeRepository;
 
 import org.springframework.stereotype.Service;
@@ -33,11 +35,23 @@ public class ReservationTimeService {
 	}
 
 	public void delete(long id) {
-		this.reservationTimeRepository.delete(id);
+		var isExist = this.reservationTimeRepository.isExistId(id);
+		if (isExist) {
+			this.reservationTimeRepository.delete(id);
+		}
+		else {
+			throw new RoomEscapeException(ErrorCode.NOT_FOUND_RESERVATION_TIME);
+		}
 	}
 
 	public ReservationTime getReservationTimeById(long id) {
-		return this.reservationTimeRepository.findById(id);
+//		try {
+			return this.reservationTimeRepository.findById(id);
+//		}
+//		catch (Exception ex) {
+//			throw new RoomEscapeException(ErrorCode.NOT_FOUND_RESERVATION_TIME);
+//		}
+
 	}
 
 }

@@ -45,18 +45,20 @@ public class ReservationTimeRepository {
 		return this.jdbcTemplate.query(sql, RESERVATION_TIME_ROW_MAPPER);
 	}
 
-	public void delete(long id) {
-		String sql = "DELETE FROM reservation_time WHERE id = ?";
-		int result = this.jdbcTemplate.update(sql, id);
-
-		if (result == 0) {
-			throw new RuntimeException("No data found for ID: " + id);
-		}
-	}
-
 	public ReservationTime findById(long id) {
 		String sql = "SELECT rt.id, rt.start_at FROM reservation_time rt WHERE rt.id = ?";
 		return this.jdbcTemplate.queryForObject(sql, RESERVATION_TIME_ROW_MAPPER, id);
+	}
+
+	public boolean isExistId(long id) {
+		String sql = "SELECT COUNT(*) FROM reservation_time WHERE id = ?";
+		int count = this.jdbcTemplate.queryForObject(sql, Integer.class, id);
+		return count > 0;
+	}
+
+	public void delete(long id) {
+		String sql = "DELETE FROM reservation_time WHERE id = ?";
+		this.jdbcTemplate.update(sql, id);
 	}
 
 	static {

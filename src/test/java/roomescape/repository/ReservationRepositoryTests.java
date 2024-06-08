@@ -106,16 +106,4 @@ class ReservationRepositoryTests {
 		verify(this.jdbcTemplate).update(anyString(), eq(id));
 	}
 
-	@Test
-	void deleteReservationException() {
-
-		// given
-		long id = 1L;
-
-		// when, then
-		assertThatThrownBy(() -> this.reservationRepository.delete(id)).isInstanceOf(RuntimeException.class)
-			.hasMessage("No data found for ID: " + id);
-
-	}
-
 }

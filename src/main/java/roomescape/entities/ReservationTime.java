@@ -7,7 +7,11 @@ public class ReservationTime {
     private String startAt;
 
     public ReservationTime(ReservationTimeAddRequestDTO reservationTimeAddRequestDTO) {
+        if (! isValidStartAt(reservationTimeAddRequestDTO.getStartAt())){
+            throw new IllegalArgumentException();
+        }
         this.startAt = reservationTimeAddRequestDTO.getStartAt();
+
     }
 
     public ReservationTime(String startAt){
@@ -26,4 +30,13 @@ public class ReservationTime {
         this.id = id;
     }
 
+    private boolean isValidStartAt(String startAt){
+        String[] times = startAt.split(":");
+        int hour = Integer.parseInt(times[0]);
+        int minute = Integer.parseInt(times[1]);
+        if (hour >= 0 && hour <= 24 && minute >= 0 && minute <= 24){
+            return true;
+        }
+        return false;
+    }
 }

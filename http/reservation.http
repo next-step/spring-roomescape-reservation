@@ -7,3 +7,10 @@ Content-Type: application/json
     "name": "브라운",
     "time": "15:40"
 }
+
+### 예약 취소
+@reservationId =1
+DELETE http://localhost:8080/reservations/{{reservationId}}
+
+### 전체 예약 조회
+GET http://localhost:8080/reservations

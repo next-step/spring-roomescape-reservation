@@ -31,4 +31,31 @@ class ReservationTest {
         );
     }
 
+    @Test
+    void cancel() {
+        // given
+        final Reservation sut = Reservation.builder()
+                .id(1L)
+                .name(new ReservationGuestName("brie"))
+                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .status(ReservationStatus.CONFIRMED)
+                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .build();
+
+        final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
+
+        // when
+        final Reservation actual = sut.cancel(clockHolder);
+
+        // then
+        assertAll(
+                () -> assertThat(actual.getId()).isEqualTo(1L),
+                () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
+                () -> assertThat(actual.getTimeStamp()).isEqualTo(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0))),
+                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
+                () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
+        );
+    }
+
 }

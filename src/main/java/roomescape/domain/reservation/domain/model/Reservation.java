@@ -15,18 +15,23 @@ public class Reservation {
     private final ReservationGuestName name;
     private final ReservationTimeStamp timeStamp;
     private final ReservationStatus status;
+    private final LocalDateTime canceledAt;
     private final LocalDateTime createdAt;
 
     @Builder
     private Reservation(
+            final Long id,
             final ReservationGuestName name,
             final ReservationTimeStamp timeStamp,
             final ReservationStatus status,
+            final LocalDateTime canceledAt,
             final LocalDateTime createdAt
     ) {
+        this.id = id;
         this.name = name;
         this.timeStamp = timeStamp;
         this.status = status;
+        this.canceledAt = canceledAt;
         this.createdAt = createdAt;
     }
 
@@ -40,6 +45,17 @@ public class Reservation {
                 .timeStamp(timeStamp)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(clockHolder.getCurrentSeoulTime())
+                .build();
+    }
+
+    public Reservation cancel(final ClockHolder clockHolder) {
+        return Reservation.builder()
+                .id(this.id)
+                .name(this.name)
+                .timeStamp(this.timeStamp)
+                .status(ReservationStatus.CANCELED)
+                .createdAt(this.createdAt)
+                .canceledAt(clockHolder.getCurrentSeoulTime())
                 .build();
     }
 

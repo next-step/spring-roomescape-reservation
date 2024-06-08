@@ -57,4 +57,31 @@ class ThemeControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("size()", is(1));
     }
+
+    @Test
+    @DisplayName("테마를 삭제한다.")
+    void deleteTheme() {
+        Map<String, String> params = Map.of(
+                "name", "레벨2 탈출",
+                "description", "우테코 레벨2를 탈출하는 내용입니다.",
+                "thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg"
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/themes")
+                .then().log().all();
+
+        RestAssured.given().log().all()
+                .when().delete("/themes/1")
+                .then().log().all()
+                .statusCode(HttpStatus.NO_CONTENT.value());
+
+        RestAssured.given().log().all()
+                .when().get("/themes")
+                .then().log().all()
+                .statusCode(HttpStatus.OK.value())
+                .body("size()", is(0));
+    }
 }

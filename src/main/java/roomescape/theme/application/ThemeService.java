@@ -31,6 +31,9 @@ public class ThemeService {
     }
 
     public void deleteTheme(Long themeId) {
-
+        if (!jdbcThemeRepository.existsById(themeId)) {
+            throw new IllegalArgumentException("존재하지 않는 테마입니다.");
+        }
+        jdbcThemeRepository.deleteById(themeId);
     }
 }

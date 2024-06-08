@@ -38,4 +38,15 @@ public class JdbcThemeRepository {
                 resultSet.getString("thumbnail")
         ));
     }
+
+    public boolean existsById(Long themeId) {
+        String sql = "SELECT COUNT(*) FROM theme WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, themeId);
+        return count != null && count.equals(1);
+    }
+
+    public void deleteById(Long themeId) {
+        String sql = "DELETE FROM theme WHERE id = ?";
+        jdbcTemplate.update(sql, themeId);
+    }
 }

@@ -39,7 +39,8 @@ public class ReservationTime {
         String[] times = startAt.split(":");
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);
-        if (hour >= 0 && hour <= 24 && minute >= 0 && minute <= 24){
+
+        if (hour >= 0 && hour <= 24 && minute >= 0 && minute <= 59){
             return true;
         }
         return false;

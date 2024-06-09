@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/reservations")
 public class ReservationController {
 	private final ReservationService reservationService;
 
@@ -14,19 +15,19 @@ public class ReservationController {
 		this.reservationService = reservationService;
 	}
 
-	@GetMapping("/reservations")
+	@GetMapping
 	public ResponseEntity<List<ReservationResponse>> getReservations() {
 		return ResponseEntity.ok().body(reservationService.findReservations());
 	}
 
-	@PostMapping("/reservations")
+	@PostMapping
 	public ResponseEntity<ReservationResponse> saveReservations(@RequestBody ReservationRequest request) {
 		Long id = reservationService.saveReservation(request);
 		return ResponseEntity.ok().body(reservationService.findReservation(id));
 	}
 
 
-	@DeleteMapping("/reservations/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteReservation(@PathVariable String id) {
 		reservationService.deleteReservation(Long.parseLong(id));
 		return ResponseEntity.ok().build();

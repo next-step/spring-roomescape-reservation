@@ -13,5 +13,11 @@ public interface ReservationRepository {
 
     Optional<Long> checkIdExists(long id);
 
-    void delete(long id);
+    void deleteById(long id);
+
+    Optional<Long> findIdByTimeIdAndThemeId(long timeId, long themeId);
+
+    Optional<Long> findAnyByTimeId(long id);
+
+    Optional<Long> findAnyByThemeId(long themeId);
 }

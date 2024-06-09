@@ -1,9 +1,8 @@
 package roomescape.apply.reservation.application;
 
 import org.springframework.stereotype.Service;
+import roomescape.apply.reservation.application.excpetion.NotFoundReservationException;
 import roomescape.apply.reservation.domain.repository.ReservationRepository;
-
-import java.util.NoSuchElementException;
 
 @Service
 public class ReservationCanceler {
@@ -15,7 +14,7 @@ public class ReservationCanceler {
     }
 
     public void cancelReservation(long id) {
-        final long reservationId = reservationRepository.checkIdExists(id).orElseThrow(NoSuchElementException::new);
-        reservationRepository.delete(reservationId);
+        final long reservationId = reservationRepository.checkIdExists(id).orElseThrow(NotFoundReservationException::new);
+        reservationRepository.deleteById(reservationId);
     }
 }

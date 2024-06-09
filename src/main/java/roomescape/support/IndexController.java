@@ -11,14 +11,18 @@ public class IndexController {
         return "/admin/index";
     }
 
-    @GetMapping("/reservation")
+    @GetMapping("/admin/reservation")
     public String adminReservationPage() {
-        return "/admin/reservation";
+        return "/admin/reservation-new";
     }
 
-    @GetMapping("/time")
+    @GetMapping("/admin/time")
     public String adminTimePage() {
         return "/admin/time";
     }
 
+    @GetMapping("/admin/theme")
+    public String adminThemes() {
+        return "/admin/theme";
+    }
 }

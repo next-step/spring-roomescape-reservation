@@ -26,7 +26,7 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> getReservation() {
+    public ResponseEntity<List<ReservationResponse>> getReservations() {
         return ResponseEntity.ok(reservationFinder.findAll());
     }
 

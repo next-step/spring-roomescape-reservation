@@ -2,7 +2,7 @@ spring:
   sql:
     init:
       mode: embedded
-      schema-locations: classpath:db/schema.sql
+      schema-locations: classpath:db/schema/schema.sql
 
   h2:
     console:

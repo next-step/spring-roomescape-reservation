@@ -81,7 +81,13 @@ public class JdbcReservationRepository implements ReservationRepository {
     public boolean existsByReservationTimeId(Long reservationTimeId) {
         String sql = "SELECT COUNT(*) FROM reservation WHERE time_id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, reservationTimeId);
-        System.out.println("count = " + count);
+        return count != null && count.equals(1);
+    }
+
+    @Override
+    public boolean existsByDateAndTimeId(String date, Long timeId) {
+        String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, date, timeId);
         return count != null && count.equals(1);
     }
 }

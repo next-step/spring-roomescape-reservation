@@ -1,9 +1,16 @@
 package roomescape.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ReservationThemeRequest {
 
+    @NotBlank(message = "테마이름은 필수 값입니다.")
     private String name;
+
+    @NotBlank(message = "테마설명은 필수 값입니다.")
     private String description;
+
+    @NotBlank(message = "테마이미지는 필수 값입니다.")
     private String thumbnail;
 
     public ReservationThemeRequest() {

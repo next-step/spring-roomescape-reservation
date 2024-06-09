@@ -1,21 +1,24 @@
 package roomescape.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ReservationRequest {
-    private Long id;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String date;
+
+    @NotBlank
     private String timeId;
+
+    @NotBlank
     private String themeId;
 
     public ReservationRequest() {
-    }
-
-    public ReservationRequest(Long id, String name, String date, String timeId, String themeId) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.timeId = timeId;
-        this.themeId = themeId;
     }
 
     public ReservationRequest(String name, String date, String timeId, String themeId) {
@@ -23,10 +26,6 @@ public class ReservationRequest {
         this.date = date;
         this.timeId = timeId;
         this.themeId = themeId;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

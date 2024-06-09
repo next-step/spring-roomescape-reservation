@@ -1,4 +1,4 @@
-package roomescape.time.web.dto;
+package roomescape.time.presentation.dto;
 
 import roomescape.time.domain.Time;
 

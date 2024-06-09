@@ -1,6 +1,5 @@
 package roomescape.reservation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,7 +13,7 @@ import java.util.List;
 public class ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public ReservationRepository(@Autowired JdbcTemplate jdbcTemplate) {
+    public ReservationRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -44,7 +43,7 @@ public class ReservationRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    public List<Reservation> toList() {
+    public List<Reservation> reservations() {
         String sql = "select id, name, date, time from reservation";
         return jdbcTemplate.query(sql, rowMapper);
     }

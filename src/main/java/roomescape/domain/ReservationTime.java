@@ -24,10 +24,6 @@ public class ReservationTime {
 		return this.startAt;
 	}
 
-	public void setStartAt(String startAt) {
-		this.startAt = startAt;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {

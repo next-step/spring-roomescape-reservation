@@ -1,5 +1,8 @@
 package roomescape.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import roomescape.controller.dto.ReservationRequest;
@@ -10,8 +13,6 @@ import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ReservationRepository;
 
 import org.springframework.stereotype.Service;
-
-import static roomescape.controller.dto.ReservationRequest.validateReservation;
 
 @Service
 public class ReservationService {
@@ -37,14 +38,9 @@ public class ReservationService {
 	}
 
 	public ReservationResponse create(ReservationRequest request) {
-
 		var reservationTime = this.reservationTimeService.getReservationTimeById(request.timeId());
 
-		validateReservation(request, reservationTime.getStartAt());
-
-		if (this.reservationRepository.isDuplicateReservation(request)) {
-			throw new RoomEscapeException(ErrorCode.DUPLICATE_RESERVATION);
-		}
+		checkReservationAvailability(request, reservationTime.getStartAt());
 
 		var theme = this.themeService.getThemeById(request.themeId());
 		var reservation = Reservation.builder()
@@ -64,6 +60,19 @@ public class ReservationService {
 		}
 		else {
 			throw new RoomEscapeException(ErrorCode.NOT_FOUND_RESERVATION);
+		}
+	}
+
+	private void checkReservationAvailability(ReservationRequest request, String time) {
+		LocalDate reservationDate = LocalDate.parse(request.date());
+		LocalTime reservationTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+		if (reservationDate.isBefore(LocalDate.now())
+				|| (reservationDate.isEqual(LocalDate.now()) && reservationTime.isBefore(LocalTime.now()))) {
+			throw new RoomEscapeException(ErrorCode.PAST_RESERVATION);
+		}
+
+		if (this.reservationRepository.isDuplicateReservation(request)) {
+			throw new RoomEscapeException(ErrorCode.DUPLICATE_RESERVATION);
 		}
 	}
 

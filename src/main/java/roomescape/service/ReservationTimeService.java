@@ -45,13 +45,7 @@ public class ReservationTimeService {
 	}
 
 	public ReservationTime getReservationTimeById(long id) {
-//		try {
-			return this.reservationTimeRepository.findById(id);
-//		}
-//		catch (Exception ex) {
-//			throw new RoomEscapeException(ErrorCode.NOT_FOUND_RESERVATION_TIME);
-//		}
-
+		return this.reservationTimeRepository.findById(id);
 	}
 
 }

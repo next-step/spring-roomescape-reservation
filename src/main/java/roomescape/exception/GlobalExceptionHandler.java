@@ -32,6 +32,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return problemDetail;
 	}
 
+	@ExceptionHandler(Exception.class)
+	public ProblemDetail handleAllExceptions(Exception ex, WebRequest request) {
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+		ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, "An unexpected error occurred.");
+		problemDetail.setTitle("Internal Server Error");
+		problemDetail.setInstance(URI.create(request.getDescription(false)));
+
+		logger.error("Unexpected error occurred: {}", problemDetail, ex);
+
+		return problemDetail;
+	}
+
 	private HttpStatus getStatusForErrorCode(ErrorCode errorCode) {
 		return switch (errorCode) {
 			case INVALID_TIME, INVALID_RESERVATION, PAST_RESERVATION -> HttpStatus.BAD_REQUEST;

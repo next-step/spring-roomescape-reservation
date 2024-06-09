@@ -30,32 +30,16 @@ public class Reservation {
 		return this.name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDate() {
 		return this.date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
 	}
 
 	public ReservationTime getTime() {
 		return this.time;
 	}
 
-	public void setTime(ReservationTime time) {
-		this.time = time;
-	}
-
 	public Theme getTheme() {
 		return this.theme;
-	}
-
-	public void setTheme(Theme theme) {
-		this.theme = theme;
 	}
 
 	@Override

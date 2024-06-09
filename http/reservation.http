@@ -1,0 +1,16 @@
+### 예약 생성
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+    "date": "2023-08-05",
+    "name": "브라운",
+    "time": "15:40"
+}
+
+### 예약 취소
+@reservationId =1
+DELETE http://localhost:8080/reservations/{{reservationId}}
+
+### 전체 예약 조회
+GET http://localhost:8080/reservations

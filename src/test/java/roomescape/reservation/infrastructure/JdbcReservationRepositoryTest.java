@@ -110,4 +110,20 @@ class JdbcReservationRepositoryTest {
 
         assertThat(result).isFalse();
     }
+
+    @Test
+    @DisplayName("예약 날짜와 시간이 존재하면 TRUE를 반환한다.")
+    void existsByDateAndTimeId_ReturnTrue() {
+        boolean result = reservationRepository.existsByDateAndTimeId("2023-08-05", 1L);
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("예약 날짜와 시간이 존재하면 FALSE를 반환한다.")
+    void existsByDateAndTimeId_ReturnFalse() {
+        boolean result = reservationRepository.existsByDateAndTimeId("2023-08-06", 1L);
+
+        assertThat(result).isFalse();
+    }
 }

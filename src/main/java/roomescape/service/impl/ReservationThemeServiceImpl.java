@@ -1,60 +1,54 @@
 package roomescape.service.impl;
 
-import java.sql.PreparedStatement;
 import java.util.List;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import roomescape.domain.ReservationTheme;
 import roomescape.dto.request.ReservationThemeRequest;
 import roomescape.dto.response.ReservationThemeResponse;
+import roomescape.repository.ReservationThemeDao;
 import roomescape.service.ReservationThemeService;
 
 @Service
 public class ReservationThemeServiceImpl implements ReservationThemeService {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final ReservationThemeDao reservationThemeDao;
 
-    public ReservationThemeServiceImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ReservationThemeServiceImpl(ReservationThemeDao reservationThemeDao) {
+        this.reservationThemeDao = reservationThemeDao;
     }
 
     @Override
     public ReservationThemeResponse createReservationTheme(ReservationThemeRequest request) {
-        final String sql = "INSERT INTO theme (name, description, thumbnail) values (?, ?, ?)";
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, request.getName());
-            ps.setString(2, request.getDescription());
-            ps.setString(3, request.getThumbnail());
-
-            return ps;
-        }, keyHolder);
-
-        return new ReservationThemeResponse(keyHolder.getKey().longValue()
-                , request.getName()
-                , request.getDescription()
-                , request.getThumbnail());
+        ReservationTheme reservationTheme = reservationThemeDao.save(this.convertToEntity(request));
+        return this.convertToResponse(reservationTheme);
     }
 
     @Override
     public List<ReservationThemeResponse> findAllReservationThemes() {
-        final String sql = "SELECT id, name, description, thumbnail FROM theme";
-
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new ReservationThemeResponse(
-                rs.getLong("id"),
-                rs.getString("name"),
-                rs.getString("description"),
-                rs.getString("thumbnail")
-        ));
+        return reservationThemeDao.findAll()
+                .stream()
+                .map(reservationTheme -> this.convertToResponse(reservationTheme))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
     public void deleteReservationTheme(Long id) {
-        final String sql = "DELETE FROM theme WHERE id = ?";
-        jdbcTemplate.update(sql, id);
+        reservationThemeDao.delete(id);
+    }
+
+    private ReservationThemeResponse convertToResponse(ReservationTheme reservationTheme) {
+        return new ReservationThemeResponse(
+                reservationTheme.getId()
+                , reservationTheme.getName()
+                , reservationTheme.getDescription()
+                , reservationTheme.getThumbnail());
+    }
+
+    private ReservationTheme convertToEntity(ReservationThemeRequest reservationThemeRequest) {
+        return new ReservationTheme(
+                reservationThemeRequest.getName()
+                , reservationThemeRequest.getDescription()
+                , reservationThemeRequest.getThumbnail());
     }
 }

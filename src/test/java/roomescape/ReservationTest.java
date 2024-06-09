@@ -41,6 +41,7 @@ public class ReservationTest {
         params.put("name", "브라운");
         params.put("date", "2023-08-05");
         params.put("timeId", "1");
+        params.put("themeId", "1");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

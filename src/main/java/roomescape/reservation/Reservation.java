@@ -18,7 +18,19 @@ public class Reservation {
 		this.reservationTime = reservationTime;
 	}
 
-	public ReservationResponse convert() {
-		return new ReservationResponse(id, name, date, reservationTime.getStartAt());
+	public Long getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public String getTime() {
+		return reservationTime.getStartAt();
 	}
 }

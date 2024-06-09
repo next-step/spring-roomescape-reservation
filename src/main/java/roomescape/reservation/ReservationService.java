@@ -15,12 +15,12 @@ public class ReservationService {
 
 	public List<ReservationResponse> findReservations() {
 		return reservationRepository.find().stream()
-				.map(Reservation::convert)
+				.map(ReservationResponse::new)
 				.collect(Collectors.toList());
 	}
 
 	public ReservationResponse findReservation(Long id) {
-		return reservationRepository.findByKey(id).convert();
+		return new ReservationResponse(reservationRepository.findByKey(id));
 	}
 
 	public Long saveReservation(ReservationRequest request) {

@@ -16,6 +16,10 @@ public class ReservationResponse {
 		this.time = time;
 	}
 
+	public ReservationResponse(Reservation reservation) {
+		this(reservation.getId(), reservation.getName(), reservation.getDate(), reservation.getTime());
+	}
+
 	public Long getId() {
 		return id;
 	}

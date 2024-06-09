@@ -18,12 +18,12 @@ public class ReservationTimeService {
 	}
 
 	public ReservationTimeResponse findReservationTime(Long id) {
-		return reservationTimeRepository.findById(id).convert();
+		return new ReservationTimeResponse(reservationTimeRepository.findById(id));
 	}
 
 	public List<ReservationTimeResponse> findReservationTimes() {
 		return reservationTimeRepository.find().stream()
-				.map(ReservationTime::convert)
+				.map(ReservationTimeResponse::new)
 				.collect(Collectors.toList());
 	}
 

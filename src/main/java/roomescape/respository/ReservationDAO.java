@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.model.Reservation;
+import roomescape.model.ReservationCreateDto;
 import roomescape.model.ReservationTime;
 
 import java.sql.PreparedStatement;
@@ -28,13 +29,12 @@ public class ReservationDAO {
                 resultSet.getLong("reservation_id"),
                 resultSet.getString("reservation_date"),
                 resultSet.getString("reservation_name"),
-                resultSet.getLong("time_id"),
                 reservationTime
         );
     };
 
 
-    public Reservation insertReservation(Reservation reservation) {
+    public ReservationCreateDto insertReservation(ReservationCreateDto reservationCreateDto) {
         String sql = "insert into reservation (date, name, time_id) values (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -42,9 +42,9 @@ public class ReservationDAO {
             PreparedStatement ps = connection.prepareStatement(
                     sql,
                     new String[]{"id"});
-            ps.setString(1, reservation.getDate());
-            ps.setString(2, reservation.getName());
-            ps.setLong(3, reservation.getTimeId());
+            ps.setString(1, reservationCreateDto.getDate());
+            ps.setString(2, reservationCreateDto.getName());
+            ps.setLong(3, reservationCreateDto.getTimeId());
             return ps;
         }, keyHolder);
 
@@ -52,7 +52,20 @@ public class ReservationDAO {
         return findReservationById(id);
     }
 
-    public Reservation findReservationById(Long id) {
+    public ReservationCreateDto findReservationById(Long id) {
+        String sql = "SELECT id, date, name, time_id FROM reservation WHERE id = ? ";
+
+        return jdbcTemplate.queryForObject(sql, (resultSet, rowNumber) -> {
+            return new ReservationCreateDto(
+                    resultSet.getLong("id"),
+                    resultSet.getString("date"),
+                    resultSet.getString("name"),
+                    resultSet.getLong("time_id")
+            );
+        }, id);
+    }
+
+    public List<Reservation> readReservations() {
         String sql = "SELECT " +
                 "r.id as reservation_id, " +
                 "r.name as reservation_name, " +
@@ -60,14 +73,8 @@ public class ReservationDAO {
                 "t.id as time_id, " +
                 "t.start_at as time_start_at " +
                 "FROM reservation as r " +
-                "INNER JOIN reservation_time as t ON r.time_id = t.id " +
-                "WHERE r.id = ?";
+                "INNER JOIN reservation_time as t ON r.time_id = t.id ";
 
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
-    }
-
-    public List<Reservation> readReservations() {
-        String sql = "select id, date, name, time_id from reservation";
         return jdbcTemplate.query(sql, rowMapper);
     }
 

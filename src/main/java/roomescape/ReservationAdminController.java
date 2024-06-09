@@ -29,4 +29,9 @@ public class ReservationAdminController {
 
         return ResponseEntity.ok().body(newReservation);
     }
+
+    @GetMapping("/reservations")
+    public ResponseEntity<List<Reservation>> getReservation() {
+        return ResponseEntity.ok().body(reservations);
+    }
 }

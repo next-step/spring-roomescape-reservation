@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import roomescape.model.ReservationTime;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 
 @Repository
 public class ReservationTimeDAO {
@@ -47,4 +48,8 @@ public class ReservationTimeDAO {
                 sql, rowMapper, id);
     }
 
+    public List<ReservationTime> readReservationTime() {
+        String sql = "select id, start_at from reservation_time";
+        return jdbcTemplate.query(sql, rowMapper);
+    }
 }

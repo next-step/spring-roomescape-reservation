@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import roomescape.model.ReservationTime;
 import roomescape.service.ReservationTimeAdminService;
 
+import java.util.List;
+
 @Controller
 public class ReservationTimeAdminController {
     private final ReservationTimeAdminService reservationTimeAdminService;
@@ -26,6 +28,13 @@ public class ReservationTimeAdminController {
         ReservationTime reservationTime = reservationTimeAdminService.createReservationTime(time);
 
         return ResponseEntity.ok().body(reservationTime);
+
+    }
+
+    @GetMapping("/times")
+    public ResponseEntity<List<ReservationTime>> getReservationTime() {
+        List<ReservationTime> reservationTimes = reservationTimeAdminService.getReservationTime();
+        return ResponseEntity.ok().body(reservationTimes);
 
     }
 

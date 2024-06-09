@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -37,6 +38,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PastDateReservationException.class)
     public ResponseEntity<Void> handlePastDateReservationException(PastDateReservationException e) {
+        log.warn("{}", e.getMessage());
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.warn("{}", e.getMessage());
         return ResponseEntity.badRequest().build();
     }

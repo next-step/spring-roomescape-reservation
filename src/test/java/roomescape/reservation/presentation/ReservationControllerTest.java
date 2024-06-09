@@ -7,6 +7,8 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
@@ -119,6 +121,34 @@ class ReservationControllerTest {
     @DisplayName("예약을 생성 시 지난 날짜로 생성하면 예외가 발생한다.")
     void testCreateReservation_PastDate() {
         ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-07-01", 1L, 1L);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("예약을 생성 시 이름이 없으면 예외가 발생한다.")
+    void testCreateReservation_InvalidName(String name) {
+        ReservationCreateRequest request = new ReservationCreateRequest(name, date, 1L, 1L);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @DisplayName("예약을 생성 시 날짜가 없으면 예외가 발생한다.")
+    void testCreateReservation_InvalidDate(String date) {
+        ReservationCreateRequest request = new ReservationCreateRequest("브라운", date, 1L, 1L);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

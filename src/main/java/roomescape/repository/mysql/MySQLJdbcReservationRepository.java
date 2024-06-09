@@ -16,7 +16,11 @@ import java.util.Optional;
 @Repository
 public class MySQLJdbcReservationRepository implements ReservationRepository {
 
+    private static final String TABLE_COLUMN_ID = "id";
+    private static final String TABLE_COLUMN_NAME = "name";
+    private static final String TABLE_COLUMN_DATE_TIME = "date_time";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
 
     public MySQLJdbcReservationRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
@@ -29,9 +33,9 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue("id", reservationEntity.getId())
-                .addValue("name", reservationEntity.getReservationName())
-                .addValue("date_time", reservationEntity.getReservationDateTime());
+                .addValue(TABLE_COLUMN_ID, reservationEntity.getId())
+                .addValue(TABLE_COLUMN_NAME, reservationEntity.getReservationName())
+                .addValue(TABLE_COLUMN_DATE_TIME, reservationEntity.getReservationDateTime());
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, generatedKeyHolder);
 
@@ -51,9 +55,9 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
             while (resultSet.next()) {
                 reservationEntities.add(
                         new ReservationEntity(
-                                resultSet.getLong("id"),
-                                resultSet.getString("name"),
-                                resultSet.getTimestamp("date_time").toLocalDateTime()
+                                resultSet.getLong(TABLE_COLUMN_ID),
+                                resultSet.getString(TABLE_COLUMN_NAME),
+                                resultSet.getTimestamp(TABLE_COLUMN_DATE_TIME).toLocalDateTime()
                         )
                 );
             }
@@ -76,15 +80,15 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
         String sql = "SELECT * FROM reservation WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue("id", reservationId);
+                .addValue(TABLE_COLUMN_ID, reservationId);
 
         return namedParameterJdbcTemplate.queryForObject(
                 sql,
                 sqlParameterSource,
                 (resultSet, rowNum) -> new ReservationEntity(
-                        resultSet.getLong("id"),
-                        resultSet.getString("name"),
-                        resultSet.getTimestamp("date_time").toLocalDateTime()
+                        resultSet.getLong(TABLE_COLUMN_ID),
+                        resultSet.getString(TABLE_COLUMN_NAME),
+                        resultSet.getTimestamp(TABLE_COLUMN_DATE_TIME).toLocalDateTime()
                 )
         );
     }

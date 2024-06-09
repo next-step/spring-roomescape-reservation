@@ -1,4 +1,4 @@
-package roomescape.reservation.web.dto;
+package roomescape.reservation.presentation.dto;
 
 public class ReservationRequest {
 

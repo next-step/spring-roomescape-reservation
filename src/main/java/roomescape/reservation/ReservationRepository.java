@@ -19,40 +19,43 @@ public class ReservationRepository {
 	}
 
 	public List<Reservation> find() {
-		String sql = "SELECT \n" +
-				"    r.id as reservation_id, \n" +
-				"    r.name as reservation_name, \n" +
-				"    r.date as reservation_date, \n" +
-				"    t.id as time_id, \n" +
-				"    t.start_at as time_start_at \n" +
-				"FROM reservation as r \n" +
-				"inner join reservation_time as t \n" +
-				"on r.time_id = t.id";
-		return jdbcTemplate.query(sql,
-				(rs, rowNum) ->
-						new Reservation(rs.getLong("reservation_id"),
-								rs.getString("reservation_name"),
-								rs.getString("reservation_date"),
-								new ReservationTime(rs.getLong("time_id"), rs.getString("time_start_at")))
-		);
+		String sql = new StringBuilder()
+				.append("SELECT ")
+				.append("r.id as reservation_id, ")
+				.append("r.name as reservation_name, ")
+				.append("r.date as reservation_date, ")
+				.append("t.id as time_id, ")
+				.append("t.start_at as time_start_at ")
+				.append("FROM reservation as r ")
+				.append("inner join reservation_time as t ")
+				.append("on r.time_id = t.id").toString();
+
+		return jdbcTemplate.query(sql, (rs, rowNum) ->
+				new Reservation(rs.getLong("reservation_id"),
+						rs.getString("reservation_name"),
+						rs.getString("reservation_date"),
+						new ReservationTime(rs.getLong("time_id"), rs.getString("time_start_at"))));
 	}
 
 	public Reservation findByKey(Long id) {
-		String sql = "SELECT \n" +
-				"    r.id as reservation_id, \n" +
-				"    r.name as reservation_name, \n" +
-				"    r.date as reservation_date, \n" +
-				"    t.id as time_id, \n" +
-				"    t.start_at as time_start_at \n" +
-				"FROM reservation as r \n" +
-				"inner join reservation_time as t \n" +
-				"on r.time_id = t.id \n" +
-				"WHERE r.id = ?";
-		RowMapper<Reservation> rowMapper = (rs, rowNum) -> new Reservation(
-				rs.getLong(1),
-				rs.getString(2),
-				rs.getString(3),
-				new ReservationTime(rs.getLong(4), rs.getString(5)));
+		String sql = new StringBuilder()
+				.append("SELECT ")
+				.append("r.id as reservation_id, ")
+				.append("r.name as reservation_name, ")
+				.append("r.date as reservation_date, ")
+				.append("t.id as time_id, ")
+				.append("t.start_at as time_start_at ")
+				.append("FROM reservation as r ")
+				.append("inner join reservation_time as t ")
+				.append("on r.time_id = t.id ")
+				.append("WHERE r.id = ?").toString();
+
+		RowMapper<Reservation> rowMapper = (rs, rowNum) ->
+				new Reservation(rs.getLong(1),
+						rs.getString(2),
+						rs.getString(3),
+						new ReservationTime(rs.getLong(4), rs.getString(5)));
+
 		return jdbcTemplate.queryForObject(sql, rowMapper, id);
 	}
 

@@ -1,7 +1,9 @@
 package roomescape.reservation.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import roomescape.reservation.exception.PastDateReservationException;
 import roomescape.theme.domain.Theme;
 import roomescape.time.domain.ReservationTime;
 
@@ -25,6 +27,9 @@ public class Reservation {
     }
 
     public Reservation(Long id, String name, LocalDate date, ReservationTime time, Theme theme) {
+        if (LocalDateTime.now().isAfter(LocalDateTime.of(date, time.getStartAt()))) {
+            throw new PastDateReservationException("이미 지난 시간은 예약할 수 없습니다.");
+        }
         this.id = id;
         this.name = name;
         this.date = date;

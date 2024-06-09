@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import roomescape.reservation.exception.PastDateReservationException;
 import roomescape.reservation.exception.ReservationAlreadyExistsException;
 import roomescape.time.exception.CannotDeleteReserveTimeException;
 
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Void> handleNoSuchElementException(NoSuchElementException e) {
+        log.warn("{}", e.getMessage());
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(PastDateReservationException.class)
+    public ResponseEntity<Void> handlePastDateReservationException(PastDateReservationException e) {
         log.warn("{}", e.getMessage());
         return ResponseEntity.badRequest().build();
     }

@@ -5,11 +5,11 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
-import roomescape.reservation.application.dto.ReservationResponse;
+import roomescape.reservation.dto.ReservationResponse;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
 import roomescape.reservation.exception.ReservationAlreadyExistsException;
-import roomescape.reservation.presentation.dto.ReservationCreateRequest;
+import roomescape.reservation.dto.ReservationCreateRequest;
 import roomescape.theme.domain.Theme;
 import roomescape.theme.infrastructure.JdbcThemeRepository;
 import roomescape.time.domain.ReservationTime;

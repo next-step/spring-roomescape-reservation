@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import roomescape.reservation.domain.repository.ReservationRepository;
 import roomescape.time.domain.ReservationTime;
 import roomescape.time.dto.ReservationTimeCreateRequest;
+import roomescape.time.dto.ReservationTimeResponse;
 import roomescape.time.exception.CannotDeleteReserveTimeException;
 import roomescape.time.infrastructure.JdbcReservationTimeRepository;
 

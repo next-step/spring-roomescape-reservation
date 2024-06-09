@@ -51,6 +51,25 @@ public class ReservationThemeTest {
     }
 
     @Test
+    @DisplayName("예약테마를 생성할 때 테마이름이 중복인 경우 에러가 발생한다.")
+    void createReservationTimeDuplicate() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "레벨2 탈출");
+        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
+        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+
+        Response firstCreateResponse = 예약테마를_생성한다(params);
+
+        firstCreateResponse.then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+
+        Response secondCreateResponse = 예약테마를_생성한다(params);
+
+        secondCreateResponse.then().log().all()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
     @DisplayName("예약테마 목록을 조회한다.")
     void findAllReservationTimes() {
         Map<String, String> params = new HashMap<>();

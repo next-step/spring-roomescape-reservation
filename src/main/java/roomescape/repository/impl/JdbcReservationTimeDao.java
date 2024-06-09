@@ -67,4 +67,10 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
 
         return Optional.ofNullable(reservationTime);
     }
+
+    @Override
+    public Long findByStartAt(String startAt) {
+        final String sql = "SELECT count(*) FROM reservation_time WHERE start_at = ?";
+        return jdbcTemplate.queryForObject(sql, Long.class, startAt);
+    }
 }

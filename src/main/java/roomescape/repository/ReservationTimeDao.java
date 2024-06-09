@@ -13,4 +13,6 @@ public interface ReservationTimeDao {
     void delete(Long id);
 
     Optional<ReservationTime> findById(Long id);
+
+    Long findByStartAt(String startAt);
 }

@@ -13,4 +13,6 @@ public interface ReservationThemeDao {
     void delete(Long id);
 
     Optional<ReservationTheme> findById(Long id);
+
+    Long findByName(String name);
 }

@@ -75,6 +75,10 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
         return Optional.ofNullable(reservationTheme);
     }
 
-
+    @Override
+    public Long findByName(String name) {
+        final String sql = "SELECT count(*) FROM theme WHERE name = ?";
+        return jdbcTemplate.queryForObject(sql, Long.class, name);
+    }
 }
 

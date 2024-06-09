@@ -25,6 +25,11 @@ public class ReservationTimeServiceImpl implements ReservationTimeService {
 
     @Override
     public ReservationTimeResponse createReservationTime(ReservationTimeRequest reservationTimeRequest) {
+        Long count = reservationTimeDao.findByStartAt(reservationTimeRequest.getStartAt());
+        if (count > 0) {
+            throw new BusinessException("동일한 테마시간이 존재합니다.", HttpStatus.CONFLICT);
+        }
+
         ReservationTime reservationTime = reservationTimeDao.save(convertToEntity(reservationTimeRequest));
         return this.convertToResponse(reservationTime);
     }

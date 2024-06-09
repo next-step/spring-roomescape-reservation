@@ -25,6 +25,11 @@ public class ReservationThemeServiceImpl implements ReservationThemeService {
 
     @Override
     public ReservationThemeResponse createReservationTheme(ReservationThemeRequest request) {
+        Long count = reservationThemeDao.findByName(request.getName());
+        if (count > 0) {
+            throw new BusinessException("동일한 테마이름이 존재합니다.", HttpStatus.CONFLICT);
+        }
+
         ReservationTheme reservationTheme = reservationThemeDao.save(this.convertToEntity(request));
         return this.convertToResponse(reservationTheme);
     }

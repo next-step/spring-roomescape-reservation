@@ -54,6 +54,22 @@ public class ReservationTimeTest {
     }
 
     @Test
+    @DisplayName("예약시간을 생성할 때 시간이 중복되면 에러가 발생한다.")
+    void createReservationTimeDuplicate() {
+        Map<String, String> params = new HashMap<>();
+        params.put("startAt", "10:00");
+
+        Response firstCreateResponse = 예약시간을_생성한다(params);
+        firstCreateResponse.then().log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("id", is(1));
+
+        Response secondCreateResponse = 예약시간을_생성한다(params);
+        secondCreateResponse.then().log().all()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
     @DisplayName("예약시간 목록을 조회한다.")
     void findAllReservationTimes() {
         Map<String, String> params = new HashMap<>();

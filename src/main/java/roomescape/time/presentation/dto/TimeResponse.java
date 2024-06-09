@@ -1,15 +1,16 @@
 package roomescape.time.presentation.dto;
 
-import roomescape.time.domain.Time;
+import lombok.Builder;
 
+@Builder
 public class TimeResponse {
 
     private final Long id;
     private final String startAt;
 
-    public TimeResponse(Time time) {
-        this.id = time.getId();
-        this.startAt = time.getStartAt();
+    public TimeResponse(Long id, String startAt) {
+        this.id = id;
+        this.startAt = startAt;
     }
 
     public Long getId() {

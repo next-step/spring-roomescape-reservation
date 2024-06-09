@@ -27,7 +27,14 @@ public class ApiReservationController {
     @GetMapping
     public ResponseEntity<List<ReservationResponse>> getReservations() {
         List<Reservation> reservations = reservationService.findAll();
-        List<ReservationResponse> responses = reservations.stream().map(ReservationResponse::new).collect(Collectors.toList());
+        List<ReservationResponse> responses = reservations.stream().map(
+                reservation -> ReservationResponse.builder()
+                        .id(reservation.getId())
+                        .name(reservation.getName())
+                        .date(reservation.getDate())
+                        .time(reservation.getTime())
+                        .build()
+        ).collect(Collectors.toList());
         return ResponseEntity.ok().body(responses);
     }
 
@@ -35,7 +42,12 @@ public class ApiReservationController {
     public ResponseEntity<ReservationResponse> save(@RequestBody ReservationRequest request) {
         Time time = timeService.findById(request.getTimeId());
         Reservation reservation = reservationService.save(new Reservation(null, request.getName(), request.getDate(), time));
-        return ResponseEntity.ok().body(new ReservationResponse(reservation));
+        return ResponseEntity.ok().body(ReservationResponse.builder()
+                .id(reservation.getId())
+                .name(reservation.getName())
+                .date(reservation.getDate())
+                .time(reservation.getTime())
+                .build());
     }
 
     @DeleteMapping

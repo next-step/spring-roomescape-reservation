@@ -19,7 +19,7 @@ public class ApiTimeController {
         this.timeService = timeService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<TimeResponse> save(@RequestBody TimeRequest request) {
         Time time = timeService.save(request.convertToDomainObject());
         TimeResponse build = TimeResponse.builder()
@@ -29,7 +29,7 @@ public class ApiTimeController {
         return ResponseEntity.ok().body(build);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<TimeResponse>> findAll() {
         List<Time> times = timeService.findAll();
         List<TimeResponse> responses = times.stream().map(
@@ -41,7 +41,7 @@ public class ApiTimeController {
         return ResponseEntity.ok().body(responses);
     }
 
-    @DeleteMapping()
+    @DeleteMapping
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         timeService.delete(id);
         return ResponseEntity.ok().build();

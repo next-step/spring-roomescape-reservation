@@ -40,6 +40,7 @@ public class ReservationRepository {
     private static final String RESERVATION_ID = "reservation_id";
     private static final String RESERVATION_NAME = "reservation_name";
     private static final String RESERVATION_DATE = "reservation_date";
+    private static final String TIME_ID = "time_id";
     private static final String TIME_START_AT = "time_start_at";
 
     private final JdbcTemplate jdbcTemplate;
@@ -49,7 +50,7 @@ public class ReservationRepository {
     }
 
     public Reservation findById(long reservationId) {
-        return jdbcTemplate.query(FIND_BY_ID_SQL, (rs, rowNum) -> new Reservation(rs.getLong(RESERVATION_ID), rs.getString(RESERVATION_NAME), rs.getString(RESERVATION_DATE), new Time(rs.getString(TIME_START_AT))), reservationId).get(0);
+        return jdbcTemplate.query(FIND_BY_ID_SQL, (rs, rowNum) -> new Reservation(rs.getLong(RESERVATION_ID), rs.getString(RESERVATION_NAME), rs.getString(RESERVATION_DATE), new Time(rs.getLong(TIME_ID), rs.getString(TIME_START_AT))), reservationId).get(0);
     }
 
     public long save(Reservation reservation) {
@@ -68,7 +69,7 @@ public class ReservationRepository {
     }
 
     public List<Reservation> findAll() {
-        return jdbcTemplate.query(FIND_ALL_SQL, (rs, rowNum) -> new Reservation(rs.getLong(COLUMN_ID), rs.getString(RESERVATION_NAME), rs.getString(RESERVATION_DATE), new Time(rs.getString(TIME_START_AT))));
+        return jdbcTemplate.query(FIND_ALL_SQL, (rs, rowNum) -> new Reservation(rs.getLong(COLUMN_ID), rs.getString(RESERVATION_NAME), rs.getString(RESERVATION_DATE), new Time(rs.getLong(TIME_ID), rs.getString(TIME_START_AT))));
     }
 
     public void delete(Long id) {

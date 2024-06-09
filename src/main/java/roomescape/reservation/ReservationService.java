@@ -24,7 +24,7 @@ public class ReservationService {
 	}
 
 	public Long saveReservation(ReservationRequest request) {
-		return reservationRepository.save(request.getName(), request.getDate(), request.getTimeId());
+		return reservationRepository.save(request.getName(), request.getDate(), request.getTimeId(), request.getThemeId());
 	}
 
 	public void deleteReservation(long id) {

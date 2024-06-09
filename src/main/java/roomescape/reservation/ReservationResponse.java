@@ -9,15 +9,18 @@ public class ReservationResponse {
 
 	private String time;
 
-	public ReservationResponse(Long id, String name, String date, String time) {
+	private String themeName;
+
+	public ReservationResponse(Long id, String name, String date, String time, String themeName) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
 		this.time = time;
+		this.themeName = themeName;
 	}
 
 	public ReservationResponse(Reservation reservation) {
-		this(reservation.getId(), reservation.getName(), reservation.getDate(), reservation.getTime());
+		this(reservation.getId(), reservation.getName(), reservation.getDate(), reservation.getTime(), reservation.getThemeName());
 	}
 
 	public Long getId() {
@@ -34,5 +37,9 @@ public class ReservationResponse {
 
 	public String getTime() {
 		return time;
+	}
+
+	public String getThemeName() {
+		return themeName;
 	}
 }

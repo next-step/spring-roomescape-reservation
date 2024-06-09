@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import roomescape.reservation.ReservationRequest;
 import roomescape.reservationTime.ReservationTimeRequest;
+import roomescape.theme.ThemeRequest;
 
 import static org.hamcrest.Matchers.is;
 
@@ -18,15 +19,24 @@ import static org.hamcrest.Matchers.is;
 public class ReservationAcceptanceTest {
 	@BeforeEach
 	void 예약_등록() {
-		ReservationTimeRequest request = new ReservationTimeRequest("12:00");
-		ReservationRequest params = new ReservationRequest("브라운", "2023-08-05", 1L);
+		ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("12:00");
+		ThemeRequest themeRequest = new ThemeRequest("탈출 미션", "탈출하는 내용입니다.", "thumbnail.jpg");
+		ReservationRequest params = new ReservationRequest("브라운", "2023-08-05", 1L, 1L);
 
 		RestAssured.given().log().all()
 				.contentType(ContentType.JSON)
-				.body(request)
+				.body(reservationTimeRequest)
 				.when().post("/times")
 				.then().log().all()
 				.statusCode(200);
+
+		RestAssured.given().log().all()
+				.contentType(ContentType.JSON)
+				.body(themeRequest)
+				.when().post("/themes")
+				.then().log().all()
+				.statusCode(201)
+				.body("id", is(1));
 
 		RestAssured.given().log().all()
 				.contentType(ContentType.JSON)

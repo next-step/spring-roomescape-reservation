@@ -4,6 +4,9 @@ public class ReservationTime {
     private Long id;
     private String startAt;
 
+    public ReservationTime() {
+    }
+
     public ReservationTime(Long id, String startAt) {
         this.id = id;
         this.startAt = startAt;
@@ -16,4 +19,5 @@ public class ReservationTime {
     public String getStartAt() {
         return startAt;
     }
+    
 }

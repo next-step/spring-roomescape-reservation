@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import roomescape.theme.domain.Theme;
+import roomescape.theme.domain.repository.ThemeRepository;
 
 @Repository
-public class JdbcThemeRepository {
+public class JdbcThemeRepository implements ThemeRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -25,12 +26,14 @@ public class JdbcThemeRepository {
                 .usingGeneratedKeyColumns("id");;
     }
 
+    @Override
     public Theme save(Theme theme) {
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(theme);
         long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
         return new Theme(id, theme.getName(), theme.getDescription(), theme.getThumbnail());
     }
 
+    @Override
     public Optional<Theme> findById(Long themeId) {
         String sql = "SELECT * FROM theme WHERE id = ?";
         try {
@@ -46,6 +49,7 @@ public class JdbcThemeRepository {
         }
     }
 
+    @Override
     public List<Theme> findAll() {
         String sql = "SELECT * FROM theme";
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> new Theme(
@@ -56,12 +60,14 @@ public class JdbcThemeRepository {
         ));
     }
 
+    @Override
     public boolean existsById(Long themeId) {
         String sql = "SELECT COUNT(*) FROM theme WHERE id = ?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, themeId);
         return count != null && count.equals(1);
     }
 
+    @Override
     public void deleteById(Long themeId) {
         String sql = "DELETE FROM theme WHERE id = ?";
         jdbcTemplate.update(sql, themeId);

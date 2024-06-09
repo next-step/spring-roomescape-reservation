@@ -5,26 +5,26 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
-import roomescape.reservation.dto.ReservationResponse;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
-import roomescape.reservation.exception.ReservationAlreadyExistsException;
 import roomescape.reservation.dto.ReservationCreateRequest;
+import roomescape.reservation.dto.ReservationResponse;
+import roomescape.reservation.exception.ReservationAlreadyExistsException;
 import roomescape.theme.domain.Theme;
-import roomescape.theme.infrastructure.JdbcThemeRepository;
+import roomescape.theme.domain.repository.ThemeRepository;
 import roomescape.time.domain.ReservationTime;
-import roomescape.time.infrastructure.JdbcReservationTimeRepository;
+import roomescape.time.domain.repository.ReservationTimeRepository;
 
 @Service
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final JdbcReservationTimeRepository reservationTimeRepository;
-    private final JdbcThemeRepository themeRepository;
+    private final ReservationTimeRepository reservationTimeRepository;
+    private final ThemeRepository themeRepository;
 
     public ReservationService(ReservationRepository reservationRepository,
-            JdbcReservationTimeRepository reservationTimeRepository,
-            JdbcThemeRepository themeRepository) {
+            ReservationTimeRepository reservationTimeRepository,
+            ThemeRepository themeRepository) {
         this.reservationRepository = reservationRepository;
         this.reservationTimeRepository = reservationTimeRepository;
         this.themeRepository = themeRepository;

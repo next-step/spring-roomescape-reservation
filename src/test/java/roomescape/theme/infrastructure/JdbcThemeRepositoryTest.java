@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import roomescape.theme.domain.Theme;
+import roomescape.theme.domain.repository.ThemeRepository;
 
 @JdbcTest
 class JdbcThemeRepositoryTest {
@@ -23,11 +24,11 @@ class JdbcThemeRepositoryTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private JdbcThemeRepository jdbcThemeRepository;
+    private ThemeRepository themeRepository;
 
     @BeforeEach
     void setUp() {
-        jdbcThemeRepository = new JdbcThemeRepository(jdbcTemplate, dataSource);
+        themeRepository = new JdbcThemeRepository(jdbcTemplate, dataSource);
     }
 
     @Test
@@ -38,7 +39,7 @@ class JdbcThemeRepositoryTest {
                 "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
 
         // when
-        Theme savedTheme = jdbcThemeRepository.save(theme);
+        Theme savedTheme = themeRepository.save(theme);
 
         // then
         assertThat(savedTheme.getId()).isNotNull();
@@ -53,10 +54,10 @@ class JdbcThemeRepositoryTest {
         // given
         Theme theme = new Theme("레벨2 탈출","우테코 레벨2를 탈출하는 내용입니다.",
                 "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
-        Theme savedTheme = jdbcThemeRepository.save(theme);
+        Theme savedTheme = themeRepository.save(theme);
 
         // when
-        Theme findTheme = jdbcThemeRepository.findById(savedTheme.getId()).get();
+        Theme findTheme = themeRepository.findById(savedTheme.getId()).get();
 
         // then
         assertThat(findTheme).usingRecursiveComparison()
@@ -70,10 +71,10 @@ class JdbcThemeRepositoryTest {
         // given
         Theme theme = new Theme("레벨2 탈출","우테코 레벨2를 탈출하는 내용입니다.",
                 "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
-        jdbcThemeRepository.save(theme);
+        themeRepository.save(theme);
 
         // when
-        List<Theme> themes = jdbcThemeRepository.findAll();
+        List<Theme> themes = themeRepository.findAll();
 
         // then
         assertThat(themes).hasSize(1);
@@ -85,10 +86,10 @@ class JdbcThemeRepositoryTest {
         // given
         Theme theme = new Theme("레벨2 탈출","우테코 레벨2를 탈출하는 내용입니다.",
                 "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
-        Theme savedTheme = jdbcThemeRepository.save(theme);
+        Theme savedTheme = themeRepository.save(theme);
 
         // when
-        boolean result = jdbcThemeRepository.existsById(savedTheme.getId());
+        boolean result = themeRepository.existsById(savedTheme.getId());
 
         // then
         assertThat(result).isTrue();
@@ -97,7 +98,7 @@ class JdbcThemeRepositoryTest {
     @Test
     @DisplayName("테마가 존재하면 FALSE를 반환한다.")
     void existsById_ReturnFalse() {
-        boolean result = jdbcThemeRepository.existsById(1L);
+        boolean result = themeRepository.existsById(1L);
 
         assertThat(result).isFalse();
     }

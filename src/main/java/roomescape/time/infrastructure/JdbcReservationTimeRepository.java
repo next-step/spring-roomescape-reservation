@@ -12,9 +12,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import roomescape.time.domain.ReservationTime;
+import roomescape.time.domain.repository.ReservationTimeRepository;
 
 @Repository
-public class JdbcReservationTimeRepository {
+public class JdbcReservationTimeRepository implements ReservationTimeRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
@@ -26,12 +27,14 @@ public class JdbcReservationTimeRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
+    @Override
     public ReservationTime save(ReservationTime reservationTime) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(reservationTime);
         Long id = simpleJdbcInsert.executeAndReturnKey(params).longValue();
         return new ReservationTime(id, reservationTime.getStartAt());
     }
 
+    @Override
     public Optional<ReservationTime> findById(Long reservationTimeId) {
         String sql = "SELECT * FROM reservation_time WHERE id = ?";
         try {
@@ -45,6 +48,7 @@ public class JdbcReservationTimeRepository {
         }
     }
 
+    @Override
     public List<ReservationTime> findAll() {
         String sql = "SELECT * FROM reservation_time";
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> new ReservationTime(
@@ -53,7 +57,8 @@ public class JdbcReservationTimeRepository {
         ));
     }
 
-    public void delete(Long reservationTimeId) {
+    @Override
+    public void deleteById(Long reservationTimeId) {
         String sql = "DELETE FROM reservation_time WHERE id = ?";
         jdbcTemplate.update(sql, reservationTimeId);
     }

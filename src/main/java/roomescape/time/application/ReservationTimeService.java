@@ -6,18 +6,18 @@ import org.springframework.stereotype.Service;
 
 import roomescape.reservation.domain.repository.ReservationRepository;
 import roomescape.time.domain.ReservationTime;
+import roomescape.time.domain.repository.ReservationTimeRepository;
 import roomescape.time.dto.ReservationTimeCreateRequest;
 import roomescape.time.dto.ReservationTimeResponse;
 import roomescape.time.exception.CannotDeleteReserveTimeException;
-import roomescape.time.infrastructure.JdbcReservationTimeRepository;
 
 @Service
 public class ReservationTimeService {
 
-    private final JdbcReservationTimeRepository reservationTimeRepository;
+    private final ReservationTimeRepository reservationTimeRepository;
     private final ReservationRepository reservationRepository;
 
-    public ReservationTimeService(JdbcReservationTimeRepository reservationTimeRepository,
+    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository,
             ReservationRepository reservationRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.reservationRepository = reservationRepository;
@@ -39,6 +39,6 @@ public class ReservationTimeService {
         if (reservationRepository.existsByReservationTimeId(reservationTimeId)) {
             throw new CannotDeleteReserveTimeException("예약된 시간은 삭제할 수 없습니다.");
         }
-        reservationTimeRepository.delete(reservationTimeId);
+        reservationTimeRepository.deleteById(reservationTimeId);
     }
 }

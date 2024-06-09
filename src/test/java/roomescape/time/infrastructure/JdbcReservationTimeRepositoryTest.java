@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import roomescape.time.domain.ReservationTime;
+import roomescape.time.domain.repository.ReservationTimeRepository;
 
 @JdbcTest
 class JdbcReservationTimeRepositoryTest {
@@ -24,7 +25,7 @@ class JdbcReservationTimeRepositoryTest {
     @Autowired
     private DataSource dataSource;
 
-    private JdbcReservationTimeRepository reservationTimeRepository;
+    private ReservationTimeRepository reservationTimeRepository;
 
     @BeforeEach
     void setUp() {
@@ -65,8 +66,8 @@ class JdbcReservationTimeRepositoryTest {
 
     @Test
     @DisplayName("예약 시간을 삭제한다.")
-    void testDelete() {
-        reservationTimeRepository.delete(1L);
+    void testDeleteById() {
+        reservationTimeRepository.deleteById(1L);
 
         assertThat(reservationTimeRepository.findById(1L)).isEmpty();
     }

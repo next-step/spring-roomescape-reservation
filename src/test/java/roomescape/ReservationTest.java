@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -48,8 +49,54 @@ public class ReservationTest {
                 .body(params)
                 .when().post("/reservations")
                 .then().log().all()
-                .statusCode(200)
+                .statusCode(HttpStatus.CREATED.value())
                 .body("id", is(1));
+    }
+
+    @Test
+    @DisplayName("예약을 생성할 때 필수값이 없으면 에러가 발생한다.")
+    void createReservationException() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "");
+        params.put("date", "2023-08-05");
+        params.put("timeId", "1");
+        params.put("themeId", "1");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("예약을 생성할때 유효하지 않은 날짜를 입력하면 에러가 발생한다.")
+    void createReservationDateException() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "브라운");
+        params.put("date", "2023-kk-05");
+        params.put("timeId", "1");
+        params.put("themeId", "1");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("예약을 생성할때 존재하지 않는 예약시간 아이디를 입력하면 에러가 발생한다.")
+    void createReservationEmptyTimeId() {
+
+    }
+
+    @Test
+    @DisplayName("예약을 생성할때 존재하지 않는 예약테마 아이디를 입력하면 에러가 발생한다.")
+    void createReservationEmptyThemeId() {
+
     }
 
     @Test
@@ -66,13 +113,13 @@ public class ReservationTest {
                 .body(params)
                 .when().post("/reservations")
                 .then().log().all()
-                .statusCode(200)
+                .statusCode(HttpStatus.CREATED.value())
                 .body("id", is(1));
 
         RestAssured.given().log().all()
                 .when().get("/reservations")
                 .then().log().all()
-                .statusCode(200)
+                .statusCode(HttpStatus.OK.value())
                 .body("size()", is(1));
     }
 
@@ -82,12 +129,12 @@ public class ReservationTest {
         RestAssured.given().log().all()
                 .when().delete("/reservations/1")
                 .then().log().all()
-                .statusCode(200);
+                .statusCode(HttpStatus.NO_CONTENT.value());
 
         RestAssured.given().log().all()
                 .when().get("/reservations")
                 .then().log().all()
-                .statusCode(200)
+                .statusCode(HttpStatus.OK.value())
                 .body("size()", is(0));
     }
 }

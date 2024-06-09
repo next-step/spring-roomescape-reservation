@@ -5,6 +5,7 @@ import static roomescape.fixture.ReservationThemeFixture.예약테마를_생성�
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,27 @@ public class ReservationThemeTest {
         params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
         params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
 
-        예약테마를_생성한다(params);
+        Response response = 예약테마를_생성한다(params);
+
+        int expectedIdValue = 1;
+        response.then().log().all()
+                .statusCode(HttpStatus.CREATED.value())
+                .header("Location", "/themes/" + expectedIdValue)
+                .body("id", is(expectedIdValue));
+    }
+
+    @Test
+    @DisplayName("예약테마를 생성할 때 필수값이 없는 경우 에러가 발생한다.")
+    void missingRequiredFieldsThrowsErrorOnThemeCreation() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "");
+        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
+        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+
+        Response response = 예약테마를_생성한다(params);
+
+        response.then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test

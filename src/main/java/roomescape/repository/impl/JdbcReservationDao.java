@@ -2,6 +2,8 @@ package roomescape.repository.impl;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -79,6 +81,75 @@ public class JdbcReservationDao implements ReservationDao {
     public void delete(Long id) {
         final String sql = "DELETE FROM reservation WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    @Override
+    public Optional<Reservation> findByDateAndTimeStartAt(String date, String startAt) {
+        final String sql = "SELECT"
+                + " r.id as reservation_id"
+                + " ,r.name as reservation_name"
+                + " ,r.\"date\" as reservation_date"
+                + " ,t.id as time_id"
+                + " ,t.start_at as time_start_at"
+                + " FROM reservation r "
+                + " INNER JOIN reservation_time t on t.id = r.time_id "
+                + " WHERE \"date\" = ? AND t.start_at = ?";
+
+        Reservation reservation = null;
+        try {
+            reservation = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+                ReservationTime reservationTime = new ReservationTime(rs.getLong("time_id"),
+                        rs.getString("time_start_at"));
+                return new Reservation(
+                        rs.getLong("reservation_id")
+                        , rs.getString("reservation_name")
+                        , rs.getString("reservation_date")
+                        , reservationTime
+                        , null
+                );
+            }, date, startAt);
+        } catch (EmptyResultDataAccessException e) {
+        }
+
+        return Optional.ofNullable(reservation);
+    }
+
+    @Override
+    public Optional<Reservation> findByTimeId(Long timeId) {
+        final String sql = "SELECT id, name, \"date\", time_id, theme_id FROM reservation WHERE time_id = ?";
+
+        Reservation reservation = null;
+        try {
+            reservation = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Reservation(
+                    rs.getLong("reservation_id")
+                    , rs.getString("reservation_name")
+                    , rs.getString("reservation_date")
+                    , new ReservationTime(rs.getLong("time_id"))
+                    , new ReservationTheme(rs.getLong("theme_id"))
+            ), timeId);
+        } catch (EmptyResultDataAccessException e) {
+        }
+
+        return Optional.ofNullable(reservation);
+    }
+
+    @Override
+    public Optional<Reservation> findByThemeId(Long themeId) {
+        final String sql = "SELECT id, name, \"date\", time_id, theme_id FROM reservation WHERE theme_id = ?";
+
+        Reservation reservation = null;
+        try {
+            reservation = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new Reservation(
+                    rs.getLong("reservation_id")
+                    , rs.getString("reservation_name")
+                    , rs.getString("reservation_date")
+                    , new ReservationTime(rs.getLong("time_id"))
+                    , new ReservationTheme(rs.getLong("theme_id"))
+            ), themeId);
+        } catch (EmptyResultDataAccessException e) {
+        }
+
+        return Optional.ofNullable(reservation);
     }
 }
 

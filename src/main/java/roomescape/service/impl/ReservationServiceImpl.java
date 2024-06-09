@@ -1,6 +1,7 @@
 package roomescape.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import roomescape.domain.Reservation;
@@ -9,19 +10,44 @@ import roomescape.domain.ReservationTime;
 import roomescape.dto.request.ReservationRequest;
 import roomescape.dto.response.ReservationResponse;
 import roomescape.repository.ReservationDao;
+import roomescape.repository.ReservationThemeDao;
+import roomescape.repository.ReservationTimeDao;
 import roomescape.service.ReservationService;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationDao reservationDao;
+    private final ReservationTimeDao reservationTimeDao;
+    private final ReservationThemeDao reservationThemeDao;
 
-    public ReservationServiceImpl(ReservationDao reservationDao) {
+    public ReservationServiceImpl(ReservationDao reservationDao, ReservationTimeDao reservationTimeDao,
+                                  ReservationThemeDao reservationThemeDao) {
         this.reservationDao = reservationDao;
+        this.reservationTimeDao = reservationTimeDao;
+        this.reservationThemeDao = reservationThemeDao;
     }
 
     @Override
     public ReservationResponse createReservation(ReservationRequest request) {
+        Optional<ReservationTime> findReservationTime = reservationTimeDao
+                .findById(Long.parseLong(request.getTimeId()));
+        if (findReservationTime.isEmpty()) {
+            throw new RuntimeException("존재하지 않는 예약시간입니다.");
+        }
+
+        Optional<ReservationTheme> findReservationTheme = reservationThemeDao
+                .findById(Long.parseLong(request.getThemeId()));
+        if (findReservationTheme.isEmpty()) {
+            throw new RuntimeException("존재하지 않는 예약테마입니다.");
+        }
+
+        Optional<Reservation> findReservation = reservationDao.findByDateAndTimeStartAt(request.getDate(),
+                findReservationTime.get().getStartAt());
+        if (!findReservation.isEmpty()) {
+            throw new RuntimeException("해당 시간에 이미 예약이 존재합니다.");
+        }
+
         Reservation reservation = reservationDao.save(this.convertToEntity(request));
         return this.convertToResponse(reservation);
     }

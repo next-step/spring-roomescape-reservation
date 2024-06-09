@@ -1,11 +1,14 @@
 package roomescape.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
+import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTime;
 import roomescape.dto.request.ReservationTimeRequest;
 import roomescape.dto.response.ReservationTimeResponse;
+import roomescape.repository.ReservationDao;
 import roomescape.repository.ReservationTimeDao;
 import roomescape.service.ReservationTimeService;
 
@@ -13,9 +16,11 @@ import roomescape.service.ReservationTimeService;
 public class ReservationTimeServiceImpl implements ReservationTimeService {
 
     private final ReservationTimeDao reservationTimeDao;
+    private final ReservationDao reservationDao;
 
-    public ReservationTimeServiceImpl(ReservationTimeDao reservationTimeDao) {
+    public ReservationTimeServiceImpl(ReservationTimeDao reservationTimeDao, ReservationDao reservationDao) {
         this.reservationTimeDao = reservationTimeDao;
+        this.reservationDao = reservationDao;
     }
 
     @Override
@@ -34,6 +39,10 @@ public class ReservationTimeServiceImpl implements ReservationTimeService {
 
     @Override
     public void deleteReservationTime(Long id) {
+        Optional<Reservation> findReservation = reservationDao.findByTimeId(id);
+        if (!findReservation.isEmpty()) {
+            throw new RuntimeException("예약 시간을 사용중인 예약이 존재합니다. 예약 삭제 후 다시 시도해주세요.");
+        }
         reservationTimeDao.delete(id);
     }
 

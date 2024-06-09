@@ -2,6 +2,7 @@ package roomescape.repository.impl;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -53,5 +54,21 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
         final String sql = "DELETE FROM theme WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
+
+    @Override
+    public Optional<ReservationTheme> findById(Long id) {
+        final String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
+        ReservationTheme reservationTheme = jdbcTemplate.queryForObject(sql,
+                (rs, rowNum) -> new ReservationTheme(
+                        rs.getLong("id")
+                        , rs.getString("name")
+                        , rs.getString("description")
+                        , rs.getString("thumbnail")
+                ), id);
+
+        return Optional.ofNullable(reservationTheme);
+    }
+
+
 }
 

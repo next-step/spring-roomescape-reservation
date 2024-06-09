@@ -1,21 +1,21 @@
 package roomescape.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.format.annotation.DateTimeFormat;
+import jakarta.validation.constraints.Pattern;
 
 public class ReservationRequest {
 
-    @NotBlank
+    @NotBlank(message = "예약자명은 필수 값입니다.")
     private String name;
 
-    @NotBlank
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotBlank(message = "날짜는 필수 값입니다.")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "yyyy-MM-dd 형식이 아닙니다.")
     private String date;
 
-    @NotBlank
+    @NotBlank(message = "예약시간 아이디는 필수 값입니다.")
     private String timeId;
 
-    @NotBlank
+    @NotBlank(message = "예약테마 아이디는 필수 값입니다.")
     private String themeId;
 
     public ReservationRequest() {

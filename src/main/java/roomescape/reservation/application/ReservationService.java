@@ -1,12 +1,14 @@
 package roomescape.reservation.application;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Service;
 
 import roomescape.reservation.application.dto.ReservationResponse;
 import roomescape.reservation.domain.Reservation;
 import roomescape.reservation.domain.repository.ReservationRepository;
+import roomescape.reservation.exception.ReservationAlreadyExistsException;
 import roomescape.reservation.presentation.dto.ReservationCreateRequest;
 import roomescape.theme.domain.Theme;
 import roomescape.theme.infrastructure.JdbcThemeRepository;
@@ -30,9 +32,14 @@ public class ReservationService {
 
     public ReservationResponse save(ReservationCreateRequest request) {
         ReservationTime findReservationTime = reservationTimeRepository.findById(request.timeId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약 시간입니다."));
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 예약 시간입니다."));
         Theme findTheme = themeRepository.findById(request.themeId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 테마입니다."));
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 테마입니다."));
+
+        if (reservationRepository.existsByDateAndTimeId(request.date(), findReservationTime.getId())) {
+            throw new ReservationAlreadyExistsException("이미 예약된 시간입니다.");
+        }
+
         Reservation reservation = reservationRepository.save(request.toReservation(findReservationTime, findTheme));
         return ReservationResponse.from(reservation);
     }

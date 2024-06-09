@@ -3,6 +3,8 @@ package roomescape.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import org.springframework.http.HttpStatus;
+import roomescape.exception.BusinessException;
 
 public class Reservation {
     private Long id;
@@ -24,7 +26,7 @@ public class Reservation {
 
     public Reservation(String name, String date, ReservationTime time, ReservationTheme theme) {
         if (isDateExpired(date, time.getStartAt())) {
-            throw new RuntimeException("이미 지나간 날짜는 예약할 수 없습니다.");
+            throw new BusinessException("이미 지나간 날짜는 예약할 수 없습니다.", HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         this.name = name;

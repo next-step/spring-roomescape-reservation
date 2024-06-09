@@ -3,12 +3,14 @@ package roomescape.service.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTheme;
 import roomescape.domain.ReservationTime;
 import roomescape.dto.request.ReservationRequest;
 import roomescape.dto.response.ReservationResponse;
+import roomescape.exception.BusinessException;
 import roomescape.repository.ReservationDao;
 import roomescape.repository.ReservationThemeDao;
 import roomescape.repository.ReservationTimeDao;
@@ -33,18 +35,18 @@ public class ReservationServiceImpl implements ReservationService {
         Optional<ReservationTime> findReservationTime = reservationTimeDao
                 .findById(Long.parseLong(request.getTimeId()));
         if (findReservationTime.isEmpty()) {
-            throw new RuntimeException("존재하지 않는 예약시간입니다.");
+            throw new BusinessException("존재하지 않는 예약시간입니다.", HttpStatus.BAD_REQUEST);
         }
 
         Optional<ReservationTheme> findReservationTheme = reservationThemeDao
                 .findById(Long.parseLong(request.getThemeId()));
         if (findReservationTheme.isEmpty()) {
-            throw new RuntimeException("존재하지 않는 예약테마입니다.");
+            throw new BusinessException("존재하지 않는 예약테마입니다.", HttpStatus.BAD_REQUEST);
         }
 
         long count = reservationDao.countByDateAndTimeId(request.getDate(), request.getTimeId());
         if (count > 0) {
-            throw new RuntimeException("해당 시간에 이미 예약이 존재합니다.");
+            throw new BusinessException("해당 시간에 이미 예약이 존재합니다.", HttpStatus.CONFLICT);
         }
 
         Reservation reservation = reservationDao.save(this.convertToEntity(request));

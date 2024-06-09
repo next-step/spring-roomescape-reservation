@@ -3,6 +3,7 @@ package roomescape.repository.impl;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -58,13 +59,18 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
     @Override
     public Optional<ReservationTheme> findById(Long id) {
         final String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
-        ReservationTheme reservationTheme = jdbcTemplate.queryForObject(sql,
-                (rs, rowNum) -> new ReservationTheme(
-                        rs.getLong("id")
-                        , rs.getString("name")
-                        , rs.getString("description")
-                        , rs.getString("thumbnail")
-                ), id);
+
+        ReservationTheme reservationTheme = null;
+        try {
+            reservationTheme = jdbcTemplate.queryForObject(sql,
+                    (rs, rowNum) -> new ReservationTheme(
+                            rs.getLong("id")
+                            , rs.getString("name")
+                            , rs.getString("description")
+                            , rs.getString("thumbnail")
+                    ), id);
+        } catch (EmptyResultDataAccessException e) {
+        }
 
         return Optional.ofNullable(reservationTheme);
     }

@@ -3,6 +3,7 @@ package roomescape.repository.impl;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -53,11 +54,16 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
     @Override
     public Optional<ReservationTime> findById(Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
-        ReservationTime reservationTime = jdbcTemplate.queryForObject(sql,
-                (rs, rowNum) -> new ReservationTime(
-                        rs.getLong("id")
-                        , rs.getString("start_at"))
-                , id);
+
+        ReservationTime reservationTime = null;
+        try {
+            reservationTime = jdbcTemplate.queryForObject(sql,
+                    (rs, rowNum) -> new ReservationTime(
+                            rs.getLong("id")
+                            , rs.getString("start_at"))
+                    , id);
+        } catch (EmptyResultDataAccessException e) {
+        }
 
         return Optional.ofNullable(reservationTime);
     }

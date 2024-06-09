@@ -41,7 +41,7 @@ public class MissionStepTest {
 
         params.clear();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+        params.put("date", "2024-06-25");
         params.put("timeId", "1");
         params.put("themeId", "1");
 

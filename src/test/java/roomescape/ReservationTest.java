@@ -40,7 +40,7 @@ public class ReservationTest {
     void createReservation() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+        params.put("date", "2024-06-25");
         params.put("timeId", "1");
         params.put("themeId", "1");
 
@@ -51,6 +51,23 @@ public class ReservationTest {
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value())
                 .body("id", is(1));
+    }
+
+    @Test
+    @DisplayName("예약을 생성할 때 이미 지난 날짜인경우 에러가 발생한다.")
+    void createReservationIsDateExpired() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "브라운");
+        params.put("date", "2023-08-05");
+        params.put("timeId", "1");
+        params.put("themeId", "1");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
     }
 
     @Test
@@ -90,13 +107,59 @@ public class ReservationTest {
     @Test
     @DisplayName("예약을 생성할때 존재하지 않는 예약시간 아이디를 입력하면 에러가 발생한다.")
     void createReservationEmptyTimeId() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "브라운");
+        params.put("date", "2024-06-25");
+        params.put("timeId", "3");
+        params.put("themeId", "1");
 
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
     @DisplayName("예약을 생성할때 존재하지 않는 예약테마 아이디를 입력하면 에러가 발생한다.")
     void createReservationEmptyThemeId() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "브라운");
+        params.put("date", "2024-06-25");
+        params.put("timeId", "1");
+        params.put("themeId", "3");
 
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("예약을 생성할 때 중복된 날짜 및 시간인 경우 에러가 발생한다.")
+    void createReservationDateAndTimeStartAtDuplicate() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", "브라운");
+        params.put("date", "2024-06-25");
+        params.put("timeId", "1");
+        params.put("themeId", "1");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/reservations")
+                .then().log().all()
+                .statusCode(HttpStatus.CONFLICT.value());
     }
 
     @Test
@@ -104,7 +167,7 @@ public class ReservationTest {
     void findAllReservations() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+        params.put("date", "2024-06-25");
         params.put("timeId", "1");
         params.put("themeId", "1");
 

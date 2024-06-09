@@ -2,10 +2,12 @@ package roomescape.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import roomescape.domain.ReservationTheme;
 import roomescape.dto.request.ReservationThemeRequest;
 import roomescape.dto.response.ReservationThemeResponse;
+import roomescape.exception.BusinessException;
 import roomescape.repository.ReservationDao;
 import roomescape.repository.ReservationThemeDao;
 import roomescape.service.ReservationThemeService;
@@ -39,7 +41,8 @@ public class ReservationThemeServiceImpl implements ReservationThemeService {
     public void deleteReservationTheme(Long id) {
         long count = reservationDao.countByThemeId(id);
         if (count > 0) {
-            throw new RuntimeException("예약 테마를 사용중인 예약이 존재합니다. 예약 삭제 후 다시 시도해주세요.");
+            throw new BusinessException("예약 테마를 사용중인 예약이 존재합니다. 예약 삭제 후 다시 시도해주세요."
+                    , HttpStatus.CONFLICT);
         }
 
         reservationThemeDao.delete(id);

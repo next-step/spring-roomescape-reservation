@@ -22,4 +22,8 @@ public class ReservationTimeAdminService {
         return reservationTimeDao.readReservationTime();
 
     }
+
+    public void deleteReservationTime(Long id) {
+        reservationTimeDao.deleteReservationTime(id);
+    }
 }

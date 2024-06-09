@@ -52,4 +52,9 @@ public class ReservationTimeDAO {
         String sql = "select id, start_at from reservation_time";
         return jdbcTemplate.query(sql, rowMapper);
     }
+
+    public void deleteReservationTime(Long id) {
+        String sql = "delete from reservation_time where id = ?";
+        jdbcTemplate.update(sql, Long.valueOf(id));
+    }
 }

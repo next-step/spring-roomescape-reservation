@@ -3,6 +3,8 @@ package roomescape.time.presntation;
 import java.net.URI;
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import roomescape.time.application.ReservationTimeResponse;
 import roomescape.time.application.ReservationTimeService;
-import roomescape.time.domain.ReservationTime;
+import roomescape.time.dto.ReservationTimeCreateRequest;
 
 @RestController
 @RequestMapping("/times")
@@ -27,8 +29,8 @@ public class ReservationTimeController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationTimeResponse> createReservationTime(@RequestBody ReservationTime reservationTime) {
-        ReservationTimeResponse response = reservationTimeService.createReservationTime(reservationTime);
+    public ResponseEntity<ReservationTimeResponse> createReservationTime(@RequestBody @Valid ReservationTimeCreateRequest request) {
+        ReservationTimeResponse response = reservationTimeService.createReservationTime(request);
         return ResponseEntity.created(URI.create("/times/" + response.reservationTimeId())).body(response);
     }
 

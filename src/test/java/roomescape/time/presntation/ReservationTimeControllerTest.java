@@ -31,6 +31,19 @@ class ReservationTimeControllerTest {
                 .then().log().all()
                 .statusCode(HttpStatus.CREATED.value());
     }
+
+    @Test
+    @DisplayName("시간 추가 시 잘못된 시간 형식이면 실패한다.")
+    void testCreateReservationTime_InvalidTimeFormat() {
+        Map<String, String> params = Map.of("startAt", "10.00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
     
     @Test
     @DisplayName("모든 시간을 조회한다.")

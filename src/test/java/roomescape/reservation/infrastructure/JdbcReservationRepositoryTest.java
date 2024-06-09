@@ -32,6 +32,7 @@ class JdbcReservationRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        String date = LocalDate.now().plusDays(1).toString();
         reservationRepository = new JdbcReservationRepository(jdbcTemplate, dataSource);
         jdbcTemplate.execute("ALTER TABLE reservation ALTER COLUMN id RESTART WITH 1");
         jdbcTemplate.execute("ALTER TABLE reservation_time ALTER COLUMN id RESTART WITH 1");
@@ -40,7 +41,7 @@ class JdbcReservationRepositoryTest {
         jdbcTemplate.execute("INSERT INTO reservation_time(start_at) VALUES ('15:40')");
         jdbcTemplate.execute("INSERT INTO theme(name, description, thumbnail)"
                 + " VALUES ('레벨1 탈출', '우테코 레벨1을 탈출하는 내용입니다.', 'https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg')");
-        jdbcTemplate.execute("INSERT INTO reservation(name, date, time_id, theme_id) VALUES ('브라운', '2023-08-05', 1, 1)");
+        jdbcTemplate.execute("INSERT INTO reservation(name, date, time_id, theme_id) VALUES ('브라운', '" + date + "', 1, 1)");
     }
 
     @Test
@@ -50,7 +51,7 @@ class JdbcReservationRepositoryTest {
         ReservationTime reservationTime = new ReservationTime(LocalTime.parse("15:40"));
         Theme theme = new Theme("레벨2 탈출", "우테코 레벨2를 탈출하는 내용입니다.",
                 "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
-        Reservation reservation = new Reservation("브라운", LocalDate.parse("2023-08-05"), reservationTime, theme);
+        Reservation reservation = new Reservation("브라운", LocalDate.now().plusDays(1), reservationTime, theme);
 
         // when
         Reservation savedReservation = reservationRepository.save(reservation);
@@ -114,13 +115,13 @@ class JdbcReservationRepositoryTest {
     @Test
     @DisplayName("예약 날짜와 시간이 존재하면 TRUE를 반환한다.")
     void existsByDateAndTimeId_ReturnTrue() {
-        boolean result = reservationRepository.existsByDateAndTimeId("2023-08-05", 1L);
+        boolean result = reservationRepository.existsByDateAndTimeId(LocalDate.now().plusDays(1).toString(), 1L);
 
         assertThat(result).isTrue();
     }
 
     @Test
-    @DisplayName("예약 날짜와 시간이 존재하면 FALSE를 반환한다.")
+    @DisplayName("예약 날짜와 시간이 존재하지 않으면 FALSE를 반환한다.")
     void existsByDateAndTimeId_ReturnFalse() {
         boolean result = reservationRepository.existsByDateAndTimeId("2023-08-06", 1L);
 

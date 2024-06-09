@@ -2,6 +2,7 @@ package roomescape.time.presntation;
 
 import static org.hamcrest.Matchers.is;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
@@ -94,7 +95,7 @@ class ReservationTimeControllerTest {
                 .extract();
 
         // Reservation 생성
-        ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L, 1L);
+        ReservationCreateRequest request = new ReservationCreateRequest("브라운", LocalDate.now().plusDays(1).toString(), 1L, 1L);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

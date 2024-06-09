@@ -89,5 +89,4 @@ class MissionStepTest {
         params.put("startAt", "10:00");
         return params;
     }
-
 }

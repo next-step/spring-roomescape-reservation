@@ -3,6 +3,7 @@ package roomescape.theme.infrastructure;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -32,13 +33,17 @@ public class JdbcThemeRepository {
 
     public Optional<Theme> findById(Long themeId) {
         String sql = "SELECT * FROM theme WHERE id = ?";
-        Theme findTheme = jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> new Theme(
-                resultSet.getLong("id"),
-                resultSet.getString("name"),
-                resultSet.getString("description"),
-                resultSet.getString("thumbnail")
-        ), themeId);
-        return Optional.ofNullable(findTheme);
+        try {
+            Theme findTheme = jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> new Theme(
+                    resultSet.getLong("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("description"),
+                    resultSet.getString("thumbnail")
+            ), themeId);
+            return Optional.ofNullable(findTheme);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     public List<Theme> findAll() {

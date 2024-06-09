@@ -1,7 +1,6 @@
 package roomescape.time.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -69,6 +68,6 @@ class JdbcReservationTimeRepositoryTest {
     void testDelete() {
         reservationTimeRepository.delete(1L);
 
-        assertThatThrownBy(() -> reservationTimeRepository.findById(1L));
+        assertThat(reservationTimeRepository.findById(1L)).isEmpty();
     }
 }

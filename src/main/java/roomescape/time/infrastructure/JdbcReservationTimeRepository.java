@@ -3,6 +3,7 @@ package roomescape.time.infrastructure;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -33,11 +34,15 @@ public class JdbcReservationTimeRepository {
 
     public Optional<ReservationTime> findById(Long reservationTimeId) {
         String sql = "SELECT * FROM reservation_time WHERE id = ?";
-        ReservationTime findReservationTime = jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> new ReservationTime(
-                resultSet.getLong("id"),
-                resultSet.getString("start_at")
-        ), reservationTimeId);
-        return Optional.ofNullable(findReservationTime);
+        try {
+            ReservationTime findReservationTime = jdbcTemplate.queryForObject(sql, (resultSet, rowNum) -> new ReservationTime(
+                    resultSet.getLong("id"),
+                    resultSet.getString("start_at")
+            ), reservationTimeId);
+            return Optional.ofNullable(findReservationTime);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     public List<ReservationTime> findAll() {

@@ -22,6 +22,28 @@ public class Time {
         return new Time(id, startAt);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Time time)) {
+            return false;
+        }
+
+        if (id != time.id) {
+            return false;
+        }
+        return startAt.equals(time.startAt);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = startAt.hashCode();
+        result = 31 * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
+
     public String getStartAt() {
         return startAt;
     }

@@ -43,4 +43,34 @@ public class Reservation {
     public Time getTime() {
         return time;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Reservation that)) {
+            return false;
+        }
+
+        if (id != that.id) {
+            return false;
+        }
+        if (!name.equals(that.name)) {
+            return false;
+        }
+        if (!date.equals(that.date)) {
+            return false;
+        }
+        return time.equals(that.time);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + time.hashCode();
+        result = 31 * result + (int) (id ^ (id >>> 32));
+        return result;
+    }
 }

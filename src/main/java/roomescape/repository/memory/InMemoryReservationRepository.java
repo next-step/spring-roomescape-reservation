@@ -16,7 +16,7 @@ public class InMemoryReservationRepository implements ReservationRepository {
     private List<ReservationEntity> reservationEntities = new ArrayList<>();
 
     public ReservationEntity save(ReservationEntity reservationEntity) {
-        if (this.containSameId(reservationEntity.getId())) {
+        if (!this.containSameId(reservationEntity.getId())) {
             ReservationEntity savedEntity = reservationEntity.changeId(index.incrementAndGet());
             this.reservationEntities.add(savedEntity);
 

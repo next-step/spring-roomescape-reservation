@@ -2,9 +2,7 @@ package roomescape;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,17 +34,11 @@ public class ReservationAdminController {
         return ResponseEntity.ok().body(reservations);
     }
 
-/*
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
 
-        Reservation removingReservation = reservations.stream()
-                .filter(reservation -> Objects.equals(reservation.getId(), id))
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
-
-        reservations.remove(removingReservation);
+        reservationAdminService.deleteReservation(id);
 
         return ResponseEntity.ok().build();
-    }*/
+    }
 }

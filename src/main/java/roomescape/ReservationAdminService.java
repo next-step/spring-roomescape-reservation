@@ -19,4 +19,8 @@ public class ReservationAdminService {
     public List<Reservation> getReservations() {
         return reservationDAO.readReservations();
     }
+
+    public void deleteReservation(Long id) {
+        reservationDAO.deleteReservation(id);
+    }
 }

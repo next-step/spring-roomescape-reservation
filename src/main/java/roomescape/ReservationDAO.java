@@ -55,4 +55,9 @@ public class ReservationDAO {
         String sql = "select id, date, name, time from reservation";
         return jdbcTemplate.query(sql, rowMapper);
     }
+
+    public void deleteReservation(Long id) {
+        String sql = "delete from reservation where id = ?";
+        jdbcTemplate.update(sql, Long.valueOf(id));
+    }
 }

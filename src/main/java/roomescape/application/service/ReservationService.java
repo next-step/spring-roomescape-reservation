@@ -1,6 +1,5 @@
 package roomescape.application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import roomescape.application.mapper.ReservationEntityMapper;
 import roomescape.application.mapper.ReservationMapper;
@@ -18,7 +17,6 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    @Autowired
     public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }

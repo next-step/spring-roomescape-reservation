@@ -20,8 +20,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
     private static final String TABLE_COLUMN_NAME = "name";
     private static final String TABLE_COLUMN_DATE_TIME = "date_time";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-
+    
     public MySQLJdbcReservationRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }

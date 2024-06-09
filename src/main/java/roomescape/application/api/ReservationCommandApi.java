@@ -1,6 +1,5 @@
 package roomescape.application.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.application.api.dto.request.CreateReservationRequest;
@@ -14,7 +13,6 @@ public class ReservationCommandApi {
 
     private final ReservationService reservationService;
 
-    @Autowired
     public ReservationCommandApi(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
@@ -29,7 +27,7 @@ public class ReservationCommandApi {
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<Void> deleteReservation(@PathVariable("reservationId") Long reservationId) {
         reservationService.deleteReservation(new DeleteReservationCommand(reservationId));
-        
+
         return ResponseEntity.ok().build();
     }
 }

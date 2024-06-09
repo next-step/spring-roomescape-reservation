@@ -19,7 +19,7 @@ public class ReservationAdminController {
 
     @GetMapping("/admin/reservation")
     public String getReservationPage() {
-        return "admin/reservation-legacy";
+        return "admin/reservation-time";
     }
 
     @PostMapping("/reservations")

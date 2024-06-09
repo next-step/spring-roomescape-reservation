@@ -35,10 +35,9 @@ public class Reservation {
 
     private boolean isDateExpired(String date, String startAt) {
         LocalDateTime now = LocalDateTime.now();
-        LocalDate localDate = LocalDate.parse(date);
-        LocalTime localTime = LocalTime.parse(startAt);
+        LocalDateTime reservationDateTime = LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(startAt));
 
-        if (now.isBefore(LocalDateTime.of(localDate, localTime))) {
+        if (reservationDateTime.isBefore(now)) {
             return true;
         }
         return false;

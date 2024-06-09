@@ -1,10 +1,8 @@
 package roomescape.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTheme;
 import roomescape.dto.request.ReservationThemeRequest;
 import roomescape.dto.response.ReservationThemeResponse;
@@ -39,8 +37,8 @@ public class ReservationThemeServiceImpl implements ReservationThemeService {
 
     @Override
     public void deleteReservationTheme(Long id) {
-        Optional<Reservation> findReservation = reservationDao.findByThemeId(id);
-        if (!findReservation.isEmpty()) {
+        long count = reservationDao.countByThemeId(id);
+        if (count > 0) {
             throw new RuntimeException("예약 테마를 사용중인 예약이 존재합니다. 예약 삭제 후 다시 시도해주세요.");
         }
 

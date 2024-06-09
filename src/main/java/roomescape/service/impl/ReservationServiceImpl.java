@@ -42,9 +42,8 @@ public class ReservationServiceImpl implements ReservationService {
             throw new RuntimeException("존재하지 않는 예약테마입니다.");
         }
 
-        Optional<Reservation> findReservation = reservationDao.findByDateAndTimeStartAt(request.getDate(),
-                findReservationTime.get().getStartAt());
-        if (!findReservation.isEmpty()) {
+        long count = reservationDao.countByDateAndTimeId(request.getDate(), request.getTimeId());
+        if (count > 0) {
             throw new RuntimeException("해당 시간에 이미 예약이 존재합니다.");
         }
 
@@ -76,8 +75,10 @@ public class ReservationServiceImpl implements ReservationService {
 
 
     private Reservation convertToEntity(ReservationRequest reservationRequest) {
-        ReservationTime reservationTime = new ReservationTime(Long.parseLong(reservationRequest.getTimeId()));
-        ReservationTheme reservationTheme = new ReservationTheme(Long.parseLong(reservationRequest.getThemeId()));
+        ReservationTime reservationTime = reservationTimeDao
+                .findById(Long.parseLong(reservationRequest.getTimeId())).get();
+        ReservationTheme reservationTheme = reservationThemeDao.findById(
+                Long.parseLong(reservationRequest.getThemeId())).get();
 
         return new Reservation(
                 reservationRequest.getName()

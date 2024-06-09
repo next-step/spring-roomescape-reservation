@@ -1,7 +1,6 @@
 package roomescape.repository;
 
 import java.util.List;
-import java.util.Optional;
 import roomescape.domain.Reservation;
 
 public interface ReservationDao {
@@ -12,9 +11,9 @@ public interface ReservationDao {
 
     void delete(Long id);
 
-    Optional<Reservation> findByDateAndTimeStartAt(String date, String startAt);
+    Long countByDateAndTimeId(String date, String timeId);
 
-    Optional<Reservation> findByTimeId(Long timeId);
+    Long countByTimeId(Long timeId);
 
-    Optional<Reservation> findByThemeId(Long themeId);
+    Long countByThemeId(Long themeId);
 }

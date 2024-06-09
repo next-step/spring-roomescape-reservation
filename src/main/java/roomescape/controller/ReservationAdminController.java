@@ -20,15 +20,15 @@ public class ReservationAdminController {
 
     @GetMapping("/admin/reservation")
     public String getReservationPage() {
-        return "admin/reservation-time";
+        return "admin/reservation";
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<ReservationCreateDto> createReservation(@RequestBody ReservationCreateDto reservationCreateDto) {
+    public ResponseEntity<Long> createReservation(@RequestBody ReservationCreateDto reservationCreateDto) {
 
-        ReservationCreateDto newReservationCreateDto = reservationAdminService.createReservation(reservationCreateDto);
+        Long reservationId = reservationAdminService.createReservation(reservationCreateDto);
 
-        return ResponseEntity.ok().body(newReservationCreateDto);
+        return ResponseEntity.ok().body(reservationId);
     }
 
     @GetMapping("/reservations")

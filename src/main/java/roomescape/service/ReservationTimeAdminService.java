@@ -15,7 +15,7 @@ public class ReservationTimeAdminService {
     }
 
     public ReservationTime createReservationTime(ReservationTime time) {
-        return reservationTimeDao.insertReservationTime(time);
+        return reservationTimeDao.insertReservationTime(time.getStartAt());
     }
 
     public List<ReservationTime> getReservationTime() {

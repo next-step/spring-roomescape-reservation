@@ -26,7 +26,7 @@ public class ReservationTimeDAO {
         return reservationTime;
     };
 
-    public ReservationTime insertReservationTime(ReservationTime time) {
+    public ReservationTime insertReservationTime(String startAt) {
         String sql = "insert into reservation_time (start_at) values (?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -34,7 +34,7 @@ public class ReservationTimeDAO {
             PreparedStatement ps = connection.prepareStatement(
                     sql,
                     new String[]{"id"});
-            ps.setString(1, time.getStartAt());
+            ps.setString(1, startAt);
             return ps;
         }, keyHolder);
 

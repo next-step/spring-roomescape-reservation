@@ -1,23 +1,18 @@
 package roomescape.model;
 
 public class ReservationCreateDto {
-    private Long id;
+
     private String date;
     private String name;
-    private Long timeId;
+    private String time;
 
     public ReservationCreateDto() {
     }
 
-    public ReservationCreateDto(Long id, String date, String name, Long timeId) {
-        this.id = id;
+    public ReservationCreateDto(String date, String name, String time) {
         this.date = date;
         this.name = name;
-        this.timeId = timeId;
-    }
-
-    public Long getId() {
-        return id;
+        this.time = time;
     }
 
     public String getDate() {
@@ -28,7 +23,7 @@ public class ReservationCreateDto {
         return name;
     }
 
-    public Long getTimeId() {
-        return timeId;
+    public String getTime() {
+        return time;
     }
 }

@@ -34,7 +34,7 @@ public class ReservationDAO {
     };
 
 
-    public ReservationCreateDto insertReservation(ReservationCreateDto reservationCreateDto) {
+    public Long insertReservation(ReservationCreateDto reservationCreateDto, Long timeId) {
         String sql = "insert into reservation (date, name, time_id) values (?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -44,25 +44,11 @@ public class ReservationDAO {
                     new String[]{"id"});
             ps.setString(1, reservationCreateDto.getDate());
             ps.setString(2, reservationCreateDto.getName());
-            ps.setLong(3, reservationCreateDto.getTimeId());
+            ps.setLong(3, timeId);
             return ps;
         }, keyHolder);
 
-        Long id = keyHolder.getKey().longValue();
-        return findReservationById(id);
-    }
-
-    public ReservationCreateDto findReservationById(Long id) {
-        String sql = "SELECT id, date, name, time_id FROM reservation WHERE id = ? ";
-
-        return jdbcTemplate.queryForObject(sql, (resultSet, rowNumber) -> {
-            return new ReservationCreateDto(
-                    resultSet.getLong("id"),
-                    resultSet.getString("date"),
-                    resultSet.getString("name"),
-                    resultSet.getLong("time_id")
-            );
-        }, id);
+        return keyHolder.getKey().longValue();
     }
 
     public List<Reservation> readReservations() {

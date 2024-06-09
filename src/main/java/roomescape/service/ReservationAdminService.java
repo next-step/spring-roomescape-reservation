@@ -3,10 +3,12 @@ package roomescape.service;
 import org.springframework.stereotype.Service;
 import roomescape.model.Reservation;
 import roomescape.model.ReservationCreateDto;
+import roomescape.model.ReservationTime;
 import roomescape.respository.ReservationDAO;
 import roomescape.respository.ReservationTimeDAO;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ReservationAdminService {
@@ -18,9 +20,13 @@ public class ReservationAdminService {
         this.reservationTimeDAO = reservationTimeDAO;
     }
 
-    public ReservationCreateDto createReservation(ReservationCreateDto reservationCreateDto) {
-        reservationTimeDAO.findReservationTimeById(reservationCreateDto.getTimeId());
-        return reservationDAO.insertReservation(reservationCreateDto);
+    public Long createReservation(ReservationCreateDto reservationCreateDto) {
+        List<ReservationTime> reservationTimes = reservationTimeDAO.readReservationTime();
+        ReservationTime reservationTime = reservationTimes.stream()
+                .filter(time -> Objects.equals(time.getStartAt(), reservationCreateDto.getTime()))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+        return reservationDAO.insertReservation(reservationCreateDto, reservationTime.getId());
     }
 
     public List<Reservation> getReservations() {

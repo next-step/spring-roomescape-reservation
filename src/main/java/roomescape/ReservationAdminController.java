@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Controller
 public class ReservationAdminController {
 
@@ -28,11 +30,13 @@ public class ReservationAdminController {
         return ResponseEntity.ok().body(newReservation);
     }
 
-   /* @GetMapping("/reservations")
+    @GetMapping("/reservations")
     public ResponseEntity<List<Reservation>> getReservation() {
+        List<Reservation> reservations = reservationAdminService.getReservations();
         return ResponseEntity.ok().body(reservations);
     }
 
+/*
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
 

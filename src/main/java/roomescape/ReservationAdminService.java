@@ -2,6 +2,8 @@ package roomescape;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReservationAdminService {
     private final ReservationDAO reservationDAO;
@@ -12,5 +14,9 @@ public class ReservationAdminService {
 
     public Reservation createReservation(Reservation reservation) {
         return reservationDAO.insertReservation(reservation);
+    }
+
+    public List<Reservation> getReservations() {
+        return reservationDAO.readReservations();
     }
 }

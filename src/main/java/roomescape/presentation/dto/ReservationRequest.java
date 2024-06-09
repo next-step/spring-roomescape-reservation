@@ -4,12 +4,14 @@ public class ReservationRequest {
 
     private final String name;
     private final String date;
-    private final String time;
+    private final long timeId;
+    private final String startAt;
 
-    private ReservationRequest(String name, String date, String time) {
+    private ReservationRequest(String name, String date, long timeId, String startAt) {
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
+        this.startAt = startAt;
     }
 
     public String getName() {
@@ -20,7 +22,11 @@ public class ReservationRequest {
         return date;
     }
 
-    public String getTime() {
-        return time;
+    public long getTimeId() {
+        return timeId;
+    }
+
+    public String getStartAt() {
+        return startAt;
     }
 }

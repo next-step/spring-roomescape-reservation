@@ -6,12 +6,14 @@ public class ReservationServiceInput {
 
     private final String name;
     private final String date;
-    private final String time;
+    private final long timeId;
+    private final String startAt;
 
     private ReservationServiceInput(ReservationRequest request) {
         this.name = request.getName();
         this.date = request.getDate();
-        this.time = request.getTime();
+        this.timeId = request.getTimeId();
+        this.startAt = request.getStartAt();
     }
 
     public static ReservationServiceInput createReservationServiceInput(ReservationRequest request) {
@@ -26,7 +28,11 @@ public class ReservationServiceInput {
         return date;
     }
 
-    public String getTime() {
-        return time;
+    public long getTimeId() {
+        return timeId;
+    }
+
+    public String getStartAt() {
+        return startAt;
     }
 }

@@ -15,7 +15,7 @@ public class HomeController {
 
     @GetMapping("/reservation")
     public String reservation() {
-        return NAMESPACE + "/reservation-legacy.html";
+        return NAMESPACE + "/reservation.html";
     }
 
     @GetMapping("/time")

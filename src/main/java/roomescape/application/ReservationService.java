@@ -20,10 +20,9 @@ public class ReservationService {
 
     @Transactional
     public ReservationServiceOutput create(ReservationServiceInput input) {
-        Reservation reservation = Reservation.createReservationWithoutId(input.getName(), input.getDate(),
-            input.getTime());
-        long id = reservationRepository.save(reservation);
-        Reservation saved = reservationRepository.findById(id).get();
+        Reservation reservation = Reservation.createReservation(input.getName(), input.getDate(),
+            input.getTimeId(), input.getStartAt());
+        Reservation saved = reservationRepository.save(reservation);
         return createReservationServiceOutput(saved);
     }
 
@@ -35,9 +34,9 @@ public class ReservationService {
 
     @Transactional
     public void delete(Long id) {
-        if (reservationRepository.findById(id).isEmpty()) {
-            throw new NotFoundException("이미 삭제된 예약입니다.");
+        if (reservationRepository.deleteById(id) > 0) {
+            return;
         }
-        reservationRepository.deleteById(id);
+        throw new NotFoundException("이미 삭제된 예약입니다.");
     }
 }

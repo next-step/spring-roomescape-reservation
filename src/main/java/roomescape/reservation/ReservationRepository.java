@@ -1,23 +1,59 @@
 package roomescape.reservation;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
 import java.util.List;
 
 @Component
 public class ReservationRepository {
-    List<Reservation> reservations = new ArrayList<>();
+    private final JdbcTemplate jdbcTemplate;
 
-    public void add(Reservation newReservation) {
-        reservations.add(newReservation);
+    public ReservationRepository(@Autowired JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void delete(long id) {
-        reservations = reservations.stream().filter(r -> r.getId() != id).toList();
+    public Reservation add(Reservation newReservation) {
+        String sql = "insert into reservation (name, date, time) values(?,?,?)";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                    sql,
+                    new String[]{"id"});
+
+            ps.setString(1, newReservation.getName());
+            ps.setString(2, newReservation.getDate());
+            ps.setString(3, newReservation.getTime());
+            return ps;
+        }, keyHolder);
+
+        long generatedId = keyHolder.getKey().longValue();
+        newReservation.setId(generatedId);
+
+        return newReservation;
+    }
+
+    public void delete(Long id) {
+        String sql = "delete from reservations where id = ?";
+        jdbcTemplate.update(sql, id);
     }
 
     public List<Reservation> toList() {
-        return reservations;
+        String sql = "select id, name, date, time from reservation";
+        return jdbcTemplate.query(sql, rowMapper);
     }
+
+    private final RowMapper<Reservation> rowMapper = (resultSet, rowNum) ->
+        new Reservation(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getString("date"),
+                resultSet.getString("time")
+        );
 }

@@ -13,10 +13,26 @@ import java.util.Objects;
 @Repository
 public class ReservationRepository {
 
-    private static final String FIND_BY_ID_SQL = "SELECT r.id as reservation_id, r.name as reservation_name, r.date as reservation_date, t.id as time_id, t.start_at as time_start_at FROM reservation as r inner join reservation_time as t on r.time_id = t.id where r.id = ?";
-    private static final String SAVE_SQL = "insert into reservation (name, date, time_id) values (?, ?, ?)";
-    private static final String FIND_ALL_SQL = "SELECT r.id as reservation_id, r.name as reservation_name, r.date as reservation_date, t.id as time_id, t.start_at as time_start_at FROM reservation as r inner join reservation_time as t on r.time_id = t.id";
-    private static final String DELETE_SQL = "delete from reservation where id = ?";
+    private static final String FIND_BY_ID_SQL = "SELECT " +
+            "r.id AS reservation_id, " +
+            "r.name AS reservation_name, " +
+            "r.date AS reservation_date, t.id as time_id, " +
+            "t.start_at AS time_start_at " +
+            "FROM reservation AS r " +
+            "INNER JOIN reservation_time AS t " +
+            "ON r.time_id = t.id " +
+            "WHERE r.id = ?";
+    private static final String SAVE_SQL = "INSERT INTO reservation (name, date, time_id) VALUES (?, ?, ?)";
+    private static final String FIND_ALL_SQL = "SELECT " +
+            "r.id AS reservation_id, " +
+            "r.name AS reservation_name, " +
+            "r.date AS reservation_date, " +
+            "t.id AS time_id, " +
+            "t.start_at AS time_start_at " +
+            "FROM reservation AS r " +
+            "INNER JOIN reservation_time AS t " +
+            "ON r.time_id = t.id";
+    private static final String DELETE_SQL = "DELETE FROM reservation WHERE id = ?";
     private static final String COLUMN_ID = "id";
     private static final int INDEX_ONE = 1;
     private static final int INDEX_TWO = 2;

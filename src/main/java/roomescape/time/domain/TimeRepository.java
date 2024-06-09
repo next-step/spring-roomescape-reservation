@@ -12,10 +12,10 @@ import java.util.Objects;
 @Repository
 public class TimeRepository {
 
-    private static final String SAVE_SQL = "insert into reservation_time (start_at) values (?)";
-    private static final String FIND_BY_ID_SQL = "select * from reservation_time where id = ?";
-    private static final String FIND_ALL_SQL = "select * from reservation_time";
-    private static final String DELETE_SQL = "delete from reservation_time where id = ?";
+    private static final String SAVE_SQL = "INSERT INTO reservation_time (start_at) VALUES (?)";
+    private static final String FIND_BY_ID_SQL = "SELECT * FROM reservation_time WHERE id = ?";
+    private static final String FIND_ALL_SQL = "SELECT * FROM reservation_time";
+    private static final String DELETE_SQL = "DELETE FROM reservation_time WHERE id = ?";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_START_AT = "start_at";
     private static final int INDEX_ONE = 1;

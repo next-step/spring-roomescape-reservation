@@ -50,7 +50,7 @@ public class ApiReservationController {
                 .build());
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         reservationService.delete(id);
         return ResponseEntity.ok().build();

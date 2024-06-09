@@ -1,6 +1,7 @@
-package roomescape.repository;
+package roomescape.repository.memory;
 
 import org.springframework.stereotype.Repository;
+import roomescape.repository.ReservationRepository;
 import roomescape.repository.entity.ReservationEntity;
 
 import java.util.ArrayList;
@@ -47,13 +48,13 @@ public class InMemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public ReservationEntity findById(Long id) {
+    public ReservationEntity findById(Long reservationId) {
         return this.reservationEntities.stream()
-                .filter(reservationEntity -> reservationEntity.isSameId(id))
+                .filter(reservationEntity -> reservationEntity.isSameId(reservationId))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException(
                         String.format(
-                                "[id:%d] id에 해당하는 reservation 엔티티가 존재하지 않습니다.", id
+                                "[id:%d] id에 해당하는 reservation 엔티티가 존재하지 않습니다.", reservationId
                         )
                 ));
     }

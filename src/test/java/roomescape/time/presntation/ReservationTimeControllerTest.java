@@ -12,6 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import roomescape.reservation.presentation.dto.ReservationCreateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -63,5 +64,49 @@ class ReservationTimeControllerTest {
                 .when().delete("/times/1")
                 .then().log().all()
                 .statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    @Test
+    @DisplayName("시간 삭제 시 예약된 시간이면 실패한다.")
+    void testDeleteReservationTime_Fail() {
+        // ReservationTime 생성
+        Map<String, String> param = Map.of("startAt", "10:00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(param)
+                .when().post("/times")
+                .then().log().all()
+                .extract();
+
+        // Theme 생성
+        Map<String, String> params = Map.of(
+                "name", "레벨2 탈출",
+                "description", "우테코 레벨2를 탈출하는 내용입니다.",
+                "thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg"
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/themes")
+                .then().log().all()
+                .extract();
+
+        // Reservation 생성
+        ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L, 1L);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all()
+                .extract();
+
+        // ReservationTime 삭제
+        RestAssured.given().log().all()
+                .when().delete("/times/1")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 }

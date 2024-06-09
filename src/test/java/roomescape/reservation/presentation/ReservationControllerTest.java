@@ -1,9 +1,8 @@
 package roomescape.reservation.presentation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.Map;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,8 +12,6 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import roomescape.reservation.presentation.dto.ReservationCreateRequest;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -54,20 +51,19 @@ class ReservationControllerTest {
     @Test
     @DisplayName("예약을 생성한다.")
     void testCreateReservation() {
-        // given
         ReservationCreateRequest request = new ReservationCreateRequest("브라운", "2021-08-01", 1L, 1L);
 
-        // when
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
+        RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/reservations")
                 .then().log().all()
-                .extract();
+                .statusCode(HttpStatus.CREATED.value());
 
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-        assertThat(response.jsonPath().getLong("reservationId")).isEqualTo(1L);
+        RestAssured.given().log().all()
+                .when().get("/reservations")
+                .then().log().all()
+                .body("size()", Matchers.is(1));
     }
 
     @Test

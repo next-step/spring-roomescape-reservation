@@ -148,7 +148,7 @@ content-type: application/json
 - response
 ```json
 HTTP/1.1 201
-Location: /themes/1
+Location: /themes/1
 Content-Type: application/json
 
 {

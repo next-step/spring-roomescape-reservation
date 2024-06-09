@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.model;
 
 public class Reservation {
     private Long id;

@@ -55,6 +55,36 @@ public class ReservationJDBCRepository implements ReservationRepository {
         WHERE id = ?
     """;
 
+    private static final String SELECT_ID_WHERE_TIME_ID_AND_THEME_ID_SQL = """
+        SELECT
+            id
+        FROM
+            reservation
+        WHERE
+            time_id = ?
+            AND theme_id = ?
+    """;
+
+    private static final String SELECT_ANY_BY_TIME_ID_SQL = """
+        SELECT
+            id
+        FROM
+            reservation
+        WHERE
+            time_id = ?
+        LIMIT 1
+    """;
+
+    private static final String SELECT_ANY_BY_THEME_ID_SQL = """
+        SELECT
+            id
+        FROM
+            reservation
+        WHERE
+            theme_id = ?
+        LIMIT 1
+    """;
+
     private final JdbcTemplate template;
 
 
@@ -100,6 +130,36 @@ public class ReservationJDBCRepository implements ReservationRepository {
     @Override
     public void deleteById(long id) {
         template.update(DELETE_SQL, id);
+    }
+
+    @Override
+    public Optional<Long> findIdByTimeIdAndThemeId(long timeId, long themeId) {
+        try {
+            Long reservationId = template.queryForObject(SELECT_ID_WHERE_TIME_ID_AND_THEME_ID_SQL, Long.class, timeId, themeId);
+            return Optional.ofNullable(reservationId);
+        } catch (EmptyResultDataAccessException exception) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Long> findAnyByTimeId(long timeId) {
+        try {
+            Long foundReservationTimeId = template.queryForObject(SELECT_ANY_BY_TIME_ID_SQL, Long.class, timeId);
+            return Optional.ofNullable(foundReservationTimeId);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<Long> findAnyByThemeId(long themeId) {
+        try {
+            Long foundThemeId = template.queryForObject(SELECT_ANY_BY_THEME_ID_SQL, Long.class, themeId);
+            return Optional.ofNullable(foundThemeId);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     private RowMapper<Reservation> reservationRowMapper() {

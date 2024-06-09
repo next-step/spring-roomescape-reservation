@@ -18,41 +18,41 @@ import java.util.Optional;
 public class ReservationTimeJDBCRepository implements ReservationTimeRepository {
 
     private static final String INSERT_SQL = """
-        INSERT INTO reservation_time(start_at)
-         VALUES (?)
-    """;
+                INSERT INTO reservation_time(start_at)
+                 VALUES (?)
+            """;
 
     private static final String SELECT_ALL_SQL = """
-        SELECT
-            id,
-            start_at
-        FROM
-            reservation_time
-    """;
+                SELECT
+                    id,
+                    start_at
+                FROM
+                    reservation_time
+            """;
 
     private static final String CHECK_ID_EXISTS_SQL = """
-        SELECT
-            id
-        FROM
-            reservation_time
-        WHERE
-            id = ?
-    """;
+                SELECT
+                    id
+                FROM
+                    reservation_time
+                WHERE
+                    id = ?
+            """;
 
     private static final String SELECT_ONE_SQL = """
-        SELECT
-            id,
-            start_at
-        FROM
-            reservation_time
-        WHERE
-            id = ?
-    """;
+                SELECT
+                    id,
+                    start_at
+                FROM
+                    reservation_time
+                WHERE
+                    id = ?
+            """;
 
     private static final String DELETE_SQL = """
-        DELETE FROM reservation_time
-        WHERE id = ?
-    """;
+                DELETE FROM reservation_time
+                WHERE id = ?
+            """;
 
     private final JdbcTemplate template;
 

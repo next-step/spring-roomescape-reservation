@@ -1,10 +1,8 @@
 package roomescape.apply.reservation.application;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import roomescape.apply.reservation.application.excpetion.DuplicateReservationException;
 import roomescape.apply.reservation.domain.repository.ReservationJDBCRepository;
 import roomescape.apply.reservation.ui.dto.ReservationRequest;
 import roomescape.apply.reservation.ui.dto.ReservationResponse;
@@ -19,6 +17,7 @@ import roomescape.apply.theme.domain.repository.ThemeRepository;
 import roomescape.support.BaseTestService;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static roomescape.support.ReservationsFixture.*;
 
 class ReservationRecorderTest extends BaseTestService {
@@ -31,10 +30,12 @@ class ReservationRecorderTest extends BaseTestService {
     void setUp() {
         transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         reservationTimeRepository = new ReservationTimeJDBCRepository(template);
+        var reservationRepository = new ReservationJDBCRepository(template);
         themeRepository = new ThemeJDBCRepository(template);
         var reservationTimeFinder = new ReservationTimeFinder(reservationTimeRepository);
         var themeFinder = new ThemeFinder(themeRepository);
-        reservationRecorder = new ReservationRecorder(new ReservationJDBCRepository(template), reservationTimeFinder, themeFinder);
+        var reservationFinder = new ReservationFinder(reservationRepository);
+        reservationRecorder = new ReservationRecorder(reservationRepository, reservationTimeFinder, themeFinder, reservationFinder);
     }
 
     @AfterEach
@@ -61,6 +62,20 @@ class ReservationRecorderTest extends BaseTestService {
                 .isEqualTo(time);
         assertThat(response.theme()).usingRecursiveComparison()
                 .isEqualTo(theme);
+    }
+
+    @Test
+    @DisplayName("이미 예약된 시간의 테마는 예약할 수 없어야한다.")
+    void notDuplicatedTimeAndTheme() {
+        // given
+        ReservationTime time = reservationTimeRepository.save(reservationTime());
+        Theme theme = themeRepository.save(theme());
+        ReservationRequest request = reservationRequest(time.getId(), theme.getId());
+        // when && then
+        Assertions.assertDoesNotThrow(() -> reservationRecorder.recordReservationBy(request));
+        assertThatThrownBy(() -> reservationRecorder.recordReservationBy(request))
+                .isInstanceOf(DuplicateReservationException.class)
+                .hasMessage(DuplicateReservationException.DEFAULT_MESSAGE);
     }
 
 }

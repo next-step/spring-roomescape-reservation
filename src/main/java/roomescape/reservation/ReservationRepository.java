@@ -17,7 +17,7 @@ public class ReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Reservation add(Reservation newReservation) {
+    public Reservation addReservation(Reservation newReservation) {
         String sql = "insert into reservation (name, date, time) values(?,?,?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -38,7 +38,7 @@ public class ReservationRepository {
         return newReservation;
     }
 
-    public void delete(Long id) {
+    public void deleteReservation(Long id) {
         String sql = "delete from reservations where id = ?";
         jdbcTemplate.update(sql, id);
     }

@@ -17,10 +17,10 @@ public class ReservationService {
     }
 
     public Reservation add(Reservation newReservation) {
-        return reservationRepository.add(newReservation);
+        return reservationRepository.addReservation(newReservation);
     }
 
     public void delete(long id) {
-        reservationRepository.delete(id);
+        reservationRepository.deleteReservation(id);
     }
 }

@@ -1,4 +1,4 @@
-package roomescape.repository.impl;
+package roomescape.repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -9,10 +9,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.ReservationTheme;
-import roomescape.repository.ReservationThemeDao;
 
 @Repository
-public class JdbcReservationThemeDao implements ReservationThemeDao {
+public class JdbcReservationThemeDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -20,7 +19,6 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public ReservationTheme save(ReservationTheme reservationTheme) {
         final String sql = "INSERT INTO theme (name, description, thumbnail) values (?, ?, ?)";
 
@@ -38,7 +36,6 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
         return reservationTheme.toEntity(reservationTheme, keyHolder.getKey().longValue());
     }
 
-    @Override
     public List<ReservationTheme> findAll() {
         final String sql = "SELECT id, name, description, thumbnail FROM theme";
 
@@ -50,13 +47,11 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
         ));
     }
 
-    @Override
     public void delete(Long id) {
         final String sql = "DELETE FROM theme WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 
-    @Override
     public Optional<ReservationTheme> findById(Long id) {
         final String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
 
@@ -75,7 +70,6 @@ public class JdbcReservationThemeDao implements ReservationThemeDao {
         return Optional.ofNullable(reservationTheme);
     }
 
-    @Override
     public Long findByName(String name) {
         final String sql = "SELECT count(*) FROM theme WHERE name = ?";
         return jdbcTemplate.queryForObject(sql, Long.class, name);

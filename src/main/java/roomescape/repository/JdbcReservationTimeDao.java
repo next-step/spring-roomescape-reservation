@@ -1,4 +1,4 @@
-package roomescape.repository.impl;
+package roomescape.repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -9,10 +9,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.ReservationTime;
-import roomescape.repository.ReservationTimeDao;
 
 @Repository
-public class JdbcReservationTimeDao implements ReservationTimeDao {
+public class JdbcReservationTimeDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -20,7 +19,6 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public ReservationTime save(ReservationTime reservationTime) {
         final String sql = "INSERT INTO reservation_time (start_at) values (?)";
 
@@ -34,7 +32,6 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         return reservationTime.toEntity(reservationTime, keyHolder.getKey().longValue());
     }
 
-    @Override
     public List<ReservationTime> findAll() {
         final String sql = "SELECT id, start_at FROM reservation_time";
         return jdbcTemplate.query(sql,
@@ -45,13 +42,11 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         );
     }
 
-    @Override
     public void delete(Long id) {
         final String sql = "DELETE FROM reservation_time WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 
-    @Override
     public Optional<ReservationTime> findById(Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
 
@@ -68,7 +63,6 @@ public class JdbcReservationTimeDao implements ReservationTimeDao {
         return Optional.ofNullable(reservationTime);
     }
 
-    @Override
     public Long findByStartAt(String startAt) {
         final String sql = "SELECT count(*) FROM reservation_time WHERE start_at = ?";
         return jdbcTemplate.queryForObject(sql, Long.class, startAt);

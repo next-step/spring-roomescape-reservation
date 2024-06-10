@@ -1,4 +1,4 @@
-package roomescape.repository.impl;
+package roomescape.repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -9,10 +9,9 @@ import org.springframework.stereotype.Repository;
 import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTheme;
 import roomescape.domain.ReservationTime;
-import roomescape.repository.ReservationDao;
 
 @Repository
-public class JdbcReservationDao implements ReservationDao {
+public class JdbcReservationDao {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -20,7 +19,6 @@ public class JdbcReservationDao implements ReservationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public Reservation save(Reservation reservation) {
         final String sql = "INSERT INTO reservation (name, \"date\", time_id, theme_id) values (?, ?, ?, ?)";
 
@@ -39,7 +37,6 @@ public class JdbcReservationDao implements ReservationDao {
         return reservation.toEntity(reservation, keyHolder.getKey().longValue());
     }
 
-    @Override
     public List<Reservation> findAll() {
         final String sql = "SELECT "
                 + "r.id as reservation_id"
@@ -75,25 +72,21 @@ public class JdbcReservationDao implements ReservationDao {
         });
     }
 
-    @Override
     public void delete(Long id) {
         final String sql = "DELETE FROM reservation WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 
-    @Override
     public Long countByDateAndTimeId(String date, String timeId) {
         final String sql = "SELECT count(*) FROM reservation r WHERE \"date\" = ? AND time_id = ?";
         return jdbcTemplate.queryForObject(sql, Long.class, date, timeId);
     }
 
-    @Override
     public Long countByTimeId(Long timeId) {
         final String sql = "SELECT count(*) FROM reservation WHERE time_id = ?";
         return jdbcTemplate.queryForObject(sql, Long.class, timeId);
     }
 
-    @Override
     public Long countByThemeId(Long themeId) {
         final String sql = "SELECT count(*) FROM reservation r WHERE theme_id = ?";
         return jdbcTemplate.queryForObject(sql, Long.class, themeId);

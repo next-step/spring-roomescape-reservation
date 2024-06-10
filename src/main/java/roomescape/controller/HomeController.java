@@ -11,13 +11,18 @@ public class HomeController {
         return "admin/index";
     }
 
-    @GetMapping("/reservation")
+    @GetMapping("/admin/reservation-new")
     public String reservation() {
-        return "admin/reservation";
+        return "admin/reservation-new";
     }
 
-    @GetMapping("/time")
+    @GetMapping("/admin/time")
     public String time() {
         return "admin/time";
+    }
+
+    @GetMapping("/admin/theme")
+    public String theme() {
+        return "admin/theme";
     }
 }

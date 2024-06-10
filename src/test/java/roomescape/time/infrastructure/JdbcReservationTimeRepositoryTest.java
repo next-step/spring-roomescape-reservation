@@ -65,6 +65,22 @@ class JdbcReservationTimeRepositoryTest {
     }
 
     @Test
+    @DisplayName("예약 시간이 존재하면 TRUE를 반환한다.")
+    void existsByStartAt() {
+        boolean exists = reservationTimeRepository.existsByStartAt(LocalTime.parse("15:40"));
+
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    @DisplayName("예약 시간이 존재하지 않으면 FALSE를 반환한다.")
+    void notExistsByStartAt() {
+        boolean exists = reservationTimeRepository.existsByStartAt(LocalTime.parse("10:40"));
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
     @DisplayName("예약 시간을 삭제한다.")
     void testDeleteById() {
         reservationTimeRepository.deleteById(1L);

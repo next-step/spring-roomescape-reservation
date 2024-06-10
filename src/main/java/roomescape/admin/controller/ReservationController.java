@@ -1,7 +1,6 @@
 package roomescape.admin.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import roomescape.admin.dto.ReadReservationResponse;
 import roomescape.admin.dto.SaveReservationRequest;
@@ -9,18 +8,12 @@ import roomescape.admin.service.ReservationService;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class ReservationController {
-    private static final String BASE_PATH = "/admin";
     private final ReservationService reservationService;
 
     public ReservationController(ReservationService reservationService){
         this.reservationService = reservationService;
-    }
-
-    @GetMapping("/reservation")
-    public String reservation(){
-        return BASE_PATH+"/reservation.html";
     }
 
     @GetMapping("/reservations")

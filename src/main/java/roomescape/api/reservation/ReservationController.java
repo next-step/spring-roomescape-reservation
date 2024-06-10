@@ -21,9 +21,20 @@ public class ReservationController {
   private final List<Reservation> reservations = new ArrayList<>();
   private final AtomicLong generator = new AtomicLong(1);
 
+  private final ReservationRepository repository;
+
+  public ReservationController(ReservationRepository repository) {
+    this.repository = repository;
+  }
+
   @GetMapping
   public List<Reservation> findReservations() {
-    return reservations;
+    return repository.findAll();
+  }
+
+  @GetMapping("{id}")
+  public Reservation getById(@PathVariable Long id) {
+    return repository.getById(id);
   }
 
   @PostMapping

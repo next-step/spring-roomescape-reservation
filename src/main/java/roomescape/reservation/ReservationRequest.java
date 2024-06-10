@@ -1,15 +1,27 @@
 package roomescape.reservation;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import roomescape.util.DateTimeUtils;
+
+import java.text.ParseException;
+
 public class ReservationRequest {
+	@NotBlank(message = "이름")
 	private String name;
 
+	@NotBlank(message = "날짜")
 	private String date;
 
+	@NotNull(message = "시간")
 	private Long timeId;
 
+	@NotNull(message = "테마")
 	private Long themeId;
 
-	public ReservationRequest(String name, String date, Long timeId, Long themeId) {
+	public ReservationRequest(String name, String date, Long timeId, Long themeId) throws ParseException {
+		DateTimeUtils.validDateFormat(date);
+
 		this.name = name;
 		this.date = date;
 		this.timeId = timeId;

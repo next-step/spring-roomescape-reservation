@@ -1,10 +1,15 @@
 package roomescape.theme;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ThemeRequest {
+	@NotBlank(message = "테마 이름")
 	private String name;
 
+	@NotBlank(message = "테마 설명")
 	private String description;
 
+	@NotBlank(message = "테마 썸네일 URL")
 	private String thumbnail;
 
 	public ThemeRequest(String name, String description, String thumbnail) {

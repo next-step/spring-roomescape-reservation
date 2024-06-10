@@ -44,6 +44,26 @@ class ReservationTimeControllerTest {
                 .then().log().all()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
+
+    @Test
+    @DisplayName("시간 추가 시 이미 존재하는 시간이면 실패한다.")
+    void testCreateReservationTime_AlreadyExistsTime() {
+        Map<String, String> params = Map.of("startAt", "10:00");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(HttpStatus.CREATED.value());
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
     
     @Test
     @DisplayName("모든 시간을 조회한다.")

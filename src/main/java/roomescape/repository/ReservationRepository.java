@@ -12,5 +12,5 @@ public interface ReservationRepository {
 
     void delete(Long reservationId);
 
-    ReservationEntity findById(Long id);
+    ReservationEntity findById(Long reservationId);
 }

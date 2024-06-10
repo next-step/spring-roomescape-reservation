@@ -1,10 +1,11 @@
-package roomescape.repository;
+package roomescape.repository.momory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import roomescape.repository.entity.ReservationEntity;
+import roomescape.repository.memory.InMemoryReservationRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

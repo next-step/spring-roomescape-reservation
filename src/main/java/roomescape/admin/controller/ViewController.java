@@ -22,4 +22,9 @@ public class ViewController {
     public String time(){
         return BASE_PATH+"/time.html";
     }
+
+    @GetMapping("/theme")
+    public String theme(){
+        return BASE_PATH+"/theme.html";
+    }
 }

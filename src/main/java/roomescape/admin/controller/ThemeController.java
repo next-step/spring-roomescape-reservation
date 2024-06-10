@@ -1,12 +1,9 @@
 package roomescape.admin.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import roomescape.admin.dto.ReadThemeResponse;
 import roomescape.admin.dto.SaveThemeRequest;
-import roomescape.admin.service.ReservationTimeService;
 import roomescape.admin.service.ThemeService;
 
 import java.util.List;

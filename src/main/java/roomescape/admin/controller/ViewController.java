@@ -15,7 +15,7 @@ public class ViewController {
 
     @GetMapping("/reservation")
     public String reservation(){
-        return BASE_PATH+"/reservation.html";
+        return BASE_PATH+"/reservation-new.html";
     }
 
     @GetMapping("/time")

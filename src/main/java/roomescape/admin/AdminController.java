@@ -19,4 +19,9 @@ public class AdminController {
 	public String time() {
 		return "admin/time.html";
 	}
+
+	@GetMapping("/admin/theme")
+	public String theme() {
+		return "admin/theme.html";
+	}
 }

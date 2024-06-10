@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static roomescape.controller.dto.ThemeRequest.validateThemeRequest;
+
 @RestController
 @RequestMapping("/themes")
 public class ThemeController {
@@ -32,6 +34,7 @@ public class ThemeController {
 
 	@PostMapping
 	public ResponseEntity<ThemeResponse> create(@RequestBody ThemeRequest request) {
+		validateThemeRequest(request);
 		return ResponseEntity.ok().body(this.themeService.create(request));
 	}
 

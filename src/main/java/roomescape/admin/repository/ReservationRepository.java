@@ -1,6 +1,5 @@
 package roomescape.admin.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,16 +23,12 @@ public class ReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void deleteReservation(Long id) {
-        this.jdbcTemplate.update(ReservationQuery.DELETE, id);
+    public List<Reservation> findAll() {
+        return this.jdbcTemplate.query(ReservationQuery.FIND_ALL, readReservationRowMapper());
     }
 
-    public List<Reservation> readReservation() {
-        return this.jdbcTemplate.query(ReservationQuery.READ_ALL, readReservationRowMapper());
-    }
-
-    public Reservation readReservationById(Long id) {
-        return this.jdbcTemplate.queryForObject(ReservationQuery.READ_BY_ID, readReservationRowMapper(),id);
+    public Reservation findById(Long id) {
+        return this.jdbcTemplate.queryForObject(ReservationQuery.FIND_BY_ID, readReservationRowMapper(),id);
     }
 
     private RowMapper<Reservation> readReservationRowMapper() {
@@ -56,7 +51,7 @@ public class ReservationRepository {
         return ReservationTime.of(id, startAt);
     }
 
-    public Long saveReservation(SaveReservationRequest saveReservationRequest) {
+    public Long save(SaveReservationRequest saveReservationRequest) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         this.jdbcTemplate.update(con -> saveReserveStatement(con, saveReservationRequest), keyHolder);
         return keyHolder.getKey().longValue();
@@ -73,5 +68,9 @@ public class ReservationRepository {
         ps.setLong(3,timeId);
 
         return ps;
+    }
+
+    public void delete(Long id) {
+        this.jdbcTemplate.update(ReservationQuery.DELETE, id);
     }
 }

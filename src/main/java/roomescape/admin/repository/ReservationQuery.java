@@ -1,7 +1,7 @@
 package roomescape.admin.repository;
 
 public class ReservationQuery {
-    public static final String READ_ALL = "SELECT \n" +
+    public static final String FIND_ALL = "SELECT \n" +
             "    r.id as reservation_id, \n" +
             "    r.name as reservation_name, \n" +
             "    r.date as reservation_date, \n" +
@@ -11,7 +11,7 @@ public class ReservationQuery {
             "inner join reservation_time as t \n" +
             "on r.time_id = t.id";
 
-    public static final String READ_BY_ID = READ_ALL + " \n where r.id = ?";
+    public static final String FIND_BY_ID = FIND_ALL + " \n where r.id = ?";
 
     public static final String SAVE = "insert into reservation(name, date, time_id) values(?,?,?)";
 

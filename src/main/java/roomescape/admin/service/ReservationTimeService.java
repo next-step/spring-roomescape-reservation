@@ -18,19 +18,19 @@ public class ReservationTimeService {
     }
 
     public List<ReadReservationTimeResponse> readReservationTime() {
-        List<ReservationTime> reservationTime = this.reservationTimeRepository.readReservationTime();
+        List<ReservationTime> reservationTime = this.reservationTimeRepository.findAll();
 
         return ReadReservationTimeResponse.from(reservationTime);
     }
 
     public ReadReservationTimeResponse saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
-        Long id = this.reservationTimeRepository.saveReservationTime(saveReservationTimeRequest);
-        ReservationTime reservationTime = this.reservationTimeRepository.readReservationTimeById(id);
+        Long id = this.reservationTimeRepository.save(saveReservationTimeRequest);
+        ReservationTime reservationTime = this.reservationTimeRepository.findById(id);
 
         return ReadReservationTimeResponse.from(reservationTime);
     }
 
     public void deleteReservationTime(Long id) {
-        this.reservationTimeRepository.deleteReservationTime(id);
+        this.reservationTimeRepository.delete(id);
     }
 }

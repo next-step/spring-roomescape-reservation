@@ -1,18 +1,17 @@
 package roomescape.repository;
 
 import roomescape.domain.ReservationTime;
-import roomescape.dto.ReservationDto;
-import roomescape.dto.ReservationTimeDto;
+import roomescape.dto.time.ReservationTimeRequest;
 
 import java.util.List;
 
 public interface ReservationTimeRepository {
 
-    ReservationTimeDto addTime(ReservationTimeDto dto);
+    List<ReservationTime> findTimes();
 
-    ReservationTimeDto findReservationTimeById(Long id);
+    Long createTime(ReservationTimeRequest request);
 
-    List<ReservationTime> findTimeList();
+    ReservationTime findReservationTimeById(Long id);
 
     void deleteTime(Long id);
 }

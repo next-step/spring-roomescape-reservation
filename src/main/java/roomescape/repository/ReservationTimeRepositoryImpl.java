@@ -1,13 +1,11 @@
 package roomescape.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.ReservationTime;
-import roomescape.dto.ReservationDto;
-import roomescape.dto.ReservationTimeDto;
+import roomescape.dto.time.ReservationTimeRequest;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -22,34 +20,7 @@ public class ReservationTimeRepositoryImpl implements ReservationTimeRepository{
     }
 
     @Override
-    public ReservationTimeDto addTime(ReservationTimeDto dto) {
-        String sql = "insert into reservation_time(start_at) values(?)";
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(
-                    sql,new String[]{"id"});
-            ps.setString(1, dto.getStartAt());
-            return ps;
-        },keyHolder);
-
-        long timeId = keyHolder.getKey().longValue();
-        return findReservationTimeById(timeId);
-    }
-    @Override
-    public ReservationTimeDto findReservationTimeById(Long id) {
-        String sql = "select id, start_at from reservation_time where id = ?";
-        return jdbcTemplate.queryForObject(
-                sql, (rs, rowNum) -> {
-                    ReservationTimeDto reservationTimeDto = new ReservationTimeDto(
-                            rs.getLong("id"),
-                            rs.getString("start_at")
-                    );
-                    return reservationTimeDto;
-                }, id);
-    }
-
-    @Override
-    public List<ReservationTime> findTimeList() {
+    public List<ReservationTime> findTimes() {
         String sql = "select id, start_at from reservation_time";
 
         return jdbcTemplate.query(
@@ -60,6 +31,33 @@ public class ReservationTimeRepositoryImpl implements ReservationTimeRepository{
                     );
                     return reservationTime;
                 });
+    }
+    @Override
+    public Long createTime(ReservationTimeRequest request) {
+        String sql = "insert into reservation_time(start_at) values(?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                    sql,new String[]{"id"});
+            ps.setString(1, request.getStartAt());
+            return ps;
+        },keyHolder);
+
+        return keyHolder.getKey().longValue();
+
+    }
+
+    @Override
+    public ReservationTime findReservationTimeById(Long id) {
+        String sql = "select id, start_at from reservation_time where id = ?";
+        return jdbcTemplate.queryForObject(
+                sql, (rs, rowNum) -> {
+                    ReservationTime entity = new ReservationTime(
+                            rs.getLong("id"),
+                            rs.getString("start_at")
+                    );
+                    return entity;
+                }, id);
     }
 
     @Override

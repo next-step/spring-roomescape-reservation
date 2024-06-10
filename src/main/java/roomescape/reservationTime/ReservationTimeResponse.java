@@ -11,7 +11,7 @@ public class ReservationTimeResponse {
 	}
 
 	public ReservationTimeResponse(ReservationTime reservationTime) {
-		this(reservationTime.getId(), reservationTime.getStartAt());
+		this(reservationTime.getId(), reservationTime.getStartAt().toString());
 	}
 
 	public Long getId() {

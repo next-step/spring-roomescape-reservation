@@ -11,8 +11,6 @@ import roomescape.reservation.ReservationRequest;
 import roomescape.reservationTime.ReservationTimeRequest;
 import roomescape.theme.ThemeRequest;
 
-import java.text.ParseException;
-
 import static org.hamcrest.Matchers.is;
 
 @DisplayName("예약 관련 api 호출 테스트")
@@ -20,7 +18,7 @@ import static org.hamcrest.Matchers.is;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationAcceptanceTest {
 	@BeforeEach
-	void 예약_등록() throws ParseException {
+	void 예약_등록() {
 		ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("12:00");
 		ThemeRequest themeRequest = new ThemeRequest("탈출 미션", "탈출하는 내용입니다.", "thumbnail.jpg");
 		ReservationRequest params = new ReservationRequest("브라운", "2023-08-05", 1L, 1L);

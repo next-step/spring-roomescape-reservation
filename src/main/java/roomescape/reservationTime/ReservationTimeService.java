@@ -13,8 +13,9 @@ public class ReservationTimeService {
 		this.reservationTimeRepository = reservationTimeRepository;
 	}
 
-	public Long saveReservationTime(ReservationTimeRequest request) {
-		return reservationTimeRepository.save(request.getStartAt());
+	public ReservationTimeResponse saveReservationTime(ReservationTimeRequest request) {
+		ReservationTime reservationTime = new ReservationTime(request.getStartAt());
+		return new ReservationTimeResponse(reservationTimeRepository.save(reservationTime));
 	}
 
 	public ReservationTimeResponse findReservationTime(Long id) {

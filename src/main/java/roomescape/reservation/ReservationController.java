@@ -21,8 +21,7 @@ public class ReservationController {
 
 	@PostMapping
 	public ReservationResponse saveReservations(@RequestBody @Valid ReservationRequest request) {
-		Long id = reservationService.saveReservation(request);
-		return reservationService.findReservation(id);
+		return reservationService.saveReservation(request);
 	}
 
 

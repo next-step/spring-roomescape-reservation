@@ -40,8 +40,8 @@ public class ReservationRepository {
 		return jdbcTemplate.query(sql, (rs, rowNum) ->
 				new Reservation(rs.getLong("reservation_id"),
 						rs.getString("reservation_name"),
-						rs.getString("reservation_date"),
-						new ReservationTime(rs.getLong("time_id"), rs.getString("time_start_at")),
+						rs.getDate("reservation_date").toLocalDate(),
+						new ReservationTime(rs.getLong("time_id"), rs.getTime("time_start_at").toLocalTime()),
 						new Theme(rs.getLong("theme_id"), rs.getString("theme_name"), rs.getString("theme_description"), rs.getString("theme_thumbnail"))));
 	}
 
@@ -67,27 +67,31 @@ public class ReservationRepository {
 		RowMapper<Reservation> rowMapper = (rs, rowNum) ->
 				new Reservation(rs.getLong(1),
 						rs.getString(2),
-						rs.getString(3),
-						new ReservationTime(rs.getLong(4), rs.getString(5)),
+						rs.getDate(3).toLocalDate(),
+						new ReservationTime(rs.getLong(4), rs.getTime(5).toLocalTime()),
 						new Theme(rs.getLong(6), rs.getString(7), rs.getString(8), rs.getString(9)));
 
 		return jdbcTemplate.queryForObject(sql, rowMapper, id);
 	}
 
-	public Long save(String name, String date, Long timeId, Long themeId) {
+	public Reservation save(Reservation reservation) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(con -> {
 			PreparedStatement ps = con.prepareStatement("INSERT INTO reservation(name, date, time_id, theme_id) VALUES (?, ?, ?, ?)", new String[]{"id"});
-			ps.setString(1, name);
-			ps.setString(2, date);
-			ps.setLong(3, timeId);
-			ps.setLong(4, themeId);
+			ps.setString(1, reservation.getName());
+			ps.setString(2, reservation.getDate().toString());
+			ps.setLong(3, reservation.getReservationTime().getId());
+			ps.setLong(4, reservation.getTheme().getId());
 
 			return ps;
 		}, keyHolder);
 
-		return keyHolder.getKey().longValue();
+		return new Reservation(keyHolder.getKey().longValue(),
+				reservation.getName(),
+				reservation.getDate(),
+				reservation.getReservationTime(),
+				reservation.getTheme());
 	}
 
 	public void delete(long id) {

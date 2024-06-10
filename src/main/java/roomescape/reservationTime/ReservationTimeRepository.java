@@ -18,23 +18,24 @@ public class ReservationTimeRepository {
 	}
 
 
-	public Long save(String startAt) {
+	public ReservationTime save(ReservationTime reservationTime) {
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(con -> {
 			PreparedStatement ps = con.prepareStatement("INSERT INTO reservation_time(start_at) VALUES (?)", new String[]{"id"});
-			ps.setString(1, startAt);
+			ps.setString(1, reservationTime.getStartAt().toString());
 
 			return ps;
 		}, keyHolder);
 
-		return keyHolder.getKey().longValue();
+		return new ReservationTime(keyHolder.getKey().longValue(),
+				reservationTime.getStartAt());
 	}
 
 	public ReservationTime findById(Long id) {
 		RowMapper<ReservationTime> rowMapper = (rs, rowNum) -> new ReservationTime(
 				rs.getLong(1),
-				rs.getString(2));
+				rs.getTime(2).toLocalTime());
 		return jdbcTemplate.queryForObject("SELECT id, start_at FROM reservation_time where id = ?", rowMapper, id);
 	}
 
@@ -42,7 +43,7 @@ public class ReservationTimeRepository {
 		return jdbcTemplate.query("SELECT id, start_at FROM reservation_time",
 				(rs, rowNum) ->
 						new ReservationTime(rs.getLong("id"),
-								rs.getString("start_at"))
+								rs.getTime("start_at").toLocalTime())
 		);
 	}
 

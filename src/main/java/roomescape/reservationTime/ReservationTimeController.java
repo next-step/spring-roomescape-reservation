@@ -16,8 +16,7 @@ public class ReservationTimeController {
 
 	@PostMapping
 	public ReservationTimeResponse saveReservationTime(@RequestBody @Valid ReservationTimeRequest request) {
-		Long id = reservationTimeService.saveReservationTime(request);
-		return reservationTimeService.findReservationTime(id);
+		return reservationTimeService.saveReservationTime(request);
 	}
 
 	@GetMapping

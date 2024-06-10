@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.text.ParseException;
+import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class RoomescapeExceptionHandler {
@@ -22,9 +22,9 @@ public class RoomescapeExceptionHandler {
 		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION,e.getBindingResult().getFieldError().getDefaultMessage());
 	}
 
-	@ExceptionHandler(ParseException.class)
+	@ExceptionHandler(DateTimeParseException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public RoomescapeExceptionResponse hanleParseException() {
-		return RoomescapeExceptionResponse.of(RoomescapeErrorCode.ILLEGAL_INPUT_FORMAT_EXCEPTION);
+		return RoomescapeExceptionResponse.of(RoomescapeErrorCode.ILLEGAL_DATETIME_FORMAT_EXCEPTION);
 	}
 }

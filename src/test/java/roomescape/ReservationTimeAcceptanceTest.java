@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import roomescape.reservationTime.ReservationTimeRequest;
 
-import java.text.ParseException;
-
 import static org.hamcrest.Matchers.is;
 
 @DisplayName("예약 시간 관련 api 호출 테스트")
@@ -18,7 +16,7 @@ import static org.hamcrest.Matchers.is;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationTimeAcceptanceTest {
 	@BeforeEach
-	void 예약_시간_등록() throws ParseException {
+	void 예약_시간_등록() {
 		ReservationTimeRequest request = new ReservationTimeRequest("12:00");
 
 		RestAssured.given().log().all()

@@ -20,7 +20,11 @@ public class ReservationResponse {
 	}
 
 	public ReservationResponse(Reservation reservation) {
-		this(reservation.getId(), reservation.getName(), reservation.getDate(), reservation.getTime(), reservation.getThemeName());
+		this(reservation.getId(),
+				reservation.getName(),
+				reservation.getDate().toString(),
+				reservation.getReservationTime().getStartAt().toString(),
+				reservation.getTheme().getName());
 	}
 
 	public Long getId() {

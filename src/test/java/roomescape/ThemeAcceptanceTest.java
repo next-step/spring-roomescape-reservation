@@ -47,7 +47,7 @@ public class ThemeAcceptanceTest {
 		RestAssured.given().log().all()
 				.when().get("/themes")
 				.then().log().all()
-				.statusCode(204)
+				.statusCode(200)
 				.body("size()", is(0));
 	}
 }

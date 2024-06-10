@@ -1,13 +1,11 @@
 package roomescape.reservationTime;
 
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/times")
 public class ReservationTimeController {
 	private final ReservationTimeService reservationTimeService;
@@ -17,19 +15,18 @@ public class ReservationTimeController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ReservationTimeResponse> saveReservationTime(@RequestBody @Valid ReservationTimeRequest request) {
+	public ReservationTimeResponse saveReservationTime(@RequestBody @Valid ReservationTimeRequest request) {
 		Long id = reservationTimeService.saveReservationTime(request);
-		return ResponseEntity.ok(reservationTimeService.findReservationTime(id));
+		return reservationTimeService.findReservationTime(id);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ReservationTimeResponse>> getReservations() {
-		return ResponseEntity.ok(reservationTimeService.findReservationTimes());
+	public List<ReservationTimeResponse> getReservations() {
+		return reservationTimeService.findReservationTimes();
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+	public void deleteReservation(@PathVariable Long id) {
 		reservationTimeService.deleteReservation(id);
-		return ResponseEntity.ok().build();
 	}
 }

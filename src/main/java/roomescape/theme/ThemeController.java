@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/themes")
 public class ThemeController {
 	private final ThemeService themeService;
@@ -18,8 +18,8 @@ public class ThemeController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ThemeResponse>> getThemes() {
-		return ResponseEntity.ok().body(themeService.findThemes());
+	public List<ThemeResponse> getThemes() {
+		return themeService.findThemes();
 	}
 
 	@PostMapping

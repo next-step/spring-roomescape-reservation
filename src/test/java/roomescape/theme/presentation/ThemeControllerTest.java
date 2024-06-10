@@ -84,4 +84,14 @@ class ThemeControllerTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("size()", is(0));
     }
+
+    @Test
+    @DisplayName("테마 삭제 시 테마를 찾을 수 없는 경우 404를 반환한다.")
+    void deleteTheme_NotFoundTheme() {
+        RestAssured.given().log().all()
+                .when().delete("/themes/1")
+                .then().log().all()
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .body("message", is("존재하지 않는 테마입니다."));
+    }
 }

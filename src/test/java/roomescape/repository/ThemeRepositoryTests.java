@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import roomescape.domain.ReservationTime;
+import roomescape.domain.Theme;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +18,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -26,10 +26,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class ReservationTimeRepositoryTests {
+class ThemeRepositoryTests {
 
 	@InjectMocks
-	private ReservationTimeRepository reservationTimeRepository;
+	private ThemeRepository themeRepository;
 
 	@Mock
 	private JdbcTemplate jdbcTemplate;
@@ -48,50 +48,50 @@ class ReservationTimeRepositoryTests {
 
 		this.jdbcInsert = mock(SimpleJdbcInsert.class);
 
-		ReflectionTestUtils.setField(this.reservationTimeRepository, "jdbcInsert", this.jdbcInsert);
+		ReflectionTestUtils.setField(this.themeRepository, "jdbcInsert", this.jdbcInsert);
 	}
 
 	@Test
-	void saveReservationTime() {
+	void findAll() {
 		// given
-		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();
+		Theme theme = Theme.builder().id(1L).name("테마1").description("첫번째테마").thumbnail("썸네일이미지").build();
 
 		given(this.jdbcInsert.executeAndReturnKey(any(Map.class))).willReturn(1L);
 
 		// when
-		ReservationTime savedReservationTime = this.reservationTimeRepository.save(reservationTime);
+		Theme savedTheme = this.themeRepository.save(theme);
 
 		// then
-		assertThat(savedReservationTime).isNotNull();
-		assertThat(savedReservationTime.getId()).isEqualTo(1L);
+		assertThat(savedTheme).isNotNull();
+		assertThat(savedTheme.getId()).isEqualTo(1L);
 	}
 
 	@Test
-	void deleteReservationTime() {
+	void delete() {
 		// given
 		long id = 1L;
 		given(this.jdbcTemplate.update(anyString(), any(Object[].class))).willReturn(1);
 
 		// when
-		this.reservationTimeRepository.delete(id);
+		this.themeRepository.delete(id);
 
 		// then
 		verify(this.jdbcTemplate).update(anyString(), eq(id));
 	}
 
 	@Test
-	void findReservationTimeById() {
+	void findById() {
 		// given
-		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();
+		Theme theme = Theme.builder().id(1L).name("테마1").description("첫번째테마").thumbnail("썸네일이미지").build();
 
 		given(this.jdbcTemplate.queryForObject(any(String.class), any(RowMapper.class), anyLong()))
-			.willReturn(reservationTime);
+				.willReturn(theme);
 
 		// when
-		ReservationTime result = this.reservationTimeRepository.findById(1L);
+		Theme result = this.themeRepository.findById(1L);
 
 		// then
-		assertThat(result).isEqualTo(reservationTime);
+		assertThat(result).isEqualTo(theme);
 	}
 
 }

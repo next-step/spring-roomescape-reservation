@@ -8,13 +8,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import roomescape.controller.dto.ReservationTimeRequest;
 import roomescape.domain.ReservationTime;
+import roomescape.exception.ErrorCode;
+import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ReservationTimeRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,6 +32,28 @@ class ReservationTimeTests {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
+	}
+
+	@Test
+	void create() {
+		// given
+		ReservationTime reservationTime = ReservationTime.builder().startAt("10:00").build();
+
+		given(this.reservationTimeRepository.save(reservationTime)).willAnswer((invocationOnMock) -> {
+			ReservationTime savedreservationTime = invocationOnMock.getArgument(0);
+			savedreservationTime.setId(1L);
+			return savedreservationTime;
+		});
+
+		ReservationTimeRequest request = new ReservationTimeRequest("10:00");
+
+		// when
+		var createdReservationTime = this.reservationTimeService.create(request);
+
+		// then
+		assertThat(createdReservationTime).isNotNull();
+		assertThat(createdReservationTime.id()).isEqualTo(1L);
+		assertThat(createdReservationTime.startAt()).isEqualTo("10:00");
 	}
 
 	@Test
@@ -55,15 +80,13 @@ class ReservationTimeTests {
 	}
 
 	@Test
-	void deleteReservationTime() {
+	void deleteReservationTimeException() {
 		// given
 		long id = 1L;
 
-		// when
-		this.reservationTimeService.delete(id);
-
-		// then
-		verify(this.reservationTimeRepository, times(1)).delete(id);
+		// when, then
+		assertThatThrownBy(() -> this.reservationTimeService.delete(id)).isInstanceOf(RoomEscapeException.class)
+				.hasMessage(ErrorCode.NOT_FOUND_RESERVATION_TIME.getMessage());
 	}
 
 	@Test

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTime;
+import roomescape.domain.Theme;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -72,12 +73,14 @@ class ReservationRepositoryTests {
 
 		// given
 		ReservationTime reservationTime = ReservationTime.builder().id(1L).startAt("10:00").build();
+		Theme theme = Theme.builder().id(1L).name("테마1").description("첫번째테마").thumbnail("테마이미지").build();
 
 		Reservation reservation = Reservation.builder()
 			.id(1L)
 			.name("tester")
 			.date("2024-06-06")
 			.time(reservationTime)
+			.theme(theme)
 			.build();
 
 		given(this.jdbcInsert.executeAndReturnKey(any(Map.class))).willReturn(1L);
@@ -101,18 +104,6 @@ class ReservationRepositoryTests {
 
 		// then
 		verify(this.jdbcTemplate).update(anyString(), eq(id));
-	}
-
-	@Test
-	void deleteReservationException() {
-
-		// given
-		long id = 1L;
-
-		// when, then
-		assertThatThrownBy(() -> this.reservationRepository.delete(id)).isInstanceOf(RuntimeException.class)
-			.hasMessage("No data found for ID: " + id);
-
 	}
 
 }

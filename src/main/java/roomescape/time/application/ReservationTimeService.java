@@ -10,6 +10,7 @@ import roomescape.time.domain.repository.ReservationTimeRepository;
 import roomescape.time.dto.ReservationTimeCreateRequest;
 import roomescape.time.dto.ReservationTimeResponse;
 import roomescape.time.exception.CannotDeleteReserveTimeException;
+import roomescape.time.exception.ReservationTimeAlreadyExistsException;
 
 @Service
 public class ReservationTimeService {
@@ -24,6 +25,9 @@ public class ReservationTimeService {
     }
 
     public ReservationTimeResponse createReservationTime(ReservationTimeCreateRequest request) {
+        if (reservationTimeRepository.existsByStartAt(request.startAt())) {
+            throw new ReservationTimeAlreadyExistsException("이미 존재하는 시간입니다.");
+        }
         ReservationTime savedResponseTime = reservationTimeRepository.save(request.toEntity());
         return ReservationTimeResponse.from(savedResponseTime);
     }

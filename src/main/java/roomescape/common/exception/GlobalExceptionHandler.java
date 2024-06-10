@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import roomescape.reservation.exception.PastDateReservationException;
 import roomescape.reservation.exception.ReservationAlreadyExistsException;
 import roomescape.time.exception.CannotDeleteReserveTimeException;
+import roomescape.time.exception.ReservationTimeAlreadyExistsException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,6 +45,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.warn("{}", e.getMessage());
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(ReservationTimeAlreadyExistsException.class)
+    public ResponseEntity<Void> handleReservationTimeAlreadyExistsException(ReservationTimeAlreadyExistsException e) {
         log.warn("{}", e.getMessage());
         return ResponseEntity.badRequest().build();
     }

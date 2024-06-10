@@ -21,38 +21,16 @@ public class GlobalExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(CannotDeleteReserveTimeException.class)
-    public ResponseEntity<ExceptionResponse> handleCannotDeleteReservedTimeException(CannotDeleteReserveTimeException e) {
-        log.warn("{}", e.getMessage());
-        return ResponseEntity.badRequest().body(ExceptionResponse.from(e.getMessage()));
-    }
-
-    @ExceptionHandler(ReservationAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleReservationAlreadyExistsException(ReservationAlreadyExistsException e) {
-        log.warn("{}", e.getMessage());
-        return ResponseEntity.badRequest().body(ExceptionResponse.from(e.getMessage()));
-    }
-
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException e) {
-        log.warn("{}", e.getMessage());
-        return ResponseEntity.badRequest().body(ExceptionResponse.from(e.getMessage()));
-    }
-
-    @ExceptionHandler(PastDateReservationException.class)
-    public ResponseEntity<ExceptionResponse> handlePastDateReservationException(PastDateReservationException e) {
+    @ExceptionHandler({CannotDeleteReserveTimeException.class, ReservationAlreadyExistsException.class,
+            NoSuchElementException.class, PastDateReservationException.class,
+            ReservationTimeAlreadyExistsException.class})
+    public ResponseEntity<ExceptionResponse> handleCannotDeleteReservedTimeException(RuntimeException e) {
         log.warn("{}", e.getMessage());
         return ResponseEntity.badRequest().body(ExceptionResponse.from(e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.warn("{}", e.getMessage());
-        return ResponseEntity.badRequest().body(ExceptionResponse.from(e.getMessage()));
-    }
-
-    @ExceptionHandler(ReservationTimeAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> handleReservationTimeAlreadyExistsException(ReservationTimeAlreadyExistsException e) {
         log.warn("{}", e.getMessage());
         return ResponseEntity.badRequest().body(ExceptionResponse.from(e.getMessage()));
     }

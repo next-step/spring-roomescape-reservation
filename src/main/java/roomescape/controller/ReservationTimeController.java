@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static roomescape.controller.dto.ReservationTimeRequest.validateReservationTime;
+
 @RestController
 @RequestMapping("/times")
 public class ReservationTimeController {
@@ -27,6 +29,7 @@ public class ReservationTimeController {
 
 	@PostMapping
 	public ResponseEntity<ReservationTimeResponse> create(@RequestBody ReservationTimeRequest request) {
+		validateReservationTime(request);
 		return ResponseEntity.ok().body(this.reservationTimeService.create(request));
 	}
 

@@ -74,9 +74,9 @@ public class ReservationRepository {
 		return reservation;
 	}
 
-	public boolean isDuplicateReservation(ReservationRequest request) {
+	public boolean isDuplicateReservation(String date, long timeId) {
 		String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time_id = ?";
-		int count = this.jdbcTemplate.queryForObject(sql, Integer.class, request.date(), request.timeId());
+		int count = this.jdbcTemplate.queryForObject(sql, Integer.class, date, timeId);
 		return count > 0;
 	}
 

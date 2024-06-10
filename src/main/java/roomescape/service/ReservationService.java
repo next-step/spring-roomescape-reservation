@@ -71,7 +71,7 @@ public class ReservationService {
 			throw new RoomEscapeException(ErrorCode.PAST_RESERVATION);
 		}
 
-		if (this.reservationRepository.isDuplicateReservation(request)) {
+		if (this.reservationRepository.isDuplicateReservation(request.date(), request.themeId())) {
 			throw new RoomEscapeException(ErrorCode.DUPLICATE_RESERVATION);
 		}
 	}

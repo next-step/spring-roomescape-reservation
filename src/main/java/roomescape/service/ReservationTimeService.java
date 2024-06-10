@@ -10,6 +10,7 @@ import roomescape.exception.ErrorCode;
 import roomescape.exception.RoomEscapeException;
 import roomescape.repository.ReservationTimeRepository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,7 +46,13 @@ public class ReservationTimeService {
 	}
 
 	public ReservationTime getReservationTimeById(long id) {
-		return this.reservationTimeRepository.findById(id);
+		try {
+			return this.reservationTimeRepository.findById(id);
+		}
+		catch (EmptyResultDataAccessException ex) {
+			throw new RoomEscapeException(ErrorCode.NOT_FOUND_RESERVATION_TIME);
+		}
+
 	}
 
 }

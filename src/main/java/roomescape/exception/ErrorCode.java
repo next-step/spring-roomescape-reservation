@@ -3,6 +3,7 @@ package roomescape.exception;
 public enum ErrorCode {
 
 	// @formatter:off
+	INVALID_PARAMETER("RES-0001", "유효하지 않은 값입니다."),
 	INVALID_TIME("RES-0001", "유효하지 않은 시간 값입니다."),
 	INVALID_RESERVATION("RES-0002", "유효하지 않은 예약 정보입니다."),
 

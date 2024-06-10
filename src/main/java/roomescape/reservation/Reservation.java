@@ -4,6 +4,7 @@ import roomescape.reservationTime.ReservationTime;
 import roomescape.theme.Theme;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Reservation {
 	private Long id;
@@ -46,5 +47,9 @@ public class Reservation {
 
 	public Theme getTheme() {
 		return theme;
+	}
+
+	public boolean isBeforeThenNow() {
+		return LocalDateTime.of(date, reservationTime.getStartAt()).isBefore(LocalDateTime.now());
 	}
 }

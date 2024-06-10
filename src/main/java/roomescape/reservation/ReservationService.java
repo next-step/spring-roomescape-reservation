@@ -1,9 +1,9 @@
 package roomescape.reservation;
 
 import org.springframework.stereotype.Service;
+import roomescape.exception.PastDateTimeExeption;
 import roomescape.reservationTime.ReservationTime;
 import roomescape.reservationTime.ReservationTimeRepository;
-import roomescape.reservationTime.ReservationTimeService;
 import roomescape.theme.Theme;
 import roomescape.theme.ThemeRepository;
 
@@ -37,6 +37,10 @@ public class ReservationService {
 		Theme theme = themeRepository.findById(request.getThemeId());
 
 		Reservation reservation = new Reservation(request.getName(), request.getDate(), reservationTime, theme);
+
+		if(reservation.isBeforeThenNow()) {
+			throw new PastDateTimeExeption();
+		}
 
 		return new ReservationResponse(reservationRepository.save(reservation));
 	}

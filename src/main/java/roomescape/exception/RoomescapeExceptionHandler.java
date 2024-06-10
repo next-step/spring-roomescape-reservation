@@ -27,4 +27,10 @@ public class RoomescapeExceptionHandler {
 	public RoomescapeExceptionResponse hanleParseException() {
 		return RoomescapeExceptionResponse.of(RoomescapeErrorCode.ILLEGAL_DATETIME_FORMAT_EXCEPTION);
 	}
+
+	@ExceptionHandler(PastDateTimeExeption.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public RoomescapeExceptionResponse handlePastDateTimeException(PastDateTimeExeption e) {
+		return RoomescapeExceptionResponse.of(e.getErrorCode());
+	}
 }

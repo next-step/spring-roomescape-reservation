@@ -60,7 +60,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	private HttpStatus getStatusForErrorCode(ErrorCode errorCode) {
 		return switch (errorCode) {
-			case INVALID_PARAMETER, INVALID_TIME, INVALID_RESERVATION, PAST_RESERVATION -> HttpStatus.BAD_REQUEST;
+			case INVALID_PARAMETER, INVALID_THEME_NAME, INVALID_THEME_DESCRIPTION, INVALID_THEME_THUMBNAIL,
+					INVALID_TIME, INVALID_RESERVATION, PAST_RESERVATION ->
+				HttpStatus.BAD_REQUEST;
 			case DUPLICATE_RESERVATION -> HttpStatus.CONFLICT;
 			case NOT_FOUND_RESERVATION, NOT_FOUND_RESERVATION_TIME, NOT_FOUND_THEME -> HttpStatus.NOT_FOUND;
 		};

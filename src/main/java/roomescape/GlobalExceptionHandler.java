@@ -1,4 +1,4 @@
-package roomescape.reservation;
+package roomescape;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

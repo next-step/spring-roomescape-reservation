@@ -2,6 +2,7 @@ package roomescape.reservation;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeRequestDto;
+import roomescape.time.ReservationTimeResponseDto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +24,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ReservationControllerTest {
 
     private ReservationRepository reservationRepository;
+    private Long time1Id;
+    private Long time2Id;
+    private String time1 = "";
+    private String time2 = "";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -27,26 +35,54 @@ class ReservationControllerTest {
     @BeforeEach
     void setUp() {
         reservationRepository = new ReservationRepository(jdbcTemplate);
-        jdbcTemplate.execute("DROP TABLE reservation IF EXISTS");
-        jdbcTemplate.execute("CREATE TABLE reservation(" +
-                "id BIGINT AUTO_INCREMENT, " +
-                "name VARCHAR(255) NOT NULL, " +
-                "date VARCHAR(255), " +
-                "time VARCHAR(255), " +
+        jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
+
+        jdbcTemplate.execute("CREATE TABLE reservation_time (" +
+                "id BIGINT NOT NULL AUTO_INCREMENT, " +
+                "start_at VARCHAR(255) NOT NULL, " +
                 "PRIMARY KEY (id))");
+
+        jdbcTemplate.execute("CREATE TABLE reservation (" +
+                "id BIGINT NOT NULL AUTO_INCREMENT, " +
+                "name VARCHAR(255) NOT NULL, " +
+                "date VARCHAR(255) NOT NULL, " +
+                "time_id BIGINT, " +   // 컬럼 수정
+                "PRIMARY KEY (id))");  // 외래키 제거
+
+        final ReservationTime request1 = new ReservationTime("15:40");
+        final ReservationTime request2 = new ReservationTime("16:40");
+        List<Object[]> reservationTimes = Arrays.asList(request1, request2).stream()
+                .map(reservationTime -> new Object[]{reservationTime.getStartAt()})
+                .collect(Collectors.toList());
+        jdbcTemplate.batchUpdate("INSERT INTO reservation_time(start_at) VALUES (?)", reservationTimes);
+
+        var response1 = RestAssured
+                .given().log().all()
+                .when().get("/times")
+                .then().log().all().extract();
+
+        List<ReservationTimeResponseDto> timeResponseDtos = response1.jsonPath().getList(".", ReservationTimeResponseDto.class);
+        time1Id = timeResponseDtos.get(0).getId();
+        time2Id = timeResponseDtos.get(1).getId();
+        time1 = timeResponseDtos.get(0).getStartAt();
+        time2 = timeResponseDtos.get(1).getStartAt();
+
     }
 
     @DisplayName("전체 예약을 조회 합니다.")
     @Test
     void readReservation() {
 
-        // given
-        final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", "15:40");
-        final Reservation reservation2 = new Reservation("심슨", "2023-08-05", "15:40");
+
+        final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", new ReservationTime(time1Id));
+        final Reservation reservation2 = new Reservation("심슨", "2023-08-05", new ReservationTime(time2Id));
+
         List<Object[]> reservations = Arrays.asList(reservation1, reservation2).stream()
-                .map(reservation -> new Object[]{reservation.getName(), reservation.getDate(), reservation.getTime()})
+                .map(reservation -> new Object[]{reservation.getName(), reservation.getDate(), reservation.getReservationTime().getId()})
                 .collect(Collectors.toList());
-        jdbcTemplate.batchUpdate("INSERT INTO reservation(name, date, time) VALUES (?,?,?)", reservations);
+
+        jdbcTemplate.batchUpdate("INSERT INTO reservation(name, date, time_id) VALUES (?,?,?)", reservations);
 
         var response = RestAssured
                 .given().log().all()
@@ -61,7 +97,7 @@ class ReservationControllerTest {
     @Test
     void createReservation() {
         // given
-        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", "15:40");
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", new ReservationTimeRequestDto(time1Id, time1));
 
         // when
         var response = RestAssured.given().log().all()
@@ -75,32 +111,27 @@ class ReservationControllerTest {
         ReservationResponseDto responseDto = response.as(ReservationResponseDto.class);
         assertThat(responseDto.getName()).isEqualTo(request.getName());
         assertThat(responseDto.getDate()).isEqualTo(request.getDate());
-        assertThat(responseDto.getTime()).isEqualTo(request.getTime());
+        assertThat(responseDto.getReservationTimeResponseDto().getStartAt()).isEqualTo(request.getReservationTimeRequestDto().getStartAt());
     }
 
     @DisplayName("예약을 삭제합니다.")
     @Test
-    void deleteReservation(){
+    void deleteReservation() {
         // given
-        final ReservationRequestDto request = new ReservationRequestDto("메이븐", "2023-08-05", "15:40");
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", new ReservationTimeRequestDto(time1Id, time1));
 
         // when
-        var response = RestAssured.given().log().all()
+        var response1 = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().post("/reservations")
                 .then().log().all().extract();
 
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        ReservationResponseDto responseDto = response.as(ReservationResponseDto.class);
-        assertThat(responseDto.getName()).isEqualTo(request.getName());
-        assertThat(responseDto.getDate()).isEqualTo(request.getDate());
-        assertThat(responseDto.getTime()).isEqualTo(request.getTime());
-
         // when
         var response2 = RestAssured.given().log().all()
-                .when().delete("/reservations/"+responseDto.getId())
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().delete("/reservations/" + response1.as(ReservationResponseDto.class).getId())
                 .then().log().all().extract();
 
         // then

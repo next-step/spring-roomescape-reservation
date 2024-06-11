@@ -8,6 +8,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.hamcrest.Matchers.is;
 
@@ -25,10 +26,22 @@ public class MissionStepTest {
 
     @Test
     void reservation() {
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put("name", "브라운");
         params.put("date", "2023-08-05");
-        params.put("time", "15:40");
+
+        Map<String, Object> time = new HashMap<>();
+        time.put("startAt", "15:40");
+        time.put("id", 1);
+        params.put("reservationTimeRequestDto", time);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(time)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("id", is(1));
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

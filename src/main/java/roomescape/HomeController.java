@@ -1,4 +1,4 @@
-package roomescape.reservation;
+package roomescape;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +9,11 @@ public class HomeController {
 
     @GetMapping("/admin/reservation")
     public String adminReservation(Model model) {
-        return "admin/reservation-legacy";
+        return "admin/reservation";
+    }
+
+    @GetMapping("/admin/time")
+    public String time(Model model) {
+        return "admin/time";
     }
 }

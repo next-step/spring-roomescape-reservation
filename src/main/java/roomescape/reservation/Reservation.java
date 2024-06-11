@@ -1,27 +1,27 @@
 package roomescape.reservation;
 
+import roomescape.time.ReservationTime;
+
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Reservation {
-    private static final AtomicLong index = new AtomicLong(1L);
+
     private Long id;
     private String name;
     private String date;
-    private String time;
+    private ReservationTime reservationTime;
 
-    public Reservation(String name, String date, String time) {
-        this.id = index.incrementAndGet();
-        this.name = name;
-        this.date = date;
-        this.time = time;
-    }
-
-    public Reservation(Long id, String name, String date, String time) {
+    public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.reservationTime = reservationTime;
+    }
+
+    public Reservation(String name, String date, ReservationTime reservationTime) {
+        this.name = name;
+        this.date = date;
+        this.reservationTime = reservationTime;
     }
 
     public Long getId() {
@@ -36,8 +36,8 @@ public class Reservation {
         return date;
     }
 
-    public String getTime() {
-        return time;
+    public ReservationTime getReservationTime() {
+        return reservationTime;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Reservation {
         private Long id;
         private String name;
         private String date;
-        private String time;
+        private ReservationTime reservationTime;
 
         public Builder id(Long id) {
             this.id = id;
@@ -74,13 +74,13 @@ public class Reservation {
             return this;
         }
 
-        public Builder time(String time) {
-            this.time = time;
+        public Builder reservationTime(ReservationTime reservationTime) {
+            this.reservationTime = reservationTime;
             return this;
         }
 
         public Reservation build() {
-            return new Reservation(id, name, date, time);
+            return new Reservation(id, name, date, reservationTime);
         }
     }
 
@@ -90,7 +90,7 @@ public class Reservation {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", date='" + date + '\'' +
-                ", time='" + time + '\'' +
+                ", reservationTime='" + reservationTime + '\'' +
                 '}';
     }
 }

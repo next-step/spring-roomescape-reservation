@@ -22,26 +22,41 @@ public class ReservationControllerTest {
     long given_예약시간_id;
     long given_테마_id;
 
+    void given_예약_2024_01_12(){
+        given_예약_삭제();
+        given_예약_시간_10_20();
+        given_테마();
+        SaveReservationRequest given_예약_2024_01_12 = new SaveReservationRequest("김민기","2024-01-12", given_예약시간_id, given_테마_id);
+
+        RestAssured.given().log().all()
+                .body(given_예약_2024_01_12)
+                .contentType(ContentType.JSON)
+                .when().post("/reservations");
+    }
+
+    void given_예약_삭제(){
+        RestAssured.given().log().all()
+                .when().delete("/reservations/1");
+    }
+
     void given_예약_시간_10_20(){
-        SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20");
+        SaveReservationTimeRequest given_예약시간_10_20 = new SaveReservationTimeRequest("10:20");
 
         var response = RestAssured.given().log().all()
-                .body(예약시간_10_20)
+                .body(given_예약시간_10_20)
                 .contentType(ContentType.JSON)
-                .when().post("/times")
-                .then().log().all().extract();
+                .when().post("/times");
 
         given_예약시간_id = response.jsonPath().getLong("id");
     }
 
     void given_테마(){
-        SaveThemeRequest 테마1 = new SaveThemeRequest("테마1", "테마에 대한 설명", "good/wow.png");
+        SaveThemeRequest given_테마 = new SaveThemeRequest("테마", "테마에 대한 설명", "good/wow.png");
 
         var response = RestAssured.given().log().all()
-                .body(테마1)
+                .body(given_테마)
                 .contentType(ContentType.JSON)
-                .when().post("/themes")
-                .then().log().all().extract();
+                .when().post("/themes");
 
         given_테마_id = response.jsonPath().getLong("id");
     }
@@ -59,11 +74,11 @@ public class ReservationControllerTest {
             void it_return_error_for_non_numeric_or_non_hyphen_in_date(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김민기","2024-01-1q", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_날짜_2024_01_1q = new SaveReservationRequest("김민기","2024-01-1q", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_10_20분)
+                        .body(예약_날짜_2024_01_1q)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -76,11 +91,11 @@ public class ReservationControllerTest {
             void it_return_error_for_null_or_empty_date(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김민기","", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_날짜_empty = new SaveReservationRequest("김민기","", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_10_20분)
+                        .body(예약_날짜_empty)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -93,11 +108,11 @@ public class ReservationControllerTest {
             void it_return_error_for_non_string_in_name(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김25","2024-01-12", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_이름_김25 = new SaveReservationRequest("김25","2024-01-12", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_10_20분)
+                        .body(예약_이름_김25)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -110,11 +125,11 @@ public class ReservationControllerTest {
             void it_return_error_for_null_or_empty_name(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("","2024-01-12", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_이름_empty = new SaveReservationRequest("","2024-01-12", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_10_20분)
+                        .body(예약_이름_empty)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -133,13 +148,14 @@ public class ReservationControllerTest {
             @DisplayName("예약한 뒤, 저장한 Dto를 리턴합니다.")
             @Rollback
             void it_return_saved_dto_after_saving_reservation(){
+                given_예약_삭제();
                 given_예약_시간_10_20();
                 given_테마();
-                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김민기","2024-01-10", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_2024_01_10 = new SaveReservationRequest("김민기","2024-01-10", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_10_20분)
+                        .body(예약_2024_01_10)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -153,8 +169,7 @@ public class ReservationControllerTest {
         @DisplayName("목록 List를 리턴합니다.")
         @Rollback
         void it_return_reservations(){
-            Context_with_saving_reservation_time_and_theme reservationTime = new Context_with_saving_reservation_time_and_theme();
-            reservationTime.it_return_saved_dto_after_saving_reservation();
+            given_예약_2024_01_12();
 
             var response = RestAssured
                     .given().log().all()
@@ -173,8 +188,7 @@ public class ReservationControllerTest {
         @DisplayName("삭제하고, void를 리턴합니다.")
         @Rollback
         void it_return_void_and_delete_reservation() {
-            Context_with_saving_reservation_time_and_theme reservationTime = new Context_with_saving_reservation_time_and_theme();
-            reservationTime.it_return_saved_dto_after_saving_reservation();
+            given_예약_2024_01_12();
 
             var response = RestAssured
                     .given().log().all()

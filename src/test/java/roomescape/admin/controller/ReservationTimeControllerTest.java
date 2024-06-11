@@ -20,6 +20,22 @@ public class ReservationTimeControllerTest {
     @DisplayName("예약 시간은")
     class Describe_reservation_time{
 
+        void given_예약_시간_10_20(){
+            given_예약_삭제();
+            SaveReservationTimeRequest given_예약시간_10_20 = new SaveReservationTimeRequest("10:20");
+
+            RestAssured.given().log().all()
+                    .body(given_예약시간_10_20)
+                    .contentType(ContentType.JSON)
+                    .when().post("/times");
+        }
+
+        void given_예약_삭제(){
+            RestAssured.given().log().all()
+                    .when().delete("/times/1");
+
+        }
+
         @Nested
         @DisplayName("데이터 유효성 검증을 진행할 때")
         class Context_with_validate_data{
@@ -71,7 +87,7 @@ public class ReservationTimeControllerTest {
         @Test
         @DisplayName("목록 List를 리턴합니다.")
         void it_return_reservation_times()  {
-            it_return_saved_dto_after_saving_reservation_time();
+            given_예약_시간_10_20();
 
             var response = RestAssured
                     .given().log().all()
@@ -88,7 +104,7 @@ public class ReservationTimeControllerTest {
         @Test
         @DisplayName("삭제하고, void를 리턴합니다.")
         void it_return_void_and_delete_reservation_time(){
-            it_return_saved_dto_after_saving_reservation_time();
+            given_예약_시간_10_20();
 
             var response = RestAssured
                     .given().log().all()

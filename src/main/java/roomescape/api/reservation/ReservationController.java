@@ -39,13 +39,11 @@ public class ReservationController {
 
   @PostMapping
   public Reservation create(@RequestBody CreateReservation createReservation) {
-    Reservation reservation = createReservation.toReservation(generator.incrementAndGet());
-    reservations.add(reservation);
-    return reservation;
+    return repository.save(createReservation);
   }
 
   @DeleteMapping("{id}")
   public void delete(@PathVariable long id) {
-    Reservation removed = reservations.remove(reservations.indexOf(new Reservation(id)));
+    repository.delete(id);
   }
 }

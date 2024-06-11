@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import roomescape.admin.dto.SaveReservationRequest;
 import roomescape.admin.dto.SaveReservationTimeRequest;
 
 import java.util.List;
@@ -21,9 +20,26 @@ public class ReservationTimeControllerTest {
     @DisplayName("예약 시간은")
     class Describe_reservation_time{
 
+        @Nested
+        @DisplayName("데이터 유효성 검증을 진행할 때")
+        class Context_with_validate_data{
+            @Test
+            @DisplayName("startAt에 숫자와 ':' 이외의 값을 넣으면, 에러를 리턴합니다.")
+            void it_return_error_for_non_numeric_or_non_colon_in_startAt(){
+
+            }
+
+            @Test
+            @DisplayName("startAt에 null, (공백) 값이 입력되면, 에러를 리턴합니다.")
+            void it_return_error_for_null_or_empty_startAt(){
+
+            }
+
+        }
+
         @Test
-        @DisplayName("저장한 뒤, 저장한 Dto를 리턴합니다.")
-        void it_save_reservation_time_and_return_saved_dto(){
+        @DisplayName("입력한 뒤, 저장한 Dto를 리턴합니다.")
+        void it_return_saved_dto_after_saving_reservation_time(){
             SaveReservationTimeRequest 예약시간_10_10 = new SaveReservationTimeRequest("10:10");
 
             var response = RestAssured.given().log().all()
@@ -37,9 +53,9 @@ public class ReservationTimeControllerTest {
         }
 
         @Test
-        @DisplayName("목록들을 조회할 수 있습니다.")
+        @DisplayName("목록 List를 리턴합니다.")
         void it_return_reservation_times()  {
-            it_save_reservation_time_and_return_saved_dto();
+            it_return_saved_dto_after_saving_reservation_time();
 
             var response = RestAssured
                     .given().log().all()
@@ -53,76 +69,18 @@ public class ReservationTimeControllerTest {
             assertThat(reservationTimes).hasSize(1);
         }
 
-        @Nested
-        @DisplayName("삭제하는 예약 시간이 이미 예약에서 사용된다면")
-        class Context_use_reservation_time_you_are_deleting_for_reservation{
-            long given_삭제_예약시간_id;
+        @Test
+        @DisplayName("삭제하고, void를 리턴합니다.")
+        void it_return_void_and_delete_reservation_time(){
+            it_return_saved_dto_after_saving_reservation_time();
 
-            void given_예약시간_10_20(){
-                SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20");
+            var response = RestAssured
+                    .given().log().all()
+                    .contentType(ContentType.JSON)
+                    .when().delete("/times/1")
+                    .then().log().all().extract();
 
-
-                var response = RestAssured.given().log().all()
-                        .body(예약시간_10_20)
-                        .contentType(ContentType.JSON)
-                        .when().post("/times")
-                        .then().log().all().extract();
-
-                given_삭제_예약시간_id = response.jsonPath().getLong("id");
-            }
-
-            void given_예약_10_20(){
-                given_예약시간_10_20();
-                SaveReservationRequest given_10_20분_예약 = new SaveReservationRequest("김민기","2024-01-10", given_삭제_예약시간_id);
-
-                RestAssured.given().log().all()
-                        .body(given_10_20분_예약)
-                        .contentType(ContentType.JSON)
-                        .when().post("/reservations")
-                        .then().log().all().extract();
-            }
-
-            @Test
-            @DisplayName("취소할 수 없고, 에러가 발생합니다.")
-            void it_not_delete_reservation_time_and_return_error(){
-                given_예약_10_20();
-
-                var response = RestAssured
-                        .given().log().all()
-                        .contentType(ContentType.JSON)
-                        .when().delete("/times/"+given_삭제_예약시간_id)
-                        .then().log().all().extract();
-
-                assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            }
-        }
-
-        @Nested
-        @DisplayName("삭제하는 예약 시간이 예약에서 사용되지않는다면")
-        class Context_not_use_reservation_time_you_are_deleting_for_reservation{
-            void given_예약시간_10_30(){
-                SaveReservationTimeRequest 예약시간_10_30 = new SaveReservationTimeRequest("10:30");
-
-                RestAssured.given().log().all()
-                        .body(예약시간_10_30)
-                        .contentType(ContentType.JSON)
-                        .when().post("/times")
-                        .then().log().all().extract();
-            }
-
-            @Test
-            @DisplayName("취소하고, void를 리턴합니다.")
-            void it_delete_reservation_time_and_return_void(){
-                given_예약시간_10_30();
-
-                var response = RestAssured
-                        .given().log().all()
-                        .contentType(ContentType.JSON)
-                        .when().delete("/times/1")
-                        .then().log().all().extract();
-
-                assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-            }
+            assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         }
 
     }

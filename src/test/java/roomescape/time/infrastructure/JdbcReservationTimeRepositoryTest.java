@@ -1,7 +1,6 @@
 package roomescape.time.infrastructure;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -15,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 import roomescape.time.domain.ReservationTime;
+import roomescape.time.domain.repository.ReservationTimeRepository;
 
 @JdbcTest
 class JdbcReservationTimeRepositoryTest {
@@ -25,7 +25,7 @@ class JdbcReservationTimeRepositoryTest {
     @Autowired
     private DataSource dataSource;
 
-    private JdbcReservationTimeRepository reservationTimeRepository;
+    private ReservationTimeRepository reservationTimeRepository;
 
     @BeforeEach
     void setUp() {
@@ -65,10 +65,26 @@ class JdbcReservationTimeRepositoryTest {
     }
 
     @Test
-    @DisplayName("예약 시간을 삭제한다.")
-    void testDelete() {
-        reservationTimeRepository.delete(1L);
+    @DisplayName("예약 시간이 존재하면 TRUE를 반환한다.")
+    void existsByStartAt() {
+        boolean exists = reservationTimeRepository.existsByStartAt(LocalTime.parse("15:40"));
 
-        assertThatThrownBy(() -> reservationTimeRepository.findById(1L));
+        assertThat(exists).isTrue();
+    }
+
+    @Test
+    @DisplayName("예약 시간이 존재하지 않으면 FALSE를 반환한다.")
+    void notExistsByStartAt() {
+        boolean exists = reservationTimeRepository.existsByStartAt(LocalTime.parse("10:40"));
+
+        assertThat(exists).isFalse();
+    }
+
+    @Test
+    @DisplayName("예약 시간을 삭제한다.")
+    void testDeleteById() {
+        reservationTimeRepository.deleteById(1L);
+
+        assertThat(reservationTimeRepository.findById(1L)).isEmpty();
     }
 }

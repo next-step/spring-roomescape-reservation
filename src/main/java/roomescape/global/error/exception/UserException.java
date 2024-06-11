@@ -1,4 +1,4 @@
-package roomescape.time.global.error.exception;
+package roomescape.global.error.exception;
 
 public class UserException extends RuntimeException {
 

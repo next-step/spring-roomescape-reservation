@@ -1,4 +1,4 @@
-package roomescape.time.global.error;
+package roomescape.global.error;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

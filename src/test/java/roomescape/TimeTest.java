@@ -11,8 +11,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.time.global.error.exception.ErrorCode;
-import roomescape.time.global.error.exception.InvalidValueException;
+import roomescape.time.error.exception.ErrorCode;
+import roomescape.time.error.exception.TimeException;
 import roomescape.time.presentation.dto.TimeRequest;
 
 import java.util.HashMap;
@@ -100,13 +100,13 @@ public class TimeTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"24:01", "-1:32", "12;30", "01:61"})
-    void 시간_형식이_맞지_않는_경우_InvalidValueException_예외를_발생시킨다(String startAt) {
+    void 시간_형식이_맞지_않는_경우_예외를_발생시킨다(String startAt) {
 
         //given
         TimeRequest timeRequest = new TimeRequest(startAt);
 
         //when, then
-        Assertions.assertThatThrownBy(timeRequest::convertToDomainObject).isInstanceOf(InvalidValueException.class).hasMessage(ErrorCode.INVALID_TIME_FORMAT_ERROR.getErrorMessage());
+        Assertions.assertThatThrownBy(timeRequest::convertToDomainObject).isInstanceOf(TimeException.class).hasMessage(ErrorCode.INVALID_TIME_FORMAT_ERROR.getErrorMessage());
     }
 
     @ParameterizedTest
@@ -116,7 +116,7 @@ public class TimeTest {
         //given
         TimeRequest timeRequest = new TimeRequest(startAt);
 
-        //when. then
+        //when, then
         Assertions.assertThatCode(timeRequest::convertToDomainObject).doesNotThrowAnyException();
     }
 }

@@ -1,7 +1,7 @@
 package roomescape.time.domain;
 
-import roomescape.time.global.error.exception.ErrorCode;
-import roomescape.time.global.error.exception.InvalidValueException;
+import roomescape.time.error.exception.ErrorCode;
+import roomescape.time.error.exception.TimeException;
 
 public class Time {
 
@@ -12,7 +12,7 @@ public class Time {
 
     public Time(Long id, String startAt) {
         this.id = id;
-        checkStartAtFormat(startAt);
+        checkFormats(startAt);
         this.startAt = startAt;
     }
 
@@ -24,10 +24,9 @@ public class Time {
         return startAt;
     }
 
-    private void checkStartAtFormat(String startAt) {
-        boolean result = startAt.matches(REGEX_FORMAT);
-        if (!result) {
-            throw new InvalidValueException(ErrorCode.INVALID_TIME_FORMAT_ERROR);
+    private void checkFormats(String startAt) {
+        if (!startAt.matches(REGEX_FORMAT)) {
+            throw new TimeException(ErrorCode.INVALID_TIME_FORMAT_ERROR);
         }
     }
 }

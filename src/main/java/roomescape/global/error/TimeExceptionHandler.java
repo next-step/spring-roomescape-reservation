@@ -1,10 +1,10 @@
-package roomescape.time.global.error;
+package roomescape.global.error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import roomescape.time.global.error.exception.InvalidValueException;
+import roomescape.time.error.exception.TimeException;
 
 import java.util.List;
 
@@ -12,11 +12,10 @@ import java.util.List;
 public class TimeExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> invalidExceptionHandler(InvalidValueException invalidValueException) {
-        HttpStatus httpStatus = HttpStatus.valueOf(invalidValueException.getStatus());
-        List<String> messages = List.of(invalidValueException.getMessage());
+    public ResponseEntity<ErrorResponse> timeExceptionHandler(TimeException timeException) {
+        HttpStatus httpStatus = HttpStatus.valueOf(timeException.getStatus());
+        List<String> messages = List.of(timeException.getMessage());
         ErrorResponse errorResponse = ErrorResponse.of(httpStatus, messages);
-
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
@@ -25,7 +24,6 @@ public class TimeExceptionHandler {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         List<String> messages = List.of(runtimeException.getMessage());
         ErrorResponse errorResponse = ErrorResponse.of(httpStatus, messages);
-
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
@@ -34,7 +32,6 @@ public class TimeExceptionHandler {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         List<String> messages = List.of(exception.getMessage());
         ErrorResponse errorResponse = ErrorResponse.of(httpStatus, messages);
-
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 }

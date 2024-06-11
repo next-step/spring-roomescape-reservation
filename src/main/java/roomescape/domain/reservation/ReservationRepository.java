@@ -1,4 +1,4 @@
-package roomescape.api.reservation;
+package roomescape.domain.reservation;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;

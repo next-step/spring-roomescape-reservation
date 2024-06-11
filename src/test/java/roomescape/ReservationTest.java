@@ -7,9 +7,17 @@ import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.reservation.domain.Reservation;
+import roomescape.reservation.error.exception.ErrorCode;
+import roomescape.reservation.error.exception.ReservationException;
+import roomescape.reservation.presentation.dto.ReservationRequest;
+import roomescape.theme.domain.Theme;
+import roomescape.time.domain.Time;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +37,7 @@ public class ReservationTest {
     private static final String TIME_ID = "timeId";
     private static final String THEME_ID = "themeId";
     private static final String START_AT = "startAt";
-    private static final String RESERVATION_NAME = "john";
+    private static final String RESERVATION_NAME = "johnPark";
     private static final String RESERVATION_DATE = "2023-08-05";
     private static final String TIME = "15:40";
     private static final int ONE = 1;
@@ -37,9 +45,12 @@ public class ReservationTest {
     private static final String WILD_CARD = "$";
     private static final String DESCRIPTION = "description";
     private static final String THUMBNAIL = "thumbnail";
-    private static final String THEME_NAME = "공포 테마";
+    private static final String THEME_NAME = "무시무시한 공포 테마";
     private static final String THEME_DESCRIPTION = "오싹";
     private static final String THEME_THUMBNAIL = "www.youtube.com/boorownie";
+
+    private Theme theme = null;
+    private Time time = null;
 
     @BeforeEach
     void 시간_예약을_추가한다() {
@@ -59,6 +70,7 @@ public class ReservationTest {
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(ONE);
+        this.time = new Time(response.jsonPath().getLong(ID), response.jsonPath().getString(START_AT));
     }
 
     @BeforeEach
@@ -81,6 +93,7 @@ public class ReservationTest {
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(ONE);
+        this.theme = new Theme(response.jsonPath().getLong(ID), response.jsonPath().getString(NAME), response.jsonPath().getString(DESCRIPTION), response.jsonPath().getString(THUMBNAIL));
     }
 
     @Test
@@ -151,5 +164,49 @@ public class ReservationTest {
 
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"가", "a", "가나다라마바사아자차카타파하거너더러머버서"})
+    void 예약_생성_중에_이름의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongNameExample) {
+
+        //given
+        ReservationRequest reservationRequest = new ReservationRequest(wrongNameExample, RESERVATION_DATE, this.time.getId(), theme.getId());
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).isInstanceOf(ReservationException.class).hasMessage(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR.getErrorMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"박민욱", "브라운", "uzbeksAliddin Buriev"})
+    void 예약_생성_중에_이름의_형식이_맞는_경우_예외를_발생하지_않는다(String rightNameExample) {
+
+        //given
+        ReservationRequest reservationRequest = new ReservationRequest(rightNameExample, RESERVATION_DATE, this.time.getId(), theme.getId());
+
+        //when, then
+        Assertions.assertThatCode(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"2024.06.12", "2023-02-29", "2021-04-31", "2100-01-01", "1899-12-31"})
+    void 예약_생성_중에_날짜의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongDateExample) {
+
+        //given
+        ReservationRequest reservationRequest = new ReservationRequest(RESERVATION_NAME, wrongDateExample, this.time.getId(), theme.getId());
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).isInstanceOf(ReservationException.class).hasMessage(ErrorCode.INVALID_THEME_DATE_FORMAT_ERROR.getErrorMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"2024-06-12", "2024-02-29", "1999-12-31"})
+    void 예약_생성_중에_날짜의_형식이_맞는_경우_예외를_발생하지_않는다(String rightDateExample) {
+
+        //given
+        ReservationRequest reservationRequest = new ReservationRequest(RESERVATION_NAME, rightDateExample, this.time.getId(), theme.getId());
+
+        //when, then
+        Assertions.assertThatCode(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).doesNotThrowAnyException();
     }
 }

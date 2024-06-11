@@ -1,5 +1,6 @@
 package roomescape.application.api.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import roomescape.application.service.command.CreateReservationTimeCommand;
 
@@ -10,6 +11,7 @@ public class CreateReservationTimeRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
     private final LocalTime startAt;
 
+    @JsonCreator
     public CreateReservationTimeRequest(LocalTime startAt) {
         this.startAt = startAt;
     }

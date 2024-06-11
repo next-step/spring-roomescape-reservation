@@ -2,7 +2,6 @@ package roomescape.theme;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -31,7 +30,7 @@ public class ThemeController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteThemes(@PathVariable String id) {
-		themeService.deleteThemes(Long.parseLong(id));
+		themeService.deleteTheme(Long.parseLong(id));
 		return ResponseEntity.noContent().build();
 	}
 }

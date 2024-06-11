@@ -1,5 +1,6 @@
 package roomescape.exception;
 
+import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,12 @@ public class RoomescapeExceptionHandler {
 		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION, e.getBindingResult().getFieldError().getDefaultMessage());
 	}
 
+	@ExceptionHandler(DuplicateRequestException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public RoomescapeExceptionResponse handleDuplicateRequestException(DuplicateRequestException e) {
+		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.EXISTS_EXCEPTION, e.getMessage());
+	}
+
 	@ExceptionHandler(DateTimeParseException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public RoomescapeExceptionResponse hanleParseException() {
@@ -34,9 +41,9 @@ public class RoomescapeExceptionHandler {
 		return RoomescapeExceptionResponse.of(e.getErrorCode());
 	}
 
-	@ExceptionHandler(AlreadyExistsException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public RoomescapeExceptionResponse handleReservationAlreayExistsException(AlreadyExistsException e) {
+	@ExceptionHandler(ReferentialIntegrityException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public RoomescapeExceptionResponse handleReservationAlreayExistsException(ReferentialIntegrityException e) {
 		return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
 	}
 

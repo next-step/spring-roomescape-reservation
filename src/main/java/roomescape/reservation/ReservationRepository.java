@@ -75,25 +75,19 @@ public class ReservationRepository {
 		return jdbcTemplate.queryForObject(sql, rowMapper, id);
 	}
 
-	public int countByDateAndTimeAndTheme(LocalDate date, Long timeId, Long themeId) {
-		String sql = new StringBuilder()
-				.append("SELECT ")
-				.append("r.id as reservation_id, ")
-				.append("r.name as reservation_name, ")
-				.append("r.date as reservation_date, ")
-				.append("t.id as time_id, ")
-				.append("t.start_at as time_start_at, ")
-				.append("th.id as theme_id, ")
-				.append("th.name as theme_name, ")
-				.append("th.description as theme_description, ")
-				.append("th.thumbnail as theme_thumbnail ")
-				.append("FROM reservation as r ")
-				.append("inner join reservation_time as t ")
-				.append("on r.time_id = t.id ")
-				.append("inner join theme as th ")
-				.append("on r.theme_id = th.id").toString();
+	public int countByTime(Long timeId) {
+		String sql = "SELECT COUNT(*) FROM reservation WHERE time_id = ?";
+		return jdbcTemplate.queryForObject(sql, Integer.class, timeId);
+	}
 
-		return this.jdbcTemplate.queryForObject("SELECT COUNT(*) FROM reservation WHERE date = ? AND time_id = ? AND theme_id = ?", Integer.class, date.toString(), timeId, themeId);
+	public int countByTheme(Long themeId) {
+		String sql = "SELECT COUNT(*) FROM reservation WHERE theme_id = ?";
+		return jdbcTemplate.queryForObject(sql, Integer.class, themeId);
+	}
+
+	public int countByDateAndTimeAndTheme(LocalDate date, Long timeId, Long themeId) {
+		String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time_id = ? AND theme_id = ?";
+		return jdbcTemplate.queryForObject(sql, Integer.class, date.toString(), timeId, themeId);
 	}
 
 	public Reservation save(Reservation reservation) {

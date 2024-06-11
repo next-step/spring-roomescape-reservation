@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.reservation.ReservationRequest;
+import roomescape.reservationTime.ReservationTimeRequest;
 import roomescape.theme.ThemeRequest;
 
 import static org.hamcrest.Matchers.is;
@@ -49,5 +51,29 @@ public class ThemeAcceptanceTest {
 				.then().log().all()
 				.statusCode(200)
 				.body("size()", is(0));
+	}
+
+	@Test
+	void 예약이_존재하는_테마_삭제_실패() {
+		ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("12:00");
+		RestAssured.given().log().all()
+				.contentType(ContentType.JSON)
+				.body(reservationTimeRequest)
+				.when().post("/times")
+				.then().log().all()
+				.statusCode(200);
+
+		ReservationRequest reservationRequest = new ReservationRequest("hhhhhwi", "2025-08-05", 1L, 1L);
+		RestAssured.given().log().all()
+				.contentType(ContentType.JSON)
+				.body(reservationRequest)
+				.when().post("/reservations")
+				.then().log().all()
+				.statusCode(200);
+
+		RestAssured.given().log().all()
+				.when().delete("/themes/1")
+				.then().log().all()
+				.statusCode(409);
 	}
 }

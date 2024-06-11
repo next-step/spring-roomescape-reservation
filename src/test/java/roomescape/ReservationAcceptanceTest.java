@@ -73,7 +73,7 @@ public class ReservationAcceptanceTest {
 		assertThat(firstResponse.statusCode()).isEqualTo(200);
 
 		ExtractableResponse<Response> secondResponse = 예약_등록(request);
-		assertThat(secondResponse.statusCode()).isEqualTo(400);
+		assertThat(secondResponse.statusCode()).isEqualTo(409);
 	}
 
 	@Test

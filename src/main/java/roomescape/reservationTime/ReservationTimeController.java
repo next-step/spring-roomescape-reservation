@@ -20,12 +20,12 @@ public class ReservationTimeController {
 	}
 
 	@GetMapping
-	public List<ReservationTimeResponse> getReservations() {
+	public List<ReservationTimeResponse> getReservationTimes() {
 		return reservationTimeService.findReservationTimes();
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteReservation(@PathVariable Long id) {
-		reservationTimeService.deleteReservation(id);
+	public void deleteReservationTime(@PathVariable Long id) {
+		reservationTimeService.deleteReservationTime(id);
 	}
 }

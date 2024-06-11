@@ -1,9 +1,9 @@
 package roomescape.reservation;
 
+import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.stereotype.Service;
 import roomescape.exception.NotExistsException;
 import roomescape.exception.PastDateTimeExeption;
-import roomescape.exception.AlreadyExistsException;
 import roomescape.reservationTime.ReservationTime;
 import roomescape.reservationTime.ReservationTimeRepository;
 import roomescape.theme.Theme;
@@ -48,7 +48,7 @@ public class ReservationService {
 		}
 
 		if(reservationRepository.countByDateAndTimeAndTheme(reservation.getDate(), reservationTime.getId(), theme.getId()) > 0) {
-			throw new AlreadyExistsException("해당 시간 예약이");
+			throw new DuplicateRequestException("해당 시간 예약이");
 		}
 
 		return new ReservationResponse(reservationRepository.save(reservation));

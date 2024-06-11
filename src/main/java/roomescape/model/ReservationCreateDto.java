@@ -4,15 +4,12 @@ public class ReservationCreateDto {
 
     private String date;
     private String name;
-    private String time;
+    private Long timeId;
 
-    public ReservationCreateDto() {
-    }
-
-    public ReservationCreateDto(String date, String name, String time) {
+    public ReservationCreateDto(String date, String name, Long timeId) {
         this.date = date;
         this.name = name;
-        this.time = time;
+        this.timeId = timeId;
     }
 
     public String getDate() {
@@ -23,7 +20,7 @@ public class ReservationCreateDto {
         return name;
     }
 
-    public String getTime() {
-        return time;
+    public Long getTimeId() {
+        return timeId;
     }
 }

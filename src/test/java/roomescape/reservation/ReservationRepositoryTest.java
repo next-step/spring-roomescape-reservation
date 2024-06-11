@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import roomescape.reservationTime.ReservationTime;
-import roomescape.reservationTime.ReservationTimeRepository;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +44,6 @@ class ReservationRepositoryTest {
                 "date VARCHAR(255) NOT NULL, " +
                 "time_id BIGINT, " +   // 컬럼 수정
                 "PRIMARY KEY (id))");  // 외래키 제거
-
     }
 
     @DisplayName("예약 전체 조회")
@@ -70,7 +69,6 @@ class ReservationRepositoryTest {
         for (Reservation reservation : actual) {
             System.out.println("reservation = " + reservation.toString());
         }
-
         // then
         assertThat(actual).hasSize(2);
     }
@@ -90,7 +88,6 @@ class ReservationRepositoryTest {
 
         // then
         Reservation actual = reservationRepository.findById(savedReservationId);
-
         assertThat(actual.getDate()).isEqualTo(request.getDate());
         assertThat(actual.getName()).isEqualTo(request.getName());
     }
@@ -111,7 +108,6 @@ class ReservationRepositoryTest {
 
         // then
         assertThatThrownBy(() -> reservationRepository.findById(savedReservationId))
-
                 .isInstanceOf(DataAccessException.class);
 
 

@@ -1,11 +1,13 @@
 package roomescape.reservation;
 
-import roomescape.reservationTime.ReservationTimeRequestDto;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeRequestDto;
 
 public class ReservationRequestDto {
     private String name;
     private String date;
     private ReservationTimeRequestDto reservationTimeRequestDto;
+
 
     public String getName() {
         return name;

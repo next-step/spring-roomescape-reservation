@@ -2,8 +2,8 @@ package roomescape.reservation;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import roomescape.reservationTime.ReservationTime;
-import roomescape.reservationTime.ReservationTimeResponseDto;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeResponseDto;
 
 import java.util.List;
 
@@ -63,20 +63,5 @@ public class ReservationService {
         }
         reservationRepository.deleteById(id);
     }
-
-
-    public ReservationResponseDto findById(Long id) {
-        Reservation reservation = reservationRepository.findById(id);
-        return new ReservationResponseDto.Builder()
-                .id(reservation.getId())
-                .name(reservation.getName())
-                .date(reservation.getDate())
-                .reservationTimeResponseDto(
-                        new ReservationTimeResponseDto(
-                                reservation.getReservationTime().getId(),
-                                reservation.getReservationTime().getStartAt()))
-                .build();
-    }
-
 
 }

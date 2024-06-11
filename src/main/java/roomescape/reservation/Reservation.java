@@ -1,6 +1,6 @@
 package roomescape.reservation;
 
-import roomescape.reservationTime.ReservationTime;
+import roomescape.time.ReservationTime;
 
 import java.util.Objects;
 
@@ -11,23 +11,33 @@ public class Reservation {
     private String date;
     private ReservationTime reservationTime;
 
-    public Long getId() { return id; }
-
-    public String getName() { return name; }
-
-    public String getDate() { return date; }
-
-    public ReservationTime getReservationTime() { return reservationTime; }
-
-    public Reservation(String name, String date, ReservationTime reservationTime) {
-        this(null, name, date, reservationTime);
-    }
-
     public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.reservationTime = reservationTime;
+    }
+
+    public Reservation(String name, String date, ReservationTime reservationTime) {
+        this.name = name;
+        this.date = date;
+        this.reservationTime = reservationTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public ReservationTime getReservationTime() {
+        return reservationTime;
     }
 
     @Override
@@ -48,7 +58,6 @@ public class Reservation {
         private String name;
         private String date;
         private ReservationTime reservationTime;
-
 
         public Builder id(Long id) {
             this.id = id;
@@ -72,38 +81,6 @@ public class Reservation {
 
         public Reservation build() {
             return new Reservation(id, name, date, reservationTime);
-
-        }
-    }
-
-    public static class Builder {
-        private Long id;
-        private String name;
-        private String date;
-        private String time;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder date(String date) {
-            this.date = date;
-            return this;
-        }
-
-        public Builder time(String time) {
-            this.time = time;
-            return this;
-        }
-
-        public Reservation build() {
-            return new Reservation(id, name, date, time);
         }
     }
 

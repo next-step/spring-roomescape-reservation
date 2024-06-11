@@ -1,12 +1,20 @@
 package roomescape.reservation;
 
-import roomescape.reservationTime.ReservationTimeResponseDto;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeResponseDto;
 
 public class ReservationResponseDto {
     private Long id;
     private String name;
     private String date;
     private ReservationTimeResponseDto reservationTimeResponseDto;
+
+    public ReservationResponseDto(Long id, String name, String date, ReservationTimeResponseDto reservationTimeResponseDto) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.reservationTimeResponseDto = reservationTimeResponseDto;
+    }
 
     public Long getId() {
         return id;
@@ -22,15 +30,6 @@ public class ReservationResponseDto {
 
     public ReservationTimeResponseDto getReservationTimeResponseDto() {
         return reservationTimeResponseDto;
-
-    }
-
-    public ReservationResponseDto(Long id, String name, String date, ReservationTimeResponseDto reservationTimeResponseDto) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.reservationTimeResponseDto = reservationTimeResponseDto;
-
     }
 
     public static class Builder {

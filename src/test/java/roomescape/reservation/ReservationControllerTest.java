@@ -2,6 +2,7 @@ package roomescape.reservation;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import roomescape.reservationTime.ReservationTime;
-import roomescape.reservationTime.ReservationTimeRequestDto;
-import roomescape.reservationTime.ReservationTimeResponseDto;
+import roomescape.time.ReservationTime;
+import roomescape.time.ReservationTimeRequestDto;
+import roomescape.time.ReservationTimeResponseDto;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,28 +38,17 @@ class ReservationControllerTest {
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
-        jdbcTemplate.execute(
-                """
-                        CREATE TABLE reservation_time (
-                            id BIGINT NOT NULL AUTO_INCREMENT, 
-                            start_at VARCHAR(255) NOT NULL,
-                            PRIMARY KEY (id)
-                        )
-                        """
-        );
+        jdbcTemplate.execute("CREATE TABLE reservation_time (" +
+                "id BIGINT NOT NULL AUTO_INCREMENT, " +
+                "start_at VARCHAR(255) NOT NULL, " +
+                "PRIMARY KEY (id))");
 
-        jdbcTemplate.execute(
-                """
-                        CREATE TABLE reservation (
-                            id BIGINT NOT NULL AUTO_INCREMENT, 
-                            name VARCHAR(255) NOT NULL, 
-                            date VARCHAR(255) NOT NULL, 
-                            time_id BIGINT,
-                            PRIMARY KEY (id),
-                            FOREIGN KEY (time_id) REFERENCES reservation_time (id)
-                        )
-                        """
-        );
+        jdbcTemplate.execute("CREATE TABLE reservation (" +
+                "id BIGINT NOT NULL AUTO_INCREMENT, " +
+                "name VARCHAR(255) NOT NULL, " +
+                "date VARCHAR(255) NOT NULL, " +
+                "time_id BIGINT, " +   // 컬럼 수정
+                "PRIMARY KEY (id))");  // 외래키 제거
 
         final ReservationTime request1 = new ReservationTime("15:40");
         final ReservationTime request2 = new ReservationTime("16:40");
@@ -83,6 +73,7 @@ class ReservationControllerTest {
     @DisplayName("전체 예약을 조회 합니다.")
     @Test
     void readReservation() {
+
 
         final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", new ReservationTime(time1Id));
         final Reservation reservation2 = new Reservation("심슨", "2023-08-05", new ReservationTime(time2Id));
@@ -141,7 +132,6 @@ class ReservationControllerTest {
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().delete("/reservations/" + response1.as(ReservationResponseDto.class).getId())
-
                 .then().log().all().extract();
 
         // then

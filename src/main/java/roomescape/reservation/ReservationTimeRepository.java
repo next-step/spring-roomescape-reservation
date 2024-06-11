@@ -18,7 +18,7 @@ public class ReservationTimeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public ReservationTime addReservationTime(ReservationTime reservationTime) {
+    public ReservationTimeEntity addReservationTime(ReservationTimeEntity reservationTime) {
         String sql = String.format("insert into %s (start_At) values(?)", TABLE_NAME);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -37,13 +37,13 @@ public class ReservationTimeRepository {
         return reservationTime;
     }
 
-    public List<ReservationTime> reservationTimes() {
+    public List<ReservationTimeEntity> reservationTimes() {
         String sql = String.format("select id, start_At from %s", TABLE_NAME);
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    private final RowMapper<ReservationTime> rowMapper = (resultSet, rowNum) ->
-            new ReservationTime(
+    private final RowMapper<ReservationTimeEntity> rowMapper = (resultSet, rowNum) ->
+            new ReservationTimeEntity(
                     resultSet.getLong("id"),
                     resultSet.getString("start_At")
             );

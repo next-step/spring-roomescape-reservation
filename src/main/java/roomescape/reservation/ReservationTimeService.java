@@ -10,15 +10,19 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    private ReservationTimeRepository reservationTimeRepository;
-
-    public ReservationTime add(ReservationTime newReservationTime) {
-        return reservationTimeRepository.addReservationTime(newReservationTime);
-    }
+    private final ReservationTimeRepository reservationTimeRepository;
 
     public List<ReservationTime> reservationTimes() {
-        return reservationTimeRepository.reservationTimes();
+        return reservationTimeRepository
+                .reservationTimes()
+                .stream()
+                .map(ReservationTime::new)
+                .toList();
+    }
 
+    public ReservationTime add(ReservationTime newReservationTime) {
+         ReservationTimeEntity entity = reservationTimeRepository.addReservationTime(newReservationTime.toEntity());
+         return new ReservationTime(entity);
     }
 
     public void delete(Long id) {

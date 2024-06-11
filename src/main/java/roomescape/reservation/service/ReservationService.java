@@ -16,7 +16,6 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    @Transactional
     public Reservation save(Reservation reservation) {
         long id = reservationRepository.save(reservation);
         return findById(id);

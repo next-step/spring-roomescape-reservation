@@ -38,10 +38,10 @@ public class Reservation {
     }
 
     public String fetchReservationDateTime(String pattern) {
-        return reservationDateTime.fetchReservationDateTime(pattern);
+        return reservationDateTime.getFormatted(pattern);
     }
 
     public LocalDateTime getReservationDateTime() {
-        return reservationDateTime.reservationDateTime();
+        return reservationDateTime.dateTime();
     }
 }

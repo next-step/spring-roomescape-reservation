@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class FindReservationsResponse {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String TIME_FORMAT = "HH:mm";
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final String TIME_PATTERN = "HH:mm";
 
     private final Long id;
 
@@ -30,8 +30,8 @@ public class FindReservationsResponse {
         return new FindReservationsResponse(
                 reservation.getId(),
                 reservation.getReservationName(),
-                reservation.fetchReservationDateTime(DATE_FORMAT),
-                reservation.fetchReservationDateTime(TIME_FORMAT)
+                reservation.fetchReservationDateTime(DATE_PATTERN),
+                reservation.fetchReservationDateTime(TIME_PATTERN)
         );
     }
 

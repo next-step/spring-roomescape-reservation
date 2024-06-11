@@ -5,13 +5,13 @@ import roomescape.domain.validator.ObjectValidator;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public record ReservationDateTime(LocalDateTime reservationDateTime) {
+public record ReservationDateTime(LocalDateTime dateTime) {
 
     public ReservationDateTime {
-        ObjectValidator.validateNotNull(reservationDateTime);
+        ObjectValidator.validateNotNull(dateTime);
     }
 
-    public String fetchReservationDateTime(String pattern) {
-        return reservationDateTime.format(DateTimeFormatter.ofPattern(pattern));
+    public String getFormatted(String pattern) {
+        return dateTime.format(DateTimeFormatter.ofPattern(pattern));
     }
 }

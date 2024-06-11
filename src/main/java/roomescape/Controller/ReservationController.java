@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +7,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import roomescape.DTO.ReservationRequest;
+import roomescape.DTO.ReservationResponse;
+import roomescape.Entity.Reservation;
+import roomescape.Entity.ReservationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -14,15 +18,6 @@ import java.util.List;
 @Controller
 public class ReservationController {
     private final JdbcTemplate jdbcTemplate;
-    private final String SELECT_RESERVATION_SQL = "SELECT " +
-            "r.id as reservation_id, " +
-            "r.name as reservation_name, " +
-            "r.date as reservation_date, " +
-            "t.id as time_id, " +
-            "t.start_at as time_start_at, " +
-            "FROM reservation as r " +
-            "INNER JOIN reservation_time as t " +
-            "ON r.time_id = t.id";
 
     public ReservationController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -35,7 +30,7 @@ public class ReservationController {
         );
         return new Reservation(
                 resultSet.getLong("reservation_id"),
-                resultSet.getNString("reservation_name"),
+                resultSet.getString("reservation_name"),
                 resultSet.getString("reservation_date"),
                 reservationTime
         );
@@ -47,30 +42,48 @@ public class ReservationController {
     }
 
     @GetMapping("reservations")
-    public ResponseEntity<List<Reservation>> read() {
-        List<Reservation> reservations = jdbcTemplate.query(SELECT_RESERVATION_SQL, reservationRowMapper);
-        return ResponseEntity.ok().body(reservations);
+    public ResponseEntity<List<ReservationResponse>> read() {
+        String sql = "SELECT " +
+                "r.id as reservation_id, " +
+                "r.name as reservation_name, " +
+                "r.date as reservation_date, " +
+                "t.id as time_id, " +
+                "t.start_at as time_start_at, " +
+                "FROM reservation as r " +
+                "INNER JOIN reservation_time as t " +
+                "ON r.time_id = t.id";
+        List<Reservation> reservations = jdbcTemplate.query(sql, reservationRowMapper);
+        return ResponseEntity.ok().body(ReservationResponse.toDTOList(reservations));
     }
 
     @PostMapping("reservations")
-    public ResponseEntity<Reservation> create(@RequestBody Reservation newReservation) {
+    public ResponseEntity<ReservationResponse> create(@RequestBody ReservationRequest request) {
         try {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(connection -> {
                 String sql = "insert into reservation (name, date, time_id) values (?, ?, ?)";
                 PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
-                ps.setString(1, newReservation.getName());
-                ps.setString(2, newReservation.getDate());
-                ps.setLong(3, newReservation.getTime().getId());
+                ps.setString(1, request.getName());
+                ps.setString(2, request.getDate());
+                ps.setLong(3, request.getTimeId());
                 return ps;
             }, keyHolder);
-
             long createId = keyHolder.getKey().longValue();
-            String sql = SELECT_RESERVATION_SQL + " where r.id = ?";
+
+            String sql = "SELECT " +
+                    "r.id as reservation_id, " +
+                    "r.name as reservation_name, " +
+                    "r.date as reservation_date, " +
+                    "t.id as time_id, " +
+                    "t.start_at as time_start_at, " +
+                    "FROM reservation as r " +
+                    "INNER JOIN reservation_time as t " +
+                    "ON r.time_id = t.id " +
+                    "WHERE r.id = ?";
             Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, createId);
-            return ResponseEntity.ok().body(reservation);
+            return ResponseEntity.ok().body(new ReservationResponse(reservation));
         }
-        catch (Exception e) {
+        catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }
     }

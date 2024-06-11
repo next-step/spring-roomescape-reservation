@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.Entity;
 
 public class ReservationTime {
     private Long id;

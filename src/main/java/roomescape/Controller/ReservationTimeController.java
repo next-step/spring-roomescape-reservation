@@ -1,4 +1,4 @@
-package roomescape;
+package roomescape.Controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +7,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import roomescape.DTO.ReservationTimeRequest;
+import roomescape.DTO.ReservationTimeResponse;
+import roomescape.Entity.ReservationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -32,26 +35,31 @@ public class ReservationTimeController {
     }
 
     @GetMapping("times")
-    public ResponseEntity<List<ReservationTime>> read() {
+    public ResponseEntity<List<ReservationTimeResponse>> read() {
         String sql = "select * from reservation_time";
         List<ReservationTime> reservationTimes = jdbcTemplate.query(sql, reservationTimeRowMapper);
-        return ResponseEntity.ok().body(reservationTimes);
+        return ResponseEntity.ok().body(ReservationTimeResponse.toDTOList(reservationTimes));
     }
 
     @PostMapping("times")
-    public ResponseEntity<ReservationTime> create(@RequestBody ReservationTime newReservationTime) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connect -> {
-            String sql = "insert into reservation_time (start_at) values (?)";
-            PreparedStatement ps = connect.prepareStatement(sql, new String[]{"id"});
-            ps.setString(1, newReservationTime.getStartAt());
-            return ps;
-        }, keyHolder);
-        Long createId = keyHolder.getKey().longValue();
+    public ResponseEntity<ReservationTimeResponse> create(@RequestBody ReservationTimeRequest request) {
+        try {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connect -> {
+                String sql = "insert into reservation_time (start_at) values (?)";
+                PreparedStatement ps = connect.prepareStatement(sql, new String[]{"id"});
+                ps.setString(1, request.getStartAt());
+                return ps;
+            }, keyHolder);
+            Long createId = keyHolder.getKey().longValue();
 
-        String sql = "select * from reservation_time where id = ?";
-        ReservationTime reservationTime = jdbcTemplate.queryForObject(sql, reservationTimeRowMapper, createId);
-        return ResponseEntity.ok().body(reservationTime);
+            String sql = "select * from reservation_time where id = ?";
+            ReservationTime reservationTime = jdbcTemplate.queryForObject(sql, reservationTimeRowMapper, createId);
+            return ResponseEntity.ok().body(new ReservationTimeResponse(reservationTime));
+        }
+        catch (NullPointerException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("times/{id}")

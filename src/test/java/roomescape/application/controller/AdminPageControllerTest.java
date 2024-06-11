@@ -1,4 +1,4 @@
-package roomescape.controller;
+package roomescape.application.controller;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

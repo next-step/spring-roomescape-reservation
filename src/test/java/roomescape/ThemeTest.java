@@ -6,9 +6,15 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.theme.domain.Theme;
+import roomescape.theme.error.exception.ErrorCode;
+import roomescape.theme.error.exception.ThemeException;
+import roomescape.theme.presentation.dto.ThemeRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,13 +28,16 @@ public class ThemeTest {
     private static final String PATH_VARIABLE_SUFFIX_URL = "/1";
     private static final String NAME = "name";
     private static final String ID = "id";
-    private static final String THEME_NAME = "레벨2 탈출";
+    private static final String THEME_NAME = "레벨2 탈출 희망";
     private static final String DESCRIPTION = "description";
-    private static final String THEME_DESCRIPTION = "우테코 레벨2를 탈출하는 내용입니다.";
+    private static final String THEME_DESCRIPTION = "우테코 레벨2를 탈출하는 내용입니다";
     private static final String THUMBNAIL = "thumbnail";
     private static final String THEME_THUMNAIL_URL = "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg";
     private static final int ONE = 1;
     private static final String WILD_CARD = "$";
+    private static final String RIGHT_NAME = "TwentyLengthsExample";
+    private static final String RIGHT_DESCRIPTION = "RightDescription";
+    private static final String RIGHT_THUMBNAIL_URL = "https://edu.nextstep.camp/spring";
 
     @Test
     void 테마_관리_페이지를_랜더링한다() {
@@ -52,7 +61,6 @@ public class ThemeTest {
         theme.put(NAME, THEME_NAME);
         theme.put(DESCRIPTION, THEME_DESCRIPTION);
         theme.put(THUMBNAIL, THEME_THUMNAIL_URL);
-
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -98,5 +106,71 @@ public class ThemeTest {
 
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Hello", "안녕", "특수_문자"})
+    void 테마_생성_중에_이름의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongNameExample) {
+
+        //given
+        ThemeRequest themeRequest = new ThemeRequest(wrongNameExample, RIGHT_DESCRIPTION, RIGHT_THUMBNAIL_URL);
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> new Theme(null, themeRequest.getName(), themeRequest.getDescription(), themeRequest.getThumbnail())).isInstanceOf(ThemeException.class).hasMessage(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR.getErrorMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"HelloWorld", "안녕하세요헬로우월드입니다", "HelloWorld안녕"})
+    void 테마_생성_중에_이름의_형식이_맞는_경우_예외를_발생하지_않는다(String rightNameExample) {
+
+        //given
+        ThemeRequest themeRequest = new ThemeRequest(rightNameExample, RIGHT_DESCRIPTION, RIGHT_THUMBNAIL_URL);
+
+        //when. then
+        Assertions.assertThatCode(() -> new Theme(null, themeRequest.getName(), themeRequest.getDescription(), themeRequest.getThumbnail())).doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "*Hello@123*", "overTwoHundreadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"})
+    void 테마_생성_중에_설명의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongDescriptionExample) {
+
+        //given
+        ThemeRequest themeRequest = new ThemeRequest(RIGHT_NAME, wrongDescriptionExample, RIGHT_THUMBNAIL_URL);
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> new Theme(null, themeRequest.getName(), themeRequest.getDescription(), themeRequest.getThumbnail())).isInstanceOf(ThemeException.class).hasMessage(ErrorCode.INVALID_THEME_DESCRIPTION_FORMAT_ERROR.getErrorMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"안녕하세요", "helloWorld", "HelloWorld123", "안녕하세요123", "가", "a", "twoHundreadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"})
+    void 테마_생성_중에_설명의_형식이_맞는_경우_예외를_발생하지_않는다(String rightDescriptionExample) {
+
+        //given
+        ThemeRequest themeRequest = new ThemeRequest(RIGHT_NAME, rightDescriptionExample, RIGHT_THUMBNAIL_URL);
+
+        //when. then
+        Assertions.assertThatCode(() -> new Theme(null, themeRequest.getName(), themeRequest.getDescription(), themeRequest.getThumbnail())).doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"http://example.com/invalid path", "ftp://example.com"})
+    void 테마_생성_중에_썸네일의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongThumbnailExample) {
+
+        //given
+        ThemeRequest themeRequest = new ThemeRequest(RIGHT_NAME, RIGHT_DESCRIPTION, wrongThumbnailExample);
+
+        //when, then
+        Assertions.assertThatThrownBy(() -> new Theme(null, themeRequest.getName(), themeRequest.getDescription(), themeRequest.getThumbnail())).isInstanceOf(ThemeException.class).hasMessage(ErrorCode.INVALID_THEME_THUMBNAIL_FORMAT_ERROR.getErrorMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"http://example.com", "https://example.com:8080/path/to/resource", "example.com", "http://localhost:3000", "http://192.168.1.1"})
+    void 테마_생성_중에_썸네일의_형식이_맞는_경우_예외를_발생하지_않는다(String rightThumbnailExample) {
+
+        //given
+        ThemeRequest themeRequest = new ThemeRequest(RIGHT_NAME, RIGHT_DESCRIPTION, rightThumbnailExample);
+
+        //when. then
+        Assertions.assertThatCode(() -> new Theme(null, themeRequest.getName(), themeRequest.getDescription(), themeRequest.getThumbnail())).doesNotThrowAnyException();
     }
 }

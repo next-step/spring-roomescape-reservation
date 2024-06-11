@@ -12,9 +12,4 @@ public record ReservationTimeCreateRequest(@JsonFormat(pattern = "HH:mm", timezo
     public ReservationTime toEntity() {
         return new ReservationTime(startAt);
     }
-
-    @Override
-    public LocalTime startAt() {
-        return startAt;
-    }
 }

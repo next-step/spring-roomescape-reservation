@@ -19,6 +19,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class ReservationControllerTest {
 
+    long given_예약시간_id;
+    long given_테마_id;
+
+    void given_예약_시간_10_20(){
+        SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20");
+
+        var response = RestAssured.given().log().all()
+                .body(예약시간_10_20)
+                .contentType(ContentType.JSON)
+                .when().post("/times")
+                .then().log().all().extract();
+
+        given_예약시간_id = response.jsonPath().getLong("id");
+    }
+
+    void given_테마(){
+        SaveThemeRequest 테마1 = new SaveThemeRequest("테마1", "테마에 대한 설명", "good/wow.png");
+
+        var response = RestAssured.given().log().all()
+                .body(테마1)
+                .contentType(ContentType.JSON)
+                .when().post("/themes")
+                .then().log().all().extract();
+
+        given_테마_id = response.jsonPath().getLong("id");
+    }
+
     @Nested
     @DisplayName("방탈출 예약은")
     class Describe_Reservation{
@@ -26,28 +53,73 @@ public class ReservationControllerTest {
         @Nested
         @DisplayName("데이터 유효성 검증을 진행할 때")
         class Context_with_validate_data{
+
             @Test
             @DisplayName("date에 숫자와 '-' 이외의 값을 입력하면, 에러를 리턴합니다.")
             void it_return_error_for_non_numeric_or_non_hyphen_in_date(){
+                given_테마();
+                given_예약_시간_10_20();
+                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김민기","2024-01-1q", given_예약시간_id, given_테마_id);
 
+                var response = RestAssured
+                        .given().log().all()
+                        .body(예약_10_20분)
+                        .contentType(ContentType.JSON)
+                        .when().post("/reservations")
+                        .then().log().all().extract();
+
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             }
 
             @Test
             @DisplayName("date에 null, (공백) 값이 입력되면, 에러를 리턴합니다.")
             void it_return_error_for_null_or_empty_date(){
+                given_테마();
+                given_예약_시간_10_20();
+                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김민기","", given_예약시간_id, given_테마_id);
 
+                var response = RestAssured
+                        .given().log().all()
+                        .body(예약_10_20분)
+                        .contentType(ContentType.JSON)
+                        .when().post("/reservations")
+                        .then().log().all().extract();
+
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             }
 
             @Test
             @DisplayName("name에 문자이외의 값이 입력되면, 에러를 리턴합니다.")
             void it_return_error_for_non_string_in_name(){
+                given_테마();
+                given_예약_시간_10_20();
+                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("김25","2024-01-12", given_예약시간_id, given_테마_id);
 
+                var response = RestAssured
+                        .given().log().all()
+                        .body(예약_10_20분)
+                        .contentType(ContentType.JSON)
+                        .when().post("/reservations")
+                        .then().log().all().extract();
+
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             }
 
             @Test
             @DisplayName("name에 null, (공백) 값이 입력되면, 에러를 리턴합니다.")
             void it_return_error_for_null_or_empty_name(){
+                given_테마();
+                given_예약_시간_10_20();
+                SaveReservationRequest 예약_10_20분 = new SaveReservationRequest("","2024-01-12", given_예약시간_id, given_테마_id);
 
+                var response = RestAssured
+                        .given().log().all()
+                        .body(예약_10_20분)
+                        .contentType(ContentType.JSON)
+                        .when().post("/reservations")
+                        .then().log().all().extract();
+
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             }
 
         }
@@ -56,32 +128,6 @@ public class ReservationControllerTest {
         @DisplayName("예약 시간과 테마를 저장하고")
         class Context_with_saving_reservation_time_and_theme{
 
-            long given_예약시간_id;
-            long given_테마_id;
-
-            void given_예약_시간_10_20(){
-                SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20");
-
-                var response = RestAssured.given().log().all()
-                        .body(예약시간_10_20)
-                        .contentType(ContentType.JSON)
-                        .when().post("/times")
-                        .then().log().all().extract();
-
-                given_예약시간_id = response.jsonPath().getLong("id");
-            }
-
-            void given_테마(){
-                SaveThemeRequest 테마1 = new SaveThemeRequest("테마1", "테마에 대한 설명", "good/wow.png");
-
-                var response = RestAssured.given().log().all()
-                        .body(테마1)
-                        .contentType(ContentType.JSON)
-                        .when().post("/themes")
-                        .then().log().all().extract();
-
-                given_테마_id = response.jsonPath().getLong("id");
-            }
 
             @Test
             @DisplayName("예약한 뒤, 저장한 Dto를 리턴합니다.")

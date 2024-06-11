@@ -15,6 +15,7 @@ public class ThemeRepository {
     private static final String FIND_BY_ID_SQL = "SELECT * FROM theme WHERE id = ?";
     private static final String FIND_ALL_SQL = "SELECT * FROM theme";
     private static final String SAVE_SQL = "INSERT INTO theme (name, description, thumbnail) VALUES (?, ?, ?)";
+    private static final String DELETE_SQL = "DELETE FROM theme WHERE id = ?";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_DESCRIPTION = "description";
@@ -52,5 +53,9 @@ public class ThemeRepository {
 
     public List<Theme> findAll() {
         return jdbcTemplate.query(FIND_ALL_SQL, (rs, rowNum) -> new Theme(rs.getLong(COLUMN_ID), rs.getString(COLUMN_NAME), rs.getString(COLUMN_DESCRIPTION), rs.getString(COLUMN_THUMBNAIL)));
+    }
+
+    public void delete(Long id) {
+        jdbcTemplate.update(DELETE_SQL, id);
     }
 }

@@ -19,6 +19,7 @@ public class ThemeTest {
 
     private static final String RENDERING_THEME_URL = "/admin/theme";
     private static final String THEMES_API_URL = "/themes";
+    private static final String PATH_VARIABLE_SUFFIX_URL = "/1";
     private static final String NAME = "name";
     private static final String ID = "id";
     private static final String THEME_NAME = "레벨2 탈출";
@@ -81,5 +82,21 @@ public class ThemeTest {
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         Assertions.assertThat(response.jsonPath().getList(WILD_CARD).size()).isEqualTo(ONE);
+    }
+
+    @Test
+    void 테마를_삭제한다() {
+
+        //given
+        테마를_추가한다();
+
+        //when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .when().delete(THEMES_API_URL + PATH_VARIABLE_SUFFIX_URL)
+                .then().log().all()
+                .extract();
+
+        //then
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }

@@ -42,7 +42,7 @@ public class ApiTimeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         timeService.delete(id);
         return ResponseEntity.ok().build();
     }

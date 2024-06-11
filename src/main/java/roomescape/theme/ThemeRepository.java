@@ -1,5 +1,6 @@
 package roomescape.theme;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -28,7 +29,7 @@ public class ThemeRepository {
 	public Theme findById(Long id) {
 		RowMapper<Theme> rowMapper = (rs, rowNum) -> new Theme(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
 
-		return jdbcTemplate.queryForObject("SELECT id, name, description, thumbnail FROM theme where id = ?", rowMapper, id);
+		return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT id, name, description, thumbnail FROM theme where id = ?", rowMapper, id));
 	}
 
 	public Long save(String name, String description, String thumbnail) {

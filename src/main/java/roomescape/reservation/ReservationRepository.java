@@ -9,6 +9,7 @@ import roomescape.reservationTime.ReservationTime;
 import roomescape.theme.Theme;
 
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -72,6 +73,27 @@ public class ReservationRepository {
 						new Theme(rs.getLong(6), rs.getString(7), rs.getString(8), rs.getString(9)));
 
 		return jdbcTemplate.queryForObject(sql, rowMapper, id);
+	}
+
+	public int countByDateAndTimeAndTheme(LocalDate date, Long timeId, Long themeId) {
+		String sql = new StringBuilder()
+				.append("SELECT ")
+				.append("r.id as reservation_id, ")
+				.append("r.name as reservation_name, ")
+				.append("r.date as reservation_date, ")
+				.append("t.id as time_id, ")
+				.append("t.start_at as time_start_at, ")
+				.append("th.id as theme_id, ")
+				.append("th.name as theme_name, ")
+				.append("th.description as theme_description, ")
+				.append("th.thumbnail as theme_thumbnail ")
+				.append("FROM reservation as r ")
+				.append("inner join reservation_time as t ")
+				.append("on r.time_id = t.id ")
+				.append("inner join theme as th ")
+				.append("on r.theme_id = th.id").toString();
+
+		return this.jdbcTemplate.queryForObject("SELECT COUNT(*) FROM reservation WHERE date = ? AND time_id = ? AND theme_id = ?", Integer.class, date.toString(), timeId, themeId);
 	}
 
 	public Reservation save(Reservation reservation) {

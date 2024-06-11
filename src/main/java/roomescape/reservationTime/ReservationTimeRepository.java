@@ -1,5 +1,6 @@
 package roomescape.reservationTime;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -36,7 +37,8 @@ public class ReservationTimeRepository {
 		RowMapper<ReservationTime> rowMapper = (rs, rowNum) -> new ReservationTime(
 				rs.getLong(1),
 				rs.getTime(2).toLocalTime());
-		return jdbcTemplate.queryForObject("SELECT id, start_at FROM reservation_time where id = ?", rowMapper, id);
+
+		return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT id, start_at FROM reservation_time where id = ?", rowMapper, id));
 	}
 
 	public List<ReservationTime> find() {

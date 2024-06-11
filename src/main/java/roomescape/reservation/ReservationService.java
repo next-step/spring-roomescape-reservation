@@ -1,13 +1,16 @@
 package roomescape.reservation;
 
 import org.springframework.stereotype.Service;
+import roomescape.exception.NotExistsException;
 import roomescape.exception.PastDateTimeExeption;
+import roomescape.exception.AlreadyExistsException;
 import roomescape.reservationTime.ReservationTime;
 import roomescape.reservationTime.ReservationTimeRepository;
 import roomescape.theme.Theme;
 import roomescape.theme.ThemeRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,13 +36,19 @@ public class ReservationService {
 	}
 
 	public ReservationResponse saveReservation(ReservationRequest request) {
-		ReservationTime reservationTime = reservationTimeRepository.findById(request.getTimeId());
-		Theme theme = themeRepository.findById(request.getThemeId());
+		ReservationTime reservationTime = Optional.ofNullable(reservationTimeRepository.findById(request.getTimeId()))
+				.orElseThrow(() -> new NotExistsException("해당 시간이"));
+		Theme theme = Optional.ofNullable(themeRepository.findById(request.getThemeId()))
+				.orElseThrow(() -> new NotExistsException("해당 테마가"));
 
 		Reservation reservation = new Reservation(request.getName(), request.getDate(), reservationTime, theme);
 
 		if(reservation.isBeforeThenNow()) {
 			throw new PastDateTimeExeption();
+		}
+
+		if(reservationRepository.countByDateAndTimeAndTheme(reservation.getDate(), reservationTime.getId(), theme.getId()) > 0) {
+			throw new AlreadyExistsException("해당 시간 예약이");
 		}
 
 		return new ReservationResponse(reservationRepository.save(reservation));

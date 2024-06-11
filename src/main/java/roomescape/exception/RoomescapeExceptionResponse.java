@@ -11,11 +11,11 @@ public class RoomescapeExceptionResponse {
 	}
 
 	public static RoomescapeExceptionResponse from(RoomescapeErrorCode roomescapeErrorCode, String exceptionMessage) {
-		return new RoomescapeExceptionResponse(roomescapeErrorCode.getCode(), exceptionMessage + roomescapeErrorCode.getMessage());
+		return new RoomescapeExceptionResponse(roomescapeErrorCode.name(), exceptionMessage + roomescapeErrorCode.getMessage());
 	}
 
 	public static RoomescapeExceptionResponse of(RoomescapeErrorCode roomescapeErrorCode) {
-		return new RoomescapeExceptionResponse(roomescapeErrorCode.getCode(), roomescapeErrorCode.getMessage());
+		return new RoomescapeExceptionResponse(roomescapeErrorCode.name(), roomescapeErrorCode.getMessage());
 	}
 
 	public String getCode() {

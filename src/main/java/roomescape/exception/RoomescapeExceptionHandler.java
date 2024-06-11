@@ -19,7 +19,7 @@ public class RoomescapeExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public RoomescapeExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION,e.getBindingResult().getFieldError().getDefaultMessage());
+		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION, e.getBindingResult().getFieldError().getDefaultMessage());
 	}
 
 	@ExceptionHandler(DateTimeParseException.class)
@@ -32,5 +32,17 @@ public class RoomescapeExceptionHandler {
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public RoomescapeExceptionResponse handlePastDateTimeException(PastDateTimeExeption e) {
 		return RoomescapeExceptionResponse.of(e.getErrorCode());
+	}
+
+	@ExceptionHandler(AlreadyExistsException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public RoomescapeExceptionResponse handleReservationAlreayExistsException(AlreadyExistsException e) {
+		return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
+	}
+
+	@ExceptionHandler(NotExistsException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public RoomescapeExceptionResponse handleNotExistsException(NotExistsException e) {
+		return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
 	}
 }

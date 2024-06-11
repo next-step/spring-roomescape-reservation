@@ -8,6 +8,4 @@ public class ReservationTimeQuery {
     public static final String SAVE = "insert into reservation_time(start_at) values(?)";
 
     public static final String DELETE = "delete from reservation_time where id = ?";
-
-
 }

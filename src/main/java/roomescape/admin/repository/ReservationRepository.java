@@ -1,6 +1,7 @@
 package roomescape.admin.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -60,6 +61,23 @@ public class ReservationRepository {
         String thumbnail = rs.getString("theme_thumbnail");
 
         return Theme.of(id, name, description, thumbnail);
+    }
+
+    public int countByDateAndStartAt(String date, String startAt) {
+        return this.jdbcTemplate.query(ReservationQuery.COUNT_BY_DATE_AND_START_AT, countReservationExtractor(),date, startAt);
+    }
+
+    private ResultSetExtractor<Integer> countReservationExtractor() {
+        return (ResultSet rs) -> {
+            if (rs.next()) {
+                return mapToInteger(rs);
+            }
+            return 0; // 결과가 없을 경우 0을 반환
+        };
+    }
+
+    private Integer mapToInteger(ResultSet rs) throws SQLException {
+        return rs.getInt("duplicated_count");
     }
 
     public Long save(SaveReservationRequest saveReservationRequest) {

@@ -26,7 +26,7 @@ public class ReservationTimeServiceTest {
             long given_테마_id;
 
             void given_예약시간_10_20(){
-                SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20");
+                SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20:00");
 
                 var response = RestAssured.given().log().all()
                         .body(예약시간_10_20)
@@ -38,7 +38,7 @@ public class ReservationTimeServiceTest {
             }
 
             void given_테마(){
-                SaveThemeRequest 테마 = new SaveThemeRequest("테마1","테마설명","썸네일 URL");
+                SaveThemeRequest 테마 = new SaveThemeRequest("테마","테마설명","썸네일 URL");
 
                 var response = RestAssured.given().log().all()
                         .body(테마)
@@ -49,13 +49,13 @@ public class ReservationTimeServiceTest {
                 given_테마_id = response.jsonPath().getLong("id");
             }
 
-            void given_예약_10_20(){
+            void given_예약_2024_12_12(){
                 given_테마();
                 given_예약시간_10_20();
-                SaveReservationRequest given_10_20분_예약 = new SaveReservationRequest("김민기","2024-01-10", given_삭제_예약시간_id, given_테마_id);
+                SaveReservationRequest given_예약_2024_12_12 = new SaveReservationRequest("김민기","2024-12-12", given_삭제_예약시간_id, given_테마_id);
 
                 RestAssured.given().log().all()
-                        .body(given_10_20분_예약)
+                        .body(given_예약_2024_12_12)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -64,7 +64,7 @@ public class ReservationTimeServiceTest {
             @Test
             @DisplayName("삭제할 수 없고, 에러가 발생합니다.")
             void it_return_error_and_not_delete_reservation(){
-                given_예약_10_20();
+                given_예약_2024_12_12();
 
                 var response = RestAssured
                         .given().log().all()
@@ -80,7 +80,7 @@ public class ReservationTimeServiceTest {
         @DisplayName("예약된 목록에서 사용하지 않는다면")
         class Context_with_in_not_use_reservations{
             void given_예약시간_10_30(){
-                SaveReservationTimeRequest 예약시간_10_30 = new SaveReservationTimeRequest("10:30");
+                SaveReservationTimeRequest 예약시간_10_30 = new SaveReservationTimeRequest("10:30:00");
 
                 RestAssured.given().log().all()
                         .body(예약시간_10_30)

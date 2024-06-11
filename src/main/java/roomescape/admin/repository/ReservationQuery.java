@@ -23,4 +23,13 @@ public class ReservationQuery {
     public static final String SAVE = "insert into reservation(name, date, time_id, theme_id) values(?,?,?,?)";
 
     public static final String DELETE = "delete from reservation where id = ?";
+
+    public static final String COUNT_BY_DATE_AND_START_AT = "SELECT COUNT(1) as duplicated_count \n" +
+                                                            "FROM reservation as r \n" +
+                                                            "inner join reservation_time as t \n" +
+                                                            "on r.time_id = t.id \n" +
+                                                            "inner join theme as te \n" +
+                                                            "on r.theme_id = te.id \n" +
+                                                            "where r.date = ? \n" +
+                                                            "and t.start_at = ?";
 }

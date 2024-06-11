@@ -22,14 +22,14 @@ public class ReservationControllerTest {
     long given_예약시간_id;
     long given_테마_id;
 
-    void given_예약_2024_01_12(){
+    void given_예약_2024_12_12(){
         given_예약_삭제();
         given_예약_시간_10_20();
         given_테마();
-        SaveReservationRequest given_예약_2024_01_12 = new SaveReservationRequest("김민기","2024-01-12", given_예약시간_id, given_테마_id);
+        SaveReservationRequest given_예약_2024_12_12 = new SaveReservationRequest("김민기","2024-12-12", given_예약시간_id, given_테마_id);
 
         RestAssured.given().log().all()
-                .body(given_예약_2024_01_12)
+                .body(given_예약_2024_12_12)
                 .contentType(ContentType.JSON)
                 .when().post("/reservations");
     }
@@ -40,10 +40,21 @@ public class ReservationControllerTest {
     }
 
     void given_예약_시간_10_20(){
-        SaveReservationTimeRequest given_예약시간_10_20 = new SaveReservationTimeRequest("10:20");
+        SaveReservationTimeRequest given_예약시간_10_20 = new SaveReservationTimeRequest("10:20:00");
 
         var response = RestAssured.given().log().all()
                 .body(given_예약시간_10_20)
+                .contentType(ContentType.JSON)
+                .when().post("/times");
+
+        given_예약시간_id = response.jsonPath().getLong("id");
+    }
+
+    void given_예약_시간_10_30() {
+        SaveReservationTimeRequest given_예약시간_10_30 = new SaveReservationTimeRequest("10:30:00");
+
+        var response = RestAssured.given().log().all()
+                .body(given_예약시간_10_30)
                 .contentType(ContentType.JSON)
                 .when().post("/times");
 
@@ -74,11 +85,11 @@ public class ReservationControllerTest {
             void it_return_error_for_non_numeric_or_non_hyphen_in_date(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_날짜_2024_01_1q = new SaveReservationRequest("김민기","2024-01-1q", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_날짜_2024_12_1q = new SaveReservationRequest("김민기","2024-12-1q", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_날짜_2024_01_1q)
+                        .body(예약_날짜_2024_12_1q)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -108,7 +119,7 @@ public class ReservationControllerTest {
             void it_return_error_for_non_string_in_name(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_이름_김25 = new SaveReservationRequest("김25","2024-01-12", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_이름_김25 = new SaveReservationRequest("김25","2024-12-12", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
@@ -125,7 +136,7 @@ public class ReservationControllerTest {
             void it_return_error_for_null_or_empty_name(){
                 given_테마();
                 given_예약_시간_10_20();
-                SaveReservationRequest 예약_이름_empty = new SaveReservationRequest("","2024-01-12", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_이름_empty = new SaveReservationRequest("","2024-12-12", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
@@ -149,13 +160,13 @@ public class ReservationControllerTest {
             @Rollback
             void it_return_saved_dto_after_saving_reservation(){
                 given_예약_삭제();
-                given_예약_시간_10_20();
+                given_예약_시간_10_30();
                 given_테마();
-                SaveReservationRequest 예약_2024_01_10 = new SaveReservationRequest("김민기","2024-01-10", given_예약시간_id, given_테마_id);
+                SaveReservationRequest 예약_2024_12_12 = new SaveReservationRequest("김민기","2024-12-12", given_예약시간_id, given_테마_id);
 
                 var response = RestAssured
                         .given().log().all()
-                        .body(예약_2024_01_10)
+                        .body(예약_2024_12_12)
                         .contentType(ContentType.JSON)
                         .when().post("/reservations")
                         .then().log().all().extract();
@@ -163,13 +174,15 @@ public class ReservationControllerTest {
                 assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
                 assertThat(response.jsonPath().getString("name")).isEqualTo("김민기");
             }
+
+
         }
 
         @Test
         @DisplayName("목록 List를 리턴합니다.")
         @Rollback
         void it_return_reservations(){
-            given_예약_2024_01_12();
+            given_예약_2024_12_12();
 
             var response = RestAssured
                     .given().log().all()
@@ -188,7 +201,7 @@ public class ReservationControllerTest {
         @DisplayName("삭제하고, void를 리턴합니다.")
         @Rollback
         void it_return_void_and_delete_reservation() {
-            given_예약_2024_01_12();
+            given_예약_2024_12_12();
 
             var response = RestAssured
                     .given().log().all()

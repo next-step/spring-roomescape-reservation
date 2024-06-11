@@ -20,12 +20,14 @@ public class ReservationTest {
 
     private static final String RENDERING_RESERVATION_URL = "/admin/reservation";
     private static final String TIMES_API_URL = "/times";
+    private static final String THEMES_API_URL = "/themes";
     private static final String RESERVATIONS_API_URL = "/reservations";
     private static final String PATH_VARIABLE_SUFFIX_URL = "/1";
     private static final String NAME = "name";
     private static final String ID = "id";
     private static final String DATE = "date";
     private static final String TIME_ID = "timeId";
+    private static final String THEME_ID = "themeId";
     private static final String START_AT = "startAt";
     private static final String RESERVATION_NAME = "john";
     private static final String RESERVATION_DATE = "2023-08-05";
@@ -33,13 +35,17 @@ public class ReservationTest {
     private static final int ONE = 1;
     private static final long LONG_ONE = 1L;
     private static final String WILD_CARD = "$";
+    private static final String DESCRIPTION = "description";
+    private static final String THUMBNAIL = "thumbnail";
+    private static final String THEME_NAME = "공포 테마";
+    private static final String THEME_DESCRIPTION = "오싹";
+    private static final String THEME_THUMBNAIL = "www.youtube.com/boorownie";
 
     @BeforeEach
     void 시간_예약을_추가한다() {
 
         //given
         Map<String, Object> time = new HashMap<>();
-        time.put(ID, ONE);
         time.put(START_AT, TIME);
 
         //when
@@ -47,6 +53,28 @@ public class ReservationTest {
                 .contentType(ContentType.JSON)
                 .body(time)
                 .when().post(TIMES_API_URL)
+                .then().log().all()
+                .extract();
+
+        //then
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(ONE);
+    }
+
+    @BeforeEach
+    void 테마를_추가한다() {
+
+        //given
+        Map<String, Object> theme = new HashMap<>();
+        theme.put(NAME, THEME_NAME);
+        theme.put(DESCRIPTION, THEME_DESCRIPTION);
+        theme.put(THUMBNAIL, THEME_THUMBNAIL);
+
+        //when
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(theme)
+                .when().post(THEMES_API_URL)
                 .then().log().all()
                 .extract();
 
@@ -77,6 +105,8 @@ public class ReservationTest {
         reservation.put(NAME, RESERVATION_NAME);
         reservation.put(DATE, RESERVATION_DATE);
         reservation.put(TIME_ID, ONE);
+        reservation.put(THEME_ID, ONE);
+
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()

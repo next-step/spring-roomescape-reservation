@@ -63,7 +63,7 @@ public class Reservation {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", date=" + date +
-                ", time=" + time +
+                ", startAt=" + time +
                 '}';
     }
 }

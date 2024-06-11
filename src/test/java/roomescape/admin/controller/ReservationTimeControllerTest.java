@@ -26,13 +26,29 @@ public class ReservationTimeControllerTest {
             @Test
             @DisplayName("startAt에 숫자와 ':' 이외의 값을 넣으면, 에러를 리턴합니다.")
             void it_return_error_for_non_numeric_or_non_colon_in_startAt(){
+                SaveReservationTimeRequest 예약시간_10_1ㄱㅅ = new SaveReservationTimeRequest("10:1ㄱㅅ");
 
+                var response = RestAssured.given().log().all()
+                        .body(예약시간_10_1ㄱㅅ)
+                        .contentType(ContentType.JSON)
+                        .when().post("/times")
+                        .then().log().all().extract();
+
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             }
 
             @Test
             @DisplayName("startAt에 null, (공백) 값이 입력되면, 에러를 리턴합니다.")
             void it_return_error_for_null_or_empty_startAt(){
+                SaveReservationTimeRequest 예약시간_empty = new SaveReservationTimeRequest("");
 
+                var response = RestAssured.given().log().all()
+                        .body(예약시간_empty)
+                        .contentType(ContentType.JSON)
+                        .when().post("/times")
+                        .then().log().all().extract();
+
+                assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
             }
 
         }

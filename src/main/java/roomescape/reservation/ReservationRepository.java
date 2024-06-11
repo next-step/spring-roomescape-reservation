@@ -11,6 +11,7 @@ import java.util.List;
 
 @Component
 public class ReservationRepository {
+    private final static String TABLE_NAME = "reservation";
     private final JdbcTemplate jdbcTemplate;
 
     public ReservationRepository(JdbcTemplate jdbcTemplate) {
@@ -18,7 +19,7 @@ public class ReservationRepository {
     }
 
     public ReservationEntity addReservation(ReservationEntity reservationEntity) {
-        String sql = "insert into reservation (name, date, time) values(?,?,?)";
+        String sql = String.format("insert into %s (name, date, time) values(?,?,?)", TABLE_NAME);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
@@ -39,12 +40,12 @@ public class ReservationRepository {
     }
 
     public void deleteReservation(Long id) {
-        String sql = "delete from reservations where id = ?";
+        String sql = String.format("delete from %s where id = ?",TABLE_NAME);
         jdbcTemplate.update(sql, id);
     }
 
     public List<ReservationEntity> reservations() {
-        String sql = "select id, name, date, time from reservation";
+        String sql = String.format("select id, name, date, time from %s", TABLE_NAME);
         return jdbcTemplate.query(sql, rowMapper);
     }
 

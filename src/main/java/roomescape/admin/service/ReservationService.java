@@ -49,7 +49,7 @@ public class ReservationService {
     private boolean isUnderDate(SaveReservationRequest saveReservationRequest) {
         ReservationTime reservationTime = this.reservationTimeRepository.findById(saveReservationRequest.timeId());
         String startAt = reservationTime.getStartAt();
-        LocalDateTime reserve = LocalDateTime.parse(saveReservationRequest.date() + " "+startAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime reserve = LocalDateTime.parse(saveReservationRequest.date() + " " + startAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
         if (reserve.isBefore(LocalDateTime.now())) {
             return true;

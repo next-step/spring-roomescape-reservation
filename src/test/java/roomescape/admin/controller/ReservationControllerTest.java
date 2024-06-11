@@ -40,7 +40,7 @@ public class ReservationControllerTest {
     }
 
     void given_예약_시간_10_20(){
-        SaveReservationTimeRequest given_예약시간_10_20 = new SaveReservationTimeRequest("10:20:00");
+        SaveReservationTimeRequest given_예약시간_10_20 = new SaveReservationTimeRequest("10:20");
 
         var response = RestAssured.given().log().all()
                 .body(given_예약시간_10_20)
@@ -51,7 +51,7 @@ public class ReservationControllerTest {
     }
 
     void given_예약_시간_10_30() {
-        SaveReservationTimeRequest given_예약시간_10_30 = new SaveReservationTimeRequest("10:30:00");
+        SaveReservationTimeRequest given_예약시간_10_30 = new SaveReservationTimeRequest("10:30");
 
         var response = RestAssured.given().log().all()
                 .body(given_예약시간_10_30)

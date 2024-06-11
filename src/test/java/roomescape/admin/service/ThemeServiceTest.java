@@ -25,7 +25,7 @@ public class ThemeServiceTest {
             long given_테마_id;
 
             void given_예약시간_10_20(){
-                SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20:00");
+                SaveReservationTimeRequest 예약시간_10_20 = new SaveReservationTimeRequest("10:20");
 
                 var response = RestAssured.given().log().all()
                         .body(예약시간_10_20)

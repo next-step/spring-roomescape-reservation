@@ -37,7 +37,7 @@ public class ReservationServiceTest {
 
         void given_예약_시간_한시간전(){
             LocalDateTime pastTime = LocalDateTime.now().minusHours(1);
-            String formattedTime = pastTime.format(DateTimeFormatter.ofPattern("hh:mm:ss"));
+            String formattedTime = pastTime.format(DateTimeFormatter.ofPattern("hh:mm"));
 
             SaveReservationTimeRequest given_예약시간_10_00 = new SaveReservationTimeRequest(formattedTime);
 
@@ -50,7 +50,7 @@ public class ReservationServiceTest {
         }
 
         void given_예약_시간_10_00(){
-            SaveReservationTimeRequest given_예약시간_10_00 = new SaveReservationTimeRequest("10:00:00");
+            SaveReservationTimeRequest given_예약시간_10_00 = new SaveReservationTimeRequest("10:00");
 
             var response = RestAssured.given().log().all()
                     .body(given_예약시간_10_00)

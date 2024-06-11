@@ -13,11 +13,16 @@ public class ReservationService {
     }
 
     public List<Reservation> reservations() {
-        return reservationRepository.reservations();
+        return reservationRepository
+                .reservations()
+                .stream()
+                .map(Reservation::new)
+                .toList();
     }
 
     public Reservation add(Reservation newReservation) {
-        return reservationRepository.addReservation(newReservation);
+        ReservationEntity entity =  reservationRepository.addReservation(newReservation.toEntity());
+        return new Reservation(entity);
     }
 
     public void delete(long id) {

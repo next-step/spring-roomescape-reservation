@@ -17,7 +17,7 @@ public class ReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Reservation addReservation(Reservation newReservation) {
+    public ReservationEntity addReservation(ReservationEntity reservationEntity) {
         String sql = "insert into reservation (name, date, time) values(?,?,?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -26,16 +26,16 @@ public class ReservationRepository {
                     sql,
                     new String[]{"id"});
 
-            ps.setString(1, newReservation.getName());
-            ps.setString(2, newReservation.getDate());
-            ps.setString(3, newReservation.getTime());
+            ps.setString(1, reservationEntity.getName());
+            ps.setString(2, reservationEntity.getDate());
+            ps.setString(3, reservationEntity.getTime());
             return ps;
         }, keyHolder);
 
         long generatedId = keyHolder.getKey().longValue();
-        newReservation.setId(generatedId);
+        reservationEntity.setId(generatedId);
 
-        return newReservation;
+        return reservationEntity;
     }
 
     public void deleteReservation(Long id) {
@@ -43,13 +43,13 @@ public class ReservationRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    public List<Reservation> reservations() {
+    public List<ReservationEntity> reservations() {
         String sql = "select id, name, date, time from reservation";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    private final RowMapper<Reservation> rowMapper = (resultSet, rowNum) ->
-        new Reservation(
+    private final RowMapper<ReservationEntity> rowMapper = (resultSet, rowNum) ->
+        new ReservationEntity(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
                 resultSet.getString("date"),

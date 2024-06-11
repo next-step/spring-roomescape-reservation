@@ -1,5 +1,6 @@
 package roomescape.reservation;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation add(@RequestBody Reservation newReservation) {
+    public Reservation add(@Validated  @RequestBody Reservation newReservation) {
         return reservationService.add(newReservation);
     }
 

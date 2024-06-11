@@ -30,11 +30,8 @@ public class ReservationRepository {
 
   public Reservation getById(Long id) {
     return jdbcTemplate.queryForObject("select id, name, date, time from reservation where id=?",
-        (rs, rownum) -> {
-          System.out.println("rs = " + rs);
-          return new Reservation(rs.getLong("id"), rs.getString("name"),
-              rs.getDate("date").toLocalDate(), rs.getTime("time").toLocalTime());
-        }, id);
+        (rs, rownum) -> new Reservation(rs.getLong("id"), rs.getString("name"),
+            rs.getDate("date").toLocalDate(), rs.getTime("time").toLocalTime()), id);
   }
 
   public Reservation save(CreateReservation newReservation) {
@@ -54,4 +51,6 @@ public class ReservationRepository {
   public void delete(long id) {
     jdbcTemplate.update("delete from reservation where id = ?", id);
   }
+
+
 }

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("admin")
 public class AdminController {
   @GetMapping("reservation")
-  public String getLegacy(){
+  public String getReservationPage(){
     return "admin/reservation-legacy";
   }
+  @GetMapping("time")
+  public String getTimePage() {return "admin/time";}
 }

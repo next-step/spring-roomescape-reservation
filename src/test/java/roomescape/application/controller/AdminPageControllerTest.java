@@ -31,4 +31,14 @@ class AdminPageControllerTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
+
+    @Test
+    void timePage() {
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .when().get("/admin/time")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
 }

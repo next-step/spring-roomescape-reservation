@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
     @GetMapping("reservation")
     public String reservation(Model model) {
-        return "admin/reservation-legacy";
+        return "admin/reservation";
+    }
+
+    @GetMapping("time")
+    public String time(Model model) {
+        return "admin/time";
     }
 }

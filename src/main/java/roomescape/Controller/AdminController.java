@@ -7,11 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminController {
     @GetMapping("/admin/reservation")
     public String manageReservation() {
-        return "admin/reservation";
+        return "admin/reservation-new";
     }
 
     @GetMapping("/admin/time")
     public String manageReservationTime() {
         return "admin/time";
+    }
+
+    @GetMapping("/admin/theme")
+    public String manageTheme() {
+        return "admin/theme";
     }
 }

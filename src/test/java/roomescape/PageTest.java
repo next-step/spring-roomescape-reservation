@@ -10,11 +10,12 @@ import org.springframework.test.annotation.DirtiesContext;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class PageTest {
-	@Test
-	void 메인_페이지_접속_성공() {
-		RestAssured.given().log().all()
-				.when().get("/")
-				.then().log().all()
-				.statusCode(200);
-	}
+
+    @Test
+    void 메인_페이지_접속_성공() {
+        RestAssured.given().log().all()
+            .when().get("/")
+            .then().log().all()
+            .statusCode(200);
+    }
 }

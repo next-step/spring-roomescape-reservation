@@ -8,24 +8,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/times")
 public class ReservationTimeController {
-	private final ReservationTimeService reservationTimeService;
 
-	public ReservationTimeController(ReservationTimeService reservationTimeService) {
-		this.reservationTimeService = reservationTimeService;
-	}
+    private final ReservationTimeService reservationTimeService;
 
-	@PostMapping
-	public ReservationTimeResponse saveReservationTime(@RequestBody @Valid ReservationTimeRequest request) {
-		return reservationTimeService.saveReservationTime(request);
-	}
+    public ReservationTimeController(ReservationTimeService reservationTimeService) {
+        this.reservationTimeService = reservationTimeService;
+    }
 
-	@GetMapping
-	public List<ReservationTimeResponse> getReservationTimes() {
-		return reservationTimeService.findReservationTimes();
-	}
+    @PostMapping
+    public ReservationTimeResponse saveReservationTime(
+        @RequestBody @Valid ReservationTimeRequest request) {
+        return reservationTimeService.saveReservationTime(request);
+    }
 
-	@DeleteMapping("/{id}")
-	public void deleteReservationTime(@PathVariable Long id) {
-		reservationTimeService.deleteReservationTime(id);
-	}
+    @GetMapping
+    public List<ReservationTimeResponse> getReservationTimes() {
+        return reservationTimeService.findReservationTimes();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteReservationTime(@PathVariable Long id) {
+        reservationTimeService.deleteReservationTime(id);
+    }
 }

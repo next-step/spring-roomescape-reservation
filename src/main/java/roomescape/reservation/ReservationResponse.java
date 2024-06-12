@@ -1,49 +1,50 @@
 package roomescape.reservation;
 
 public class ReservationResponse {
-	private Long id;
 
-	private String name;
+    private Long id;
 
-	private String date;
+    private String name;
 
-	private String time;
+    private String date;
 
-	private String themeName;
+    private String time;
 
-	public ReservationResponse(Long id, String name, String date, String time, String themeName) {
-		this.id = id;
-		this.name = name;
-		this.date = date;
-		this.time = time;
-		this.themeName = themeName;
-	}
+    private String themeName;
 
-	public ReservationResponse(Reservation reservation) {
-		this(reservation.getId(),
-				reservation.getName(),
-				reservation.getDate().toString(),
-				reservation.getReservationTime().getStartAt().toString(),
-				reservation.getTheme().getName());
-	}
+    public ReservationResponse(Long id, String name, String date, String time, String themeName) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.time = time;
+        this.themeName = themeName;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public ReservationResponse(Reservation reservation) {
+        this(reservation.getId(),
+            reservation.getName(),
+            reservation.getDate().toString(),
+            reservation.getReservationTime().getStartAt().toString(),
+            reservation.getTheme().getName());
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getTime() {
-		return time;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public String getThemeName() {
-		return themeName;
-	}
+    public String getTime() {
+        return time;
+    }
+
+    public String getThemeName() {
+        return themeName;
+    }
 }

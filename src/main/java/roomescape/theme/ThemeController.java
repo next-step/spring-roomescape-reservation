@@ -10,27 +10,28 @@ import java.util.List;
 @RestController
 @RequestMapping("/themes")
 public class ThemeController {
-	private final ThemeService themeService;
 
-	public ThemeController(ThemeService themeService) {
-		this.themeService = themeService;
-	}
+    private final ThemeService themeService;
 
-	@GetMapping
-	public List<ThemeResponse> getThemes() {
-		return themeService.findThemes();
-	}
+    public ThemeController(ThemeService themeService) {
+        this.themeService = themeService;
+    }
 
-	@PostMapping
-	public ResponseEntity<ThemeResponse> saveThemes(@RequestBody @Valid ThemeRequest request) {
-		Long id = themeService.saveThemes(request);
-		return ResponseEntity.created(URI.create("/themes/"+id)).body(themeService.findTheme(id));
-	}
+    @GetMapping
+    public List<ThemeResponse> getThemes() {
+        return themeService.findThemes();
+    }
+
+    @PostMapping
+    public ResponseEntity<ThemeResponse> saveTheme(@RequestBody @Valid ThemeRequest request) {
+        Long id = themeService.saveThemes(request);
+        return ResponseEntity.created(URI.create("/themes/" + id)).body(themeService.findTheme(id));
+    }
 
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteThemes(@PathVariable String id) {
-		themeService.deleteTheme(Long.parseLong(id));
-		return ResponseEntity.noContent().build();
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTheme(@PathVariable String id) {
+        themeService.deleteTheme(Long.parseLong(id));
+        return ResponseEntity.noContent().build();
+    }
 }

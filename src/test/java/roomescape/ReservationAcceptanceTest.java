@@ -20,110 +20,112 @@ import static org.hamcrest.Matchers.is;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationAcceptanceTest {
-	private final String name = "hhhhhwi";
-	private final ReservationRequest request = new ReservationRequest(name, "2025-08-05", 1L, 1L);
 
-	@BeforeEach
-	void 예약_시간_및_테마_등록() {
-		ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("12:00");
-		ThemeRequest themeRequest = new ThemeRequest("탈출 미션", "탈출하는 내용입니다.", "thumbnail.jpg");
+    private final String name = "hhhhhwi";
+    private final ReservationRequest request = new ReservationRequest(name, "2025-08-05", 1L, 1L);
 
-		RestAssured.given().log().all()
-				.contentType(ContentType.JSON)
-				.body(reservationTimeRequest)
-				.when().post("/times")
-				.then().log().all()
-				.statusCode(200);
+    @BeforeEach
+    void 예약_시간_및_테마_등록() {
+        ReservationTimeRequest reservationTimeRequest = new ReservationTimeRequest("12:00");
+        ThemeRequest themeRequest = new ThemeRequest("탈출 미션", "탈출하는 내용입니다.", "thumbnail.jpg");
 
-		RestAssured.given().log().all()
-				.contentType(ContentType.JSON)
-				.body(themeRequest)
-				.when().post("/themes")
-				.then().log().all()
-				.statusCode(201)
-				.body("id", is(1));
-	}
+        RestAssured.given().log().all()
+            .contentType(ContentType.JSON)
+            .body(reservationTimeRequest)
+            .when().post("/times")
+            .then().log().all()
+            .statusCode(200);
 
-	@Test
-	void 예약_등록_성공() {
-		ExtractableResponse<Response> response = 예약_등록(request);
+        RestAssured.given().log().all()
+            .contentType(ContentType.JSON)
+            .body(themeRequest)
+            .when().post("/themes")
+            .then().log().all()
+            .statusCode(201)
+            .body("id", is(1));
+    }
 
-		assertThat(response.statusCode()).isEqualTo(200);
-	}
+    @Test
+    void 예약_등록_성공() {
+        ExtractableResponse<Response> response = 예약_등록(request);
 
-	@Test
-	void 이름이_빈_값이면_예약_등록_실패() {
-		ReservationRequest requestWithBlank = new ReservationRequest("", "2025-08-05", 1L, 1L);
-		ExtractableResponse<Response> response = 예약_등록(requestWithBlank);
+        assertThat(response.statusCode()).isEqualTo(200);
+    }
 
-		assertThat(response.statusCode()).isEqualTo(400);
-	}
+    @Test
+    void 이름이_빈_값이면_예약_등록_실패() {
+        ReservationRequest requestWithBlank = new ReservationRequest("", "2025-08-05", 1L, 1L);
+        ExtractableResponse<Response> response = 예약_등록(requestWithBlank);
 
-	@Test
-	void 날짜가_과거이면_예약_등록_실패() {
-		ReservationRequest requestWithPastDate = new ReservationRequest(name, "2023-08-05", 1L, 1L);
-		ExtractableResponse<Response> response = 예약_등록(requestWithPastDate);
+        assertThat(response.statusCode()).isEqualTo(400);
+    }
 
-		assertThat(response.statusCode()).isEqualTo(400);
-	}
+    @Test
+    void 날짜가_과거이면_예약_등록_실패() {
+        ReservationRequest requestWithPastDate = new ReservationRequest(name, "2023-08-05", 1L, 1L);
+        ExtractableResponse<Response> response = 예약_등록(requestWithPastDate);
 
-	@Test
-	void 이미_존재하는_예약_등록_실패() {
-		ExtractableResponse<Response> firstResponse = 예약_등록(request);
-		assertThat(firstResponse.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(400);
+    }
 
-		ExtractableResponse<Response> secondResponse = 예약_등록(request);
-		assertThat(secondResponse.statusCode()).isEqualTo(409);
-	}
+    @Test
+    void 이미_존재하는_예약_등록_실패() {
+        ExtractableResponse<Response> firstResponse = 예약_등록(request);
+        assertThat(firstResponse.statusCode()).isEqualTo(200);
 
-	@Test
-	void 존재하지_않는_시간의_예약_등록_실패() {
-		ReservationRequest requestWithNotExistTime = new ReservationRequest(name, "2025-08-05", 2L, 1L);
-		assertThat(예약_등록(requestWithNotExistTime).statusCode()).isEqualTo(404);
-	}
+        ExtractableResponse<Response> secondResponse = 예약_등록(request);
+        assertThat(secondResponse.statusCode()).isEqualTo(409);
+    }
 
-	@Test
-	void 예약_조회_성공() {
-		예약_등록(request);
-		ExtractableResponse<Response> response = 예약_조회();
+    @Test
+    void 존재하지_않는_시간의_예약_등록_실패() {
+        ReservationRequest requestWithNotExistTime = new ReservationRequest(name, "2025-08-05", 2L,
+            1L);
+        assertThat(예약_등록(requestWithNotExistTime).statusCode()).isEqualTo(404);
+    }
 
-		assertThat(response.statusCode()).isEqualTo(200);
-		assertThat(response.jsonPath().getList("name")).contains(name);
-	}
+    @Test
+    void 예약_조회_성공() {
+        예약_등록(request);
+        ExtractableResponse<Response> response = 예약_조회();
 
-	@Test
-	void 예약_삭제_성공() {
-		예약_등록(request);
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.jsonPath().getList("name")).contains(name);
+    }
 
-		ExtractableResponse<Response> responseBeforeDelete = 예약_조회();
+    @Test
+    void 예약_삭제_성공() {
+        예약_등록(request);
 
-		assertThat(responseBeforeDelete.statusCode()).isEqualTo(200);
-		assertThat(responseBeforeDelete.jsonPath().getList("name")).hasSize(1);
+        ExtractableResponse<Response> responseBeforeDelete = 예약_조회();
 
-		RestAssured.given().log().all()
-				.when().delete("/reservations/1")
-				.then().log().all()
-				.statusCode(200);
+        assertThat(responseBeforeDelete.statusCode()).isEqualTo(200);
+        assertThat(responseBeforeDelete.jsonPath().getList("name")).hasSize(1);
 
-		ExtractableResponse<Response> responseAfterDelete = 예약_조회();
+        RestAssured.given().log().all()
+            .when().delete("/reservations/1")
+            .then().log().all()
+            .statusCode(200);
 
-		assertThat(responseAfterDelete.statusCode()).isEqualTo(200);
-		assertThat(responseAfterDelete.jsonPath().getList("name")).hasSize(0);
-	}
+        ExtractableResponse<Response> responseAfterDelete = 예약_조회();
 
-	private ExtractableResponse<Response> 예약_조회() {
-		return RestAssured.given().log().all()
-				.when().get("/reservations")
-				.then().log().all()
-				.extract();
-	}
+        assertThat(responseAfterDelete.statusCode()).isEqualTo(200);
+        assertThat(responseAfterDelete.jsonPath().getList("name")).hasSize(0);
+    }
 
-	private ExtractableResponse<Response> 예약_등록(ReservationRequest request) {
-		return RestAssured.given().log().all()
-				.contentType(ContentType.JSON)
-				.body(request)
-				.when().post("/reservations")
-				.then().log().all()
-				.extract();
-	}
+    private ExtractableResponse<Response> 예약_조회() {
+        return RestAssured.given().log().all()
+            .when().get("/reservations")
+            .then().log().all()
+            .extract();
+    }
+
+    private ExtractableResponse<Response> 예약_등록(ReservationRequest request) {
+        return RestAssured.given().log().all()
+            .contentType(ContentType.JSON)
+            .body(request)
+            .when().post("/reservations")
+            .then().log().all()
+            .extract();
+    }
 }

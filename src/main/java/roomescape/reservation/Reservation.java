@@ -7,49 +7,51 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Reservation {
-	private Long id;
 
-	private String name;
+    private Long id;
 
-	private LocalDate date;
+    private String name;
 
-	private ReservationTime reservationTime;
+    private LocalDate date;
 
-	private Theme theme;
+    private ReservationTime reservationTime;
 
-	public Reservation(Long id, String name, LocalDate date, ReservationTime reservationTime, Theme theme) {
-		this.id = id;
-		this.name = name;
-		this.date = date;
-		this.reservationTime = reservationTime;
-		this.theme = theme;
-	}
+    private Theme theme;
 
-	public Reservation(String name, String date, ReservationTime reservationTime, Theme theme) {
-		this(null, name, LocalDate.parse(date), reservationTime, theme);
-	}
+    public Reservation(Long id, String name, LocalDate date, ReservationTime reservationTime,
+        Theme theme) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.reservationTime = reservationTime;
+        this.theme = theme;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Reservation(String name, String date, ReservationTime reservationTime, Theme theme) {
+        this(null, name, LocalDate.parse(date), reservationTime, theme);
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public LocalDate getDate() {
-		return date;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public ReservationTime getReservationTime() {
-		return reservationTime;
-	}
+    public LocalDate getDate() {
+        return date;
+    }
 
-	public Theme getTheme() {
-		return theme;
-	}
+    public ReservationTime getReservationTime() {
+        return reservationTime;
+    }
 
-	public boolean isBeforeThenNow() {
-		return LocalDateTime.of(date, reservationTime.getStartAt()).isBefore(LocalDateTime.now());
-	}
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public boolean isBeforeThenNow() {
+        return LocalDateTime.of(date, reservationTime.getStartAt()).isBefore(LocalDateTime.now());
+    }
 }

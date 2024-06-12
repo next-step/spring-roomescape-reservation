@@ -12,42 +12,49 @@ import java.util.List;
 
 @Repository
 public class ThemeRepository {
-	private final JdbcTemplate jdbcTemplate;
 
-	public ThemeRepository(JdbcTemplate jdbcTemplate) {
-		this.jdbcTemplate = jdbcTemplate;
-	}
+    private final JdbcTemplate jdbcTemplate;
 
-	public List<Theme> find() {
-		return jdbcTemplate.query("SELECT id, name, description, thumbnail FROM theme", (rs, rowNum) ->
-				new Theme(rs.getLong(1),
-						rs.getString(2),
-						rs.getString(3),
-						rs.getString(4)));
-	}
+    public ThemeRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-	public Theme findById(Long id) {
-		RowMapper<Theme> rowMapper = (rs, rowNum) -> new Theme(rs.getLong(1), rs.getString(2), rs.getString(3), rs.getString(4));
+    public List<Theme> find() {
+        return jdbcTemplate.query("SELECT id, name, description, thumbnail FROM theme",
+            (rs, rowNum) ->
+                new Theme(rs.getLong(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4)));
+    }
 
-		return DataAccessUtils.singleResult(jdbcTemplate.query("SELECT id, name, description, thumbnail FROM theme where id = ?", rowMapper, id));
-	}
+    public Theme findById(Long id) {
+        RowMapper<Theme> rowMapper = (rs, rowNum) -> new Theme(rs.getLong(1), rs.getString(2),
+            rs.getString(3), rs.getString(4));
 
-	public Long save(String name, String description, String thumbnail) {
-		KeyHolder keyHolder = new GeneratedKeyHolder();
+        return DataAccessUtils.singleResult(
+            jdbcTemplate.query("SELECT id, name, description, thumbnail FROM theme where id = ?",
+                rowMapper, id));
+    }
 
-		jdbcTemplate.update(con -> {
-			PreparedStatement ps = con.prepareStatement("INSERT INTO theme(name, description, thumbnail) VALUES (?, ?, ?)", new  String[]{"id"});
-			ps.setString(1, name);
-			ps.setString(2, description);
-			ps.setString(3, thumbnail);
+    public Long save(String name, String description, String thumbnail) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-			return ps;
-		}, keyHolder);
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO theme(name, description, thumbnail) VALUES (?, ?, ?)",
+                new String[]{"id"});
+            ps.setString(1, name);
+            ps.setString(2, description);
+            ps.setString(3, thumbnail);
 
-		return keyHolder.getKey().longValue();
-	}
+            return ps;
+        }, keyHolder);
 
-	public void delete(Long id) {
-		jdbcTemplate.update("DELETE FROM theme WHERE id = ?", id);
-	}
+        return keyHolder.getKey().longValue();
+    }
+
+    public void delete(Long id) {
+        jdbcTemplate.update("DELETE FROM theme WHERE id = ?", id);
+    }
 }

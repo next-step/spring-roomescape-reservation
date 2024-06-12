@@ -8,25 +8,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
-	private final ReservationService reservationService;
 
-	public ReservationController(ReservationService reservationService) {
-		this.reservationService = reservationService;
-	}
+    private final ReservationService reservationService;
 
-	@GetMapping
-	public List<ReservationResponse> getReservations() {
-		return reservationService.findReservations();
-	}
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
-	@PostMapping
-	public ReservationResponse saveReservations(@RequestBody @Valid ReservationRequest request) {
-		return reservationService.saveReservation(request);
-	}
+    @GetMapping
+    public List<ReservationResponse> getReservations() {
+        return reservationService.findReservations();
+    }
+
+    @PostMapping
+    public ReservationResponse saveReservations(@RequestBody @Valid ReservationRequest request) {
+        return reservationService.saveReservation(request);
+    }
 
 
-	@DeleteMapping("/{id}")
-	public void deleteReservation(@PathVariable String id) {
-		reservationService.deleteReservation(Long.parseLong(id));
-	}
+    @DeleteMapping("/{id}")
+    public void deleteReservation(@PathVariable String id) {
+        reservationService.deleteReservation(Long.parseLong(id));
+    }
 }

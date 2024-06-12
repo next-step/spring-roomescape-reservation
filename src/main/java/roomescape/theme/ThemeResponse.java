@@ -1,38 +1,39 @@
 package roomescape.theme;
 
 public class ThemeResponse {
-	private Long id;
 
-	private String name;
+    private Long id;
 
-	private String description;
+    private String name;
 
-	private String thumbnail;
+    private String description;
 
-	public ThemeResponse(Long id, String name, String description, String thumbnail) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.thumbnail = thumbnail;
-	}
+    private String thumbnail;
 
-	public ThemeResponse(Theme theme) {
-		this(theme.getId(), theme.getName(), theme.getDescription(), theme.getThumbnail());
-	}
+    public ThemeResponse(Long id, String name, String description, String thumbnail) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.thumbnail = thumbnail;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public ThemeResponse(Theme theme) {
+        this(theme.getId(), theme.getName(), theme.getDescription(), theme.getThumbnail());
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getThumbnail() {
-		return thumbnail;
-	}
+    public String getDescription() {
+        return description;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
 }

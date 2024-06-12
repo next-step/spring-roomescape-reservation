@@ -11,45 +11,53 @@ import java.time.format.DateTimeParseException;
 
 @RestControllerAdvice
 public class RoomescapeExceptionHandler {
-	@ExceptionHandler(IllegalArgumentException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public RoomescapeExceptionResponse IllegalArgumentException(IllegalArgumentException e) {
-		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION, e.getMessage());
-	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public RoomescapeExceptionResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION, e.getBindingResult().getFieldError().getDefaultMessage());
-	}
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RoomescapeExceptionResponse IllegalArgumentException(IllegalArgumentException e) {
+        return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION,
+            e.getMessage());
+    }
 
-	@ExceptionHandler(DuplicateRequestException.class)
-	@ResponseStatus(HttpStatus.CONFLICT)
-	public RoomescapeExceptionResponse handleDuplicateRequestException(DuplicateRequestException e) {
-		return RoomescapeExceptionResponse.from(RoomescapeErrorCode.EXISTS_EXCEPTION, e.getMessage());
-	}
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RoomescapeExceptionResponse handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException e) {
+        return RoomescapeExceptionResponse.from(RoomescapeErrorCode.ILLEGAL_INPUT_VALUE_EXCEPTION,
+            e.getBindingResult().getFieldError().getDefaultMessage());
+    }
 
-	@ExceptionHandler(DateTimeParseException.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public RoomescapeExceptionResponse hanleParseException() {
-		return RoomescapeExceptionResponse.of(RoomescapeErrorCode.ILLEGAL_DATETIME_FORMAT_EXCEPTION);
-	}
+    @ExceptionHandler(DuplicateRequestException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public RoomescapeExceptionResponse handleDuplicateRequestException(
+        DuplicateRequestException e) {
+        return RoomescapeExceptionResponse.from(RoomescapeErrorCode.EXISTS_EXCEPTION,
+            e.getMessage());
+    }
 
-	@ExceptionHandler(PastDateTimeExeption.class)
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public RoomescapeExceptionResponse handlePastDateTimeException(PastDateTimeExeption e) {
-		return RoomescapeExceptionResponse.of(e.getErrorCode());
-	}
+    @ExceptionHandler(DateTimeParseException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RoomescapeExceptionResponse hanleParseException() {
+        return RoomescapeExceptionResponse.of(
+            RoomescapeErrorCode.ILLEGAL_DATETIME_FORMAT_EXCEPTION);
+    }
 
-	@ExceptionHandler(ReferentialIntegrityException.class)
-	@ResponseStatus(HttpStatus.CONFLICT)
-	public RoomescapeExceptionResponse handleReservationAlreayExistsException(ReferentialIntegrityException e) {
-		return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
-	}
+    @ExceptionHandler(PastDateTimeException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RoomescapeExceptionResponse handlePastDateTimeException(PastDateTimeException e) {
+        return RoomescapeExceptionResponse.of(e.getErrorCode());
+    }
 
-	@ExceptionHandler(NotExistsException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public RoomescapeExceptionResponse handleNotExistsException(NotExistsException e) {
-		return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
-	}
+    @ExceptionHandler(ReferentialIntegrityException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public RoomescapeExceptionResponse handleReservationAlreayExistsException(
+        ReferentialIntegrityException e) {
+        return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(NotExistsException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public RoomescapeExceptionResponse handleNotExistsException(NotExistsException e) {
+        return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
+    }
 }

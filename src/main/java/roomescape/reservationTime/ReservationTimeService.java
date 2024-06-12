@@ -9,34 +9,36 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReservationTimeService {
-	private final ReservationTimeRepository reservationTimeRepository;
-	private final ReservationRepository reservationRepository;
 
-	public ReservationTimeService(ReservationTimeRepository reservationTimeRepository, ReservationRepository reservationRepository) {
-		this.reservationTimeRepository = reservationTimeRepository;
-		this.reservationRepository = reservationRepository;
-	}
+    private final ReservationTimeRepository reservationTimeRepository;
+    private final ReservationRepository reservationRepository;
 
-	public ReservationTimeResponse saveReservationTime(ReservationTimeRequest request) {
-		ReservationTime reservationTime = new ReservationTime(request.getStartAt());
-		return new ReservationTimeResponse(reservationTimeRepository.save(reservationTime));
-	}
+    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository,
+        ReservationRepository reservationRepository) {
+        this.reservationTimeRepository = reservationTimeRepository;
+        this.reservationRepository = reservationRepository;
+    }
 
-	public ReservationTimeResponse findReservationTime(Long id) {
-		return new ReservationTimeResponse(reservationTimeRepository.findById(id));
-	}
+    public ReservationTimeResponse saveReservationTime(ReservationTimeRequest request) {
+        ReservationTime reservationTime = new ReservationTime(request.getStartAt());
+        return new ReservationTimeResponse(reservationTimeRepository.save(reservationTime));
+    }
 
-	public List<ReservationTimeResponse> findReservationTimes() {
-		return reservationTimeRepository.find().stream()
-				.map(ReservationTimeResponse::new)
-				.collect(Collectors.toList());
-	}
+    public ReservationTimeResponse findReservationTime(Long id) {
+        return new ReservationTimeResponse(reservationTimeRepository.findById(id));
+    }
 
-	public void deleteReservationTime(Long id) {
-		if(reservationRepository.countByTime(id) > 0) {
-			throw new ReferentialIntegrityException("해당 시간에 대한 예약");
-		}
+    public List<ReservationTimeResponse> findReservationTimes() {
+        return reservationTimeRepository.find().stream()
+            .map(ReservationTimeResponse::new)
+            .collect(Collectors.toList());
+    }
 
-		reservationTimeRepository.delete(id);
-	}
+    public void deleteReservationTime(Long id) {
+        if (reservationRepository.countByTime(id) > 0) {
+            throw new ReferentialIntegrityException("해당 시간에 대한 예약");
+        }
+
+        reservationTimeRepository.delete(id);
+    }
 }

@@ -4,38 +4,39 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ReservationRequest {
-	@NotBlank(message = "이름")
-	private String name;
 
-	@NotBlank(message = "날짜")
-	private String date;
+    @NotBlank(message = "이름")
+    private String name;
 
-	@NotNull(message = "시간")
-	private Long timeId;
+    @NotBlank(message = "날짜")
+    private String date;
 
-	@NotNull(message = "테마")
-	private Long themeId;
+    @NotNull(message = "시간")
+    private Long timeId;
 
-	public ReservationRequest(String name, String date, Long timeId, Long themeId) {
-		this.name = name;
-		this.date = date;
-		this.timeId = timeId;
-		this.themeId = themeId;
-	}
+    @NotNull(message = "테마")
+    private Long themeId;
 
-	public String getName() {
-		return name;
-	}
+    public ReservationRequest(String name, String date, Long timeId, Long themeId) {
+        this.name = name;
+        this.date = date;
+        this.timeId = timeId;
+        this.themeId = themeId;
+    }
 
-	public String getDate() {
-		return date;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Long getTimeId() {
-		return timeId;
-	}
+    public String getDate() {
+        return date;
+    }
 
-	public Long getThemeId() {
-		return themeId;
-	}
+    public Long getTimeId() {
+        return timeId;
+    }
+
+    public Long getThemeId() {
+        return themeId;
+    }
 }

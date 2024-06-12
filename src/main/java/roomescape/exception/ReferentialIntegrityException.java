@@ -1,18 +1,15 @@
 package roomescape.exception;
 
-public class ReferentialIntegrityException extends RuntimeException{
-	private RoomescapeErrorCode errorCode;
+public class ReferentialIntegrityException extends RuntimeException {
 
-	public ReferentialIntegrityException(String message) {
-		super(message);
-		this.errorCode = RoomescapeErrorCode.REFERENTIAL_EXCEPTION;
-	}
+    private RoomescapeErrorCode errorCode;
 
-	public ReferentialIntegrityException() {
-		this("");
-	}
+    public ReferentialIntegrityException(String message) {
+        super(message);
+        this.errorCode = RoomescapeErrorCode.REFERENTIAL_EXCEPTION;
+    }
 
-	public RoomescapeErrorCode getErrorCode() {
-		return errorCode;
-	}
+    public RoomescapeErrorCode getErrorCode() {
+        return errorCode;
+    }
 }

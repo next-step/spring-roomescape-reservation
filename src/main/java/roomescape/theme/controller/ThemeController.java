@@ -21,8 +21,8 @@ public class ThemeController {
     }
 
     @GetMapping
-    public List<ThemeResponse> getThemes() {
-        return themeService.findThemes();
+    public ResponseEntity<List<ThemeResponse>> getThemes() {
+        return ResponseEntity.ok().body(themeService.findThemes());
     }
 
     @PostMapping

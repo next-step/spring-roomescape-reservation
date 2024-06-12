@@ -2,14 +2,14 @@ package roomescape.exception;
 
 public class NotExistsException extends RuntimeException {
 
-    private RoomescapeErrorCode errorCode;
+    private RoomescapeErrorMessage errorCode;
 
     public NotExistsException(String message) {
         super(message);
-        this.errorCode = RoomescapeErrorCode.NOT_EXISTS_EXCEPTION;
+        this.errorCode = RoomescapeErrorMessage.NOT_EXISTS_EXCEPTION;
     }
 
-    public RoomescapeErrorCode getErrorCode() {
+    public RoomescapeErrorMessage getErrorCode() {
         return errorCode;
     }
 }

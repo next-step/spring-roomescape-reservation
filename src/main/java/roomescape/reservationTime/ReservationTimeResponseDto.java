@@ -1,4 +1,4 @@
-package roomescape.time;
+package roomescape.reservationTime;
 
 public class ReservationTimeResponseDto {
 

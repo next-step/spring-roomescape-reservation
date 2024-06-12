@@ -1,6 +1,6 @@
 package roomescape.reservation;
 
-import roomescape.time.ReservationTime;
+import roomescape.reservationTime.ReservationTime;
 
 import java.util.Objects;
 

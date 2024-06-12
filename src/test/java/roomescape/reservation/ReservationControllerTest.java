@@ -2,7 +2,6 @@ package roomescape.reservation;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
-import roomescape.time.ReservationTime;
-import roomescape.time.ReservationTimeRequestDto;
-import roomescape.time.ReservationTimeResponseDto;
+import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimeRequestDto;
+import roomescape.reservationTime.ReservationTimeResponseDto;
 
 import java.util.Arrays;
 import java.util.List;

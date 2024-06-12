@@ -2,11 +2,9 @@ package roomescape.reservation;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import roomescape.time.ReservationTime;
+import roomescape.reservationTime.ReservationTime;
 
 import java.util.HashMap;
 import java.util.List;

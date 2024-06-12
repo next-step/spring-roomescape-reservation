@@ -39,4 +39,25 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
 
         return reservationTimeEntity.changeId(id);
     }
+
+    @Override
+    public Optional<ReservationTimeEntity> findById(Long reservationTimeId) {
+        String sql = "SELECT * FROM reservation_time WHERE id = :id";
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue(TABLE_COLUMN_ID, reservationTimeId);
+
+        return Optional.ofNullable(
+                namedParameterJdbcTemplate.queryForObject(
+                        sql,
+                        sqlParameterSource,
+                        (resultSet, rowNum) -> new ReservationTimeEntity(
+                                resultSet.getLong(TABLE_COLUMN_ID),
+                                resultSet.getTime(TABLE_COLUMN_START_AT).toLocalTime()
+                        )
+                )
+        );
+    }
+
+
 }

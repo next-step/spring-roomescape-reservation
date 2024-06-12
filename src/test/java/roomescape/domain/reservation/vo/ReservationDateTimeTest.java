@@ -12,7 +12,7 @@ class ReservationDateTimeTest {
     private static final String TIME_FORMAT = "HH:mm";
 
     @Test
-    void fetchReservationDateTimeTest() {
+    void getFormatted() {
         LocalDateTime localDateTime = LocalDateTime.of(2024, 6, 6, 19, 25);
         ReservationDateTime reservationDateTime = new ReservationDateTime(localDateTime);
 

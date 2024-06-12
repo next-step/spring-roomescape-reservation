@@ -27,7 +27,6 @@ public class ReservationService {
                                 .reservationTimeResponseDto(new ReservationTimeResponseDto(
                                         reservation.getReservationTime().getId(),
                                         reservation.getReservationTime().getStartAt()))
-                                .time(reservation.getTime())
                                 .build()
                 ).toList();
     }
@@ -40,7 +39,6 @@ public class ReservationService {
                         new ReservationTime(
                                 reservationRequestDto.getReservationTimeRequestDto().getId(),
                                 reservationRequestDto.getReservationTimeRequestDto().getStartAt()))
-                .time(reservationRequestDto.getTime())
                 .build();
 
         final Long savedId = reservationRepository.save(reservation);
@@ -53,7 +51,6 @@ public class ReservationService {
                 .reservationTimeResponseDto(
                         new ReservationTimeResponseDto(savedReservation.getReservationTime().getId(),
                                 savedReservation.getReservationTime().getStartAt()))
-                .time(savedReservation.getTime())
                 .build();
     }
 
@@ -74,7 +71,10 @@ public class ReservationService {
                 .id(reservation.getId())
                 .name(reservation.getName())
                 .date(reservation.getDate())
-                .time(reservation.getTime())
+                .reservationTimeResponseDto(
+                        new ReservationTimeResponseDto(
+                                reservation.getReservationTime().getId(),
+                                reservation.getReservationTime().getStartAt()))
                 .build();
     }
 

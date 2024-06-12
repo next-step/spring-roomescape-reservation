@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import roomescape.reservation.ReservationRequestDto;
+import roomescape.reservation.ReservationResponseDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -42,7 +44,7 @@ class ReservationControllerTest {
         ReservationResponseDto responseDto = response.as(ReservationResponseDto.class);
         assertThat(responseDto.getName()).isEqualTo(request.getName());
         assertThat(responseDto.getDate()).isEqualTo(request.getDate());
-        assertThat(responseDto.getTime()).isEqualTo(request.getTime());
+        assertThat(responseDto.getReservationTimeResponseDto().getStartAt()).isEqualTo(request.getReservationTimeRequestDto().getStartAt());
     }
 
     @DisplayName("예약을 삭제합니다.")
@@ -63,7 +65,7 @@ class ReservationControllerTest {
         ReservationResponseDto responseDto = response.as(ReservationResponseDto.class);
         assertThat(responseDto.getName()).isEqualTo(request.getName());
         assertThat(responseDto.getDate()).isEqualTo(request.getDate());
-        assertThat(responseDto.getTime()).isEqualTo(request.getTime());
+        assertThat(responseDto.getReservationTimeResponseDto().getStartAt()).isEqualTo(request.getReservationTimeRequestDto().getStartAt());
 
         // when
         var response2 = RestAssured.given().log().all()

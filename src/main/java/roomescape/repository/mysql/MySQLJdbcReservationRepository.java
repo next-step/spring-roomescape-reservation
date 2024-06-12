@@ -20,7 +20,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
     private static final String TABLE_COLUMN_NAME = "name";
     private static final String TABLE_COLUMN_DATE_TIME = "date_time";
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    
+
     public MySQLJdbcReservationRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
@@ -75,19 +75,21 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public ReservationEntity findById(Long reservationId) {
+    public Optional<ReservationEntity> findById(Long reservationId) {
         String sql = "SELECT * FROM reservation WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationId);
 
-        return namedParameterJdbcTemplate.queryForObject(
-                sql,
-                sqlParameterSource,
-                (resultSet, rowNum) -> new ReservationEntity(
-                        resultSet.getLong(TABLE_COLUMN_ID),
-                        resultSet.getString(TABLE_COLUMN_NAME),
-                        resultSet.getTimestamp(TABLE_COLUMN_DATE_TIME).toLocalDateTime()
+        return Optional.ofNullable(
+                namedParameterJdbcTemplate.queryForObject(
+                        sql,
+                        sqlParameterSource,
+                        (resultSet, rowNum) -> new ReservationEntity(
+                                resultSet.getLong(TABLE_COLUMN_ID),
+                                resultSet.getString(TABLE_COLUMN_NAME),
+                                resultSet.getTimestamp(TABLE_COLUMN_DATE_TIME).toLocalDateTime()
+                        )
                 )
         );
     }

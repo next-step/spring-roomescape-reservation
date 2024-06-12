@@ -43,7 +43,8 @@ class InMemoryReservationRepositoryTest {
                 );
 
                 inMemoryReservationRepository.save(expected);
-                ReservationEntity actual = inMemoryReservationRepository.findById(1L);
+                ReservationEntity actual = inMemoryReservationRepository.findById(1L)
+                        .orElseThrow(() -> new IllegalStateException("엔티티를 찾을 수 없습니다."));
 
                 assertSoftly(softly -> softly.assertThat(actual.getReservationName()).isEqualTo("brie")
                 );
@@ -67,7 +68,8 @@ class InMemoryReservationRepositoryTest {
 
                 inMemoryReservationRepository.save(expected);
 
-                ReservationEntity actual = inMemoryReservationRepository.findById(1L);
+                ReservationEntity actual = inMemoryReservationRepository.findById(1L)
+                        .orElseThrow(() -> new IllegalStateException("엔티티를 찾을 수 없습니다."));
                 List<ReservationEntity> all = inMemoryReservationRepository.findAll();
 
                 assertSoftly(softly -> {
@@ -106,9 +108,7 @@ class InMemoryReservationRepositoryTest {
                             softly.assertThat(deleteEntities.size()).isEqualTo(0);
                         }
                 );
-
             }
         }
     }
-
 }

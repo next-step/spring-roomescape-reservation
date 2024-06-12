@@ -53,7 +53,8 @@ class MySQLJdbcReservationRepositoryTest {
                 );
 
                 mySQLJdbcReservationRepository.save(expected);
-                ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L);
+                ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L)
+                        .orElseThrow(() -> new IllegalStateException("엔티티를 찾을 수 없습니다."));
 
                 assertSoftly(softly -> softly.assertThat(actual.getReservationName()).isEqualTo("brie")
                 );
@@ -76,7 +77,8 @@ class MySQLJdbcReservationRepositoryTest {
 
             mySQLJdbcReservationRepository.save(expected);
 
-            ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L);
+            ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L)
+                    .orElseThrow(() -> new IllegalStateException("엔티티를 찾을 수 없습니다."));
             List<ReservationEntity> all = mySQLJdbcReservationRepository.findAll();
 
             assertSoftly(softly -> {

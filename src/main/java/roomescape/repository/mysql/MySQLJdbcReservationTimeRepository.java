@@ -58,6 +58,5 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
                 )
         );
     }
-
-
+    
 }

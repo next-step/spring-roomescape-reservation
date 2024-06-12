@@ -2,8 +2,9 @@ package roomescape.reservation;
 
 import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.stereotype.Service;
-import roomescape.exception.NotExistsException;
 import roomescape.exception.PastDateTimeException;
+import roomescape.exception.ReservationTimeNotExistsException;
+import roomescape.exception.ThemeNotExistsException;
 import roomescape.reservationTime.ReservationTime;
 import roomescape.reservationTime.ReservationTimeRepository;
 import roomescape.theme.Theme;
@@ -40,9 +41,9 @@ public class ReservationService {
     public ReservationResponse saveReservation(ReservationRequest request) {
         ReservationTime reservationTime = Optional.ofNullable(
                 reservationTimeRepository.findById(request.getTimeId()))
-            .orElseThrow(() -> new NotExistsException("해당 시간이"));
+            .orElseThrow(ReservationTimeNotExistsException::new);
         Theme theme = Optional.ofNullable(themeRepository.findById(request.getThemeId()))
-            .orElseThrow(() -> new NotExistsException("해당 테마가"));
+            .orElseThrow(ThemeNotExistsException::new);
 
         Reservation reservation = new Reservation(request.getName(), request.getDate(),
             reservationTime, theme);

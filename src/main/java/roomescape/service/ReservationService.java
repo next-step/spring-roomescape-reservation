@@ -32,10 +32,7 @@ public class ReservationService {
     }
 
     public ReservationResponse createReservation(ReservationRequest reservationRequest) {
-        ReservationTime reservationTime = findReservationTimeById(reservationRequest.getTimeId());
-        findReservationThemeById(reservationRequest.getThemeId());
-
-        validateReservationCreation(reservationRequest, reservationTime);
+        validateReservationCreation(reservationRequest);
 
         Reservation reservation = reservationDao.save(this.convertToEntity(reservationRequest));
         return this.convertToResponse(reservation);
@@ -51,7 +48,10 @@ public class ReservationService {
         reservationDao.delete(id);
     }
 
-    private void validateReservationCreation(ReservationRequest reservationRequest, ReservationTime reservationTime) {
+    private void validateReservationCreation(ReservationRequest reservationRequest) {
+        findReservationThemeById(reservationRequest.getThemeId());
+        ReservationTime reservationTime = findReservationTimeById(reservationRequest.getTimeId());
+
         long count = reservationDao.countByDateAndTimeId(reservationRequest.getDate()
                 , reservationRequest.getTimeId());
         if (count > 0) {

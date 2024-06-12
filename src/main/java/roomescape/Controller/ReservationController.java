@@ -5,7 +5,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import roomescape.DTO.ReservationRequest;
 import roomescape.DTO.ReservationResponse;
@@ -15,7 +14,7 @@ import roomescape.Entity.ReservationTime;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-@Controller
+@RestController
 public class ReservationController {
     private final JdbcTemplate jdbcTemplate;
 
@@ -35,11 +34,6 @@ public class ReservationController {
                 reservationTime
         );
     };
-
-    @GetMapping("/admin/reservation")
-    public String showAdminPage() {
-        return "admin/reservation";
-    }
 
     @GetMapping("reservations")
     public ResponseEntity<List<ReservationResponse>> read() {

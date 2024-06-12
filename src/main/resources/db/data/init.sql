@@ -1,5 +1,6 @@
 SET FOREIGN_KEY_CHECKS = 0;
 
 TRUNCATE TABLE reservation;
+TRUNCATE TABLE reservation_time;
 
 SET FOREIGN_KEY_CHECKS = 1;

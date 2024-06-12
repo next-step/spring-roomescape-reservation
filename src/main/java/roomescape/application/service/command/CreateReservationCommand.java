@@ -2,6 +2,7 @@ package roomescape.application.service.command;
 
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.vo.ReservationDateTime;
+import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class CreateReservationCommand {
 
     public Reservation toReservation() {
         return new Reservation(
+                ReservationId.empty(),
                 new ReservationName(this.name),
                 new ReservationDateTime(this.getReservationDateTime())
         );

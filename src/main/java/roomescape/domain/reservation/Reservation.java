@@ -15,15 +15,8 @@ public class Reservation {
 
     private final ReservationDateTime reservationDateTime;
 
-
-    public Reservation(ReservationName reservationName, ReservationDateTime reservationDateTime) {
-        ObjectValidator.validateNotNull(reservationName, reservationDateTime);
-        this.id = ReservationId.notSaved();
-        this.reservationName = reservationName;
-        this.reservationDateTime = reservationDateTime;
-    }
-
     public Reservation(ReservationId id, ReservationName reservationName, ReservationDateTime reservationDateTime) {
+        ObjectValidator.validateNotNull(reservationName, reservationDateTime);
         this.id = id;
         this.reservationName = reservationName;
         this.reservationDateTime = reservationDateTime;

@@ -8,6 +8,10 @@ public class ReservationTimeId {
         this.id = id;
     }
 
+    public static ReservationTimeId empty() {
+        return new ReservationTimeId(null);
+    }
+
     public Long getId() {
         return id;
     }

@@ -11,6 +11,10 @@ public class ReservationTimeStartAt {
         this.startAt = startAt;
     }
 
+    public LocalTime getStartAt() {
+        return startAt;
+    }
+
     public String getFormatted(String pattern) {
         return startAt.format(DateTimeFormatter.ofPattern(pattern));
     }

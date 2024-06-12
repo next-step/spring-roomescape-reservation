@@ -6,7 +6,7 @@ public record ReservationId(Long id) {
         this.id = id;
     }
 
-    public static ReservationId notSaved() {
+    public static ReservationId empty() {
         return new ReservationId(null);
     }
 }

@@ -1,7 +1,9 @@
 package roomescape;
 
 import static org.hamcrest.Matchers.is;
+import static roomescape.fixture.ReservationFixture.예약을_생성한다;
 import static roomescape.fixture.ReservationThemeFixture.예약테마를_생성한다;
+import static roomescape.fixture.ReservationTimeFixture.예약시간을_생성한다;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -19,13 +21,17 @@ import org.springframework.test.annotation.DirtiesContext;
 @DisplayName("예약테마 테스트")
 public class ReservationThemeTest {
 
+    private final String NAME = "레벨2 탈출";
+    private final String DESCRIPTION = "우테코 레벨2를 탈출하는 내용입니다.";
+    private final String THUMBNAIL = "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg";
+
     @Test
     @DisplayName("예약테마를 생성한다.")
-    void createReservationTime() {
+    void createReservationTheme() {
         Map<String, String> params = new HashMap<>();
-        params.put("name", "레벨2 탈출");
-        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
-        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        params.put("name", NAME);
+        params.put("description", DESCRIPTION);
+        params.put("thumbnail", THUMBNAIL);
 
         Response response = 예약테마를_생성한다(params);
 
@@ -41,8 +47,8 @@ public class ReservationThemeTest {
     void missingRequiredFieldsThrowsErrorOnThemeCreation() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "");
-        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
-        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        params.put("description", DESCRIPTION);
+        params.put("thumbnail", THUMBNAIL);
 
         Response response = 예약테마를_생성한다(params);
 
@@ -52,11 +58,11 @@ public class ReservationThemeTest {
 
     @Test
     @DisplayName("예약테마를 생성할 때 테마이름이 중복인 경우 에러가 발생한다.")
-    void createReservationTimeDuplicate() {
+    void createReservationThemeDuplicate() {
         Map<String, String> params = new HashMap<>();
-        params.put("name", "레벨2 탈출");
-        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
-        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        params.put("name", NAME);
+        params.put("description", DESCRIPTION);
+        params.put("thumbnail", THUMBNAIL);
 
         Response firstCreateResponse = 예약테마를_생성한다(params);
 
@@ -71,11 +77,11 @@ public class ReservationThemeTest {
 
     @Test
     @DisplayName("예약테마 목록을 조회한다.")
-    void findAllReservationTimes() {
+    void findAllReservationThemes() {
         Map<String, String> params = new HashMap<>();
-        params.put("name", "레벨2 탈출");
-        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
-        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        params.put("name", NAME);
+        params.put("description", DESCRIPTION);
+        params.put("thumbnail", THUMBNAIL);
 
         예약테마를_생성한다(params);
 
@@ -90,11 +96,11 @@ public class ReservationThemeTest {
 
     @Test
     @DisplayName("예약테마를 삭제한다.")
-    void deleteReservationTime() {
+    void deleteReservationTheme() {
         Map<String, String> params = new HashMap<>();
-        params.put("name", "레벨2 탈출");
-        params.put("description", "우테코 레벨2를 탈출하는 내용입니다.");
-        params.put("thumbnail", "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg");
+        params.put("name", NAME);
+        params.put("description", DESCRIPTION);
+        params.put("thumbnail", THUMBNAIL);
 
         예약테마를_생성한다(params);
 
@@ -106,4 +112,33 @@ public class ReservationThemeTest {
                 .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
+    @Test
+    @DisplayName("예약테마를 삭제할 때 사용중인 예약이 있는 경우 에러가 발생한다.")
+    void deleteReservationThemeExistReservation() {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", NAME);
+        params.put("description", DESCRIPTION);
+        params.put("thumbnail", THUMBNAIL);
+
+        예약테마를_생성한다(params);
+
+        params.clear();
+        params.put("startAt", "10:00");
+
+        예약시간을_생성한다(params);
+
+        params.clear();
+        params.put("name", "브라운");
+        params.put("date", "2024-06-25");
+        params.put("timeId", "1");
+        params.put("themeId", "1");
+        예약을_생성한다(params);
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().delete("/themes/1")
+                .then().log().all()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
 }

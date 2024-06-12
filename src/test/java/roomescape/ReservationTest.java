@@ -1,11 +1,13 @@
 package roomescape;
 
 import static org.hamcrest.Matchers.is;
+import static roomescape.fixture.ReservationFixture.예약을_생성한다;
 import static roomescape.fixture.ReservationThemeFixture.예약테마를_생성한다;
 import static roomescape.fixture.ReservationTimeFixture.예약시간을_생성한다;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,13 +46,12 @@ public class ReservationTest {
         params.put("timeId", "1");
         params.put("themeId", "1");
 
-        RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(params)
-                .when().post("/reservations")
-                .then().log().all()
+        Response response = 예약을_생성한다(params);
+
+        int expectedIdValue = 1;
+        response.then().log().all()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("id", is(1));
+                .body("id", is(expectedIdValue));
     }
 
     @Test

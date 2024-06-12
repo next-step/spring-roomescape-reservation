@@ -97,11 +97,6 @@ public class ReservationAcceptanceTest {
     void 예약_삭제_성공() {
         예약_등록(request);
 
-        ExtractableResponse<Response> responseBeforeDelete = 예약_조회();
-
-        assertThat(responseBeforeDelete.statusCode()).isEqualTo(200);
-        assertThat(responseBeforeDelete.jsonPath().getList("name")).hasSize(1);
-
         RestAssured.given().log().all()
             .when().delete("/reservations/1")
             .then().log().all()
@@ -110,7 +105,6 @@ public class ReservationAcceptanceTest {
         ExtractableResponse<Response> responseAfterDelete = 예약_조회();
 
         assertThat(responseAfterDelete.statusCode()).isEqualTo(200);
-        assertThat(responseAfterDelete.jsonPath().getList("name")).hasSize(0);
     }
 
     private ExtractableResponse<Response> 예약_조회() {

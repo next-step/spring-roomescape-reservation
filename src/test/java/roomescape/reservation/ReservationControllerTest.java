@@ -73,7 +73,6 @@ class ReservationControllerTest {
     @Test
     void readReservation() {
 
-
         final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", new ReservationTime(time1Id));
         final Reservation reservation2 = new Reservation("심슨", "2023-08-05", new ReservationTime(time2Id));
 
@@ -131,6 +130,7 @@ class ReservationControllerTest {
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().delete("/reservations/" + response1.as(ReservationResponseDto.class).getId())
+
                 .then().log().all().extract();
 
         // then

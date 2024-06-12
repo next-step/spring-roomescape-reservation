@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @Repository
 public class ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -21,7 +22,6 @@ public class ReservationRepository {
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation")
                 .usingGeneratedKeyColumns("id");
-
         this.reservationRowMapper = (resultSet, rowNum) -> new Reservation(
                 resultSet.getLong("reservation_id"),
                 resultSet.getString("reservation_name"),
@@ -43,12 +43,12 @@ public class ReservationRepository {
                 "FROM reservation as r \n" +
                 "inner join reservation_time as t \n" +
                 "on r.time_id = t.id";
+
         return jdbcTemplate.query(sql, reservationRowMapper);
 
     }
 
     public Long save(Reservation reservation) {
-//        final SqlParameterSource parameters = new BeanPropertySqlParameterSource(reservation);
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", reservation.getName());
         parameters.put("date", reservation.getDate());
@@ -75,6 +75,7 @@ public class ReservationRepository {
                 "where r.id = ?";
         Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
         return reservation;
+
     }
 
     public boolean existsById(Long id) {

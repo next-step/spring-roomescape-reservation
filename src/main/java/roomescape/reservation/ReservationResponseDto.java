@@ -13,6 +13,7 @@ public class ReservationResponseDto {
         this.name = name;
         this.date = date;
         this.reservationTimeResponseDto = reservationTimeResponseDto;
+
     }
 
     public Long getId() {
@@ -29,6 +30,7 @@ public class ReservationResponseDto {
 
     public ReservationTimeResponseDto getReservationTimeResponseDto() {
         return reservationTimeResponseDto;
+
     }
 
     public static class Builder {

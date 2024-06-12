@@ -1,5 +1,6 @@
 package roomescape.reservation;
 
+<<<<<<< HEAD
 import roomescape.reservationTime.ReservationTime;
 
 import java.util.Objects;
@@ -59,6 +60,7 @@ public class Reservation {
         private String date;
         private ReservationTime reservationTime;
 
+
         public Builder id(Long id) {
             this.id = id;
             return this;
@@ -81,6 +83,7 @@ public class Reservation {
 
         public Reservation build() {
             return new Reservation(id, name, date, reservationTime);
+
         }
     }
 

@@ -44,6 +44,7 @@ class ReservationRepositoryTest {
                 "date VARCHAR(255) NOT NULL, " +
                 "time_id BIGINT, " +   // 컬럼 수정
                 "PRIMARY KEY (id))");  // 외래키 제거
+
     }
 
     @DisplayName("예약 전체 조회")
@@ -69,6 +70,7 @@ class ReservationRepositoryTest {
         for (Reservation reservation : actual) {
             System.out.println("reservation = " + reservation.toString());
         }
+
         // then
         assertThat(actual).hasSize(2);
     }
@@ -88,6 +90,7 @@ class ReservationRepositoryTest {
 
         // then
         Reservation actual = reservationRepository.findById(savedReservationId);
+
         assertThat(actual.getDate()).isEqualTo(request.getDate());
         assertThat(actual.getName()).isEqualTo(request.getName());
     }
@@ -108,6 +111,7 @@ class ReservationRepositoryTest {
 
         // then
         assertThatThrownBy(() -> reservationRepository.findById(savedReservationId))
+
                 .isInstanceOf(DataAccessException.class);
 
 

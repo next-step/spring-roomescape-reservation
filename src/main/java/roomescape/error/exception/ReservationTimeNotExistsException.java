@@ -1,4 +1,4 @@
-package roomescape.exception;
+package roomescape.error.exception;
 
 public class ReservationTimeNotExistsException extends NotExistsException{
 

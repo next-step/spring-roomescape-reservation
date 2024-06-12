@@ -1,14 +1,17 @@
-package roomescape.reservation;
+package roomescape.reservation.service;
 
 import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.stereotype.Service;
-import roomescape.exception.PastDateTimeException;
-import roomescape.exception.ReservationTimeNotExistsException;
-import roomescape.exception.ThemeNotExistsException;
+import roomescape.error.exception.PastDateTimeException;
+import roomescape.error.exception.ReservationTimeNotExistsException;
+import roomescape.error.exception.ThemeNotExistsException;
+import roomescape.reservation.Reservation;
+import roomescape.reservation.dto.ReservationRequest;
+import roomescape.reservation.dto.ReservationResponse;
 import roomescape.reservationTime.ReservationTime;
-import roomescape.reservationTime.ReservationTimeRepository;
+import roomescape.reservationTime.service.ReservationTimeRepository;
 import roomescape.theme.Theme;
-import roomescape.theme.ThemeRepository;
+import roomescape.theme.service.ThemeRepository;
 
 import java.util.List;
 import java.util.Optional;

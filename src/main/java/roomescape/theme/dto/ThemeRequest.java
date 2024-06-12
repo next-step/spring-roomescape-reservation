@@ -1,28 +1,22 @@
-package roomescape.theme;
+package roomescape.theme.dto;
 
-public class ThemeResponse {
+import jakarta.validation.constraints.NotBlank;
 
-    private Long id;
+public class ThemeRequest {
 
+    @NotBlank(message = "테마 이름")
     private String name;
 
+    @NotBlank(message = "테마 설명")
     private String description;
 
+    @NotBlank(message = "테마 썸네일 URL")
     private String thumbnail;
 
-    public ThemeResponse(Long id, String name, String description, String thumbnail) {
-        this.id = id;
+    public ThemeRequest(String name, String description, String thumbnail) {
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
-    }
-
-    public ThemeResponse(Theme theme) {
-        this(theme.getId(), theme.getName(), theme.getDescription(), theme.getThumbnail());
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

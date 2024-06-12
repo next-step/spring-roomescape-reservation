@@ -1,4 +1,4 @@
-package roomescape.exception;
+package roomescape.error;
 
 public enum RoomescapeErrorMessage {
     ILLEGAL_INPUT_VALUE_EXCEPTION(" 값을 확인해주세요."),

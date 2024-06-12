@@ -1,4 +1,4 @@
-package roomescape.exception;
+package roomescape.error;
 
 import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.format.DateTimeParseException;
+import roomescape.error.exception.NotExistsException;
+import roomescape.error.exception.PastDateTimeException;
+import roomescape.error.exception.ReferentialIntegrityException;
 
 @RestControllerAdvice
 public class RoomescapeExceptionHandler {

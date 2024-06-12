@@ -1,4 +1,6 @@
-package roomescape.exception;
+package roomescape.error.exception;
+
+import roomescape.error.RoomescapeErrorMessage;
 
 public class ReferentialIntegrityException extends RuntimeException {
 

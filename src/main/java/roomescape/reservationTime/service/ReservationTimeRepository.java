@@ -1,4 +1,4 @@
-package roomescape.reservationTime;
+package roomescape.reservationTime.service;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import roomescape.reservationTime.ReservationTime;
 
 @Repository
 public class ReservationTimeRepository {

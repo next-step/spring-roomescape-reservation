@@ -1,11 +1,14 @@
-package roomescape.reservationTime;
+package roomescape.reservationTime.service;
 
 import org.springframework.stereotype.Service;
-import roomescape.exception.ReferentialIntegrityException;
-import roomescape.reservation.ReservationRepository;
+import roomescape.error.exception.ReferentialIntegrityException;
+import roomescape.reservation.service.ReservationRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.dto.ReservationTimeRequest;
+import roomescape.reservationTime.dto.ReservationTimeResponse;
 
 @Service
 public class ReservationTimeService {

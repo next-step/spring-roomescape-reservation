@@ -1,11 +1,13 @@
-package roomescape.theme;
+package roomescape.theme.service;
 
 import org.springframework.stereotype.Service;
-import roomescape.exception.ReferentialIntegrityException;
-import roomescape.reservation.ReservationRepository;
+import roomescape.error.exception.ReferentialIntegrityException;
+import roomescape.reservation.service.ReservationRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import roomescape.theme.dto.ThemeRequest;
+import roomescape.theme.dto.ThemeResponse;
 
 @Service
 public class ThemeService {

@@ -1,4 +1,4 @@
-package roomescape.theme;
+package roomescape.theme.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import roomescape.theme.dto.ThemeRequest;
+import roomescape.theme.dto.ThemeResponse;
+import roomescape.theme.service.ThemeService;
 
 @RestController
 @RequestMapping("/themes")

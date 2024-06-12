@@ -1,4 +1,6 @@
-package roomescape.reservation;
+package roomescape.reservation.dto;
+
+import roomescape.reservation.Reservation;
 
 public class ReservationResponse {
 

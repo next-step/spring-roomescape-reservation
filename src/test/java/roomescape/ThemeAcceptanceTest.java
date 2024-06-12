@@ -7,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.reservation.ReservationRequest;
-import roomescape.reservationTime.ReservationTimeRequest;
-import roomescape.theme.ThemeRequest;
+import roomescape.reservation.dto.ReservationRequest;
+import roomescape.reservationTime.dto.ReservationTimeRequest;
+import roomescape.theme.dto.ThemeRequest;
 
 import static org.hamcrest.Matchers.is;
 

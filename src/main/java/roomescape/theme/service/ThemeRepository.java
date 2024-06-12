@@ -1,4 +1,4 @@
-package roomescape.theme;
+package roomescape.theme.service;
 
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
+import roomescape.theme.Theme;
 
 @Repository
 public class ThemeRepository {

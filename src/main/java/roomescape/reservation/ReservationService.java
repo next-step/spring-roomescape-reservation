@@ -64,4 +64,19 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
+
+    public ReservationResponseDto findById(Long id) {
+        Reservation reservation = reservationRepository.findById(id);
+        return new ReservationResponseDto.Builder()
+                .id(reservation.getId())
+                .name(reservation.getName())
+                .date(reservation.getDate())
+                .reservationTimeResponseDto(
+                        new ReservationTimeResponseDto(
+                                reservation.getReservationTime().getId(),
+                                reservation.getReservationTime().getStartAt()))
+                .build();
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package roomescape.reservation;
+package roomescape.reservation.time;
 
 public class ReservationTimeEntity {
     private Long id;

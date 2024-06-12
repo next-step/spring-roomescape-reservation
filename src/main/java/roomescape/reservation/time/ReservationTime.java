@@ -1,4 +1,4 @@
-package roomescape.reservation;
+package roomescape.reservation.time;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.lang.NonNull;

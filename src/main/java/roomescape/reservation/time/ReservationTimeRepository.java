@@ -1,4 +1,4 @@
-package roomescape.reservation;
+package roomescape.reservation.time;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

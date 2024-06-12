@@ -12,10 +12,10 @@ public class ReservationRequest {
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "yyyy-MM-dd 형식이 아닙니다.")
     private String date;
 
-    @NotBlank(message = "예약시간 아이디는 필수 값입니다.")
+    @NotBlank(message = "예약하려면 시간을 선택해야합니다. 확인 후 다시 시도해주세요.")
     private String timeId;
 
-    @NotBlank(message = "예약테마 아이디는 필수 값입니다.")
+    @NotBlank(message = "예약하려면 테마를 선택해야합니다. 확인 후 다시 시도해주세요.")
     private String themeId;
 
     public ReservationRequest() {

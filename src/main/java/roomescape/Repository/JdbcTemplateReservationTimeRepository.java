@@ -46,10 +46,10 @@ public class JdbcTemplateReservationTimeRepository implements ReservationTimeRep
     public Long countReservationMatchWith(Long id) {
         String sql = "select count(*) "
                 + "from reservation as r "
-                + "inner_join reservation_time as t "
+                + "inner join reservation_time as t "
                 + "on r.time_id = t.id "
                 + "where t.id = ?";
-        return jdbcTemplate.queryForObject(sql, Long.class);
+        return jdbcTemplate.queryForObject(sql, Long.class, id);
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ReservationTimeTest {
 
     @ParameterizedTest
     @DisplayName("ReservationTimeController - create() : invalid time")
-    @ValueSource(strings = {"asdf", "24:24", ""})
+    @ValueSource(strings = {"asdf", "24:24", "", "24:00"})
     void 유효하지_않은_예약_시간_생성(String startAt) {
         var response = RestAssured
                 .given().log().all()
@@ -114,6 +114,7 @@ public class ReservationTimeTest {
     @Test
     @DisplayName("ReservationTimeController - delete() : time with reservation existing")
     void 예약_존재하는_시간_삭제() {
+        new ReservationTest().예약();
         var response = RestAssured
                 .given().log().all()
                 .when().delete("/times/1")

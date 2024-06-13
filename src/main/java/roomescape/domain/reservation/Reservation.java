@@ -44,10 +44,10 @@ public class Reservation {
     }
 
     public LocalDate getReservationDate() {
-        return this.reservationDate.getDate();
+        return this.reservationDate.date();
     }
 
     public Long getReservationTimeId() {
-        return this.reservationTimeId.getId();
+        return this.reservationTimeId.id();
     }
 }

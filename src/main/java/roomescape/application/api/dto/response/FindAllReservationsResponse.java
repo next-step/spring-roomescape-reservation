@@ -1,7 +1,7 @@
 package roomescape.application.api.dto.response;
 
-import roomescape.domain.reservation.Reservation;
-import roomescape.domain.reservation.Reservations;
+import roomescape.domain.reservation.ReservationView;
+import roomescape.domain.reservation.ReservationViews;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,26 +17,30 @@ public class FindAllReservationsResponse {
 
     private final String date;
 
-    private final String time;
+    private final Long timeId;
 
-    private FindAllReservationsResponse(Long id, String name, String date, String time) {
+    private final String startAt;
+
+    public FindAllReservationsResponse(Long id, String name, String date, Long timeId, String startAt) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
+        this.startAt = startAt;
     }
 
-    public static FindAllReservationsResponse from(Reservation reservation) {
+    public static FindAllReservationsResponse from(ReservationView reservationView) {
         return new FindAllReservationsResponse(
-                reservation.getId(),
-                reservation.getReservationName(),
-                reservation.getFormattedReservationDate(DATE_PATTERN),
-                reservation.getFormattedReservationDate(TIME_PATTERN)
+                reservationView.getReservationId(),
+                reservationView.getReservationName(),
+                reservationView.getFormattedReservationDate(DATE_PATTERN),
+                reservationView.getReservationTimeId(),
+                reservationView.getFormattedReservationTimeStartAt(TIME_PATTERN)
         );
     }
 
-    public static List<FindAllReservationsResponse> toFindAllReservationsResponses(Reservations reservations) {
-        return reservations.getReservations()
+    public static List<FindAllReservationsResponse> toFindAllReservationsResponses(ReservationViews reservationViews) {
+        return reservationViews.getReservationViews()
                 .stream()
                 .map(FindAllReservationsResponse::from)
                 .collect(Collectors.toList());
@@ -54,7 +58,11 @@ public class FindAllReservationsResponse {
         return date;
     }
 
-    public String getTime() {
-        return time;
+    public Long getTimeId() {
+        return timeId;
+    }
+
+    public String getStartAt() {
+        return startAt;
     }
 }

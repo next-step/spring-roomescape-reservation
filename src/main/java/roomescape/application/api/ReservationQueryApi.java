@@ -4,24 +4,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import roomescape.application.api.dto.response.FindAllReservationsResponse;
-import roomescape.application.service.ReservationService;
-import roomescape.domain.reservation.Reservations;
+import roomescape.application.service.ReservationQueryService;
+import roomescape.domain.reservation.ReservationViews;
 
 import java.util.List;
 
 @RestController
 public class ReservationQueryApi {
 
-    private final ReservationService reservationService;
+    private final ReservationQueryService reservationQueryService;
 
-    public ReservationQueryApi(ReservationService reservationService) {
-        this.reservationService = reservationService;
+    public ReservationQueryApi(ReservationQueryService reservationQueryService) {
+        this.reservationQueryService = reservationQueryService;
     }
 
     @GetMapping("/reservations")
     public ResponseEntity<List<FindAllReservationsResponse>> findAllReservations() {
-        Reservations reservations = reservationService.findAllReservations();
+        ReservationViews reservationViews = reservationQueryService.findAllReservations();
 
-        return ResponseEntity.ok(FindAllReservationsResponse.toFindAllReservationsResponses(reservations));
+        return ResponseEntity.ok(FindAllReservationsResponse.toFindAllReservationsResponses(reservationViews));
     }
 }

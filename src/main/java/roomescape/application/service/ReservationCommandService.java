@@ -6,25 +6,16 @@ import roomescape.application.mapper.ReservationMapper;
 import roomescape.application.service.command.CreateReservationCommand;
 import roomescape.application.service.command.DeleteReservationCommand;
 import roomescape.domain.reservation.Reservation;
-import roomescape.domain.reservation.Reservations;
 import roomescape.repository.ReservationRepository;
 import roomescape.repository.entity.ReservationEntity;
 
-import java.util.List;
-
 @Service
-public class ReservationService {
+public class ReservationCommandService {
 
     private final ReservationRepository reservationRepository;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationCommandService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
-    }
-
-    public Reservations findAllReservations() {
-        List<ReservationEntity> reservationEntities = reservationRepository.findAll();
-
-        return ReservationMapper.toReservations(reservationEntities);
     }
 
     public Reservation createReservation(CreateReservationCommand createReservationCommand) {

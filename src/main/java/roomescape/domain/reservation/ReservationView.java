@@ -33,5 +33,24 @@ public class ReservationView {
         this.reservationTimeId = reservationTimeId;
         this.reservationTimeStartAt = reservationTimeStartAt;
     }
-    
+
+    public Long getReservationId() {
+        return this.reservationId.id();
+    }
+
+    public String getReservationName() {
+        return this.reservationName.name();
+    }
+
+    public String getFormattedReservationDate(String pattern) {
+        return this.reservationDate.getFormatted(pattern);
+    }
+
+    public String getFormattedReservationTimeStartAt(String pattern) {
+        return this.reservationTimeStartAt.getFormatted(pattern);
+    }
+
+    public Long getReservationTimeId() {
+        return this.reservationTimeId.id();
+    }
 }

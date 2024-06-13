@@ -19,7 +19,7 @@ public class ReservationTime {
     }
 
     public Long getId() {
-        return id.getId();
+        return id.id();
     }
 
     public String getFormattedStartAt(String pattern) {
@@ -27,7 +27,7 @@ public class ReservationTime {
     }
 
     public LocalTime getStartAt() {
-        return this.startAt.getStartAt();
+        return this.startAt.startAt();
     }
 
 }

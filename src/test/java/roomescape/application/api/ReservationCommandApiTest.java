@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import roomescape.application.api.dto.request.CreateReservationRequest;
 import roomescape.application.api.dto.response.CreateReservationResponse;
-import roomescape.application.service.ReservationService;
+import roomescape.application.service.ReservationCommandService;
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
@@ -34,7 +34,7 @@ class ReservationCommandApiTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     @MockBean
-    private ReservationService reservationService;
+    private ReservationCommandService reservationCommandService;
     @Autowired
     private MockMvc mockMvc;
     private Reservation reservation;
@@ -56,7 +56,7 @@ class ReservationCommandApiTest {
         CreateReservationRequest createReservationRequest =
                 new CreateReservationRequest(LocalDate.of(2024, 6, 6), reservationName, 1L);
 
-        given(reservationService.createReservation(any()))
+        given(reservationCommandService.createReservation(any()))
                 .willReturn(reservation);
 
         CreateReservationResponse expectedResponse = CreateReservationResponse.from(reservation);
@@ -75,7 +75,7 @@ class ReservationCommandApiTest {
     void deleteReservationTest() throws Exception {
         Long reservationId = 1L;
 
-        doNothing().when(reservationService).deleteReservation(any());
+        doNothing().when(reservationCommandService).deleteReservation(any());
 
         mockMvc.perform(
                         delete("/reservations/{reservationId}", reservationId)

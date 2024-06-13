@@ -4,6 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
@@ -39,6 +41,58 @@ public class ReservationTest {
     }
 
     @Test
+    @DisplayName("ReservationController - create() date already past")
+    void 과거_날짜_시간_예약() {
+        String name = "yeeun";
+        String date = "2023-02-17";
+        new ReservationTimeTest().예약_시간_생성(); // 13:00
+        new ThemeTest().테마_생성();
+
+        var response = RestAssured
+                .given().log().all()
+                .body(new ReservationRequest(name, date, 1L, 1L))
+                .contentType(ContentType.JSON)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("ReservationController - create() not existent time")
+    void 존재하지_않는_시간_예약() {
+        String name = "yeeun";
+        String date = "2025-02-17";
+        new ThemeTest().테마_생성();
+
+        var response = RestAssured
+                .given().log().all()
+                .body(new ReservationRequest(name, date, 1L, 1L))
+                .contentType(ContentType.JSON)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    @DisplayName("ReservationController - create() not existent theme")
+    void 존재하지_않는_테마_예약() {
+        String name = "yeeun";
+        String date = "2025-02-17";
+        new ReservationTimeTest().예약_시간_생성();
+
+        var response = RestAssured
+                .given().log().all()
+                .body(new ReservationRequest(name, date, 1L, 1L))
+                .contentType(ContentType.JSON)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
     @DisplayName("ReservationController - read()")
     void 젼체_예약_조회() {
         예약();
@@ -50,6 +104,17 @@ public class ReservationTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("", ReservationResponse.class)).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("ReservationController - read() not existent reservation")
+    void 예약이_없는_경우_예약_조회() {
+        var response = RestAssured
+                .given().log().all()
+                .when().get("/reservations")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     @Test

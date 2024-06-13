@@ -8,15 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import roomescape.application.api.dto.response.FindReservationsResponse;
-import roomescape.application.service.ReservationService;
-import roomescape.domain.reservation.Reservation;
-import roomescape.domain.reservation.Reservations;
-import roomescape.domain.reservation.vo.ReservationDateTime;
-import roomescape.domain.reservation.vo.ReservationId;
-import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.application.api.dto.response.FindReservationTimesResponse;
+import roomescape.application.service.ReservationTimeService;
+import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.ReservationTimes;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
+import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -24,39 +23,37 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ReservationQueryApi.class)
-class ReservationQueryApiTest {
+@WebMvcTest(ReservationTimeQueryApi.class)
+class ReservationTimeQueryApiTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @MockBean
-    private ReservationService reservationService;
+    private ReservationTimeService reservationTimeService;
 
     @Autowired
     private MockMvc mockMvc;
 
-    private Reservations reservations;
+    private ReservationTimes reservationTimes;
 
     @BeforeEach
     void setUp() {
-        Reservation reservation = new Reservation(
-                new ReservationId(1L),
-                new ReservationName("kilian"),
-                new ReservationDateTime(LocalDateTime.of(2024, 6, 6, 19, 25))
+        ReservationTime reservationTime = new ReservationTime(
+                new ReservationTimeId(1L),
+                new ReservationTimeStartAt(LocalTime.of(16, 1))
         );
 
-        reservations = new Reservations(List.of(reservation));
+        reservationTimes = new ReservationTimes(List.of(reservationTime));
     }
 
     @Test
-    @DisplayName("예약 전체 조회 API 컨트롤러 테스트")
+    @DisplayName("예약시간 전체 조회 API 컨트롤러 테스트")
     void findReservationsTest() throws Exception {
-        given(reservationService.findAllReservations()).willReturn(reservations);
-        List<FindReservationsResponse> response =
-                FindReservationsResponse.toFindReservationsResponses(reservations);
+        given(reservationTimeService.findReservationTimes()).willReturn(reservationTimes);
+        List<FindReservationTimesResponse> response = FindReservationTimesResponse.toFindReservationResponses(reservationTimes);
 
         mockMvc.perform(
-                        get("/reservations")
+                        get("/times")
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string(objectMapper.writeValueAsString(response)));

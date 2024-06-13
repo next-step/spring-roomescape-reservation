@@ -82,6 +82,12 @@ public class JdbcTemplateReservationRepository implements ReservationRepository 
     }
 
     @Override
+    public Long countMatchWith(String date, Long timeId, Long themeId) {
+        String sql = "select count(*) from reservation where date = ? and time_id = ? and theme_id = ?";
+        return jdbcTemplate.queryForObject(sql, Long.class, date, timeId, themeId);
+    }
+
+    @Override
     public long save(String name, String date, Long timeId, Long themeId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {

@@ -1,7 +1,6 @@
 package roomescape.reservation.service;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -23,22 +22,23 @@ public class ReservationRepository {
     }
 
     public List<Reservation> find() {
-        String sql = new StringBuilder()
-            .append("SELECT ")
-            .append("r.id as reservation_id, ")
-            .append("r.name as reservation_name, ")
-            .append("r.date as reservation_date, ")
-            .append("t.id as time_id, ")
-            .append("t.start_at as time_start_at, ")
-            .append("th.id as theme_id, ")
-            .append("th.name as theme_name, ")
-            .append("th.description as theme_description, ")
-            .append("th.thumbnail as theme_thumbnail ")
-            .append("FROM reservation as r ")
-            .append("inner join reservation_time as t ")
-            .append("on r.time_id = t.id ")
-            .append("inner join theme as th ")
-            .append("on r.theme_id = th.id").toString();
+        String sql = """ 
+            SELECT
+                r.id as reservation_id,
+                r.name as reservation_name,
+                r.date as reservation_date,
+                t.id as time_id,
+                t.start_at as time_start_at,
+                th.id as theme_id,
+                th.name as theme_name,
+                th.description as theme_description,
+                th.thumbnail as theme_thumbnail
+            FROM reservation as r
+            inner join reservation_time as t
+                on r.time_id = t.id
+            inner join theme as th
+                on r.theme_id = th.id
+            """;
 
         return jdbcTemplate.query(sql, (rs, rowNum) ->
             new Reservation(rs.getLong("reservation_id"),
@@ -50,39 +50,6 @@ public class ReservationRepository {
                     rs.getString("theme_name"),
                     rs.getString("theme_description"),
                     rs.getString("theme_thumbnail"))));
-    }
-
-    public Reservation findByKey(Long id) {
-        String sql = new StringBuilder()
-            .append("SELECT ")
-            .append("r.id as reservation_id, ")
-            .append("r.name as reservation_name, ")
-            .append("r.date as reservation_date, ")
-            .append("t.id as time_id, ")
-            .append("t.start_at as time_start_at, ")
-            .append("th.id as theme_id, ")
-            .append("th.name as theme_name, ")
-            .append("th.description as theme_description, ")
-            .append("th.thumbnail as theme_thumbnail ")
-            .append("FROM reservation as r ")
-            .append("inner join reservation_time as t ")
-            .append("on r.time_id = t.id ")
-            .append("inner join theme as th ")
-            .append("on r.theme_id = th.id ")
-            .append("WHERE r.id = ?").toString();
-
-        RowMapper<Reservation> rowMapper = (rs, rowNum) ->
-            new Reservation(rs.getLong(1),
-                rs.getString(2),
-                rs.getDate(3).toLocalDate(),
-                new ReservationTime(rs.getLong(4),
-                    rs.getTime(5).toLocalTime()),
-                new Theme(rs.getLong(6),
-                    rs.getString(7),
-                    rs.getString(8),
-                    rs.getString(9)));
-
-        return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     public int countByTime(Long timeId) {

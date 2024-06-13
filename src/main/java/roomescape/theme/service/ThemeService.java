@@ -16,7 +16,7 @@ public class ThemeService {
     private final ReservationRepository reservationRepository;
 
     public ThemeService(ThemeRepository themeRepository,
-        ReservationRepository reservationRepository) {
+                        ReservationRepository reservationRepository) {
         this.themeRepository = themeRepository;
         this.reservationRepository = reservationRepository;
     }

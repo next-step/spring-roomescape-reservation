@@ -20,7 +20,6 @@ public class ReservationTimeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     public ReservationTime save(ReservationTime reservationTime) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 

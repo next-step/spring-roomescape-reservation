@@ -25,7 +25,8 @@ public class ReservationService {
     private final ThemeRepository themeRepository;
 
     public ReservationService(ReservationRepository reservationRepository,
-        ReservationTimeRepository reservationTimeRepository, ThemeRepository themeRepository) {
+                                ReservationTimeRepository reservationTimeRepository,
+                                ThemeRepository themeRepository) {
         this.reservationRepository = reservationRepository;
         this.reservationTimeRepository = reservationTimeRepository;
         this.themeRepository = themeRepository;
@@ -35,10 +36,6 @@ public class ReservationService {
         return reservationRepository.find().stream()
             .map(ReservationResponse::new)
             .collect(Collectors.toList());
-    }
-
-    public ReservationResponse findReservation(Long id) {
-        return new ReservationResponse(reservationRepository.findByKey(id));
     }
 
     public ReservationResponse saveReservation(ReservationRequest request) {

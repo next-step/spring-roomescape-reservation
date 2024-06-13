@@ -17,7 +17,7 @@ public class ReservationTimeService {
     private final ReservationRepository reservationRepository;
 
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository,
-        ReservationRepository reservationRepository) {
+                                    ReservationRepository reservationRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.reservationRepository = reservationRepository;
     }
@@ -25,10 +25,6 @@ public class ReservationTimeService {
     public ReservationTimeResponse saveReservationTime(ReservationTimeRequest request) {
         ReservationTime reservationTime = new ReservationTime(request.getStartAt());
         return new ReservationTimeResponse(reservationTimeRepository.save(reservationTime));
-    }
-
-    public ReservationTimeResponse findReservationTime(Long id) {
-        return new ReservationTimeResponse(reservationTimeRepository.findById(id));
     }
 
     public List<ReservationTimeResponse> findReservationTimes() {

@@ -1,10 +1,12 @@
 let isEditing = false;
-const API_ENDPOINT = '/times';
-const cellFields = ['id', 'startAt'];
-const createCellFields = ['', createInput()];
+const API_ENDPOINT = '/themes';
+const cellFields = ['id', 'name', 'description', 'thumbnail'];
+const createCellFields = ['', createInput(), createInput(), createInput()];
 function createBody(inputs) {
   return {
-    startAt: inputs[0].value,
+    name: inputs[0].value,
+    description: inputs[1].value,
+    thumbnail: inputs[2].value,
   };
 }
 
@@ -61,7 +63,6 @@ function createAddField(row) {
 
 function createInput() {
   const input = document.createElement('input');
-  input.type = 'time'
   input.className = 'form-control';
   return input;
 }

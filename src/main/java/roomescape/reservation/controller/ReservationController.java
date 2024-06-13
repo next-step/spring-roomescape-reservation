@@ -29,7 +29,6 @@ public class ReservationController {
         return ResponseEntity.ok().body(reservationService.saveReservation(request));
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable String id) {
         reservationService.deleteReservation(Long.parseLong(id));

@@ -48,7 +48,7 @@ public class ReservationService {
         Reservation reservation = new Reservation(request.getName(), request.getDate(),
             reservationTime, theme);
 
-        if (reservation.isBeforeThenNow()) {
+        if (reservation.isBeforeThanNow()) {
             throw new PastDateTimeException();
         }
 

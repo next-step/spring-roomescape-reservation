@@ -18,8 +18,7 @@ public class Reservation {
 
     private Theme theme;
 
-    public Reservation(Long id, String name, LocalDate date, ReservationTime reservationTime,
-        Theme theme) {
+    public Reservation(Long id, String name, LocalDate date, ReservationTime reservationTime, Theme theme) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -29,6 +28,10 @@ public class Reservation {
 
     public Reservation(String name, String date, ReservationTime reservationTime, Theme theme) {
         this(null, name, LocalDate.parse(date), reservationTime, theme);
+    }
+
+    public boolean isBeforeThanNow() {
+        return LocalDateTime.of(date, reservationTime.getStartAt()).isBefore(LocalDateTime.now());
     }
 
     public Long getId() {
@@ -51,7 +54,4 @@ public class Reservation {
         return theme;
     }
 
-    public boolean isBeforeThenNow() {
-        return LocalDateTime.of(date, reservationTime.getStartAt()).isBefore(LocalDateTime.now());
-    }
 }

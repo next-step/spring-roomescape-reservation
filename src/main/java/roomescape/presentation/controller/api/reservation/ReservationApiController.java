@@ -1,10 +1,10 @@
 package roomescape.presentation.controller.api.reservation;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import roomescape.application.service.reservation.ReservationService;
+import roomescape.presentation.dto.request.CreateReservationRequest;
+import roomescape.presentation.dto.response.CreateReservationResponse;
 import roomescape.presentation.dto.response.GetReservationListResponse;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class ReservationApiController {
     private final ReservationService reservationService;
 
-    public ReservationApiController(ReservationService reservationService){
+    public ReservationApiController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
@@ -31,6 +31,16 @@ public class ReservationApiController {
                                 .build())
                         .collect(Collectors.toList())
         );
+    }
 
+    @PostMapping
+    public ResponseEntity<CreateReservationResponse> createReservation(
+            @RequestBody CreateReservationRequest request
+    ) {
+        return ResponseEntity.ok().body(
+                CreateReservationResponse.of(
+                        reservationService.createReservation(request.toCommand())
+                )
+        );
     }
 }

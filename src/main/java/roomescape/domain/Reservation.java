@@ -1,5 +1,7 @@
 package roomescape.domain;
 
+import roomescape.application.dto.command.CreateReservationCommand;
+
 public class Reservation {
 
     private Long id;
@@ -29,5 +31,9 @@ public class Reservation {
 
     public String getTime() {
         return time;
+    }
+
+    public static Reservation create(Long id, CreateReservationCommand command) {
+        return new Reservation(id, command.getName(), command.getDate(), command.getTime());
     }
 }

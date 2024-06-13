@@ -1,6 +1,8 @@
 package roomescape.application.service.reservation;
 
 import org.springframework.stereotype.Service;
+import roomescape.application.dto.command.CreateReservationCommand;
+import roomescape.application.dto.result.CreateReservationResult;
 import roomescape.application.dto.result.GetReservationResult;
 import roomescape.domain.Reservation;
 import roomescape.repository.reservation.ReservationRepository;
@@ -33,5 +35,7 @@ public class ReservationService {
                         .build()).collect(Collectors.toList());
     }
 
-
+    public CreateReservationResult createReservation(CreateReservationCommand command) {
+        return CreateReservationResult.of(reservationRepository.createReservation(command));
+    }
 }

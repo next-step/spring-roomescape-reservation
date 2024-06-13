@@ -16,17 +16,17 @@ public class Time {
         this.startAt = startAt;
     }
 
+    private void checkFormats(String startAt) {
+        if (!startAt.matches(REGEX_FORMAT)) {
+            throw new TimeException(ErrorCode.INVALID_TIME_FORMAT_ERROR);
+        }
+    }
+
     public Long getId() {
         return id;
     }
 
     public String getStartAt() {
         return startAt;
-    }
-
-    private void checkFormats(String startAt) {
-        if (!startAt.matches(REGEX_FORMAT)) {
-            throw new TimeException(ErrorCode.INVALID_TIME_FORMAT_ERROR);
-        }
     }
 }

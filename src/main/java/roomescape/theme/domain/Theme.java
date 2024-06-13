@@ -21,6 +21,18 @@ public class Theme {
         this.thumbnail = thumbnail;
     }
 
+    private void checkFormats(String name, String description, String thumbnail) {
+        if (!name.matches(NAME_FORMAT)) {
+            throw new ThemeException(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR);
+        }
+        if (!description.matches(DESCRIPTION_FORMAT)) {
+            throw new ThemeException(ErrorCode.INVALID_THEME_DESCRIPTION_FORMAT_ERROR);
+        }
+        if (!thumbnail.matches(THUMBNAIL_FORMAT)) {
+            throw new ThemeException(ErrorCode.INVALID_THEME_THUMBNAIL_FORMAT_ERROR);
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -35,17 +47,5 @@ public class Theme {
 
     public String getThumbnail() {
         return thumbnail;
-    }
-
-    private void checkFormats(String name, String description, String thumbnail) {
-        if (!name.matches(NAME_FORMAT)) {
-            throw new ThemeException(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR);
-        }
-        if (!description.matches(DESCRIPTION_FORMAT)) {
-            throw new ThemeException(ErrorCode.INVALID_THEME_DESCRIPTION_FORMAT_ERROR);
-        }
-        if (!thumbnail.matches(THUMBNAIL_FORMAT)) {
-            throw new ThemeException(ErrorCode.INVALID_THEME_THUMBNAIL_FORMAT_ERROR);
-        }
     }
 }

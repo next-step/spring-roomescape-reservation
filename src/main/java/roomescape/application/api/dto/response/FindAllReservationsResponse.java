@@ -6,7 +6,7 @@ import roomescape.domain.reservation.Reservations;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FindReservationsResponse {
+public class FindAllReservationsResponse {
 
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String TIME_PATTERN = "HH:mm";
@@ -19,15 +19,15 @@ public class FindReservationsResponse {
 
     private final String time;
 
-    private FindReservationsResponse(Long id, String name, String date, String time) {
+    private FindAllReservationsResponse(Long id, String name, String date, String time) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.time = time;
     }
 
-    public static FindReservationsResponse from(Reservation reservation) {
-        return new FindReservationsResponse(
+    public static FindAllReservationsResponse from(Reservation reservation) {
+        return new FindAllReservationsResponse(
                 reservation.getId(),
                 reservation.getReservationName(),
                 reservation.fetchReservationDateTime(DATE_PATTERN),
@@ -35,10 +35,10 @@ public class FindReservationsResponse {
         );
     }
 
-    public static List<FindReservationsResponse> toFindReservationsResponses(Reservations reservations) {
+    public static List<FindAllReservationsResponse> toFindAllReservationsResponses(Reservations reservations) {
         return reservations.getReservations()
                 .stream()
-                .map(FindReservationsResponse::from)
+                .map(FindAllReservationsResponse::from)
                 .collect(Collectors.toList());
     }
 

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import roomescape.application.api.dto.response.FindReservationTimesResponse;
+import roomescape.application.api.dto.response.FindAllReservationTimesResponse;
 import roomescape.application.service.ReservationTimeService;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.ReservationTimes;
@@ -48,9 +48,9 @@ class ReservationTimeQueryApiTest {
 
     @Test
     @DisplayName("예약시간 전체 조회 API 컨트롤러 테스트")
-    void findReservationsTest() throws Exception {
-        given(reservationTimeService.findReservationTimes()).willReturn(reservationTimes);
-        List<FindReservationTimesResponse> response = FindReservationTimesResponse.toFindReservationResponses(reservationTimes);
+    void findAllReservationsTest() throws Exception {
+        given(reservationTimeService.findAllReservationTimes()).willReturn(reservationTimes);
+        List<FindAllReservationTimesResponse> response = FindAllReservationTimesResponse.toFindAllReservationResponses(reservationTimes);
 
         mockMvc.perform(
                         get("/times")

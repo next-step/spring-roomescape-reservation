@@ -28,7 +28,7 @@ public class ReservationTimeService {
         return ReservationTimeMapper.toReservationTime(savedReservationTime);
     }
 
-    public ReservationTimes findReservationTimes() {
+    public ReservationTimes findAllReservationTimes() {
         List<ReservationTimeEntity> reservationTimeEntities = reservationTimeRepository.findAll();
 
         return ReservationTimeMapper.toReservationTimes(reservationTimeEntities);

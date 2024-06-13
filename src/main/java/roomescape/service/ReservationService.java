@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import roomescape.domain.Reservation;
@@ -41,7 +40,7 @@ public class ReservationService {
     public List<ReservationResponse> findAllReservations() {
         return reservationDao.findAll().stream()
                 .map(this::convertToResponse)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     public void deleteReservation(Long id) {

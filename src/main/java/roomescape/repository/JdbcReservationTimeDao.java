@@ -50,7 +50,7 @@ public class JdbcReservationTimeDao {
     public Optional<ReservationTime> findById(Long id) {
         final String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
 
-        ReservationTime reservationTime = null;
+        ReservationTime reservationTime;
         try {
             reservationTime = jdbcTemplate.queryForObject(sql,
                     (rs, rowNum) -> new ReservationTime(
@@ -58,6 +58,7 @@ public class JdbcReservationTimeDao {
                             , rs.getString("start_at"))
                     , id);
         } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
 
         return Optional.ofNullable(reservationTime);

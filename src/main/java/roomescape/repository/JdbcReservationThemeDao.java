@@ -55,7 +55,7 @@ public class JdbcReservationThemeDao {
     public Optional<ReservationTheme> findById(Long id) {
         final String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
 
-        ReservationTheme reservationTheme = null;
+        ReservationTheme reservationTheme;
         try {
             reservationTheme = jdbcTemplate.queryForObject(sql,
                     (rs, rowNum) -> new ReservationTheme(
@@ -65,6 +65,7 @@ public class JdbcReservationThemeDao {
                             , rs.getString("thumbnail")
                     ), id);
         } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
         }
 
         return Optional.ofNullable(reservationTheme);

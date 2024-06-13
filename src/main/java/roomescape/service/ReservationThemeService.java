@@ -1,7 +1,6 @@
 package roomescape.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import roomescape.domain.ReservationTheme;
@@ -35,8 +34,8 @@ public class ReservationThemeService {
     public List<ReservationThemeResponse> findAllReservationThemes() {
         return reservationThemeDao.findAll()
                 .stream()
-                .map(reservationTheme -> this.convertToResponse(reservationTheme))
-                .collect(Collectors.toUnmodifiableList());
+                .map(this::convertToResponse)
+                .toList();
     }
 
     public void deleteReservationTheme(Long id) {

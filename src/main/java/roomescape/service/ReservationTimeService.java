@@ -1,7 +1,6 @@
 package roomescape.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import roomescape.domain.ReservationTime;
@@ -35,8 +34,8 @@ public class ReservationTimeService {
     public List<ReservationTimeResponse> findAllReservationTimes() {
         return reservationTimeDao.findAll()
                 .stream()
-                .map(reservationTime -> this.convertToResponse(reservationTime))
-                .collect(Collectors.toUnmodifiableList());
+                .map(this::convertToResponse)
+                .toList();
     }
 
     public void deleteReservationTime(Long id) {

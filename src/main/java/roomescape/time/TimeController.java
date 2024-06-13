@@ -1,5 +1,6 @@
 package roomescape.time;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class TimeController {
     }
 
     @PostMapping
-    public Time add(@RequestBody Time time) {
+    public Time add(@Valid @RequestBody Time time) {
         return timeService.add(time);
     }
 

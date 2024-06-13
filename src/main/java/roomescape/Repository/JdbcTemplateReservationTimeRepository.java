@@ -38,7 +38,7 @@ public class JdbcTemplateReservationTimeRepository implements ReservationTimeRep
 
     @Override
     public ReservationTime findByStartAt(String startAt) {
-        String sql = "select * from reservation_time where startAt = ?";
+        String sql = "select * from reservation_time where start_at = ?";
         return jdbcTemplate.queryForObject(sql, rowMapper, startAt);
     }
 

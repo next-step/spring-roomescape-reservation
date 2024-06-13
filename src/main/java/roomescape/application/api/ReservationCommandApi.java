@@ -25,7 +25,7 @@ public class ReservationCommandApi {
     }
 
     @DeleteMapping("/reservations/{reservationId}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable("reservationId") Long reservationId) {
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
         reservationService.deleteReservation(new DeleteReservationCommand(reservationId));
 
         return ResponseEntity.ok().build();

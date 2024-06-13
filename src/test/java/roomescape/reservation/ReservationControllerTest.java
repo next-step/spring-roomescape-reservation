@@ -37,17 +37,28 @@ class ReservationControllerTest {
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
-        jdbcTemplate.execute("CREATE TABLE reservation_time (" +
-                "id BIGINT NOT NULL AUTO_INCREMENT, " +
-                "start_at VARCHAR(255) NOT NULL, " +
-                "PRIMARY KEY (id))");
+        jdbcTemplate.execute(
+                """
+                        CREATE TABLE reservation_time (
+                            id BIGINT NOT NULL AUTO_INCREMENT, 
+                            start_at VARCHAR(255) NOT NULL,
+                            PRIMARY KEY (id)
+                        )
+                        """
+        );
 
-        jdbcTemplate.execute("CREATE TABLE reservation (" +
-                "id BIGINT NOT NULL AUTO_INCREMENT, " +
-                "name VARCHAR(255) NOT NULL, " +
-                "date VARCHAR(255) NOT NULL, " +
-                "time_id BIGINT, " +   // 컬럼 수정
-                "PRIMARY KEY (id))");  // 외래키 제거
+        jdbcTemplate.execute(
+                """
+                        CREATE TABLE reservation (
+                            id BIGINT NOT NULL AUTO_INCREMENT, 
+                            name VARCHAR(255) NOT NULL, 
+                            date VARCHAR(255) NOT NULL, 
+                            time_id BIGINT,
+                            PRIMARY KEY (id),
+                            FOREIGN KEY (time_id) REFERENCES reservation_time (id)
+                        )
+                        """
+        );
 
         final ReservationTime request1 = new ReservationTime("15:40");
         final ReservationTime request2 = new ReservationTime("16:40");

@@ -11,33 +11,23 @@ public class Reservation {
     private String date;
     private ReservationTime reservationTime;
 
+    public Long getId() { return id; }
+
+    public String getName() { return name; }
+
+    public String getDate() { return date; }
+
+    public ReservationTime getReservationTime() { return reservationTime; }
+
+    public Reservation(String name, String date, ReservationTime reservationTime) {
+        this(null, name, date, reservationTime);
+    }
+
     public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.reservationTime = reservationTime;
-    }
-
-    public Reservation(String name, String date, ReservationTime reservationTime) {
-        this.name = name;
-        this.date = date;
-        this.reservationTime = reservationTime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public ReservationTime getReservationTime() {
-        return reservationTime;
     }
 
     @Override

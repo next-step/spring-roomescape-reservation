@@ -21,6 +21,10 @@ public class ReservationService {
 
     public List<ReservationResponse> findAll() {
         List<Reservation> reservations = reservationRepository.findAll();
+
+        if (reservations.isEmpty()) {
+            throw new NotFoundException("등록된 예약이 없습니다.");
+        }
         return ReservationResponse.toDTOList(reservations);
     }
 

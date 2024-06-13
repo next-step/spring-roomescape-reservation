@@ -1,9 +1,13 @@
 package roomescape.application.mapper;
 
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.ReservationTimes;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
 import roomescape.repository.entity.ReservationTimeEntity;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class ReservationTimeMapper {
 
@@ -11,6 +15,14 @@ public abstract class ReservationTimeMapper {
         return new ReservationTime(
                 new ReservationTimeId(reservationTimeEntity.getId()),
                 new ReservationTimeStartAt(reservationTimeEntity.getStartAt())
+        );
+    }
+
+    public static ReservationTimes toReservationTimes(List<ReservationTimeEntity> reservationTimeEntities) {
+        return new ReservationTimes(
+                reservationTimeEntities.stream()
+                        .map(ReservationTimeMapper::toReservationTime)
+                        .collect(Collectors.toList())
         );
     }
 }

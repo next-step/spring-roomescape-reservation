@@ -5,8 +5,11 @@ import roomescape.application.mapper.ReservationTimeEntityMapper;
 import roomescape.application.mapper.ReservationTimeMapper;
 import roomescape.application.service.command.CreateReservationTimeCommand;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.ReservationTimes;
 import roomescape.repository.ReservationTimeRepository;
 import roomescape.repository.entity.ReservationTimeEntity;
+
+import java.util.List;
 
 @Service
 public class ReservationTimeService {
@@ -23,5 +26,11 @@ public class ReservationTimeService {
                 reservationTimeRepository.save(ReservationTimeEntityMapper.toReservationTimeEntity(reservationTime));
 
         return ReservationTimeMapper.toReservationTime(savedReservationTime);
+    }
+
+    public ReservationTimes findReservationTimes() {
+        List<ReservationTimeEntity> reservationTimeEntities = reservationTimeRepository.findAll();
+
+        return ReservationTimeMapper.toReservationTimes(reservationTimeEntities);
     }
 }

@@ -11,7 +11,7 @@ public class Reservations {
         this.reservations = reservations;
     }
 
-    public List<Reservation> fetchReservations() {
+    public List<Reservation> getReservations() {
         return List.copyOf(this.reservations);
     }
 

@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 public abstract class ReservationMapper {
 
+    // domain import
+
     public static Reservation toReservation(ReservationEntity reservationEntity) {
         return new Reservation(
                 new ReservationId(reservationEntity.getId()),

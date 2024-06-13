@@ -36,7 +36,7 @@ public class FindReservationsResponse {
     }
 
     public static List<FindReservationsResponse> toFindReservationsResponses(Reservations reservations) {
-        return reservations.fetchReservations()
+        return reservations.getReservations()
                 .stream()
                 .map(FindReservationsResponse::from)
                 .collect(Collectors.toList());

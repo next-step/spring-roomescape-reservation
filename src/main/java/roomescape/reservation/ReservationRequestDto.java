@@ -7,8 +7,6 @@ public class ReservationRequestDto {
     private String date;
     private ReservationTimeRequestDto reservationTimeRequestDto;
 
-
-
     public String getName() {
         return name;
     }

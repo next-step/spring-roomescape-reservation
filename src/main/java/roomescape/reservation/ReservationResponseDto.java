@@ -8,14 +8,6 @@ public class ReservationResponseDto {
     private String date;
     private ReservationTimeResponseDto reservationTimeResponseDto;
 
-    public ReservationResponseDto(Long id, String name, String date, ReservationTimeResponseDto reservationTimeResponseDto) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.reservationTimeResponseDto = reservationTimeResponseDto;
-
-    }
-
     public Long getId() {
         return id;
     }
@@ -30,6 +22,14 @@ public class ReservationResponseDto {
 
     public ReservationTimeResponseDto getReservationTimeResponseDto() {
         return reservationTimeResponseDto;
+
+    }
+
+    public ReservationResponseDto(Long id, String name, String date, ReservationTimeResponseDto reservationTimeResponseDto) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.reservationTimeResponseDto = reservationTimeResponseDto;
 
     }
 

@@ -35,14 +35,17 @@ public class ReservationRepository {
     }
 
     public List<Reservation> findAll() {
-        final String sql = "SELECT r.id as reservation_id, " +
-                "r.name as reservation_name, " +
-                "r.date as reservation_date, " +
-                "t.id as time_id, " +
-                "t.start_at as start_at " +
-                "FROM reservation as r \n" +
-                "inner join reservation_time as t \n" +
-                "on r.time_id = t.id";
+        final String sql = """
+                SELECT r.id as reservation_id, 
+                       r.name as reservation_name, 
+                       r.date as reservation_date, 
+                       t.id as time_id, 
+                       t.start_at as start_at
+                FROM reservation as r 
+                inner join reservation_time as t
+                on r.time_id = t.id
+                """;
+
 
         return jdbcTemplate.query(sql, reservationRowMapper);
 
@@ -64,15 +67,17 @@ public class ReservationRepository {
 
 
     public Reservation findById(Long id) {
-        final String sql = "SELECT r.id as reservation_id, " +
-                "r.name as reservation_name, " +
-                "r.date as reservation_date, " +
-                "t.id as time_id, " +
-                "t.start_at as start_at " +
-                "FROM reservation as r \n" +
-                "inner join reservation_time as t \n" +
-                "on r.time_id = t.id " +
-                "where r.id = ?";
+        final String sql = """
+                SELECT r.id as reservation_id, 
+                                r.name as reservation_name, 
+                                r.date as reservation_date, 
+                                t.id as time_id, 
+                                t.start_at as start_at 
+                FROM reservation as r 
+                inner join reservation_time as t
+                on r.time_id = t.id
+                where r.id = ?
+                """;
         Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
         return reservation;
 

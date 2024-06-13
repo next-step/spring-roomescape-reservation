@@ -1,6 +1,5 @@
 package roomescape.Repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -20,7 +19,7 @@ public class JdbcTemplateThemeRepository implements ThemeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private final RowMapper<Theme> themeRowMapper = (resultSet, rowNum) -> {
+    private final RowMapper<Theme> rowMapper = (resultSet, rowNum) -> {
         return new Theme(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
@@ -32,13 +31,26 @@ public class JdbcTemplateThemeRepository implements ThemeRepository {
     @Override
     public List<Theme> findAll() {
         String sql = "select * from theme";
-        return jdbcTemplate.query(sql, themeRowMapper);
+        return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
     public Theme findById(Long id) {
         String sql = "select * from theme where id = ?";
-        return jdbcTemplate.queryForObject(sql, themeRowMapper, id);
+        return jdbcTemplate.queryForObject(sql, rowMapper, id);
+    }
+
+    @Override
+    public Theme findByName(String name) {
+        String sql = "select * from theme where name = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper, name);
+    }
+
+    @Override
+    public Long countReservationMatchWith(Long id) {
+        String sql = "select count(*) from reservation as r inner join theme as t on r.theme_id = t.id where t.id = ?";
+
+        return jdbcTemplate.queryForObject(sql, Long.class, id);
     }
 
     @Override

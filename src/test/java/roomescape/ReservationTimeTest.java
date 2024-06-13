@@ -4,6 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
@@ -32,7 +34,36 @@ public class ReservationTimeTest {
     }
 
     @Test
-    @DisplayName("ReservationTimeController - read()")
+    @DisplayName("ReservationTimeController - create() : duplicated start time")
+    void 중복_예약_시간_생성() {
+        예약_시간_생성();
+        String startAt = "13:00";
+        var response = RestAssured
+                .given().log().all()
+                .body(new ReservationTimeRequest(startAt))
+                .contentType(ContentType.JSON)
+                .when().post("/times")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ParameterizedTest
+    @DisplayName("ReservationTimeController - create() : invalid time")
+    @ValueSource(strings = {"asdf", "24:24", ""})
+    void 유효하지_않은_예약_시간_생성(String startAt) {
+        var response = RestAssured
+                .given().log().all()
+                .body(new ReservationTimeRequest(startAt))
+                .contentType(ContentType.JSON)
+                .when().post("/times")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("ReservationTimeController - read() : all")
     void 전체_예약_시간_조회() {
         예약_시간_생성();
 
@@ -46,7 +77,7 @@ public class ReservationTimeTest {
     }
 
     @Test
-    @DisplayName("ReservationTimeController - delete() 1")
+    @DisplayName("ReservationTimeController - delete()")
     void 예약_시간_삭제() {
         예약_시간_생성();
 
@@ -59,7 +90,7 @@ public class ReservationTimeTest {
     }
 
     @Test
-    @DisplayName("ReservationTimeController - delete() 2")
+    @DisplayName("ReservationTimeController - delete() : non existent time")
     void 존재하지_않는_예약_시간_삭제() {
         var response = RestAssured
                 .given().log().all()
@@ -67,5 +98,16 @@ public class ReservationTimeTest {
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    @DisplayName("ReservationTimeController - delete() : time with reservation existing")
+    void 예약_존재하는_시간_삭제() {
+        var response = RestAssured
+                .given().log().all()
+                .when().delete("/times/1")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
     }
 }

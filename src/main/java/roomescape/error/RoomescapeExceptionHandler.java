@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.format.DateTimeParseException;
 import roomescape.error.exception.NotExistsException;
 import roomescape.error.exception.PastDateTimeException;
-import roomescape.error.exception.ReferentialIntegrityException;
+import roomescape.error.exception.ReferenceException;
 
 @RestControllerAdvice
 public class RoomescapeExceptionHandler {
@@ -18,24 +18,25 @@ public class RoomescapeExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RoomescapeExceptionResponse IllegalArgumentException(IllegalArgumentException e) {
-        return RoomescapeExceptionResponse.from(RoomescapeErrorMessage.ILLEGAL_INPUT_VALUE_EXCEPTION,
-            e.getMessage());
+        return RoomescapeExceptionResponse.from(e.getMessage(),
+            RoomescapeErrorMessage.ILLEGAL_INPUT_VALUE_EXCEPTION);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RoomescapeExceptionResponse handleMethodArgumentNotValidException(
         MethodArgumentNotValidException e) {
-        return RoomescapeExceptionResponse.from(RoomescapeErrorMessage.ILLEGAL_INPUT_VALUE_EXCEPTION,
-            e.getBindingResult().getFieldError().getDefaultMessage());
+        return RoomescapeExceptionResponse.from(
+            e.getBindingResult().getFieldError().getDefaultMessage(),
+            RoomescapeErrorMessage.ILLEGAL_INPUT_VALUE_EXCEPTION);
     }
 
     @ExceptionHandler(DuplicateRequestException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public RoomescapeExceptionResponse handleDuplicateRequestException(
         DuplicateRequestException e) {
-        return RoomescapeExceptionResponse.from(RoomescapeErrorMessage.EXISTS_EXCEPTION,
-            e.getMessage());
+        return RoomescapeExceptionResponse.from(e.getMessage(),
+            RoomescapeErrorMessage.EXISTS_EXCEPTION);
     }
 
     @ExceptionHandler(DateTimeParseException.class)
@@ -48,19 +49,19 @@ public class RoomescapeExceptionHandler {
     @ExceptionHandler(PastDateTimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RoomescapeExceptionResponse handlePastDateTimeException(PastDateTimeException e) {
-        return RoomescapeExceptionResponse.of(e.getErrorCode());
+        return RoomescapeExceptionResponse.of(e.getMessage());
     }
 
-    @ExceptionHandler(ReferentialIntegrityException.class)
+    @ExceptionHandler(ReferenceException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public RoomescapeExceptionResponse handleReservationAlreayExistsException(
-        ReferentialIntegrityException e) {
-        return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
+        ReferenceException e) {
+        return RoomescapeExceptionResponse.of(e.getMessage());
     }
 
     @ExceptionHandler(NotExistsException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public RoomescapeExceptionResponse handleNotExistsException(NotExistsException e) {
-        return RoomescapeExceptionResponse.from(e.getErrorCode(), e.getMessage());
+        return RoomescapeExceptionResponse.of(e.getMessage());
     }
 }

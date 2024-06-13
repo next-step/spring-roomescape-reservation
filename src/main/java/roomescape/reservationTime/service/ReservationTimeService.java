@@ -1,7 +1,8 @@
 package roomescape.reservationTime.service;
 
 import org.springframework.stereotype.Service;
-import roomescape.error.exception.ReferentialIntegrityException;
+import roomescape.error.exception.ReferenceException;
+import roomescape.error.exception.ReservationTimeReferenceException;
 import roomescape.reservation.service.ReservationRepository;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ReservationTimeService {
 
     public void deleteReservationTime(Long id) {
         if (reservationRepository.countByTime(id) > 0) {
-            throw new ReferentialIntegrityException("해당 시간에 대한 예약");
+            throw new ReservationTimeReferenceException();
         }
 
         reservationTimeRepository.delete(id);

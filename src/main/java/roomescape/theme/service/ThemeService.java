@@ -1,7 +1,8 @@
 package roomescape.theme.service;
 
 import org.springframework.stereotype.Service;
-import roomescape.error.exception.ReferentialIntegrityException;
+import roomescape.error.exception.ReferenceException;
+import roomescape.error.exception.ThemeReferenceException;
 import roomescape.reservation.service.ReservationRepository;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class ThemeService {
 
     public void deleteTheme(long id) {
         if (reservationRepository.countByTheme(id) > 0) {
-            throw new ReferentialIntegrityException("해당 테마에 대한 예약");
+            throw new ThemeReferenceException();
         }
 
         themeRepository.delete(id);

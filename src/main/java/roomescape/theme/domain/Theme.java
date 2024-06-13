@@ -38,10 +38,14 @@ public class Theme {
     }
 
     private void checkFormats(String name, String description, String thumbnail) {
-        if (!name.matches(NAME_FORMAT)) throw new ThemeException(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR);
-        if (!description.matches(DESCRIPTION_FORMAT))
+        if (!name.matches(NAME_FORMAT)) {
+            throw new ThemeException(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR);
+        }
+        if (!description.matches(DESCRIPTION_FORMAT)) {
             throw new ThemeException(ErrorCode.INVALID_THEME_DESCRIPTION_FORMAT_ERROR);
-        if (!thumbnail.matches(THUMBNAIL_FORMAT))
+        }
+        if (!thumbnail.matches(THUMBNAIL_FORMAT)) {
             throw new ThemeException(ErrorCode.INVALID_THEME_THUMBNAIL_FORMAT_ERROR);
+        }
     }
 }

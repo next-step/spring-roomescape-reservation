@@ -46,9 +46,11 @@ public class Reservation {
     }
 
     private void checkFormats(String name, String date) {
-        if (!name.matches(NAME_FORMAT))
+        if (!name.matches(NAME_FORMAT)) {
             throw new ReservationException(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR);
-        if (!date.matches(DATE_FORMAT))
+        }
+        if (!date.matches(DATE_FORMAT)) {
             throw new ReservationException(ErrorCode.INVALID_THEME_DATE_FORMAT_ERROR);
+        }
     }
 }

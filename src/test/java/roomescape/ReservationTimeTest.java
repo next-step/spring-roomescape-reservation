@@ -77,6 +77,17 @@ public class ReservationTimeTest {
     }
 
     @Test
+    @DisplayName("ReservationTimeController - read() : no created reservation time")
+    void 등록된_예약_시간_없는_경우__예약_시간_조회() {
+        var response = RestAssured
+                .given().log().all()
+                .when().get("/times")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
     @DisplayName("ReservationTimeController - delete()")
     void 예약_시간_삭제() {
         예약_시간_생성();

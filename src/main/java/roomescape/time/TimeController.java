@@ -7,7 +7,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/times")
 public class TimeController {
-    TimeService timeService;
+    private final TimeService timeService;
 
     public TimeController(TimeService timeService) {
         this.timeService = timeService;

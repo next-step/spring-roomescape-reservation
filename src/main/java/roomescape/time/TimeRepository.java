@@ -11,11 +11,11 @@ import java.util.List;
 
 @Repository
 public class TimeRepository {
-    private final JdbcTemplate jdbcTemplate;
-
     private static final String TABLE_NAME = "reservation_time";
     private static final String COLUMN_START_AT = "start_at";
     private static final String COLUMN_ID = "id";
+
+    private final JdbcTemplate jdbcTemplate;
 
     public TimeRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;

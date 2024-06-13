@@ -6,11 +6,11 @@ import java.util.List;
 
 @Service
 public class TimeService {
+    private final TimeRepository timeRepository;
+
     public TimeService(TimeRepository timeRepository) {
         this.timeRepository = timeRepository;
     }
-
-    private final TimeRepository timeRepository;
 
     public List<Time> reservationTimes() {
         return timeRepository

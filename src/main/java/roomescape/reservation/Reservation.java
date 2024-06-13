@@ -6,8 +6,8 @@ import roomescape.time.TimeEntity;
 public class Reservation {
     private Long id;
     private String name;
-    private final ReservationDate date;
     private Time time;
+    private final ReservationDate date;
 
     public static Reservation createdByEntity(ReservationEntity reservationEntity, TimeEntity time) {
         return new Reservation(reservationEntity.getId(),

@@ -37,6 +37,22 @@ public class JdbcTemplateReservationTimeRepository implements ReservationTimeRep
     }
 
     @Override
+    public ReservationTime findByStartAt(String startAt) {
+        String sql = "select * from reservation_time where startAt = ?";
+        return jdbcTemplate.queryForObject(sql, rowMapper, startAt);
+    }
+
+    @Override
+    public Long countReservationMatchWith(Long id) {
+        String sql = "select count(*) "
+                + "from reservation as r "
+                + "inner_join reservation_time as t "
+                + "on r.time_id = t.id "
+                + "where t.id = ?";
+        return jdbcTemplate.queryForObject(sql, Long.class);
+    }
+
+    @Override
     public long save(String startAt) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connect -> {

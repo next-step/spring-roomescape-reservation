@@ -4,7 +4,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +20,8 @@ import roomescape.time.domain.Time;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -54,9 +55,12 @@ public class ReservationTest {
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(1);
-        this.time = new Time(response.jsonPath().getLong(ID), response.jsonPath().getString(START_AT));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getLong(ID)).isEqualTo(1);
+        this.time = new Time(
+                response.jsonPath().getLong(ID),
+                response.jsonPath().getString(START_AT)
+        );
     }
 
     @BeforeEach
@@ -77,9 +81,14 @@ public class ReservationTest {
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
-        this.theme = new Theme(response.jsonPath().getLong(ID), response.jsonPath().getString(NAME), response.jsonPath().getString(DESCRIPTION), response.jsonPath().getString(THUMBNAIL));
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
+        this.theme = new Theme(
+                response.jsonPath().getLong(ID),
+                response.jsonPath().getString(NAME),
+                response.jsonPath().getString(DESCRIPTION),
+                response.jsonPath().getString(THUMBNAIL)
+        );
     }
 
     @Test
@@ -92,7 +101,7 @@ public class ReservationTest {
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
     }
 
@@ -116,8 +125,8 @@ public class ReservationTest {
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
     }
 
     @Test
@@ -132,8 +141,8 @@ public class ReservationTest {
                 .then().log().all()
                 .extract();
 
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getList("$").size()).isEqualTo(1);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("$").size()).isEqualTo(1);
     }
 
     @Test
@@ -149,7 +158,7 @@ public class ReservationTest {
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @ParameterizedTest
@@ -160,7 +169,13 @@ public class ReservationTest {
         ReservationRequest reservationRequest = new ReservationRequest(wrongNameExample, "2023-08-05", this.time.getId(), theme.getId());
 
         //when, then
-        Assertions.assertThatThrownBy(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).isInstanceOf(ReservationException.class).hasMessage(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR.getErrorMessage());
+        assertThatThrownBy(() -> new Reservation(
+                null, reservationRequest.getName(),
+                reservationRequest.getDate(),
+                this.time,
+                this.theme)
+        ).isInstanceOf(ReservationException.class)
+                .hasMessage(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR.getErrorMessage());
     }
 
     @ParameterizedTest
@@ -171,7 +186,12 @@ public class ReservationTest {
         ReservationRequest reservationRequest = new ReservationRequest(rightNameExample, "2023-08-05", this.time.getId(), theme.getId());
 
         //when, then
-        Assertions.assertThatCode(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).doesNotThrowAnyException();
+        assertThatCode(() -> new Reservation(
+                null,
+                reservationRequest.getName(),
+                reservationRequest.getDate(),
+                this.time, this.theme)
+        ).doesNotThrowAnyException();
     }
 
     @ParameterizedTest
@@ -182,7 +202,13 @@ public class ReservationTest {
         ReservationRequest reservationRequest = new ReservationRequest("johnPark", wrongDateExample, this.time.getId(), theme.getId());
 
         //when, then
-        Assertions.assertThatThrownBy(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).isInstanceOf(ReservationException.class).hasMessage(ErrorCode.INVALID_THEME_DATE_FORMAT_ERROR.getErrorMessage());
+        assertThatThrownBy(() -> new Reservation(
+                null,
+                reservationRequest.getName(),
+                reservationRequest.getDate(),
+                this.time, this.theme)
+        ).isInstanceOf(ReservationException.class)
+                .hasMessage(ErrorCode.INVALID_THEME_DATE_FORMAT_ERROR.getErrorMessage());
     }
 
     @ParameterizedTest
@@ -193,6 +219,11 @@ public class ReservationTest {
         ReservationRequest reservationRequest = new ReservationRequest("johnPark", rightDateExample, this.time.getId(), theme.getId());
 
         //when, then
-        Assertions.assertThatCode(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).doesNotThrowAnyException();
+        assertThatCode(() -> new Reservation(
+                null, reservationRequest.getName(),
+                reservationRequest.getDate(),
+                this.time,
+                this.theme)
+        ).doesNotThrowAnyException();
     }
 }

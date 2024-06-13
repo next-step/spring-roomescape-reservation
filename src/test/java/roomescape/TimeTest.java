@@ -4,7 +4,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,31 +17,26 @@ import roomescape.time.presentation.dto.TimeRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.AssertionsForClassTypes.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class TimeTest {
 
-    private static final String RENDERING_TIME_URL = "/admin/time";
-    private static final String TIMES_API_URL = "/times";
-    private static final String PATH_VARIABLE_SUFFIX_URL = "/1";
     private static final String ID = "id";
     private static final String START_AT = "startAt";
-    private static final String TIME = "15:40";
-    private static final int ONE = 1;
-    private static final long LONG_ONE = 1L;
-    private static final String WILD_CARD = "$";
 
     @Test
     void 시간_관리_페이지를_랜더링한다() {
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().get(RENDERING_TIME_URL)
+                .when().get("/admin/time")
                 .then().log().all()
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 
     }
 
@@ -51,19 +45,19 @@ public class TimeTest {
 
         //given
         Map<String, Object> time = new HashMap<>();
-        time.put(START_AT, TIME);
+        time.put(START_AT, "15:40");
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(time)
-                .when().post(TIMES_API_URL)
+                .when().post("/times")
                 .then().log().all()
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(LONG_ONE);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
     }
 
     @Test
@@ -74,12 +68,12 @@ public class TimeTest {
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().get(TIMES_API_URL)
+                .when().get("/times")
                 .then().log().all()
                 .extract();
 
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getList(WILD_CARD).size()).isEqualTo(ONE);
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("$").size()).isEqualTo(1);
     }
 
     @Test
@@ -90,12 +84,12 @@ public class TimeTest {
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().delete(TIMES_API_URL + PATH_VARIABLE_SUFFIX_URL)
+                .when().delete("/times/1")
                 .then().log().all()
                 .extract();
 
         //then
-        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @ParameterizedTest
@@ -106,7 +100,7 @@ public class TimeTest {
         TimeRequest timeRequest = new TimeRequest(startAt);
 
         //when, then
-        Assertions.assertThatThrownBy(timeRequest::convertToDomainObject).isInstanceOf(TimeException.class).hasMessage(ErrorCode.INVALID_TIME_FORMAT_ERROR.getErrorMessage());
+        assertThatThrownBy(timeRequest::convertToDomainObject).isInstanceOf(TimeException.class).hasMessage(ErrorCode.INVALID_TIME_FORMAT_ERROR.getErrorMessage());
     }
 
     @ParameterizedTest
@@ -117,6 +111,6 @@ public class TimeTest {
         TimeRequest timeRequest = new TimeRequest(startAt);
 
         //when, then
-        Assertions.assertThatCode(timeRequest::convertToDomainObject).doesNotThrowAnyException();
+        assertThatCode(timeRequest::convertToDomainObject).doesNotThrowAnyException();
     }
 }

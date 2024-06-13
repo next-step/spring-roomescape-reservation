@@ -23,7 +23,7 @@ public class ReservationService {
     public Reservation add(NewReservation newReservation) {
         ReservationEntity entity =  reservationRepository.addReservation(newReservation.toEntity());
         TimeEntity time = timeRepository.time(entity.getTimeId());
-        return new Reservation(entity, time);
+        return Reservation.createdByEntity(entity, time);
     }
 
     public void delete(long id) {

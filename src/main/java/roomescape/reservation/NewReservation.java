@@ -12,6 +12,6 @@ public class NewReservation {
     }
 
     public ReservationEntity toEntity() {
-        return new ReservationEntity(name, date.toString(), timeId);
+        return ReservationEntity.of(name, date.toString(), timeId);
     }
 }

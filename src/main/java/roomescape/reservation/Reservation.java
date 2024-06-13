@@ -9,11 +9,11 @@ public class Reservation {
     private final ReservationDate date;
     private Time time;
 
-    public Reservation(ReservationEntity reservationEntity, TimeEntity time) {
-        this(reservationEntity.getId(),
+    public static Reservation createdByEntity(ReservationEntity reservationEntity, TimeEntity time) {
+        return new Reservation(reservationEntity.getId(),
                 reservationEntity.getName(),
                 new ReservationDate(reservationEntity.getDate()),
-                new Time(time));
+                Time.from(time));
     }
 
     public Reservation(Long id, String name, String date, Long timeId, String startAt) {

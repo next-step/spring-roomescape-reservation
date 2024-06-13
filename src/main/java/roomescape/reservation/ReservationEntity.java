@@ -7,11 +7,11 @@ public class ReservationEntity {
     private String date;
     private Long timeId;
 
-    public ReservationEntity(String name, String date, Long timeId) {
-        this(null, name, date, timeId);
+    public static ReservationEntity of(String name, String date, Long timeId) {
+        return new ReservationEntity(null, name, date, timeId);
     }
 
-    public ReservationEntity(Long id, String  name, String date, Long timeId) {
+    private ReservationEntity(Long id, String  name, String date, Long timeId) {
         this.id = id;
         this.name = name;
         this.date = date;

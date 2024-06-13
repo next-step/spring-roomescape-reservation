@@ -16,13 +16,13 @@ public class TimeService {
         return timeRepository
                 .reservationTimes()
                 .stream()
-                .map(Time::new)
+                .map(Time::from)
                 .toList();
     }
 
     public Time add(Time newTime) {
          TimeEntity entity = timeRepository.addReservationTime(newTime.toEntity());
-         return new Time(entity);
+         return Time.from(entity);
     }
 
     public void delete(Long id) {

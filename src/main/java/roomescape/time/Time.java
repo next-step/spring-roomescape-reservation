@@ -5,8 +5,8 @@ public class Time {
 
     private final ReservationTime startAt;
 
-    public Time(TimeEntity entity) {
-        this(entity.getId(), entity.getStartAt());
+    public static Time from(TimeEntity entity) {
+        return new Time(entity.getId(), entity.getStartAt());
     }
 
     public Time(Long id, String startAt) {

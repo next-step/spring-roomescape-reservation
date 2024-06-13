@@ -33,6 +33,9 @@ public class ReservationTest {
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        ReservationResponse body = response.body().as(ReservationResponse.class);
+        assertThat(body.getName()).isEqualTo(name);
+        assertThat(body.getDate()).isEqualTo(date);
     }
 
     @Test

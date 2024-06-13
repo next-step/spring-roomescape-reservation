@@ -27,6 +27,8 @@ public class ReservationTimeTest {
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        ReservationTimeResponse body = response.body().as(ReservationTimeResponse.class);
+        assertThat(body.getStartAt()).isEqualTo(startAt);
     }
 
     @Test

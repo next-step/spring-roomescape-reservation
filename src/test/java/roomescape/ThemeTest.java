@@ -30,6 +30,10 @@ public class ThemeTest {
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        ThemeResponse body = response.body().as(ThemeResponse.class);
+        assertThat(body.getName()).isEqualTo(name);
+        assertThat(body.getDescription()).isEqualTo(description);
+        assertThat(body.getThumbnail()).isEqualTo(thumbnail);
     }
 
     @Test

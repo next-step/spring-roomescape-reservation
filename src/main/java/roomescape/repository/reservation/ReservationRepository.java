@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository {
     public List<Reservation> findAllReservations();
-    public Reservation createReservation(CreateReservationCommand command);
+    public Reservation createReservation(Reservation reservation);
     public void deleteReservation(Long id);
 }

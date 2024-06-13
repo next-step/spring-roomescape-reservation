@@ -36,7 +36,9 @@ public class ReservationService {
     }
 
     public CreateReservationResult createReservation(CreateReservationCommand command) {
-        return CreateReservationResult.of(reservationRepository.createReservation(command));
+        return CreateReservationResult.of(
+                reservationRepository.createReservation(Reservation.create(command))
+        );
     }
 
     public void deleteReservation(Long id) {

@@ -1,7 +1,11 @@
 package roomescape.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import roomescape.application.dto.command.CreateReservationCommand;
 
+@Getter
+@Setter
 public class Reservation {
 
     private Long id;
@@ -17,23 +21,7 @@ public class Reservation {
         this.time = time;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public static Reservation create(Long id, CreateReservationCommand command) {
-        return new Reservation(id, command.getName(), command.getDate(), command.getTime());
+    public static Reservation create(CreateReservationCommand command) {
+        return new Reservation(null, command.getName(), command.getDate(), command.getTime());
     }
 }

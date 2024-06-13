@@ -1,38 +1,59 @@
 package roomescape.repository.reservation;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.application.dto.command.CreateReservationCommand;
 import roomescape.domain.Reservation;
 
-import java.util.HashMap;
+import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepository {
 
+    private final JdbcTemplate jdbcTemplate;
 
-    private Map<Long, Reservation> reservations = new HashMap<>();
-    private AtomicLong index = new AtomicLong(1);
 
-    @Override
-    public List<Reservation> findAllReservations() {
-        return reservations.values().stream().toList();
+    public ReservationRepositoryImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Reservation createReservation(CreateReservationCommand command) {
-        Reservation reservation = Reservation.create(index.getAndIncrement(), command);
-        reservations.put(reservation.getId(), reservation);
+    public List<Reservation> findAllReservations() {
+
+        return jdbcTemplate.query("SELECT * FROM reservation", (rs, rowNum) -> {
+            return new Reservation(
+                    rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("date"),
+                    rs.getString("time")
+            );
+        });
+    }
+
+    @Override
+    public Reservation createReservation(Reservation reservation) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        String sql = "insert into Reservation(name, date, time) values(?, ?, ?)";
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(sql, new String[]{"id"});
+            pstmt.setString(1, reservation.getName());
+            pstmt.setString(2, reservation.getDate());
+            pstmt.setString(3, reservation.getTime());
+            return pstmt;
+        }, keyHolder);
+
+        long key = keyHolder.getKey().longValue();
+        reservation.setId(key);
 
         return reservation;
     }
 
     @Override
     public void deleteReservation(Long id) {
-        if(reservations.containsKey(id)){
-            reservations.remove(id);
-        }
+        jdbcTemplate.update("DELETE FROM reservation WHERE id = ?", id);
     }
 }

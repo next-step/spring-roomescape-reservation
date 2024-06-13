@@ -17,16 +17,14 @@ public class FindAllReservationsResponse {
 
     private final String date;
 
-    private final Long timeId;
+    private final Time time;
 
-    private final String startAt;
 
-    public FindAllReservationsResponse(Long id, String name, String date, Long timeId, String startAt) {
+    public FindAllReservationsResponse(Long id, String name, String date, Time time) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.timeId = timeId;
-        this.startAt = startAt;
+        this.time = time;
     }
 
     public static FindAllReservationsResponse from(ReservationView reservationView) {
@@ -34,8 +32,10 @@ public class FindAllReservationsResponse {
                 reservationView.getReservationId(),
                 reservationView.getReservationName(),
                 reservationView.getFormattedReservationDate(DATE_PATTERN),
-                reservationView.getReservationTimeId(),
-                reservationView.getFormattedReservationTimeStartAt(TIME_PATTERN)
+                new FindAllReservationsResponse.Time(
+                        reservationView.getReservationTimeId(),
+                        reservationView.getFormattedReservationTimeStartAt(TIME_PATTERN)
+                )
         );
     }
 
@@ -58,11 +58,27 @@ public class FindAllReservationsResponse {
         return date;
     }
 
-    public Long getTimeId() {
-        return timeId;
+    public Time getTime() {
+        return time;
     }
 
-    public String getStartAt() {
-        return startAt;
+    private static class Time {
+        
+        private final Long timeId;
+
+        private final String startAt;
+
+        public Time(Long timeId, String startAt) {
+            this.timeId = timeId;
+            this.startAt = startAt;
+        }
+
+        public Long getTimeId() {
+            return timeId;
+        }
+
+        public String getStartAt() {
+            return startAt;
+        }
     }
 }

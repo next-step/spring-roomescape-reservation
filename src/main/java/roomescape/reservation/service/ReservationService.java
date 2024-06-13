@@ -41,9 +41,9 @@ public class ReservationService {
     public ReservationResponse saveReservation(ReservationRequest request) {
         ReservationTime reservationTime = Optional.ofNullable(
                 reservationTimeRepository.findById(request.getTimeId()))
-            .orElseThrow(ReservationTimeNotExistsException::new);
+                .orElseThrow(ReservationTimeNotExistsException::new);
         Theme theme = Optional.ofNullable(themeRepository.findById(request.getThemeId()))
-            .orElseThrow(ThemeNotExistsException::new);
+                                .orElseThrow(ThemeNotExistsException::new);
 
         Reservation reservation = new Reservation(request.getName(), request.getDate(),
             reservationTime, theme);

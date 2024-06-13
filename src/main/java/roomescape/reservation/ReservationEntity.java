@@ -5,13 +5,17 @@ public class ReservationEntity {
     private Long id;
     private String name;
     private String date;
-    private String time;
+    private Long timeId;
 
-    public ReservationEntity(Long id, String  name, String date, String time) {
+    public ReservationEntity(String name, String date, Long timeId) {
+        this(null, name, date, timeId);
+    }
+
+    public ReservationEntity(Long id, String  name, String date, Long timeId) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
     }
 
     public long getId() {
@@ -38,11 +42,11 @@ public class ReservationEntity {
         this.date = date;
     }
 
-    public String getTime() {
-        return time;
+    public Long getTimeId() {
+        return timeId;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setTimeId(Long timeId) {
+        this.timeId = timeId;
     }
 }

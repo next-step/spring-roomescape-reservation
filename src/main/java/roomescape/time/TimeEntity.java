@@ -20,8 +20,4 @@ public class TimeEntity {
     public String getStartAt() {
         return startAt;
     }
-
-    public void setStartAt(String startAt) {
-        this.startAt = startAt;
-    }
 }

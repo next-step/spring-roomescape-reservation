@@ -1,42 +1,31 @@
 package roomescape.reservation;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import roomescape.time.Time;
-
-import java.time.LocalDate;
+import roomescape.time.TimeEntity;
 
 public class Reservation {
-    private static final String DATE_PATTERN = "yyyy-MM-dd";
-    private static final String TIME_PATTERN = "hh:mm";
-
-    @Nullable
     private Long id;
-
-    @NonNull
     private String name;
-
-    @NonNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
-    private LocalDate date;
-
+    private final ReservationDate date;
     private Time time;
 
-    public Reservation(ReservationEntity entity) {
-//        this(entity.getId(), entity.getName(),
-//                LocalDate.parse(entity.getDate()),
-//                LocalTime.parse(entity.getTime()));
+    public Reservation(ReservationEntity reservationEntity, TimeEntity time) {
+        this(reservationEntity.getId(),
+                reservationEntity.getName(),
+                new ReservationDate(reservationEntity.getDate()),
+                new Time(time));
     }
 
-    public Reservation(Long id, String name, LocalDate date, Time time) {
+    public Reservation(Long id, String name, String date, Long timeId, String startAt) {
+        this(id, name, new ReservationDate(date), new Time(timeId, startAt));
+    }
+
+    public Reservation(Long id, String name, ReservationDate date, Time time) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.time = time;
     }
-
 
     public Long getId() {
         return id;
@@ -54,28 +43,15 @@ public class Reservation {
         this.name = name;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Time getReservationTime() {
-        return time;
-    }
-
     public void setTime(Time time) {
         this.time = time;
     }
 
-    public ReservationEntity toEntity() {
-        return null;
-//        return new ReservationEntity(
-//                id,
-//                name,
-//                date.format(DateTimeFormatter.ofPattern(DATE_PATTERN)),
-//                time.format(DateTimeFormatter.ofPattern(TIME_PATTERN)));
+    public ReservationDate getDate() {
+        return date;
+    }
+
+    public Time getTime() {
+        return time;
     }
 }

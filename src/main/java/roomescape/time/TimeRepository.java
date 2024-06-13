@@ -12,7 +12,10 @@ import java.util.List;
 @Repository
 public class TimeRepository {
     private final JdbcTemplate jdbcTemplate;
+
     private static final String TABLE_NAME = "reservation_time";
+    private static final String COLUMN_START_AT = "start_at";
+    private static final String COLUMN_ID = "id";
 
     public TimeRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -23,13 +26,13 @@ public class TimeRepository {
     }
 
     public TimeEntity addReservationTime(TimeEntity reservationTime) {
-        String sql = String.format("insert into %s (start_At) values(?)", TABLE_NAME);
+        String sql = String.format("insert into %s (%s) values(?)", TABLE_NAME, COLUMN_START_AT);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
                     sql,
-                    new String[]{"id"});
+                    new String[]{COLUMN_ID});
 
             ps.setString(1, reservationTime.getStartAt());
             return ps;
@@ -42,18 +45,27 @@ public class TimeRepository {
     }
 
     public List<TimeEntity> reservationTimes() {
-        String sql = String.format("select id, start_At from %s", TABLE_NAME);
+        String sql = String.format("select %s, %s from %s", COLUMN_ID, COLUMN_START_AT, TABLE_NAME);
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     private final RowMapper<TimeEntity> rowMapper = (resultSet, rowNum) ->
             new TimeEntity(
-                    resultSet.getLong("id"),
-                    resultSet.getString("start_At")
+                    resultSet.getLong(COLUMN_ID),
+                    resultSet.getString(COLUMN_START_AT)
             );
 
     public void delete(Long id) {
-        String sql = String.format("delete from %s where id = ?", TABLE_NAME);
+        String sql = String.format("delete from %s where %s = ?", TABLE_NAME, COLUMN_ID);
         jdbcTemplate.update(sql, id);
+    }
+
+    public TimeEntity time(Long timeId) {
+        String sql = String.format("select %s, %s from %s where id = ?", COLUMN_ID, COLUMN_START_AT, TABLE_NAME);
+        return jdbcTemplate.queryForObject(sql,
+                (resultSet, rowNum)  -> new TimeEntity(
+                    resultSet.getLong(COLUMN_ID),
+                    resultSet.getString(COLUMN_START_AT)
+            ), timeId);
     }
 }

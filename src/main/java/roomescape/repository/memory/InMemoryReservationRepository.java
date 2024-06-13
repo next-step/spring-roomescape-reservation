@@ -3,6 +3,7 @@ package roomescape.repository.memory;
 import org.springframework.stereotype.Repository;
 import roomescape.repository.ReservationRepository;
 import roomescape.repository.entity.ReservationEntity;
+import roomescape.repository.projection.ReservationViewProjection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,12 @@ public class InMemoryReservationRepository implements ReservationRepository {
         return this.reservationEntities.stream()
                 .filter(reservationEntity -> reservationEntity.isSameId(reservationId))
                 .findAny();
+    }
+
+    @Override
+    public List<ReservationViewProjection> findAllReservationViewProjection() {
+        // 미구현
+        return null;
     }
 
     private boolean containSameId(Long id) {

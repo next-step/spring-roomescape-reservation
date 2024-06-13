@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.repository.ReservationRepository;
 import roomescape.repository.entity.ReservationEntity;
+import roomescape.repository.projection.ReservationViewProjection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,13 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
     private static final String TABLE_COLUMN_NAME = "name";
     private static final String TABLE_COLUMN_DATE = "date";
     private static final String TABLE_COLUMN_TIME_ID = "time_id";
+
+    private static final String TABLE_COLUMN_RESERVATION_ID = "reservation_id";
+    private static final String TABLE_COLUMN_RESERVATION_NAME = "reservation_name";
+    private static final String TABLE_COLUMN_RESERVATION_DATE = "reservation_date";
+    private static final String TABLE_COLUMN_RESERVATION_TIME_ID = "time_id";
+    private static final String TABLE_COLUMN_RESERVATION_TIME_START_AT = "time_start_at";
+
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -97,5 +105,36 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                         )
                 )
         );
+    }
+
+    @Override
+    public List<ReservationViewProjection> findAllReservationViewProjection() {
+        String sql = "SELECT " +
+                "    r.id as reservation_id, " +
+                "    r.name as reservation_name, " +
+                "    r.date as reservation_date, " +
+                "    t.id as time_id, " +
+                "    t.start_at as time_start_at " +
+                "FROM reservation as r " +
+                "inner join reservation_time as t " +
+                "on r.time_id = t.id";
+
+
+        return namedParameterJdbcTemplate.query(sql, resultSet -> {
+            List<ReservationViewProjection> reservationViewProjections = new ArrayList<>();
+            while (resultSet.next()) {
+                reservationViewProjections.add(
+                        new ReservationViewProjection(
+                                resultSet.getLong(TABLE_COLUMN_RESERVATION_ID),
+                                resultSet.getString(TABLE_COLUMN_RESERVATION_NAME),
+                                resultSet.getDate(TABLE_COLUMN_RESERVATION_DATE).toLocalDate(),
+                                resultSet.getLong(TABLE_COLUMN_RESERVATION_TIME_ID),
+                                resultSet.getTime(TABLE_COLUMN_RESERVATION_TIME_START_AT).toLocalTime()
+                        )
+                );
+            }
+
+            return reservationViewProjections;
+        });
     }
 }

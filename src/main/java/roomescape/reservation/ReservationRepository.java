@@ -25,7 +25,7 @@ public class ReservationRepository {
     }
 
     public ReservationEntity addReservation(ReservationEntity reservationEntity) {
-        String sql = String.format("insert into %s (%s, %s, %s) values(?,?,?)", COLUMN_NAME, COLUMN_DATE, COLUMN_TIME_ID, TABLE_NAME);
+        String sql = String.format("insert into %s (%s, %s, %s) values(?,?,?)", TABLE_NAME, COLUMN_NAME, COLUMN_DATE, COLUMN_TIME_ID);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {

@@ -1,8 +1,5 @@
 package roomescape.time.presentation.dto;
 
-import lombok.Builder;
-
-@Builder
 public class TimeResponse {
 
     private final Long id;

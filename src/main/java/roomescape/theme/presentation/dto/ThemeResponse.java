@@ -1,8 +1,5 @@
 package roomescape.theme.presentation.dto;
 
-import lombok.Builder;
-
-@Builder
 public class ThemeResponse {
 
     private Long id;

@@ -32,14 +32,13 @@ public class ApiReservationController {
     public ResponseEntity<List<ReservationResponse>> getReservations() {
         List<Reservation> reservations = reservationService.findAll();
         List<ReservationResponse> responses = reservations.stream().map(reservation ->
-                        ReservationResponse.builder().
-                                id(reservation.getId())
-                                .name(reservation.getName())
-                                .date(reservation.getDate())
-                                .time(reservation.getTime())
-                                .theme(reservation.getTheme()
-                                ).build())
-                .collect(Collectors.toList());
+                new ReservationResponse(
+                        reservation.getId(),
+                        reservation.getName(),
+                        reservation.getDate(),
+                        reservation.getTime(),
+                        reservation.getTheme()
+                )).collect(Collectors.toList());
         return ResponseEntity.ok().body(responses);
     }
 
@@ -49,13 +48,13 @@ public class ApiReservationController {
         Theme theme = themeService.findById(request.getThemeId());
         Reservation reservation = reservationService.save(new Reservation(null, request.getName(), request.getDate(), time, theme));
         return ResponseEntity.ok().body(
-                ReservationResponse.builder()
-                        .id(reservation.getId())
-                        .name(reservation.getName())
-                        .date(reservation.getDate())
-                        .time(reservation.getTime())
-                        .theme(reservation.getTheme()
-                        ).build());
+                new ReservationResponse(
+                        reservation.getId(),
+                        reservation.getName(),
+                        reservation.getDate(),
+                        reservation.getTime(),
+                        reservation.getTheme()
+                ));
     }
 
     @DeleteMapping("/{id}")

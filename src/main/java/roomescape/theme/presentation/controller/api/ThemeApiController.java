@@ -22,18 +22,22 @@ public class ThemeApiController {
     @PostMapping
     public ResponseEntity<ThemeResponse> save(@RequestBody ThemeRequest request) {
         Theme theme = themeService.save(new Theme(null, request.getName(), request.getDescription(), request.getThumbnail()));
-        return ResponseEntity.ok().body(ThemeResponse.builder().id(theme.getId()).name(theme.getName()).description(theme.getName()).thumbnail(theme.getThumbnail()).build());
+        return ResponseEntity.ok().body(new ThemeResponse(
+                theme.getId(),
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail()
+        ));
     }
 
     @GetMapping
     public ResponseEntity<List<ThemeResponse>> getThemes() {
         List<Theme> themes = themeService.findAll();
-        List<ThemeResponse> responses = themes.stream().map(theme -> ThemeResponse.builder().
-                id(theme.getId())
-                .name(theme.getName())
-                .description(theme.getDescription())
-                .thumbnail(theme.getThumbnail())
-                .build()
+        List<ThemeResponse> responses = themes.stream().map(theme -> new ThemeResponse(
+                theme.getId(),
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail())
         ).toList();
         return ResponseEntity.ok(responses);
     }

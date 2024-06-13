@@ -1,10 +1,8 @@
 package roomescape.reservation.presentation.dto;
 
-import lombok.Builder;
 import roomescape.theme.domain.Theme;
 import roomescape.time.domain.Time;
 
-@Builder
 public class ReservationResponse {
 
     private final Long id;

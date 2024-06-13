@@ -1,11 +1,9 @@
 package roomescape.global.error;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@Getter
 public class ErrorResponse {
 
     private HttpStatus status;
@@ -18,5 +16,13 @@ public class ErrorResponse {
 
     public static ErrorResponse of(HttpStatus status, List<String> errorMessages) {
         return new ErrorResponse(status, errorMessages);
+    }
+
+    public HttpStatus getStatus() {
+        return status;
+    }
+
+    public List<String> getErrorMessages() {
+        return errorMessages;
     }
 }

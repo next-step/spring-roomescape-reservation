@@ -12,10 +12,19 @@ import java.util.Objects;
 @Repository
 public class ThemeRepository {
 
-    private static final String FIND_BY_ID_SQL = "SELECT * FROM theme WHERE id = ?";
-    private static final String FIND_ALL_SQL = "SELECT * FROM theme";
-    private static final String SAVE_SQL = "INSERT INTO theme (name, description, thumbnail) VALUES (?, ?, ?)";
-    private static final String DELETE_SQL = "DELETE FROM theme WHERE id = ?";
+    private static final String FIND_BY_ID_SQL = """
+            SELECT * FROM theme WHERE id = ?;
+            """;
+    private static final String FIND_ALL_SQL = """
+            SELECT * FROM theme;
+            """;
+    private static final String SAVE_SQL = """
+            INSERT INTO theme (name, description, thumbnail) 
+            VALUES (?, ?, ?);
+            """;
+    private static final String DELETE_SQL = """
+            DELETE FROM theme WHERE id = ?;
+            """;
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_DESCRIPTION = "description";

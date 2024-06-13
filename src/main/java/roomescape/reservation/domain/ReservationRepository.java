@@ -14,43 +14,50 @@ import java.util.Objects;
 @Repository
 public class ReservationRepository {
 
-    private static final String FIND_BY_ID_SQL =
-            "SELECT " +
-                "r.id AS reservation_id, " +
-                "r.name AS reservation_name, " +
-                "r.date AS reservation_date, " +
-                "rt.id AS reservation_time_id, " +
-                "rt.start_at AS reservation_time_start_at, " +
-                "rt.start_at AS reservation_time, " +
-                "t.id AS theme_id, " +
-                "t.name AS theme_name, " +
-                "t.description AS theme_description, " +
-                "t.thumbnail AS theme_thumbnail " +
-            "FROM reservation r " +
-            "INNER JOIN reservation_time rt " +
-                "ON r.time_id = rt.id " +
-            "INNER JOIN theme t " +
-                "ON r.theme_id = t.id " +
-            "WHERE r.id = ?;";
-    private static final String SAVE_SQL = "INSERT INTO reservation (name, date, time_id, theme_id) VALUES (?, ?, ?, ?)";
-    private static final String FIND_ALL_SQL =
-            "SELECT " +
-                "r.id AS reservation_id, " +
-                "r.name AS reservation_name, " +
-                "r.date AS reservation_date, " +
-                "rt.id AS reservation_time_id, " +
-                "rt.start_at AS reservation_time_start_at, " +
-                "rt.start_at AS reservation_time, " +
-                "t.id AS theme_id, " +
-                "t.name AS theme_name, " +
-                "t.description AS theme_description, " +
-                "t.thumbnail AS theme_thumbnail " +
-            "FROM reservation r " +
-            "INNER JOIN reservation_time rt " +
-                "ON r.time_id = rt.id " +
-            "INNER JOIN theme t " +
-                "ON r.theme_id = t.id;";
-    private static final String DELETE_SQL = "DELETE FROM reservation WHERE id = ?";
+    private static final String FIND_BY_ID_SQL = """
+            SELECT 
+                r.id AS reservation_id, 
+                r.name AS reservation_name, 
+                r.date AS reservation_date, 
+                rt.id AS reservation_time_id, 
+                rt.start_at AS reservation_time_start_at, 
+                rt.start_at AS reservation_time, 
+                t.id AS theme_id, 
+                t.name AS theme_name, 
+                t.description AS theme_description, 
+                t.thumbnail AS theme_thumbnail 
+            FROM reservation r 
+            INNER JOIN reservation_time rt 
+                ON r.time_id = rt.id 
+            INNER JOIN theme t 
+                ON r.theme_id = t.id 
+            WHERE r.id = ?;
+            """;
+    private static final String SAVE_SQL = """
+            INSERT INTO reservation (name, date, time_id, theme_id) 
+            VALUES (?, ?, ?, ?);
+            """;
+    private static final String FIND_ALL_SQL = """
+            SELECT 
+                r.id AS reservation_id, 
+                r.name AS reservation_name, 
+                r.date AS reservation_date, 
+                rt.id AS reservation_time_id, 
+                rt.start_at AS reservation_time_start_at, 
+                rt.start_at AS reservation_time, 
+                t.id AS theme_id, 
+                t.name AS theme_name, 
+                t.description AS theme_description, 
+                t.thumbnail AS theme_thumbnail 
+            FROM reservation r 
+            INNER JOIN reservation_time rt 
+                ON r.time_id = rt.id 
+            INNER JOIN theme t 
+                ON r.theme_id = t.id;
+            """;
+    private static final String DELETE_SQL = """
+            DELETE FROM reservation WHERE id = ?;
+            """;
     private static final String COLUMN_ID = "id";
     private static final int INDEX_ONE = 1;
     private static final int INDEX_TWO = 2;

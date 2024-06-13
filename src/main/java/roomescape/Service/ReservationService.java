@@ -61,6 +61,7 @@ public class ReservationService {
         validateDate(request.getDate());
         checkExistentTime(request.getTimeId());
         checkExistentTheme(request.getThemeId());
+        checkDuplicated(request.getDate(), request.getTimeId(), request.getThemeId());
     }
 
     private void validateDate(String date) {
@@ -96,6 +97,12 @@ public class ReservationService {
         }
         catch (EmptyResultDataAccessException exception) {
             throw new NotFoundException("존재하지 않는 테마입니다.");
+        }
+    }
+
+    private void checkDuplicated(String date, Long timeId, Long themeId) {
+        if (reservationRepository.countMatchWith(date, timeId, themeId) > 0) {
+            throw new BadRequestException("해당 방탈출은 이미 예약되었습니다.");
         }
     }
 

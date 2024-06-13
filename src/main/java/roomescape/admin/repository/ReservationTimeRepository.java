@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationTimeRepository {
@@ -22,12 +23,16 @@ public class ReservationTimeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<ReservationTime> findAll() {
-        return this.jdbcTemplate.query(ReservationTimeQuery.FIND_ALL, readReservationTimeRowMapper());
+    public Optional<List<ReservationTime>> findAll() {
+        return Optional.of(this.jdbcTemplate.query(ReservationTimeQuery.FIND_ALL, readReservationTimeRowMapper()));
     }
 
-    public ReservationTime findById(Long id) {
-        return this.jdbcTemplate.queryForObject(ReservationTimeQuery.FIND_BY_ID, readReservationTimeRowMapper(),id);
+    public Optional<ReservationTime> findById(Long id) {
+        return Optional.of(this.jdbcTemplate.queryForObject(ReservationTimeQuery.FIND_BY_ID, readReservationTimeRowMapper(),id));
+    }
+
+    public Optional<Integer> countById(Long id){
+        return Optional.of(this.jdbcTemplate.queryForObject(ReservationTimeQuery.COUNT_BY_ID, Integer.class, id));
     }
 
     private RowMapper<ReservationTime> readReservationTimeRowMapper() {

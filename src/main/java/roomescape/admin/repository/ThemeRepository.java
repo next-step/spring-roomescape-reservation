@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ThemeRepository {
@@ -22,12 +23,16 @@ public class ThemeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Theme> findAll() {
-        return this.jdbcTemplate.query(ThemeQuery.FIND_ALL, readThemeRowMapper());
+    public Optional<List<Theme>> findAll() {
+        return Optional.of(this.jdbcTemplate.query(ThemeQuery.FIND_ALL, readThemeRowMapper()));
     }
 
-    public Theme findById(Long id) {
-        return this.jdbcTemplate.queryForObject(ThemeQuery.FIND_BY_ID, readThemeRowMapper(),id);
+    public Optional<Theme> findById(Long id) {
+        return Optional.of(this.jdbcTemplate.queryForObject(ThemeQuery.FIND_BY_ID, readThemeRowMapper(),id));
+    }
+
+    public Optional<Integer> countById(Long id){
+        return Optional.of(this.jdbcTemplate.queryForObject(ThemeQuery.COUNT_BY_ID, Integer.class, id));
     }
 
     private RowMapper<Theme> readThemeRowMapper() {

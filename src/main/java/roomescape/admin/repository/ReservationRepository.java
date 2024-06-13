@@ -1,7 +1,6 @@
 package roomescape.admin.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -15,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationRepository {
@@ -25,12 +25,12 @@ public class ReservationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Reservation> findAll() {
-        return this.jdbcTemplate.query(ReservationQuery.FIND_ALL, readReservationRowMapper());
+    public Optional<List<Reservation>> findAll() {
+        return Optional.of(this.jdbcTemplate.query(ReservationQuery.FIND_ALL, readReservationRowMapper()));
     }
 
-    public Reservation findById(Long id) {
-        return this.jdbcTemplate.queryForObject(ReservationQuery.FIND_BY_ID, readReservationRowMapper(),id);
+    public Optional<Reservation> findById(Long id) {
+        return Optional.of(this.jdbcTemplate.queryForObject(ReservationQuery.FIND_BY_ID, readReservationRowMapper(),id));
     }
 
     private RowMapper<Reservation> readReservationRowMapper() {
@@ -64,20 +64,7 @@ public class ReservationRepository {
     }
 
     public int countByDateAndStartAt(String date, String startAt) {
-        return this.jdbcTemplate.query(ReservationQuery.COUNT_BY_DATE_AND_START_AT, countReservationExtractor(),date, startAt);
-    }
-
-    private ResultSetExtractor<Integer> countReservationExtractor() {
-        return (ResultSet rs) -> {
-            if (rs.next()) {
-                return mapToInteger(rs);
-            }
-            return 0; // 결과가 없을 경우 0을 반환
-        };
-    }
-
-    private Integer mapToInteger(ResultSet rs) throws SQLException {
-        return rs.getInt("duplicated_count");
+        return this.jdbcTemplate.queryForObject(ReservationQuery.COUNT_BY_DATE_AND_START_AT, Integer.class, date, startAt);
     }
 
     public Long save(SaveReservationRequest saveReservationRequest) {

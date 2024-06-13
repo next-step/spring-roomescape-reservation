@@ -7,11 +7,16 @@ import roomescape.admin.entity.Reservation;
 import roomescape.admin.entity.ReservationTime;
 import roomescape.admin.repository.ReservationRepository;
 import roomescape.admin.repository.ReservationTimeRepository;
-import roomescape.common.exception.CustomException;
+import roomescape.common.exception.DBException;
+import roomescape.common.exception.PolicyException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static roomescape.common.exception.DBException.SEARCH_ERROR;
+import static roomescape.common.exception.PolicyException.DUPLICATE_RESERVATION_ERROR;
+import static roomescape.common.exception.PolicyException.RESERVATION_PRIOR_TO_CURRENT_TIME_ERROR;
 
 @Service
 public class ReservationService {
@@ -26,49 +31,54 @@ public class ReservationService {
     }
 
     public List<ReadReservationResponse> readReservation() {
-        List<Reservation> reservation = this.reservationRepository.findAll();
+        List<Reservation> reservation = this.reservationRepository.findAll()
+                .orElseThrow(() -> new DBException(SEARCH_ERROR));
 
         return ReadReservationResponse.from(reservation);
     }
 
     public ReadReservationResponse saveReservation(SaveReservationRequest saveReservationRequest) {
         if(isDuplicatedReservation(saveReservationRequest)){
-            throw new CustomException("중복된 예약이 존재합니다.");
+            throw new PolicyException(DUPLICATE_RESERVATION_ERROR);
         }
 
         if(isUnderDate(saveReservationRequest)){
-            throw new CustomException("예약 시간은 현재 시간보다 이전일 수 없습니다.");
+            throw new PolicyException(RESERVATION_PRIOR_TO_CURRENT_TIME_ERROR);
         }
 
         Long id = this.reservationRepository.save(saveReservationRequest);
-        Reservation reservation = this.reservationRepository.findById(id);
 
-        return ReadReservationResponse.from(reservation);
+        return ReadReservationResponse.from(readReservationById(id));
+    }
+
+    public Reservation readReservationById(Long id) {
+        return this.reservationRepository.findById(id)
+                .orElseThrow(() -> new DBException(SEARCH_ERROR));
     }
 
     private boolean isUnderDate(SaveReservationRequest saveReservationRequest) {
-        ReservationTime reservationTime = this.reservationTimeRepository.findById(saveReservationRequest.timeId());
+        ReservationTime reservationTime = readReservationTimeById(saveReservationRequest);
         String startAt = reservationTime.getStartAt();
         LocalDateTime reserve = LocalDateTime.parse(saveReservationRequest.date() + " " + startAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
-        if (reserve.isBefore(LocalDateTime.now())) {
-            return true;
-        }
-
-        return false;
+        return reserve.isBefore(LocalDateTime.now());
     }
 
     private boolean isDuplicatedReservation(SaveReservationRequest saveReservationRequest) {
-        ReservationTime reservationTime = this.reservationTimeRepository.findById(saveReservationRequest.timeId());
+        ReservationTime reservationTime = readReservationTimeById(saveReservationRequest);
         String startAt = reservationTime.getStartAt();
         String date = saveReservationRequest.date();
-        int duplicate = this.reservationRepository.countByDateAndStartAt(date, startAt);
 
-        if(duplicate > 0){
-            return true;
-        }
+        return isExistData(this.reservationRepository.countByDateAndStartAt(date, startAt));
+    }
 
-        return false;
+    private ReservationTime readReservationTimeById(SaveReservationRequest saveReservationRequest) {
+        return this.reservationTimeRepository.findById(saveReservationRequest.timeId())
+                .orElseThrow(() -> new DBException(SEARCH_ERROR));
+    }
+
+    private boolean isExistData(int count){
+        return count > 0;
     }
 
     public void deleteReservation(Long id) {

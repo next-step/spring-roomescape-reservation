@@ -20,7 +20,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservation add(@Validated  @RequestBody Reservation newReservation) {
+    public Reservation add(@Validated  @RequestBody NewReservation newReservation) {
         return reservationService.add(newReservation);
     }
 

@@ -1,4 +1,4 @@
-package roomescape.reservation.time;
+package roomescape.time;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.lang.NonNull;
@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class ReservationTime {
+public class Time {
     private static final String TIME_PATTERN = "hh:mm";
 
     @Nullable
@@ -17,11 +17,11 @@ public class ReservationTime {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_PATTERN)
     private LocalTime startAt;
 
-    public ReservationTime(ReservationTimeEntity entity) {
+    public Time(TimeEntity entity) {
         this(entity.getId(), LocalTime.parse(entity.getStartAt()));
     }
 
-    public ReservationTime(Long id, LocalTime startAt) {
+    public Time(Long id, LocalTime startAt) {
         this.id = id;
         this.startAt = startAt;
     }
@@ -43,8 +43,8 @@ public class ReservationTime {
         this.startAt = startAt;
     }
 
-    public ReservationTimeEntity toEntity() {
-        return new ReservationTimeEntity(
+    public TimeEntity toEntity() {
+        return new TimeEntity(
                 id,
                 startAt.format(DateTimeFormatter.ofPattern(TIME_PATTERN))
         );

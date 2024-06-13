@@ -4,10 +4,9 @@ package roomescape.reservation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import roomescape.time.Time;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 public class Reservation {
     private static final String DATE_PATTERN = "yyyy-MM-dd";
@@ -23,17 +22,15 @@ public class Reservation {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_PATTERN)
     private LocalDate date;
 
-    @NonNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = TIME_PATTERN)
-    private LocalTime time;
+    private Time time;
 
     public Reservation(ReservationEntity entity) {
-        this(entity.getId(), entity.getName(),
-                LocalDate.parse(entity.getDate()),
-                LocalTime.parse(entity.getTime()));
+//        this(entity.getId(), entity.getName(),
+//                LocalDate.parse(entity.getDate()),
+//                LocalTime.parse(entity.getTime()));
     }
 
-    public Reservation(Long id, String name, LocalDate date, LocalTime time) {
+    public Reservation(Long id, String name, LocalDate date, Time time) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -65,19 +62,20 @@ public class Reservation {
         this.date = date;
     }
 
-    public LocalTime getTime() {
+    public Time getReservationTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 
     public ReservationEntity toEntity() {
-        return new ReservationEntity(
-                id,
-                name,
-                date.format(DateTimeFormatter.ofPattern(DATE_PATTERN)),
-                time.format(DateTimeFormatter.ofPattern(TIME_PATTERN)));
+        return null;
+//        return new ReservationEntity(
+//                id,
+//                name,
+//                date.format(DateTimeFormatter.ofPattern(DATE_PATTERN)),
+//                time.format(DateTimeFormatter.ofPattern(TIME_PATTERN)));
     }
 }

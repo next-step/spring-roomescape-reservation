@@ -1,4 +1,4 @@
-package roomescape.reservation.time;
+package roomescape.time;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,15 +10,19 @@ import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class ReservationTimeRepository {
+public class TimeRepository {
     private final JdbcTemplate jdbcTemplate;
     private static final String TABLE_NAME = "reservation_time";
 
-    public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
+    public TimeRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public ReservationTimeEntity addReservationTime(ReservationTimeEntity reservationTime) {
+    public static String getTableName() {
+        return TABLE_NAME;
+    }
+
+    public TimeEntity addReservationTime(TimeEntity reservationTime) {
         String sql = String.format("insert into %s (start_At) values(?)", TABLE_NAME);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -37,13 +41,13 @@ public class ReservationTimeRepository {
         return reservationTime;
     }
 
-    public List<ReservationTimeEntity> reservationTimes() {
+    public List<TimeEntity> reservationTimes() {
         String sql = String.format("select id, start_At from %s", TABLE_NAME);
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    private final RowMapper<ReservationTimeEntity> rowMapper = (resultSet, rowNum) ->
-            new ReservationTimeEntity(
+    private final RowMapper<TimeEntity> rowMapper = (resultSet, rowNum) ->
+            new TimeEntity(
                     resultSet.getLong("id"),
                     resultSet.getString("start_At")
             );

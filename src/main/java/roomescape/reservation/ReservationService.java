@@ -20,7 +20,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public Reservation add(Reservation newReservation) {
+    public Reservation add(NewReservation newReservation) {
         ReservationEntity entity =  reservationRepository.addReservation(newReservation.toEntity());
         return new Reservation(entity);
     }

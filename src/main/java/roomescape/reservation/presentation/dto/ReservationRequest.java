@@ -11,7 +11,11 @@ public class ReservationRequest {
     private final Long themeId;
 
     @JsonCreator
-    public ReservationRequest(@JsonProperty("name") String name, @JsonProperty("date") String date, @JsonProperty("timeId") Long timeId, @JsonProperty("themeId") Long themeId) {
+    public ReservationRequest(
+            @JsonProperty("name") String name,
+            @JsonProperty("date") String date,
+            @JsonProperty("timeId") Long timeId,
+            @JsonProperty("themeId") Long themeId) {
         this.name = name;
         this.date = date;
         this.timeId = timeId;

@@ -38,4 +38,8 @@ public class ReservationService {
     public CreateReservationResult createReservation(CreateReservationCommand command) {
         return CreateReservationResult.of(reservationRepository.createReservation(command));
     }
+
+    public void deleteReservation(Long id) {
+        reservationRepository.deleteReservation(id);
+    }
 }

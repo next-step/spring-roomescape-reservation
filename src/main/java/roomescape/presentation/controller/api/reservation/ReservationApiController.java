@@ -43,4 +43,12 @@ public class ReservationApiController {
                 )
         );
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteReservation(
+            @RequestParam Long id
+    ) {
+        reservationService.deleteReservation(id);
+        return ResponseEntity.ok().build();
+    }
 }

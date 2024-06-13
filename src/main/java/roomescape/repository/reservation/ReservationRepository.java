@@ -10,4 +10,5 @@ import java.util.List;
 public interface ReservationRepository {
     public List<Reservation> findAllReservations();
     public Reservation createReservation(CreateReservationCommand command);
+    public void deleteReservation(Long id);
 }

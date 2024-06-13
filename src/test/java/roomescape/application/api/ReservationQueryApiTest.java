@@ -12,11 +12,12 @@ import roomescape.application.api.dto.response.FindAllReservationsResponse;
 import roomescape.application.service.ReservationService;
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.Reservations;
-import roomescape.domain.reservation.vo.ReservationDateTime;
+import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
@@ -42,7 +43,8 @@ class ReservationQueryApiTest {
         Reservation reservation = new Reservation(
                 new ReservationId(1L),
                 new ReservationName("kilian"),
-                new ReservationDateTime(LocalDateTime.of(2024, 6, 6, 19, 25))
+                new ReservationDate(LocalDate.of(2024, 6, 6)),
+                new ReservationTimeId(1L)
         );
 
         reservations = new Reservations(List.of(reservation));

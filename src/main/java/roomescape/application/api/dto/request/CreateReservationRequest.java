@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import roomescape.application.service.command.CreateReservationCommand;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class CreateReservationRequest {
 
@@ -14,17 +12,16 @@ public class CreateReservationRequest {
 
     private final String name;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "Asia/Seoul")
-    private final LocalTime time;
+    private final Long timeId;
 
-    public CreateReservationRequest(LocalDate date, String name, LocalTime time) {
+    public CreateReservationRequest(LocalDate date, String name, Long timeId) {
         this.date = date;
         this.name = name;
-        this.time = time;
+        this.timeId = timeId;
     }
 
     public CreateReservationCommand toCreateReservationCommand() {
-        return new CreateReservationCommand(name, LocalDateTime.of(date, time));
+        return new CreateReservationCommand(name, date, timeId);
     }
 
     public LocalDate getDate() {
@@ -35,7 +32,7 @@ public class CreateReservationRequest {
         return name;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public Long getTimeId() {
+        return timeId;
     }
 }

@@ -21,6 +21,10 @@ public class ReservationTimeService {
 
     public List<ReservationTimeResponse> findAll() {
         List<ReservationTime> times = reservationTimeRepository.findAll();
+
+        if (times.isEmpty()) {
+            throw new NotFoundException("등록된 예약 시간이 없습니다.");
+        }
         return ReservationTimeResponse.toDTOList(times);
     }
 

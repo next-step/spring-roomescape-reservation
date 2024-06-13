@@ -58,12 +58,7 @@ public class ReservationRepository {
     private static final String DELETE_SQL = """
             DELETE FROM reservation WHERE id = ?;
             """;
-    private static final String COLUMN_ID = "id";
-    private static final int INDEX_ONE = 1;
-    private static final int INDEX_TWO = 2;
-    private static final int INDEX_THREE = 3;
-    private static final int INDEX_FOUR = 4;
-    private static final int ZERO = 0;
+    private static final String ID = "id";
     private static final String RESERVATION_ID = "reservation_id";
     private static final String RESERVATION_NAME = "reservation_name";
     private static final String RESERVATION_DATE = "reservation_date";
@@ -86,9 +81,17 @@ public class ReservationRepository {
                         rs.getLong(RESERVATION_ID),
                         rs.getString(RESERVATION_NAME),
                         rs.getString(RESERVATION_DATE),
-                        new Time(rs.getLong(TIME_ID), rs.getString(TIME_START_AT)),
-                        new Theme(rs.getLong(THEME_ID), rs.getString(THEME_NAME), rs.getString(THEME_DESCRIPTION), rs.getString(THEME_THUMBNAIL))
-                ), reservationId).get(ZERO);
+                        new Time(
+                                rs.getLong(TIME_ID),
+                                rs.getString(TIME_START_AT)
+                        ),
+                        new Theme(
+                                rs.getLong(THEME_ID),
+                                rs.getString(THEME_NAME),
+                                rs.getString(THEME_DESCRIPTION),
+                                rs.getString(THEME_THUMBNAIL)
+                        )
+                ), reservationId).get(0);
     }
 
     public long save(Reservation reservation) {
@@ -96,12 +99,12 @@ public class ReservationRepository {
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     SAVE_SQL,
-                    new String[]{COLUMN_ID}
+                    new String[]{ID}
             );
-            preparedStatement.setString(INDEX_ONE, reservation.getName());
-            preparedStatement.setString(INDEX_TWO, reservation.getDate());
-            preparedStatement.setLong(INDEX_THREE, reservation.getTime().getId());
-            preparedStatement.setLong(INDEX_FOUR, reservation.getTheme().getId());
+            preparedStatement.setString(1, reservation.getName());
+            preparedStatement.setString(2, reservation.getDate());
+            preparedStatement.setLong(3, reservation.getTime().getId());
+            preparedStatement.setLong(4, reservation.getTheme().getId());
             return preparedStatement;
         }, keyHolder);
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
@@ -110,11 +113,19 @@ public class ReservationRepository {
     public List<Reservation> findAll() {
         return jdbcTemplate.query(FIND_ALL_SQL, (rs, rowNum) ->
                 new Reservation(
-                        rs.getLong(COLUMN_ID),
+                        rs.getLong(ID),
                         rs.getString(RESERVATION_NAME),
                         rs.getString(RESERVATION_DATE),
-                        new Time(rs.getLong(TIME_ID), rs.getString(TIME_START_AT)),
-                        new Theme(rs.getLong(THEME_ID), rs.getString(THEME_NAME), rs.getString(THEME_DESCRIPTION), rs.getString(THEME_THUMBNAIL))
+                        new Time(
+                                rs.getLong(TIME_ID),
+                                rs.getString(TIME_START_AT)
+                        ),
+                        new Theme(
+                                rs.getLong(THEME_ID),
+                                rs.getString(THEME_NAME),
+                                rs.getString(THEME_DESCRIPTION),
+                                rs.getString(THEME_THUMBNAIL)
+                        )
                 )
         );
     }

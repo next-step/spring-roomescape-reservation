@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import roomescape.repository.config.MySQLJdbcReservationRepositoryConfig;
 import roomescape.repository.entity.ReservationEntity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -40,7 +40,8 @@ class MySQLJdbcReservationRepositoryTest {
                         new ReservationEntity(
                                 1L,
                                 "kilian",
-                                LocalDateTime.of(2024, 6, 8, 17, 22)
+                                LocalDate.of(2024, 6, 8),
+                                1L
                         ));
             }
 
@@ -50,7 +51,8 @@ class MySQLJdbcReservationRepositoryTest {
                 ReservationEntity expected = new ReservationEntity(
                         1L,
                         "brie",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
+                        LocalDate.of(2024, 6, 8),
+                        1L
                 );
 
                 mySQLJdbcReservationRepository.save(expected);
@@ -72,7 +74,8 @@ class MySQLJdbcReservationRepositoryTest {
                 ReservationEntity expected = new ReservationEntity(
                         1L,
                         "kilian",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
+                        LocalDate.of(2024, 6, 8),
+                        1L
                 );
 
                 mySQLJdbcReservationRepository.save(expected);
@@ -105,7 +108,8 @@ class MySQLJdbcReservationRepositoryTest {
                         new ReservationEntity(
                                 1L,
                                 "kilian",
-                                LocalDateTime.of(2024, 6, 8, 17, 22)
+                                LocalDate.of(2024, 6, 8),
+                                1L
                         ));
                 List<ReservationEntity> savedEntities = mySQLJdbcReservationRepository.findAll();
 

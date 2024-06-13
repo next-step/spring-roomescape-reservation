@@ -18,7 +18,9 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     private static final String TABLE_COLUMN_ID = "id";
     private static final String TABLE_COLUMN_NAME = "name";
-    private static final String TABLE_COLUMN_DATE_TIME = "date_time";
+    private static final String TABLE_COLUMN_DATE = "date";
+    private static final String TABLE_COLUMN_TIME_ID = "time_id";
+
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public MySQLJdbcReservationRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -27,14 +29,15 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public ReservationEntity save(ReservationEntity reservationEntity) {
-        String sql = "INSERT INTO reservation (id, name, date_time) VALUES (:id, :name, :date_time) " +
-                "ON DUPLICATE KEY UPDATE name = VALUES(name), date_time = VALUES(date_time)";
+        String sql = "INSERT INTO reservation (id, name, date, time_id) VALUES (:id, :name, :date, :time_id) " +
+                "ON DUPLICATE KEY UPDATE name = VALUES(name), date = VALUES(date), time_id = VALUES(time_id)";
 
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationEntity.getId())
                 .addValue(TABLE_COLUMN_NAME, reservationEntity.getReservationName())
-                .addValue(TABLE_COLUMN_DATE_TIME, reservationEntity.getReservationDateTime());
+                .addValue(TABLE_COLUMN_DATE, reservationEntity.getReservationDate())
+                .addValue(TABLE_COLUMN_TIME_ID, reservationEntity.getReservationTimeId());
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, generatedKeyHolder);
 
@@ -47,7 +50,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public List<ReservationEntity> findAll() {
-        String sql = "SELECT id, name, date_time FROM reservation";
+        String sql = "SELECT id, name, date, time_id FROM reservation";
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
             List<ReservationEntity> reservationEntities = new ArrayList<>();
@@ -56,7 +59,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                         new ReservationEntity(
                                 resultSet.getLong(TABLE_COLUMN_ID),
                                 resultSet.getString(TABLE_COLUMN_NAME),
-                                resultSet.getTimestamp(TABLE_COLUMN_DATE_TIME).toLocalDateTime()
+                                resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
+                                resultSet.getLong(TABLE_COLUMN_TIME_ID)
                         )
                 );
             }
@@ -88,7 +92,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                         (resultSet, rowNum) -> new ReservationEntity(
                                 resultSet.getLong(TABLE_COLUMN_ID),
                                 resultSet.getString(TABLE_COLUMN_NAME),
-                                resultSet.getTimestamp(TABLE_COLUMN_DATE_TIME).toLocalDateTime()
+                                resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
+                                resultSet.getLong(TABLE_COLUMN_TIME_ID)
                         )
                 )
         );

@@ -30,8 +30,8 @@ public class FindAllReservationsResponse {
         return new FindAllReservationsResponse(
                 reservation.getId(),
                 reservation.getReservationName(),
-                reservation.fetchReservationDateTime(DATE_PATTERN),
-                reservation.fetchReservationDateTime(TIME_PATTERN)
+                reservation.getFormattedReservationDate(DATE_PATTERN),
+                reservation.getFormattedReservationDate(TIME_PATTERN)
         );
     }
 

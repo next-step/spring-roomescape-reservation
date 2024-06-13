@@ -26,8 +26,8 @@ public class CreateReservationResponse {
         return new CreateReservationResponse(
                 reservation.getId(),
                 reservation.getReservationName(),
-                reservation.fetchReservationDateTime(DATE_PATTERN),
-                reservation.fetchReservationDateTime(TIME_PATTERN)
+                reservation.getFormattedReservationDate(DATE_PATTERN),
+                reservation.getFormattedReservationDate(TIME_PATTERN)
         );
     }
 

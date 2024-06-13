@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import roomescape.repository.entity.ReservationEntity;
 import roomescape.repository.memory.InMemoryReservationRepository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -29,7 +29,8 @@ class InMemoryReservationRepositoryTest {
                 inMemoryReservationRepository.save(new ReservationEntity(
                         1L,
                         "kilian",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
+                        LocalDate.of(2024, 6, 8),
+                        1L
                 ));
             }
 
@@ -39,7 +40,8 @@ class InMemoryReservationRepositoryTest {
                 ReservationEntity expected = new ReservationEntity(
                         1L,
                         "brie",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
+                        LocalDate.of(2024, 6, 8),
+                        1L
                 );
 
                 inMemoryReservationRepository.save(expected);
@@ -63,7 +65,8 @@ class InMemoryReservationRepositoryTest {
                 ReservationEntity expected = new ReservationEntity(
                         1L,
                         "kilian",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
+                        LocalDate.of(2024, 6, 8),
+                        1L
                 );
 
                 inMemoryReservationRepository.save(expected);
@@ -93,11 +96,14 @@ class InMemoryReservationRepositoryTest {
             @Test
             @DisplayName("삭제 한다.")
             void delete() {
-                inMemoryReservationRepository.save(new ReservationEntity(
-                        1L,
-                        "kilian",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
-                ));
+                inMemoryReservationRepository.save(
+                        new ReservationEntity(
+                                1L,
+                                "kilian",
+                                LocalDate.of(2024, 6, 8),
+                                1L
+                        )
+                );
                 List<ReservationEntity> savedEntities = inMemoryReservationRepository.findAll();
 
                 inMemoryReservationRepository.delete(1L);

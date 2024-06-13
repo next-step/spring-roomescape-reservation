@@ -2,9 +2,10 @@ package roomescape.application.mapper;
 
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.Reservations;
-import roomescape.domain.reservation.vo.ReservationDateTime;
+import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.repository.entity.ReservationEntity;
 
 import java.util.List;
@@ -18,7 +19,8 @@ public abstract class ReservationMapper {
         return new Reservation(
                 new ReservationId(reservationEntity.getId()),
                 new ReservationName(reservationEntity.getReservationName()),
-                new ReservationDateTime(reservationEntity.getReservationDateTime())
+                new ReservationDate(reservationEntity.getReservationDate()),
+                new ReservationTimeId(reservationEntity.getReservationTimeId())
         );
     }
 

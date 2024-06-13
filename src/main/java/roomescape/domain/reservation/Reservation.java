@@ -1,11 +1,12 @@
 package roomescape.domain.reservation;
 
-import roomescape.domain.reservation.vo.ReservationDateTime;
+import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.validator.ObjectValidator;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Reservation {
 
@@ -13,13 +14,21 @@ public class Reservation {
 
     private final ReservationName reservationName;
 
-    private final ReservationDateTime reservationDateTime;
+    private final ReservationDate reservationDate;
 
-    public Reservation(ReservationId id, ReservationName reservationName, ReservationDateTime reservationDateTime) {
-        ObjectValidator.validateNotNull(reservationName, reservationDateTime);
+    private final ReservationTimeId reservationTimeId;
+
+    public Reservation(
+            ReservationId id,
+            ReservationName reservationName,
+            ReservationDate reservationDate,
+            ReservationTimeId reservationTimeId
+    ) {
+        ObjectValidator.validateNotNull(id, reservationName, reservationDate, reservationTimeId);
         this.id = id;
         this.reservationName = reservationName;
-        this.reservationDateTime = reservationDateTime;
+        this.reservationDate = reservationDate;
+        this.reservationTimeId = reservationTimeId;
     }
 
     public Long getId() {
@@ -30,11 +39,15 @@ public class Reservation {
         return reservationName.name();
     }
 
-    public String fetchReservationDateTime(String pattern) {
-        return reservationDateTime.getFormatted(pattern);
+    public String getFormattedReservationDate(String pattern) {
+        return this.reservationDate.getFormatted(pattern);
     }
 
-    public LocalDateTime getReservationDateTime() {
-        return reservationDateTime.dateTime();
+    public LocalDate getReservationDate() {
+        return this.reservationDate.getDate();
+    }
+
+    public Long getReservationTimeId() {
+        return this.reservationTimeId.getId();
     }
 }

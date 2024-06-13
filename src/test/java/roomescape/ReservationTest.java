@@ -26,28 +26,14 @@ import java.util.Map;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationTest {
 
-    private static final String RENDERING_RESERVATION_URL = "/admin/reservation";
-    private static final String TIMES_API_URL = "/times";
-    private static final String THEMES_API_URL = "/themes";
-    private static final String RESERVATIONS_API_URL = "/reservations";
-    private static final String PATH_VARIABLE_SUFFIX_URL = "/1";
     private static final String NAME = "name";
     private static final String ID = "id";
     private static final String DATE = "date";
     private static final String TIME_ID = "timeId";
     private static final String THEME_ID = "themeId";
     private static final String START_AT = "startAt";
-    private static final String RESERVATION_NAME = "johnPark";
-    private static final String RESERVATION_DATE = "2023-08-05";
-    private static final String TIME = "15:40";
-    private static final int ONE = 1;
-    private static final long LONG_ONE = 1L;
-    private static final String WILD_CARD = "$";
     private static final String DESCRIPTION = "description";
     private static final String THUMBNAIL = "thumbnail";
-    private static final String THEME_NAME = "무시무시한 공포 테마";
-    private static final String THEME_DESCRIPTION = "오싹";
-    private static final String THEME_THUMBNAIL = "www.youtube.com/boorownie";
 
     private Theme theme = null;
     private Time time = null;
@@ -57,19 +43,19 @@ public class ReservationTest {
 
         //given
         Map<String, Object> time = new HashMap<>();
-        time.put(START_AT, TIME);
+        time.put(START_AT, "15:40");
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(time)
-                .when().post(TIMES_API_URL)
+                .when().post("/times")
                 .then().log().all()
                 .extract();
 
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(ONE);
+        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(1);
         this.time = new Time(response.jsonPath().getLong(ID), response.jsonPath().getString(START_AT));
     }
 
@@ -78,21 +64,21 @@ public class ReservationTest {
 
         //given
         Map<String, Object> theme = new HashMap<>();
-        theme.put(NAME, THEME_NAME);
-        theme.put(DESCRIPTION, THEME_DESCRIPTION);
-        theme.put(THUMBNAIL, THEME_THUMBNAIL);
+        theme.put(NAME, "무시무시한 공포 테마");
+        theme.put(DESCRIPTION, "오싹");
+        theme.put(THUMBNAIL, "www.youtube.com/boorownie");
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(theme)
-                .when().post(THEMES_API_URL)
+                .when().post("/themes")
                 .then().log().all()
                 .extract();
 
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(ONE);
+        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
         this.theme = new Theme(response.jsonPath().getLong(ID), response.jsonPath().getString(NAME), response.jsonPath().getString(DESCRIPTION), response.jsonPath().getString(THUMBNAIL));
     }
 
@@ -101,7 +87,7 @@ public class ReservationTest {
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().get(RENDERING_RESERVATION_URL)
+                .when().get("/admin/reservation")
                 .then().log().all()
                 .extract();
 
@@ -115,23 +101,23 @@ public class ReservationTest {
 
         //given
         Map<String, Object> reservation = new HashMap<>();
-        reservation.put(NAME, RESERVATION_NAME);
-        reservation.put(DATE, RESERVATION_DATE);
-        reservation.put(TIME_ID, ONE);
-        reservation.put(THEME_ID, ONE);
+        reservation.put(NAME, "johnPark");
+        reservation.put(DATE, "2023-08-05");
+        reservation.put(TIME_ID, 1L);
+        reservation.put(THEME_ID, 1L);
 
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(reservation)
-                .when().post(RESERVATIONS_API_URL)
+                .when().post("/reservations")
                 .then().log().all()
                 .extract();
 
         //then
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(LONG_ONE);
+        Assertions.assertThat(response.jsonPath().getLong(ID)).isEqualTo(1L);
     }
 
     @Test
@@ -142,12 +128,12 @@ public class ReservationTest {
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().get(RESERVATIONS_API_URL)
+                .when().get("/reservations")
                 .then().log().all()
                 .extract();
 
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        Assertions.assertThat(response.jsonPath().getList(WILD_CARD).size()).isEqualTo(ONE);
+        Assertions.assertThat(response.jsonPath().getList("$").size()).isEqualTo(1);
     }
 
     @Test
@@ -158,7 +144,7 @@ public class ReservationTest {
 
         //when
         ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .when().delete(RESERVATIONS_API_URL + PATH_VARIABLE_SUFFIX_URL)
+                .when().delete("/reservations/1")
                 .then().log().all()
                 .extract();
 
@@ -171,7 +157,7 @@ public class ReservationTest {
     void 예약_생성_중에_이름의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongNameExample) {
 
         //given
-        ReservationRequest reservationRequest = new ReservationRequest(wrongNameExample, RESERVATION_DATE, this.time.getId(), theme.getId());
+        ReservationRequest reservationRequest = new ReservationRequest(wrongNameExample, "2023-08-05", this.time.getId(), theme.getId());
 
         //when, then
         Assertions.assertThatThrownBy(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).isInstanceOf(ReservationException.class).hasMessage(ErrorCode.INVALID_THEME_NAME_FORMAT_ERROR.getErrorMessage());
@@ -182,7 +168,7 @@ public class ReservationTest {
     void 예약_생성_중에_이름의_형식이_맞는_경우_예외를_발생하지_않는다(String rightNameExample) {
 
         //given
-        ReservationRequest reservationRequest = new ReservationRequest(rightNameExample, RESERVATION_DATE, this.time.getId(), theme.getId());
+        ReservationRequest reservationRequest = new ReservationRequest(rightNameExample, "2023-08-05", this.time.getId(), theme.getId());
 
         //when, then
         Assertions.assertThatCode(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).doesNotThrowAnyException();
@@ -193,7 +179,7 @@ public class ReservationTest {
     void 예약_생성_중에_날짜의_형식이_맞지_않는_경우_예외를_발생시킨다(String wrongDateExample) {
 
         //given
-        ReservationRequest reservationRequest = new ReservationRequest(RESERVATION_NAME, wrongDateExample, this.time.getId(), theme.getId());
+        ReservationRequest reservationRequest = new ReservationRequest("johnPark", wrongDateExample, this.time.getId(), theme.getId());
 
         //when, then
         Assertions.assertThatThrownBy(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).isInstanceOf(ReservationException.class).hasMessage(ErrorCode.INVALID_THEME_DATE_FORMAT_ERROR.getErrorMessage());
@@ -204,7 +190,7 @@ public class ReservationTest {
     void 예약_생성_중에_날짜의_형식이_맞는_경우_예외를_발생하지_않는다(String rightDateExample) {
 
         //given
-        ReservationRequest reservationRequest = new ReservationRequest(RESERVATION_NAME, rightDateExample, this.time.getId(), theme.getId());
+        ReservationRequest reservationRequest = new ReservationRequest("johnPark", rightDateExample, this.time.getId(), theme.getId());
 
         //when, then
         Assertions.assertThatCode(() -> new Reservation(null, reservationRequest.getName(), reservationRequest.getDate(), this.time, this.theme)).doesNotThrowAnyException();

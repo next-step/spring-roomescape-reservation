@@ -11,6 +11,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping(value = "/themes")
 public class ThemeController {
 
     private final ThemeService themeService;
@@ -19,21 +20,21 @@ public class ThemeController {
         this.themeService = themeService;
     }
 
-    @GetMapping("/themes")
+    @GetMapping
     public ResponseEntity<List<ReadThemeResponse>> readTheme(){
         List<ReadThemeResponse> response = this.themeService.readTheme();
 
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/themes")
+    @PostMapping
     public ResponseEntity<ReadThemeResponse> saveTheme(@Valid @RequestBody SaveThemeRequest saveThemeRequest){
         ReadThemeResponse response = this.themeService.saveTheme(saveThemeRequest);
 
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/themes/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheme(@PathVariable(name = "id") Long id){
         this.themeService.deleteTheme(id);
 

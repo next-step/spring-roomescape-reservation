@@ -1,6 +1,7 @@
 package roomescape.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.DTO.ThemeRequest;
@@ -22,18 +23,20 @@ public class ThemeController {
     @GetMapping(URI)
     public ResponseEntity<List<ThemeResponse>> read() {
         List<ThemeResponse> themes = themeService.findAll();
-        return ResponseEntity.ok().body(themes);
+        return ResponseEntity.status(HttpStatus.OK).body(themes);
     }
 
     @PostMapping(URI)
     public ResponseEntity<ThemeResponse> create(@RequestBody ThemeRequest request) {
         long themeId = themeService.add(request);
         ThemeResponse theme = themeService.findOne(themeId);
-        return ResponseEntity.ok().body(theme);
+        return ResponseEntity.status(HttpStatus.CREATED).body(theme);
     }
 
     @DeleteMapping(URI + "/{id}")
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         themeService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
     }
 }

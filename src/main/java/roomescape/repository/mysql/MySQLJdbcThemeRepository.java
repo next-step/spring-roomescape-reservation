@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import roomescape.repository.ThemeRepository;
 import roomescape.repository.entity.ThemeEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -64,5 +66,25 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
                         )
                 )
         );
+    }
+
+    @Override
+    public List<ThemeEntity> findAll() {
+        String sql = "SELECT * FROM theme";
+
+        return namedParameterJdbcTemplate.query(sql, resultSet -> {
+            List<ThemeEntity> themeEntities = new ArrayList<>();
+            while (resultSet.next()) {
+                themeEntities.add(
+                        new ThemeEntity(
+                                resultSet.getLong(TABLE_COLUMN_ID),
+                                resultSet.getString(TABLE_COLUMN_NAME),
+                                resultSet.getString(TABLE_COLUMN_DESCRIPTION),
+                                resultSet.getString(TABLE_COLUMN_THUMBNAIL)
+                        )
+                );
+            }
+            return themeEntities;
+        });
     }
 }

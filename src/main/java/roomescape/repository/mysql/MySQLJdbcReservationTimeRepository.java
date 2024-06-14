@@ -63,7 +63,7 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
 
     @Override
     public List<ReservationTimeEntity> findAll() {
-        String sql = "SELECT id, start_at FROM reservation_time";
+        String sql = "SELECT * FROM reservation_time";
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
             List<ReservationTimeEntity> reservationTimeEntities = new ArrayList<>();

@@ -10,6 +10,6 @@ public interface ThemeRepository {
     Theme findById(Long id);
     Theme findByName(String name);
     Long countReservationMatchWith(Long id);
-    long save(ThemeRequest request);
+    long save(String name, String description, String thumbnail);
     long deleteById(Long id);
 }

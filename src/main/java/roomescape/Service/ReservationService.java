@@ -74,11 +74,8 @@ public class ReservationService {
         catch (DateTimeParseException exception) {
             throw new BadRequestException("유효하지 않은 날짜 형식입니다.");
         }
-        if (reservationDate.isBefore(now)) {
-            throw new BadRequestException("이미 지난 날짜입니다.");
-        }
-        if (reservationDate.isEqual(now)) {
-            throw new BadRequestException("당일 예약은 불가능합니다.");
+        if (!reservationDate.isAfter(now)) {
+            throw new BadRequestException("해당 날짜는 예약이 불가능합니다.");
         }
     }
 
@@ -110,7 +107,7 @@ public class ReservationService {
         long deleteCount = reservationRepository.deleteById(id);
 
         if (deleteCount == 0) {
-            throw new NotFoundException("id와 일치하는 reservation이 없음");
+            throw new NotFoundException("id와 일치하는 예약이 없습니다.");
         }
     }
 }

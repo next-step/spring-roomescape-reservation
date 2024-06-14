@@ -54,14 +54,14 @@ public class JdbcTemplateThemeRepository implements ThemeRepository {
     }
 
     @Override
-    public long save(ThemeRequest request) {
+    public long save(String name, String description, String thumbnail) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             String sql = "insert into theme (name, description, thumbnail) values (?, ?, ?)";
             PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
-            ps.setString(1, request.getName());
-            ps.setString(2, request.getDescription());
-            ps.setString(3, request.getThumbnail());
+            ps.setString(1, name);
+            ps.setString(2, description);
+            ps.setString(3, thumbnail);
             return ps;
         }, keyHolder);
         return keyHolder.getKey().longValue();

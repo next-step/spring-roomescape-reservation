@@ -37,6 +37,5 @@ public class ThemeController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         themeService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
     }
 }

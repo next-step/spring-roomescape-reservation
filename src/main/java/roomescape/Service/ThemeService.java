@@ -37,7 +37,11 @@ public class ThemeService {
 
     public long add(ThemeRequest request) {
         validateDuplicated(request.getName());
-        return themeRepository.save(request);
+        return themeRepository.save(
+                request.getName(),
+                request.getDescription(),
+                request.getThumbnail()
+        );
     }
 
     private void validateDuplicated(String name) {

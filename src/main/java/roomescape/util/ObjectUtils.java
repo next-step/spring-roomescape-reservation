@@ -11,7 +11,7 @@ public abstract class ObjectUtils {
 
     public static boolean hasNull(Object... args) {
         if (Objects.isNull(args)) return true;
-        
+
         List<Object> objects = toList(args);
 
         return !CollectionUtils.isEmpty(objects) && objects.stream().anyMatch(Objects::isNull);

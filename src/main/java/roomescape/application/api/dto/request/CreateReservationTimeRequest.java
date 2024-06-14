@@ -16,11 +16,11 @@ public class CreateReservationTimeRequest {
         this.startAt = startAt;
     }
 
-    public LocalTime getStartAt() {
-        return startAt;
-    }
-
     public CreateReservationTimeCommand toCreateReservationTimeCommand() {
         return new CreateReservationTimeCommand(this.startAt);
+    }
+
+    public LocalTime getStartAt() {
+        return startAt;
     }
 }

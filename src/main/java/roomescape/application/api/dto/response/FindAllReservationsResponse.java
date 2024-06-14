@@ -19,7 +19,6 @@ public class FindAllReservationsResponse {
 
     private final Time time;
 
-
     public FindAllReservationsResponse(Long id, String name, String date, Time time) {
         this.id = id;
         this.name = name;
@@ -63,7 +62,7 @@ public class FindAllReservationsResponse {
     }
 
     private static class Time {
-        
+
         private final Long timeId;
 
         private final String startAt;

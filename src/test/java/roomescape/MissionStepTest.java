@@ -7,9 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.application.api.dto.request.CreateReservationRequest;
+import roomescape.application.api.dto.request.CreateReservationTimeRequest;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.hamcrest.Matchers.is;
 
@@ -36,14 +38,22 @@ public class MissionStepTest {
 
     @Test
     void reservation() {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", "브라운");
-        params.put("date", "2023-08-05");
-        params.put("time", "15:40");
+        CreateReservationRequest createReservationRequest =
+                new CreateReservationRequest(LocalDate.of(2023, 8, 5), "브라운", 1L);
+        CreateReservationTimeRequest createReservationTimeRequest =
+                new CreateReservationTimeRequest(LocalTime.of(21, 11));
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(params)
+                .body(createReservationTimeRequest)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("id", is(1));
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(createReservationRequest)
                 .when().post("/reservations")
                 .then().log().all()
                 .statusCode(200)
@@ -66,5 +76,4 @@ public class MissionStepTest {
                 .statusCode(200)
                 .body("size()", is(0));
     }
-
 }

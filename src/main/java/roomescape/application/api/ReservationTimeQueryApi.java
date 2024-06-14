@@ -21,7 +21,7 @@ public class ReservationTimeQueryApi {
     @GetMapping("/times")
     public ResponseEntity<List<FindAllReservationTimesResponse>> findAllReservationTimes() {
         ReservationTimes reservationTimes = reservationTimeService.findAllReservationTimes();
-
+        
         return ResponseEntity.ok(FindAllReservationTimesResponse.toFindAllReservationResponses(reservationTimes));
     }
 }

@@ -9,7 +9,11 @@ import roomescape.repository.entity.ReservationTimeEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class ReservationTimeMapper {
+public final class ReservationTimeMapper {
+
+    private ReservationTimeMapper() {
+        throw new UnsupportedOperationException(ReservationTimeMapper.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+    }
 
     public static ReservationTime toReservationTime(ReservationTimeEntity reservationTimeEntity) {
         return new ReservationTime(

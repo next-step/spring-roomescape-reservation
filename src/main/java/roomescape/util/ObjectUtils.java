@@ -7,7 +7,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class ObjectUtils {
+public final class ObjectUtils {
+
+    private ObjectUtils() {
+        throw new UnsupportedOperationException(ObjectUtils.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+    }
 
     public static boolean hasNull(Object... args) {
         if (Objects.isNull(args)) return true;

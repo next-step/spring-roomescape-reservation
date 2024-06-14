@@ -12,7 +12,11 @@ import roomescape.repository.projection.ReservationViewProjection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class ReservationViewMapper {
+public final class ReservationViewMapper {
+
+    private ReservationViewMapper() {
+        throw new UnsupportedOperationException(ReservationViewMapper.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+    }
 
     public static ReservationView toReservationView(ReservationViewProjection reservationViewProjection) {
         return new ReservationView(

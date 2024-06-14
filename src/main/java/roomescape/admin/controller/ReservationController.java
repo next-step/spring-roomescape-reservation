@@ -1,7 +1,7 @@
 package roomescape.admin.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import roomescape.admin.dto.ReadReservationResponse;
 import roomescape.admin.dto.SaveReservationRequest;
@@ -9,35 +9,30 @@ import roomescape.admin.service.ReservationService;
 
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping(value = "/reservations")
 public class ReservationController {
-    private static final String BASE_PATH = "/admin";
     private final ReservationService reservationService;
 
     public ReservationController(ReservationService reservationService){
         this.reservationService = reservationService;
     }
 
-    @GetMapping("/reservation")
-    public String reservation(){
-        return BASE_PATH+"/reservation.html";
-    }
-
-    @GetMapping("/reservations")
+    @GetMapping
     public ResponseEntity<List<ReadReservationResponse>> readReservation(){
         List<ReadReservationResponse> response = this.reservationService.readReservation();
 
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/reservations")
-    public ResponseEntity<ReadReservationResponse> saveReservation(@RequestBody SaveReservationRequest saveReservationRequest){
+    @PostMapping
+    public ResponseEntity<ReadReservationResponse> saveReservation(@Valid @RequestBody SaveReservationRequest saveReservationRequest){
         ReadReservationResponse response = this.reservationService.saveReservation(saveReservationRequest);
 
         return ResponseEntity.ok().body(response);
     }
 
-    @DeleteMapping("/reservations/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable(name = "id") Long id){
         this.reservationService.deleteReservation(id);
 

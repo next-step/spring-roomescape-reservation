@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationTimeRepository {
@@ -22,12 +23,16 @@ public class ReservationTimeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<ReservationTime> readReservationTime() {
-        return this.jdbcTemplate.query(ReservationTimeQuery.READ_ALL, readReservationTimeRowMapper());
+    public Optional<List<ReservationTime>> findAll() {
+        return Optional.of(this.jdbcTemplate.query(ReservationTimeQuery.FIND_ALL, readReservationTimeRowMapper()));
     }
 
-    public ReservationTime readReservationTimeById(Long id) {
-        return this.jdbcTemplate.queryForObject(ReservationTimeQuery.READ_BY_ID, readReservationTimeRowMapper(),id);
+    public Optional<ReservationTime> findById(Long id) {
+        return Optional.of(this.jdbcTemplate.queryForObject(ReservationTimeQuery.FIND_BY_ID, readReservationTimeRowMapper(),id));
+    }
+
+    public Optional<Integer> countById(Long id){
+        return Optional.of(this.jdbcTemplate.queryForObject(ReservationTimeQuery.COUNT_BY_ID, Integer.class, id));
     }
 
     private RowMapper<ReservationTime> readReservationTimeRowMapper() {
@@ -41,7 +46,7 @@ public class ReservationTimeRepository {
         return ReservationTime.of(id, startAt);
     }
 
-    public Long saveReservationTime(SaveReservationTimeRequest saveReservationTimeRequest) {
+    public Long save(SaveReservationTimeRequest saveReservationTimeRequest) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         this.jdbcTemplate.update(con -> saveReserveTimeStatement(con, saveReservationTimeRequest), keyHolder);
         return keyHolder.getKey().longValue();
@@ -55,7 +60,7 @@ public class ReservationTimeRepository {
         return ps;
     }
 
-    public void deleteReservationTime(Long id) {
+    public void delete(Long id) {
         this.jdbcTemplate.update(ReservationTimeQuery.DELETE, id);
     }
 

@@ -35,8 +35,27 @@
 </nav>
 
 <div class="content-container">
-  <h2 class="content-container-title">방탈출 어드민</h2>
+  <h2 class="content-container-title">방탈출 예약 페이지</h2>
+  <div class="table-header">
+    <button id="add-button" class="btn btn-custom mb-2 float-right">예약 추가</button>
+  </div>
+  <div class="table-container"/>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>예약번호</th>
+      <th>예약자</th>
+      <th>테마</th>
+      <th>날짜</th>
+      <th>시간</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
 </div>
 
+<script src="/js/reservation-new.js"></script>
 </body>
 </html>

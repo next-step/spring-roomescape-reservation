@@ -12,4 +12,6 @@ public interface ThemeRepository {
     Optional<ThemeEntity> findById(Long themeId);
 
     List<ThemeEntity> findAll();
+
+    void delete(Long themeId);
 }

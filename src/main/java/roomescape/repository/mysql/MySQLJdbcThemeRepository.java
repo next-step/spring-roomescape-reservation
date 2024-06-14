@@ -87,4 +87,14 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
             return themeEntities;
         });
     }
+
+    @Override
+    public void delete(Long themeId) {
+        String sql = "DELETE FROM theme WHERE id = :id";
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue(TABLE_COLUMN_ID, themeId);
+
+        namedParameterJdbcTemplate.update(sql, sqlParameterSource);
+    }
 }

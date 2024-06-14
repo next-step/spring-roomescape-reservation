@@ -81,7 +81,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
         String sql = "DELETE FROM reservation WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue("id", reservationId);
+                .addValue(TABLE_COLUMN_ID, reservationId);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }

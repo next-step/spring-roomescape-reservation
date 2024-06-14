@@ -84,7 +84,7 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
         String sql = "DELETE FROM reservation_time WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue("id", reservationTimeId);
+                .addValue(TABLE_COLUMN_ID, reservationTimeId);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }

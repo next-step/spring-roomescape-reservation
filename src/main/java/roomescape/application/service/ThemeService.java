@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import roomescape.application.mapper.ThemeEntityMapper;
 import roomescape.application.mapper.ThemeMapper;
 import roomescape.application.service.command.CreateThemeCommand;
+import roomescape.application.service.command.DeleteThemeCommand;
 import roomescape.domain.theme.Theme;
 import roomescape.domain.theme.Themes;
 import roomescape.repository.ThemeRepository;
@@ -27,5 +28,9 @@ public class ThemeService {
 
     public Themes findAllThemes() {
         return ThemeMapper.toThemes(themeRepository.findAll());
+    }
+
+    public void deleteTheme(DeleteThemeCommand deleteThemeCommand) {
+        themeRepository.delete(deleteThemeCommand.getThemeId());
     }
 }

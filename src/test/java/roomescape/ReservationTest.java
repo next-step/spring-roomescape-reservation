@@ -16,6 +16,8 @@ import roomescape.Service.ReservationService;
 import roomescape.Service.ReservationTimeService;
 import roomescape.Service.ThemeService;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -40,10 +42,8 @@ public class ReservationTest {
     @DisplayName("ReservationController - create()")
     void 예약() {
         String name = "yeeun";
-        String date = "2024-12-13";
-
-        new ReservationTimeTest().예약_시간_생성();
-        new ThemeTest().테마_생성();
+        String date = LocalDate.now().plusWeeks(1).toString();
+        set();
 
         var response = RestAssured
                 .given().log().all()
@@ -62,9 +62,25 @@ public class ReservationTest {
     @DisplayName("ReservationController - create() date already past")
     void 과거_날짜_시간_예약() {
         String name = "yeeun";
-        String date = "2023-02-17";
-        new ReservationTimeTest().예약_시간_생성(); // 13:00
-        new ThemeTest().테마_생성();
+        String date = LocalDate.now().minusWeeks(1).toString();
+        set();
+
+        var response = RestAssured
+                .given().log().all()
+                .body(new ReservationRequest(name, date, 1L, 1L))
+                .contentType(ContentType.JSON)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("ReservationController - create() same-day")
+    void 당일_예약() {
+        String name = "yeeun";
+        String date = LocalDate.now().toString();
+        set();
 
         var response = RestAssured
                 .given().log().all()
@@ -80,7 +96,7 @@ public class ReservationTest {
     @DisplayName("ReservationController - create() not existent time")
     void 존재하지_않는_시간_예약() {
         String name = "yeeun";
-        String date = "2025-02-17";
+        String date = LocalDate.now().plusWeeks(1).toString();
         new ThemeTest().테마_생성();
 
         var response = RestAssured
@@ -97,7 +113,7 @@ public class ReservationTest {
     @DisplayName("ReservationController - create() not existent theme")
     void 존재하지_않는_테마_예약() {
         String name = "yeeun";
-        String date = "2025-02-17";
+        String date = LocalDate.now().plusWeeks(1).toString();
         new ReservationTimeTest().예약_시간_생성();
 
         var response = RestAssured
@@ -113,7 +129,7 @@ public class ReservationTest {
     @Test
     @DisplayName("ReservationController - create() duplicated date, time and theme")
     void 중복_예약() {
-        String date = "2024-12-13";
+        String date = LocalDate.now().plusWeeks(1).toString();
         set();
         reservationService.make(new ReservationRequest("yeeun", date, 1L, 1L));
 

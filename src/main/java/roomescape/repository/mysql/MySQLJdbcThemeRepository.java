@@ -44,4 +44,25 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
 
         return themeEntity.changeId(id);
     }
+
+    @Override
+    public Optional<ThemeEntity> findById(Long themeId) {
+        String sql = "SELECT * FROM theme WHERE id = :id";
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue(TABLE_COLUMN_ID, themeId);
+
+        return Optional.ofNullable(
+                namedParameterJdbcTemplate.queryForObject(
+                        sql,
+                        sqlParameterSource,
+                        (resultSet, rowNum) -> new ThemeEntity(
+                                resultSet.getLong(TABLE_COLUMN_ID),
+                                resultSet.getString(TABLE_COLUMN_NAME),
+                                resultSet.getString(TABLE_COLUMN_DESCRIPTION),
+                                resultSet.getString(TABLE_COLUMN_THUMBNAIL)
+                        )
+                )
+        );
+    }
 }

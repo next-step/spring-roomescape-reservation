@@ -22,6 +22,8 @@ import roomescape.domain.theme.vo.ThemeThumbnail;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,5 +72,17 @@ class ThemeCommandApiTest {
                 )
                 .andExpect(status().isCreated())
                 .andExpect(content().string(objectMapper.writeValueAsString(response)));
+    }
+
+    @Test
+    @DisplayName("방탈출 테마 삭제 API 컨트롤러 테스트")
+    void deleteReservationTimeTest() throws Exception {
+        Long themeId = 1L;
+
+        doNothing().when(themeService).deleteTheme(any());
+
+        mockMvc.perform(
+                delete("/themes/{themeId}", themeId)
+        ).andExpect(status().isNoContent());
     }
 }

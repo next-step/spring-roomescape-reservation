@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
-import roomescape.repository.config.MySQLJdbcReservationRepositoryConfig;
+import roomescape.repository.config.MySQLJdbcRepositoryConfig;
 import roomescape.repository.entity.ReservationEntity;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(MySQLJdbcReservationRepositoryConfig.class)
+@Import(MySQLJdbcRepositoryConfig.class)
 @Sql({"classpath:db/schema/schema.sql", "classpath:db/data/init.sql"})
 class MySQLJdbcReservationRepositoryTest {
 

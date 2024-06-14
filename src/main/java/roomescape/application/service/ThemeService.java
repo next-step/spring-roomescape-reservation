@@ -5,6 +5,7 @@ import roomescape.application.mapper.ThemeEntityMapper;
 import roomescape.application.mapper.ThemeMapper;
 import roomescape.application.service.command.CreateThemeCommand;
 import roomescape.domain.theme.Theme;
+import roomescape.domain.theme.Themes;
 import roomescape.repository.ThemeRepository;
 import roomescape.repository.entity.ThemeEntity;
 
@@ -22,5 +23,9 @@ public class ThemeService {
         ThemeEntity themeEntity = themeRepository.save(ThemeEntityMapper.toThemeEntity(theme));
 
         return ThemeMapper.toTheme(themeEntity);
+    }
+
+    public Themes findAllThemes() {
+        return ThemeMapper.toThemes(themeRepository.findAll());
     }
 }

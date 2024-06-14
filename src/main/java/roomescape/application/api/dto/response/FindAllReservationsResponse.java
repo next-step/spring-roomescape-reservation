@@ -26,7 +26,7 @@ public class FindAllReservationsResponse {
         this.time = time;
     }
 
-    public static FindAllReservationsResponse from(ReservationView reservationView) {
+    private static FindAllReservationsResponse from(ReservationView reservationView) {
         return new FindAllReservationsResponse(
                 reservationView.getReservationId(),
                 reservationView.getReservationName(),

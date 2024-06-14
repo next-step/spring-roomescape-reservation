@@ -10,8 +10,6 @@ import roomescape.domain.reservationtime.ReservationTimes;
 import roomescape.repository.ReservationTimeRepository;
 import roomescape.repository.entity.ReservationTimeEntity;
 
-import java.util.List;
-
 @Service
 public class ReservationTimeService {
 
@@ -30,9 +28,7 @@ public class ReservationTimeService {
     }
 
     public ReservationTimes findAllReservationTimes() {
-        List<ReservationTimeEntity> reservationTimeEntities = reservationTimeRepository.findAll();
-
-        return ReservationTimeMapper.toReservationTimes(reservationTimeEntities);
+        return ReservationTimeMapper.toReservationTimes(reservationTimeRepository.findAll());
     }
 
     public void deleteReservationTime(DeleteReservationTimeCommand deleteReservationTimeCommand) {

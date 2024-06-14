@@ -2,9 +2,10 @@ package roomescape.reservation;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimeResponseDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -23,7 +24,9 @@ public class ReservationService {
                                 .id(reservation.getId())
                                 .name(reservation.getName())
                                 .date(reservation.getDate())
-                                .time(reservation.getTime())
+                                .reservationTimeResponseDto(new ReservationTimeResponseDto(
+                                        reservation.getReservationTime().getId(),
+                                        reservation.getReservationTime().getStartAt()))
                                 .build()
                 ).toList();
     }
@@ -32,7 +35,10 @@ public class ReservationService {
     public ReservationResponseDto save(ReservationRequestDto reservationRequestDto) {
         final Reservation reservation = new Reservation.Builder().name(reservationRequestDto.getName())
                 .date(reservationRequestDto.getDate())
-                .time(reservationRequestDto.getTime())
+                .reservationTime(
+                        new ReservationTime(
+                                reservationRequestDto.getReservationTimeRequestDto().getId(),
+                                reservationRequestDto.getReservationTimeRequestDto().getStartAt()))
                 .build();
 
         final Long savedId = reservationRepository.save(reservation);
@@ -42,19 +48,22 @@ public class ReservationService {
                 .id(savedReservation.getId())
                 .name(savedReservation.getName())
                 .date(savedReservation.getDate())
-                .time(savedReservation.getTime())
+                .reservationTimeResponseDto(
+                        new ReservationTimeResponseDto(savedReservation.getReservationTime().getId(),
+                                savedReservation.getReservationTime().getStartAt()))
                 .build();
     }
 
 
     @Transactional
     public void delete(Long id) {
-        if(!reservationRepository.existsById(id)) {
+        final boolean isExistedReservation = reservationRepository.existsById(id);
+        if (!isExistedReservation) {
             throw new IllegalArgumentException("해당 예약이 존재하지 않습니다.");
-        } else if (reservationRepository.existsById(id)) {
-            reservationRepository.deleteById(id);
         }
+        reservationRepository.deleteById(id);
     }
+
 
     public ReservationResponseDto findById(Long id) {
         Reservation reservation = reservationRepository.findById(id);
@@ -62,7 +71,10 @@ public class ReservationService {
                 .id(reservation.getId())
                 .name(reservation.getName())
                 .date(reservation.getDate())
-                .time(reservation.getTime())
+                .reservationTimeResponseDto(
+                        new ReservationTimeResponseDto(
+                                reservation.getReservationTime().getId(),
+                                reservation.getReservationTime().getStartAt()))
                 .build();
     }
 

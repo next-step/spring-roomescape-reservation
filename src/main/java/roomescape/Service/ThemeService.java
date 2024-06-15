@@ -16,7 +16,6 @@ import java.util.List;
 public class ThemeService {
     private final ThemeRepository themeRepository;
 
-    @Autowired
     public ThemeService(ThemeRepository themeRepository) {
         this.themeRepository = themeRepository;
     }

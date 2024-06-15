@@ -18,7 +18,6 @@ import java.util.List;
 public class ReservationTimeService {
     private final ReservationTimeRepository reservationTimeRepository;
 
-    @Autowired
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
     }

@@ -15,7 +15,6 @@ import java.util.List;
 public class ThemeController {
     private ThemeService themeService;
 
-    @Autowired
     public ThemeController(ThemeService themeService) {
         this.themeService = themeService;
     }

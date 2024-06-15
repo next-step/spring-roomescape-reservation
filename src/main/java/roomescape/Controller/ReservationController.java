@@ -11,8 +11,8 @@ import roomescape.Service.ReservationService;
 import java.util.List;
 
 @RestController
+@RequestMapping("/reservations")
 public class ReservationController {
-    private final String PATH = "reservations";
     private final ReservationService reservationService;
 
     @Autowired
@@ -20,13 +20,13 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping(PATH)
+    @GetMapping()
     public ResponseEntity<List<ReservationResponse>> read() {
         List<ReservationResponse> reservations = reservationService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(reservations);
     }
 
-    @PostMapping(PATH)
+    @PostMapping()
     public ResponseEntity<ReservationResponse> create(@RequestBody ReservationRequest request) {
         Long reservationId = reservationService.make(request);
         ReservationResponse reservation = reservationService.findOne(reservationId);
@@ -34,7 +34,7 @@ public class ReservationController {
 
     }
 
-    @DeleteMapping(PATH + "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> remove(@PathVariable("id") Long id) {
         reservationService.cancel(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

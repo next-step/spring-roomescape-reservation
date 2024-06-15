@@ -11,8 +11,8 @@ import roomescape.Service.ThemeService;
 import java.util.List;
 
 @RestController
+@RequestMapping("/themes")
 public class ThemeController {
-    private final String URI = "themes";
     private ThemeService themeService;
 
     @Autowired
@@ -20,20 +20,20 @@ public class ThemeController {
         this.themeService = themeService;
     }
 
-    @GetMapping(URI)
+    @GetMapping()
     public ResponseEntity<List<ThemeResponse>> read() {
         List<ThemeResponse> themes = themeService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(themes);
     }
 
-    @PostMapping(URI)
+    @PostMapping()
     public ResponseEntity<ThemeResponse> create(@RequestBody ThemeRequest request) {
         long themeId = themeService.add(request);
         ThemeResponse theme = themeService.findOne(themeId);
         return ResponseEntity.status(HttpStatus.CREATED).body(theme);
     }
 
-    @DeleteMapping(URI + "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         themeService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

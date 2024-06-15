@@ -11,8 +11,8 @@ import roomescape.Service.ReservationTimeService;
 import java.util.List;
 
 @RestController
+@RequestMapping(path = "/times")
 public class ReservationTimeController {
-    private final String PATH = "times";
     private final ReservationTimeService reservationTimeService;
 
     @Autowired
@@ -20,23 +20,22 @@ public class ReservationTimeController {
         this.reservationTimeService = reservationTimeService;
     }
 
-    @GetMapping(PATH)
+    @GetMapping()
     public ResponseEntity<List<ReservationTimeResponse>> read() {
         List<ReservationTimeResponse> reservationTimes = reservationTimeService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(reservationTimes);
     }
 
-    @PostMapping(PATH)
+    @PostMapping()
     public ResponseEntity<ReservationTimeResponse> create(@RequestBody ReservationTimeRequest request) {
         long id = reservationTimeService.add(request);
         ReservationTimeResponse reservationTime = reservationTimeService.findOne(id);
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationTime);
     }
 
-    @DeleteMapping(PATH + "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         reservationTimeService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
     }
 }

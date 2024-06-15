@@ -54,7 +54,7 @@ class ReservationCommandApiTest {
     void createReservationTest() throws Exception {
         String reservationName = "kilian";
         CreateReservationRequest createReservationRequest =
-                new CreateReservationRequest(LocalDate.of(2024, 6, 6), reservationName, 1L);
+                new CreateReservationRequest("2024-06-06", reservationName, 1L);
 
         given(reservationCommandService.createReservation(any()))
                 .willReturn(reservation);

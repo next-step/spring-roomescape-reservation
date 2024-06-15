@@ -51,7 +51,7 @@ class ReservationTimeCommandApiTest {
     @Test
     @DisplayName("예약 시간 생성 API 컨트롤러 테스트")
     void createReservationTimeTest() throws Exception {
-        CreateReservationTimeRequest request = new CreateReservationTimeRequest(LocalTime.of(20, 21));
+        CreateReservationTimeRequest request = new CreateReservationTimeRequest("20:21");
 
         given(reservationTimeService.createReservationTime(any())).willReturn(reservationTime);
 

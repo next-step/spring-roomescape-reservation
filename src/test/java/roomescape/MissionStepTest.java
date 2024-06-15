@@ -10,9 +10,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import roomescape.application.api.dto.request.CreateReservationRequest;
 import roomescape.application.api.dto.request.CreateReservationTimeRequest;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -39,9 +36,9 @@ public class MissionStepTest {
     @Test
     void reservation() {
         CreateReservationRequest createReservationRequest =
-                new CreateReservationRequest(LocalDate.of(2023, 8, 5), "브라운", 1L);
+                new CreateReservationRequest("2023-08-05", "브라운", 1L);
         CreateReservationTimeRequest createReservationTimeRequest =
-                new CreateReservationTimeRequest(LocalTime.of(21, 11));
+                new CreateReservationTimeRequest("21:11");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

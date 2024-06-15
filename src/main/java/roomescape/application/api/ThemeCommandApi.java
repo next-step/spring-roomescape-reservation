@@ -1,5 +1,6 @@
 package roomescape.application.api;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.application.api.dto.request.CreateThemeRequest;
@@ -20,7 +21,7 @@ public class ThemeCommandApi {
     }
 
     @PostMapping("/themes")
-    public ResponseEntity<CreateThemeResponse> createTheme(@RequestBody CreateThemeRequest createThemeRequest) {
+    public ResponseEntity<CreateThemeResponse> createTheme(@RequestBody @Valid CreateThemeRequest createThemeRequest) {
         Theme theme = themeService.createTheme(createThemeRequest.toCreateThemeCommand());
 
         return ResponseEntity

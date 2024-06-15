@@ -1,13 +1,17 @@
 package roomescape.application.api.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import roomescape.application.service.command.CreateThemeCommand;
 
 public class CreateThemeRequest {
 
+    @NotBlank
     private final String name;
 
+    @NotBlank
     private final String description;
 
+    @NotBlank
     private final String thumbnail;
 
     public CreateThemeRequest(String name, String description, String thumbnail) {

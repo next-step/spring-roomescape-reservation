@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.reservation.domain.ReservationReader;
 import roomescape.domain.reservation.domain.model.Reservation;
 import roomescape.domain.reservation.domain.model.ReservationGuestName;
 import roomescape.domain.reservation.domain.model.ReservationStatus;
@@ -33,9 +32,6 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
 
     @Autowired
     ReservationRepository repository;
-
-    @Autowired
-    ReservationReader reservationReader;
 
     @DisplayName("예약 정보로 예약을 생성한다.")
     @Test
@@ -73,7 +69,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         final Long reservationId = repository.save(reservation).getId();
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
 
-        final ReservationCommandService sut = new ReservationCommandService(reservationReader, repository, clockHolder);
+        final ReservationCommandService sut = new ReservationCommandService(repository, clockHolder);
 
         // when
         sut.cancel(new ReservationId(reservationId));
@@ -138,5 +134,4 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         // when & then
         Assertions.assertDoesNotThrow(() -> sut.reserve(request));
     }
-
 }

@@ -3,6 +3,8 @@ package roomescape.domain.reservation.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.reservation.domain.model.Reservation;
+import roomescape.domain.reservation.domain.model.ReservationGuestName;
+import roomescape.domain.reservation.domain.model.ReservationTimeStamp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +54,17 @@ public class MemoryReservationRepository implements ReservationRepository {
     public Optional<Reservation> findById(Long reservationId) {
         return this.reservations.stream()
                 .filter(reservation -> reservation.matchesId(reservationId))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Reservation> findByNameAndTimestamp(
+            final ReservationGuestName name,
+            final ReservationTimeStamp timestamp
+    ) {
+        return this.reservations.stream()
+                .filter(reservation -> reservation.matchesName(name))
+                .filter(reservation -> reservation.matchesTimestamp(timestamp))
                 .findFirst();
     }
 

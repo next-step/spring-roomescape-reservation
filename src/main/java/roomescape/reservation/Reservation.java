@@ -49,6 +49,7 @@ public class Reservation {
         private String date;
         private ReservationTime reservationTime;
 
+
         public Builder id(Long id) {
             this.id = id;
             return this;

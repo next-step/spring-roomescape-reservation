@@ -54,18 +54,22 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, themeId);
 
-        return Optional.ofNullable(
-                namedParameterJdbcTemplate.queryForObject(
-                        sql,
-                        sqlParameterSource,
-                        (resultSet, rowNum) -> new ThemeEntity(
-                                resultSet.getLong(TABLE_COLUMN_ID),
-                                resultSet.getString(TABLE_COLUMN_NAME),
-                                resultSet.getString(TABLE_COLUMN_DESCRIPTION),
-                                resultSet.getString(TABLE_COLUMN_THUMBNAIL)
-                        )
-                )
-        );
+        try {
+            return Optional.ofNullable(
+                    namedParameterJdbcTemplate.queryForObject(
+                            sql,
+                            sqlParameterSource,
+                            (resultSet, rowNum) -> new ThemeEntity(
+                                    resultSet.getLong(TABLE_COLUMN_ID),
+                                    resultSet.getString(TABLE_COLUMN_NAME),
+                                    resultSet.getString(TABLE_COLUMN_DESCRIPTION),
+                                    resultSet.getString(TABLE_COLUMN_THUMBNAIL)
+                            )
+                    )
+            );
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
     }
 
     @Override

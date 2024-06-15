@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import roomescape.application.error.code.ErrorCode;
 import roomescape.application.error.dto.ErrorResponse;
+import roomescape.application.service.exception.ServiceException;
 
 public final class ResponseEntityFactory {
 
@@ -21,6 +22,12 @@ public final class ResponseEntityFactory {
     public static ResponseEntity<ErrorResponse> create(BindException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponse.from(ex));
+    }
+
+    public static ResponseEntity<ErrorResponse> create(ServiceException ex) {
+        return ResponseEntity
+                .status(ex.getHttpStatus())
                 .body(ErrorResponse.from(ex));
     }
 }

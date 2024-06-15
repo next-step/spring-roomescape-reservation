@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import roomescape.application.error.code.ErrorCode;
+import roomescape.application.service.exception.ServiceException;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,10 @@ public class ErrorResponse {
 
     public static ErrorResponse from(BindException ex) {
         return new ErrorResponse(INVALID_API_REQUEST_PARAMETER, ApiValidationError.toApiValidationErrors(ex));
+    }
+
+    public static ErrorResponse from(ServiceException ex) {
+        return new ErrorResponse(ex.getCode(), ex.getMessage());
     }
 
     public String getCode() {

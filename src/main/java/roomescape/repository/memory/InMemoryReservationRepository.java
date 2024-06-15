@@ -62,6 +62,12 @@ public class InMemoryReservationRepository implements ReservationRepository {
         return null;
     }
 
+    @Override
+    public Optional<ReservationEntity> findByTimeId(Long timeId) {
+        // 미구현
+        return Optional.empty();
+    }
+
     private boolean containSameId(Long id) {
         return this.reservationEntities.stream()
                 .anyMatch(reservationEntity -> reservationEntity.isSameId(id));

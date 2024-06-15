@@ -49,16 +49,20 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationTimeId);
 
-        return Optional.ofNullable(
-                namedParameterJdbcTemplate.queryForObject(
-                        sql,
-                        sqlParameterSource,
-                        (resultSet, rowNum) -> new ReservationTimeEntity(
-                                resultSet.getLong(TABLE_COLUMN_ID),
-                                resultSet.getTime(TABLE_COLUMN_START_AT).toLocalTime()
-                        )
-                )
-        );
+        try {
+            return Optional.ofNullable(
+                    namedParameterJdbcTemplate.queryForObject(
+                            sql,
+                            sqlParameterSource,
+                            (resultSet, rowNum) -> new ReservationTimeEntity(
+                                    resultSet.getLong(TABLE_COLUMN_ID),
+                                    resultSet.getTime(TABLE_COLUMN_START_AT).toLocalTime()
+                            )
+                    )
+            );
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
     }
 
     @Override

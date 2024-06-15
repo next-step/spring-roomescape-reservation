@@ -93,18 +93,22 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationId);
 
-        return Optional.ofNullable(
-                namedParameterJdbcTemplate.queryForObject(
-                        sql,
-                        sqlParameterSource,
-                        (resultSet, rowNum) -> new ReservationEntity(
-                                resultSet.getLong(TABLE_COLUMN_ID),
-                                resultSet.getString(TABLE_COLUMN_NAME),
-                                resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
-                                resultSet.getLong(TABLE_COLUMN_TIME_ID)
-                        )
-                )
-        );
+        try {
+            return Optional.ofNullable(
+                    namedParameterJdbcTemplate.queryForObject(
+                            sql,
+                            sqlParameterSource,
+                            (resultSet, rowNum) -> new ReservationEntity(
+                                    resultSet.getLong(TABLE_COLUMN_ID),
+                                    resultSet.getString(TABLE_COLUMN_NAME),
+                                    resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
+                                    resultSet.getLong(TABLE_COLUMN_TIME_ID)
+                            )
+                    )
+            );
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -136,5 +140,29 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
             return reservationViewProjections;
         });
+    }
+
+    @Override
+    public Optional<ReservationEntity> findByTimeId(Long timeId) {
+        String sql = "SELECT * FROM reservation WHERE time_id = :time_id";
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue(TABLE_COLUMN_TIME_ID, timeId);
+
+        try {
+            return Optional.ofNullable(
+                    namedParameterJdbcTemplate.queryForObject(
+                            sql,
+                            sqlParameterSource,
+                            (resultSet, rowNum) -> new ReservationEntity(
+                                    resultSet.getLong(TABLE_COLUMN_ID),
+                                    resultSet.getString(TABLE_COLUMN_NAME),
+                                    resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
+                                    resultSet.getLong(TABLE_COLUMN_TIME_ID)
+                            )
+                    )
+            );
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
     }
 }

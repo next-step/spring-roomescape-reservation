@@ -17,4 +17,6 @@ public interface ReservationRepository {
     Optional<ReservationEntity> findById(Long reservationId);
 
     List<ReservationViewProjection> findAllReservationViewProjection();
+
+    Optional<ReservationEntity> findByTimeId(Long timeId);
 }

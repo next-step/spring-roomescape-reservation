@@ -27,6 +27,18 @@ public class ErrorResponse {
         this.validationErrors = Collections.emptyList();
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public List<ApiValidationError> getValidationErrors() {
+        return validationErrors;
+    }
+
     public static class ApiValidationError {
 
         private final String field;

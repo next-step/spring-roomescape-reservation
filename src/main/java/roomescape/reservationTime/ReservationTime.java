@@ -1,20 +1,27 @@
 package roomescape.reservationTime;
 
+import java.time.LocalTime;
+
 public class ReservationTime {
-	private Long id;
 
-	private String startAt;
+    private Long id;
 
-	public ReservationTime(Long id, String startAt) {
-		this.id = id;
-		this.startAt = startAt;
-	}
+    private LocalTime startAt;
 
-	public String getStartAt() {
-		return startAt;
-	}
+    public ReservationTime(Long id, LocalTime startAt) {
+        this.id = id;
+        this.startAt = startAt;
+    }
 
-	public ReservationTimeResponse convert() {
-		return new ReservationTimeResponse(id, startAt);
-	}
+    public ReservationTime(String startAtStr) {
+        this(null, LocalTime.parse(startAtStr));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalTime getStartAt() {
+        return startAt;
+    }
 }

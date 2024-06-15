@@ -28,4 +28,14 @@ public class ReservationThemeResponseDto {
         this.description = description;
         this.thumbnail = thumbnail;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", thumbnail='" + thumbnail + '\'' +
+                '}';
+    }
 }

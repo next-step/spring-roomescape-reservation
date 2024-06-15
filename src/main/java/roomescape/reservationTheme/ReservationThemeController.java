@@ -1,5 +1,7 @@
 package roomescape.reservationTheme;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import java.util.List;
 @RestController
 public class ReservationThemeController {
 
+    private static final Logger log = LoggerFactory.getLogger(ReservationThemeController.class);
     private final ReservationThemeService reservationThemeService;
 
     public ReservationThemeController(ReservationThemeService reservationThemeService) {

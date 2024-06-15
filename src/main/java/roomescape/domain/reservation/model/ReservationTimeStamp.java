@@ -1,4 +1,4 @@
-package roomescape.domain.reservation.domain.model;
+package roomescape.domain.reservation.model;
 
 import lombok.Getter;
 

@@ -2,12 +2,12 @@ package roomescape.domain.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import roomescape.domain.reservation.domain.model.Reservation;
-import roomescape.domain.reservation.domain.model.ReservationGuestName;
-import roomescape.domain.reservation.domain.model.ReservationTimeStamp;
 import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.exception.ReservationNotFoundException;
+import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservation.model.ReservationGuestName;
+import roomescape.domain.reservation.model.ReservationTimeStamp;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.domain.reservation.service.request.ReserveRequest;
 import roomescape.domain.reservation.service.response.ReserveResponse;

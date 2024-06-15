@@ -2,9 +2,9 @@ package roomescape.domain.reservation.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.reservation.domain.model.Reservation;
-import roomescape.domain.reservation.domain.model.ReservationGuestName;
-import roomescape.domain.reservation.domain.model.ReservationTimeStamp;
+import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservation.model.ReservationGuestName;
+import roomescape.domain.reservation.model.ReservationTimeStamp;
 import roomescape.support.IntegrationTestSupport;
 
 import java.time.LocalDateTime;

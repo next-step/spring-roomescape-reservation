@@ -2,7 +2,6 @@ package roomescape.domain.reservation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import roomescape.domain.reservation.domain.ReservationCanceler;
 import roomescape.domain.reservation.domain.ReservationReader;
 import roomescape.domain.reservation.domain.model.Reservation;
 import roomescape.domain.reservation.domain.model.ReservationGuestName;
@@ -20,7 +19,6 @@ import roomescape.global.infrastructure.ClockHolder;
 public class ReservationCommandService {
 
     private final ReservationReader reader;
-    private final ReservationCanceler canceler;
     private final ReservationRepository reservationRepository;
     private final ClockHolder clockHolder;
 
@@ -38,7 +36,9 @@ public class ReservationCommandService {
     }
 
     public void cancel(final ReservationId reservationId) {
-        canceler.cancel(reservationId);
+        final Reservation reservation = reader.getById(reservationId);
+        final Reservation cancelled = reservation.cancel(clockHolder);
+        reservationRepository.save(cancelled);
     }
 
     private void verifyDuplicatedReservationNotExist(final ReserveRequest request) {

@@ -4,14 +4,18 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import roomescape.domain.reservation.domain.ReservationReader;
 import roomescape.domain.reservation.domain.model.Reservation;
 import roomescape.domain.reservation.domain.model.ReservationGuestName;
 import roomescape.domain.reservation.domain.model.ReservationStatus;
 import roomescape.domain.reservation.domain.model.ReservationTimeStamp;
+import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.domain.reservation.service.request.ReserveRequest;
 import roomescape.domain.reservation.service.response.ReserveResponse;
+import roomescape.global.infrastructure.ClockHolder;
+import roomescape.mock.FakeClockHolder;
 import roomescape.support.IntegrationTestSupport;
 
 import java.time.LocalDate;
@@ -20,6 +24,7 @@ import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ReservationCommandServiceTest extends IntegrationTestSupport {
 
@@ -28,6 +33,9 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
 
     @Autowired
     ReservationRepository repository;
+
+    @Autowired
+    ReservationReader reservationReader;
 
     @DisplayName("예약 정보로 예약을 생성한다.")
     @Test
@@ -49,6 +57,39 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .containsExactly(
                         "brie", LocalDate.of(2024, 6, 8), LocalTime.of(12, 0)
                 );
+    }
+
+    @DisplayName("예약 id로 예약을 취소한다")
+    @Test
+    void cancel() {
+        // given
+        final Reservation reservation = Reservation.builder()
+                .id(1L)
+                .name(new ReservationGuestName("brie"))
+                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .status(ReservationStatus.CONFIRMED)
+                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .build();
+        final Long reservationId = repository.save(reservation).getId();
+        final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
+
+        final ReservationCommandService sut = new ReservationCommandService(reservationReader, repository, clockHolder);
+
+        // when
+        sut.cancel(new ReservationId(reservationId));
+
+        // then
+        assertThat(repository.findAll()).hasSize(1);
+
+        final Reservation actual = repository.findById(reservationId).get();
+        assertAll(
+                () -> assertThat(actual.getId()).isEqualTo(1L),
+                () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
+                () -> assertThat(actual.getTimeStamp()).isEqualTo(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0))),
+                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
+                () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
+        );
     }
 
     @DisplayName("이미 같은 이름, 예약 날짜/시간으로 예약이 되어있는 경우 예약 시 예외 발생")

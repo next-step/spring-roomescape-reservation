@@ -2,13 +2,9 @@ package roomescape.domain.reservation.service.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.domain.reservation.domain.ReservationAppend;
-import roomescape.domain.reservation.domain.model.ReservationGuestName;
-import roomescape.domain.reservation.domain.model.ReservationTimeStamp;
 import roomescape.domain.reservation.exception.ReservationException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -40,12 +36,4 @@ public class ReserveRequest {
             throw ReservationException.nullField("time");
         }
     }
-
-    public ReservationAppend toReservationAppend() {
-        return ReservationAppend.builder()
-                .name(new ReservationGuestName(this.name))
-                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(this.date, this.time)))
-                .build();
-    }
-
 }

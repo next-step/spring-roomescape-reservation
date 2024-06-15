@@ -1,6 +1,5 @@
 package roomescape.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import roomescape.DTO.ThemeRequest;
@@ -26,7 +25,7 @@ public class ThemeService {
         if (themes.isEmpty()) {
             throw new NotFoundException("등록된 테마가 없습니다.");
         }
-        return ThemeResponse.toDTOList(themes);
+        return ThemeResponse.toResponses(themes);
     }
 
     public ThemeResponse findOne(Long id) {

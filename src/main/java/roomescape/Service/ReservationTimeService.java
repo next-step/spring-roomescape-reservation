@@ -1,6 +1,5 @@
 package roomescape.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import roomescape.DTO.ReservationTimeRequest;
@@ -28,7 +27,7 @@ public class ReservationTimeService {
         if (times.isEmpty()) {
             throw new NotFoundException("등록된 예약 시간이 없습니다.");
         }
-        return ReservationTimeResponse.toDTOList(times);
+        return ReservationTimeResponse.toResponses(times);
     }
 
     public ReservationTimeResponse findOne(Long id) {

@@ -40,7 +40,7 @@ public class ThemeResponse {
         return thumbnail;
     }
 
-    public static List<ThemeResponse> toDTOList(List<Theme> themes) {
+    public static List<ThemeResponse> toResponses(List<Theme> themes) {
         return themes.stream().map(ThemeResponse::new).toList();
     }
 }

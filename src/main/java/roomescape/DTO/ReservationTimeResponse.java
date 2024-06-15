@@ -26,7 +26,7 @@ public class ReservationTimeResponse {
         return this.startAt;
     }
 
-    public static List<ReservationTimeResponse> toDTOList(List<ReservationTime> reservationTimes) {
+    public static List<ReservationTimeResponse> toResponses(List<ReservationTime> reservationTimes) {
         return reservationTimes.stream().map(ReservationTimeResponse::new).toList();
     }
 }

@@ -47,7 +47,7 @@ public class ReservationResponse {
         return theme;
     }
 
-    public static List<ReservationResponse> toDTOList(List<Reservation> reservations) {
+    public static List<ReservationResponse> toResponses(List<Reservation> reservations) {
         return reservations.stream().map(ReservationResponse::new).toList();
     }
 }

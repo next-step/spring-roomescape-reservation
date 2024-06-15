@@ -1,4 +1,4 @@
-package roomescape.time.web.dto;
+package roomescape.time.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,7 @@ public class TimeRequest {
         this.startAt = startAt;
     }
 
-    public Time toEntity() {
+    public Time convertToDomainObject() {
         return new Time(null, this.startAt);
     }
 }

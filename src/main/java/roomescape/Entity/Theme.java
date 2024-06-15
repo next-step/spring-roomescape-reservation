@@ -1,4 +1,4 @@
-package roomescape.Entity;
+package roomescape.entity;
 
 public class Theme {
     private final Long id;

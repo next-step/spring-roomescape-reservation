@@ -1,6 +1,6 @@
-package roomescape.DTO;
+package roomescape.dto;
 
-import roomescape.Entity.ReservationTime;
+import roomescape.entity.ReservationTime;
 
 import java.util.List;
 

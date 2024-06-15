@@ -1,21 +1,20 @@
-package roomescape.Repository;
+package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.DTO.ThemeRequest;
-import roomescape.Entity.Theme;
+import roomescape.entity.Theme;
 
 import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class JdbcTemplateThemeRepository implements ThemeRepository {
+public class ThemeJdbcTemplateRepository implements ThemeRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public JdbcTemplateThemeRepository(JdbcTemplate jdbcTemplate) {
+    public ThemeJdbcTemplateRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.DTO.ThemeRequest;
-import roomescape.DTO.ThemeResponse;
+import roomescape.dto.ThemeRequest;
+import roomescape.dto.ThemeResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

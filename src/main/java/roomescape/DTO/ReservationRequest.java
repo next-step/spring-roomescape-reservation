@@ -1,6 +1,4 @@
-package roomescape.DTO;
-
-import roomescape.Entity.Reservation;
+package roomescape.dto;
 
 public class ReservationRequest {
     private String name;

@@ -1,20 +1,20 @@
-package roomescape.Repository;
+package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.Entity.ReservationTime;
+import roomescape.entity.ReservationTime;
 
 import java.sql.PreparedStatement;
 import java.util.List;
 
 @Repository
-public class JdbcTemplateReservationTimeRepository implements ReservationTimeRepository {
+public class ReservationTimeJdbcTemplateRepository implements ReservationTimeRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public JdbcTemplateReservationTimeRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationTimeJdbcTemplateRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

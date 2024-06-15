@@ -1,13 +1,13 @@
-package roomescape.Service;
+package roomescape.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import roomescape.DTO.ReservationTimeRequest;
-import roomescape.DTO.ReservationTimeResponse;
-import roomescape.Entity.ReservationTime;
-import roomescape.Exception.BadRequestException;
-import roomescape.Exception.NotFoundException;
-import roomescape.Repository.ReservationTimeRepository;
+import roomescape.dto.ReservationTimeRequest;
+import roomescape.dto.ReservationTimeResponse;
+import roomescape.entity.ReservationTime;
+import roomescape.exception.BadRequestException;
+import roomescape.exception.NotFoundException;
+import roomescape.repository.ReservationTimeRepository;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;

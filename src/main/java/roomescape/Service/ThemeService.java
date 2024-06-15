@@ -1,13 +1,13 @@
-package roomescape.Service;
+package roomescape.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import roomescape.DTO.ThemeRequest;
-import roomescape.DTO.ThemeResponse;
-import roomescape.Entity.Theme;
-import roomescape.Exception.BadRequestException;
-import roomescape.Exception.NotFoundException;
-import roomescape.Repository.ThemeRepository;
+import roomescape.dto.ThemeRequest;
+import roomescape.dto.ThemeResponse;
+import roomescape.entity.Theme;
+import roomescape.exception.BadRequestException;
+import roomescape.exception.NotFoundException;
+import roomescape.repository.ThemeRepository;
 
 import java.util.List;
 

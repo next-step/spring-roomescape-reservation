@@ -1,4 +1,4 @@
-package roomescape.DTO;
+package roomescape.dto;
 
 public class ExceptionResponse {
     private final String message;

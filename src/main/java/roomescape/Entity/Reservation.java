@@ -1,4 +1,4 @@
-package roomescape.Entity;
+package roomescape.entity;
 
 public class Reservation {
     private final Long id;

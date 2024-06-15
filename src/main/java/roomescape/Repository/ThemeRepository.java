@@ -1,7 +1,6 @@
-package roomescape.Repository;
+package roomescape.repository;
 
-import roomescape.DTO.ThemeRequest;
-import roomescape.Entity.Theme;
+import roomescape.entity.Theme;
 
 import java.util.List;
 

@@ -9,8 +9,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.DTO.ReservationTimeRequest;
-import roomescape.DTO.ReservationTimeResponse;
+import roomescape.dto.ReservationTimeRequest;
+import roomescape.dto.ReservationTimeResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

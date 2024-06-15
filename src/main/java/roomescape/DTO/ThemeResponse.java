@@ -1,6 +1,6 @@
-package roomescape.DTO;
+package roomescape.dto;
 
-import roomescape.Entity.Theme;
+import roomescape.entity.Theme;
 
 import java.util.List;
 

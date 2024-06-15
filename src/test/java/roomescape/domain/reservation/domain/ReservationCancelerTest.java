@@ -35,7 +35,7 @@ class ReservationCancelerTest extends IntegrationTestSupport {
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        final Long reservationId = repository.save(reservation);
+        final Long reservationId = repository.save(reservation).getId();
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
         final ReservationCanceler sut = new ReservationCanceler(clockHolder, reader, repository);
 

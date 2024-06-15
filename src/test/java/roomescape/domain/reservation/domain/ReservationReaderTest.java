@@ -29,7 +29,7 @@ class ReservationReaderTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("name"))
                 .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
                 .build();
-        final Long reservationId = reservationRepository.save(reservation);
+        final Long reservationId = reservationRepository.save(reservation).getId();
 
         // when
         final Reservation actual = sut.getById(new ReservationId(reservationId));

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ReservationRepository {
 
-    Long save(Reservation reservation);
+    Reservation save(Reservation reservation);
 
     List<Reservation> findAll();
 

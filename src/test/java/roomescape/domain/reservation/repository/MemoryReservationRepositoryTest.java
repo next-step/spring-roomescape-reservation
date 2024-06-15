@@ -23,7 +23,7 @@ class MemoryReservationRepositoryTest extends IntegrationTestSupport {
     void save() {
         final Reservation reservation = createReservation("name1", LocalDateTime.of(2024, 6, 8, 12, 0));
 
-        final Long actual = sut.save(reservation);
+        final Long actual = sut.save(reservation).getId();
 
         assertThat(actual).isNotNull();
         assertThat(actual).isNotEqualTo(0);
@@ -41,7 +41,7 @@ class MemoryReservationRepositoryTest extends IntegrationTestSupport {
 
     @Test
     void findById_exist() {
-        final Long reservationId = sut.save(createReservation("name", LocalDateTime.of(2024, 6, 8, 12, 0)));
+        final Long reservationId = sut.save(createReservation("name", LocalDateTime.of(2024, 6, 8, 12, 0))).getId();
 
         final Optional<Reservation> actual = sut.findById(reservationId);
 

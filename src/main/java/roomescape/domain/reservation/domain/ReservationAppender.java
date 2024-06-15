@@ -15,9 +15,8 @@ public class ReservationAppender {
     private final ClockHolder clockHolder;
 
     public ReservationId append(final ReservationAppend append) {
-        final Reservation reservation = append.toReservation(clockHolder);
-        final Long reservationId = repository.save(reservation);
-        return new ReservationId(reservationId);
+        final Reservation appended = repository.save(append.toReservation(clockHolder));
+        return new ReservationId(appended.getId());
     }
 
 }

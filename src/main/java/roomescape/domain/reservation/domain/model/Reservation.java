@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 public class Reservation {
 
-    private Long id;
+    private final Long id;
     private final ReservationGuestName name;
     private final ReservationTimeStamp timeStamp;
     private final ReservationStatus status;

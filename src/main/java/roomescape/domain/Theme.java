@@ -6,6 +6,11 @@ public class Theme {
     private String description; //테마 설명
     private String thumbnail; //테마 이미지
 
+    public Theme(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Theme(String name, String description, String thumbnail) {
         this.name = name;
         this.description = description;
@@ -34,5 +39,4 @@ public class Theme {
     public String getThumbnail() {
         return thumbnail;
     }
-
 }

@@ -4,6 +4,7 @@ import roomescape.domain.ReservationTime;
 import roomescape.dto.time.ReservationTimeRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationTimeRepository {
 
@@ -14,4 +15,6 @@ public interface ReservationTimeRepository {
     ReservationTime findReservationTimeById(Long id);
 
     void deleteTime(Long id);
+
+    int countReservationTimeByStartAt(ReservationTimeRequest request);
 }

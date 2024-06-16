@@ -5,6 +5,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.Theme;
+import roomescape.dto.theme.create.ThemeCreateRequest;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -53,6 +54,21 @@ public class ThemeRepositoryImpl implements ThemeRepository{
     }
 
     @Override
+    public Theme findThemeById(Long themeId) {
+        String sql = "select id, name, description, thumbnail from theme where id = ?";
+        return jdbcTemplate.queryForObject(
+                sql, (rs, rowNum) -> {
+                    Theme theme = new Theme(
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            rs.getString("description"),
+                            rs.getString("thumbnail")
+                    );
+                    return theme;
+                },themeId);
+    }
+
+    @Override
     public void deleteTheme(Long id) {
         String sql = "delete from theme where id = ?";
         int deletedId = jdbcTemplate.update(sql, id);
@@ -60,5 +76,11 @@ public class ThemeRepositoryImpl implements ThemeRepository{
         if (deletedId < 1) {
             throw new RuntimeException("존재하지 않는 아이디 : " + deletedId);
         }
+    }
+
+    @Override
+    public int countDuplicatedName(ThemeCreateRequest request) {
+        String sql = "select count(*) from theme where name = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, request.getName());
     }
 }

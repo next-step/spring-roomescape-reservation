@@ -65,4 +65,10 @@ public class ReservationTimeRepositoryImpl implements ReservationTimeRepository{
         String sql = "delete from reservation_time where id = ?";
         jdbcTemplate.update(sql, Long.valueOf(id));
     }
+
+    @Override
+    public int countReservationTimeByStartAt(ReservationTimeRequest request) {
+        String sql = "select count(*) from reservation_time where start_at = ?";
+        return jdbcTemplate.queryForObject(sql, Integer.class, request.getStartAt());
+    }
 }

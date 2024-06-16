@@ -1,11 +1,14 @@
 package roomescape.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import roomescape.dto.theme.ThemeResponse;
 import roomescape.dto.theme.create.ThemeCreateRequest;
 import roomescape.dto.theme.create.ThemeCreateResponse;
+import roomescape.exception.custom.DuplicatedThemeName;
 import roomescape.service.ThemeService;
 
 import java.net.URI;
@@ -33,7 +36,7 @@ public class ThemeController {
     }
 
     @PostMapping
-    public ResponseEntity<ThemeCreateResponse> createTheme(@RequestBody ThemeCreateRequest request) {
+    public ResponseEntity<ThemeCreateResponse> createTheme(@Valid @RequestBody ThemeCreateRequest request) {
         ThemeCreateResponse response = themeService.createTheme(request);
         return ResponseEntity.created(URI.create("/themes/" + response.getId())).build();
 
@@ -43,5 +46,10 @@ public class ThemeController {
     public ResponseEntity<Void> deleteTheme(@PathVariable Long id) {
         themeService.deleteTheme(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(DuplicatedThemeName.class)
+    public ResponseEntity<String> handleDuplicatedThemeNameException(DuplicatedThemeName e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }

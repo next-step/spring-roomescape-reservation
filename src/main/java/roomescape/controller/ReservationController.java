@@ -1,7 +1,9 @@
 package roomescape.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.Reservation;
 import roomescape.domain.ReservationTime;
@@ -15,7 +17,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("/reservations")
 public class ReservationController {
 
     private final ReservationService reservationService;
@@ -31,7 +33,8 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> create(@RequestBody ReservationCreateRequest dto) {
+    public ResponseEntity<ReservationCreateResponse> create(@Valid @RequestBody ReservationCreateRequest dto) {
+        dto.checkTimeAndThemeValidation();
         ReservationCreateResponse reservation = reservationService.createReservation(dto);
         return ResponseEntity.created(URI.create("/reservation/" + reservation.getId())).build();
     }

@@ -5,7 +5,7 @@ import roomescape.domain.ReservationTime;
 import roomescape.dto.time.ReservationTimeRequest;
 import roomescape.dto.time.ReservationTimeResponse;
 import roomescape.dto.time.create.ReservationTimeCreateResponse;
-import roomescape.repository.ReservationRepository;
+import roomescape.exception.custom.DuplicatedReservationTime;
 import roomescape.repository.ReservationTimeRepository;
 
 import java.util.List;
@@ -28,6 +28,7 @@ public class ReservationTimeService {
     }
 
     public ReservationTimeCreateResponse createTime(ReservationTimeRequest request) {
+        checkDuplicatedReservationTime(request);
         Long id = reservationTimeRepository.createTime(request);
         ReservationTime entity = reservationTimeRepository.findReservationTimeById(id);
         return ReservationTimeCreateResponse.toDto(entity);
@@ -35,5 +36,12 @@ public class ReservationTimeService {
 
     public void deleteTime(Long id) {
         reservationTimeRepository.deleteTime(id);
+    }
+
+    public void checkDuplicatedReservationTime(ReservationTimeRequest request) {
+        int count = reservationTimeRepository.countReservationTimeByStartAt(request);
+        if (count > 0) {
+            throw new DuplicatedReservationTime("이미 존재하는 예약 시간입니다. 다른 시간대를 입력해주세요.");
+        }
     }
 }

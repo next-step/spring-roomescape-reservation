@@ -9,6 +9,8 @@ public class ThemeCreateResponse {
     private String description;
     private String thumbnail;
 
+
+
     public static ThemeCreateResponse toResponse(Theme theme) {
         return new ThemeCreateResponse(theme.getId(), theme.getName(), theme.getDescription(), theme.getThumbnail());
     }

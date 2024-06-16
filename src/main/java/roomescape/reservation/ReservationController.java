@@ -1,10 +1,18 @@
 package roomescape.reservation;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import roomescape.entities.Reservation;
-import roomescape.reservation.data.ReservationAddRequestDTO;
+import roomescape.entities.ReservationTime;
+import roomescape.reservation.data.ReservationAddRequestDto;
+import roomescape.reservationTime.ReservationTimeService;
 
 import java.util.List;
 
@@ -12,21 +20,25 @@ import java.util.List;
 @RequestMapping("/reservations")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final ReservationTimeService reservationTimeService;
 
-    @Autowired
-    public ReservationController(ReservationService reservationService) {
+
+    public ReservationController(ReservationService reservationService, ReservationTimeService reservationTimeService) {
         this.reservationService = reservationService;
+        this.reservationTimeService = reservationTimeService;
     }
 
     @GetMapping
-    public List<Reservation> searchReservations(){
-        return reservationService.searchAllReservations();
+    public ResponseEntity<List<Reservation>> searchReservations(){
+        List<Reservation> res = reservationService.searchAllReservations();
+        return ResponseEntity.ok().body(res);
     }
 
     @PostMapping
-    public void addReservation(@RequestBody ReservationAddRequestDTO reservationAddRequestDTO) {
-        Reservation newReservation = new Reservation(reservationAddRequestDTO);
-        reservationService.addReservation(newReservation);
+    public ResponseEntity<Reservation> addReservation(@RequestBody ReservationAddRequestDto reservationAddRequestDto) {
+        ReservationTime reservationTime = reservationTimeService.findByTime(reservationAddRequestDto.getTime());
+        Reservation reservation = reservationService.addReservation(new Reservation(reservationAddRequestDto.getName(), reservationAddRequestDto.getDate(), reservationTime));
+        return ResponseEntity.ok().body(reservation);
     }
 
     @DeleteMapping("/{id}")

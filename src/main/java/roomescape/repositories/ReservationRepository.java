@@ -2,11 +2,14 @@ package roomescape.repositories;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.entities.Reservation;
 import roomescape.entities.ReservationTime;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -21,32 +24,43 @@ public class ReservationRepository {
 
     public Reservation save(Reservation reservation){
         String sql = "INSERT INTO RESERVATION(date, time_id, name) VALUES(?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(
+                    sql,
+                    new String[]{"id"});
+            ps.setString(1, reservation.getDate());
+            ps.setLong(2, reservation.getReservationTime().getId());
+            ps.setString(3, reservation.getName());
+            return ps;
+        }, keyHolder);
 
-        jdbcTemplate.update(sql, reservation.getDate(), reservation.getTime().getId(), reservation.getName());
-        return reservation;
+        Long id = keyHolder.getKey().longValue();
+
+        return new Reservation(keyHolder.getKey().longValue(), reservation.getDate(), reservation.getName(), reservation.getReservationTime());
     }
 
     public List<Reservation> findAll(){
-        String sql = "SELECT \n" +
-                "    r.id as reservation_id, \n" +
-                "    r.name as reservation_name, \n" +
-                "    r.date as reservation_date, \n" +
-                "    t.id as time_id, \n" +
-                "    t.start_at as time_start_at \n" +
-                "FROM reservation as r \n" +
-                "inner join reservation_time as t \n" +
-                "on r.time_id = t.id\n";
+        String sql = """
+                      select r.id as reservation_id,
+                      r.name as reservation_name,
+                      r.date as reservation_date,
+                      t.time as time
+               from reservation as r
+               inner join reservation_time as t
+               on r.time_id = t.id
+            """;
+
         List<Reservation> reservations = jdbcTemplate.query(sql, new RowMapper<Reservation>() {
             @Override
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Reservation reservation = new Reservation(
-                    rs.getLong("reservation_id"),
+                System.out.println(rs);
+                return new Reservation( //TODO
+                    rs.getLong("id"),
                     rs.getString("date"),
                     rs.getString("name"),
-                    new ReservationTime(rs.getLong("time_id"), rs.getString("time_start_at"))
+                    new ReservationTime(rs.getLong("id"), rs.getString("time"))
                 );
-                reservation.setId(rs.getLong("id"));
-                return reservation;
             }
         });
         return reservations;

@@ -1,42 +1,37 @@
 package roomescape.entities;
 
-import roomescape.reservationTime.data.ReservationTimeAddRequestDTO;
+import roomescape.reservationTime.data.ReservationTimeAddRequestDto;
 
 public class ReservationTime {
     private Long id;
-    private String startAt;
+    private String time;
 
-    public ReservationTime(ReservationTimeAddRequestDTO reservationTimeAddRequestDTO) {
-        if (! isValidStartAt(reservationTimeAddRequestDTO.getStartAt())){
+    public ReservationTime(ReservationTimeAddRequestDto reservationTimeAddRequestDTO) {
+        if (!isValidTime(reservationTimeAddRequestDTO.getTime())){
             throw new IllegalArgumentException();
         }
-        this.startAt = reservationTimeAddRequestDTO.getStartAt();
-
+        this.time = reservationTimeAddRequestDTO.getTime();
     }
 
-    public ReservationTime(String startAt){
-        this.startAt = startAt;
+    public ReservationTime(String time){
+        this.time = time;
     }
 
-    public ReservationTime(Long reservationTimeId, String startAt) {
+    public ReservationTime(Long reservationTimeId, String time) {
         this.id = reservationTimeId;
-        this.startAt = startAt;
+        this.time = time;
     }
 
     public Long getId() {
         return this.id;
     }
 
-    public String getStartAt() {
-        return this.startAt;
+    public String getTime() {
+        return this.time;
     }
 
-    public void setId(Long id){
-        this.id = id;
-    }
-
-    private boolean isValidStartAt(String startAt){
-        String[] times = startAt.split(":");
+    private boolean isValidTime(String time){
+        String[] times = time.split(":");
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);
 

@@ -28,4 +28,8 @@ public class ReservationTimeService {
     public void cancelReservationTime(Long id){
         reservationTimeRepository.deleteById(id);
     }
+
+    public ReservationTime findByTime(String time){
+        return reservationTimeRepository.findByTime(time);
+    }
 }

@@ -1,40 +1,36 @@
 package roomescape.entities;
 
-import roomescape.reservation.data.ReservationAddRequestDTO;
+import roomescape.reservation.data.ReservationAddRequestDto;
 
 public class Reservation {
     private Long id;
     private String name;
     private String date;
-    private ReservationTime time;
+    private ReservationTime reservationTime;
 
-    public Reservation(Long id, String name, String date, ReservationTime time) {
+    public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.reservationTime = reservationTime;
     }
 
-    public Reservation(ReservationAddRequestDTO reservationAddRequestDTO){
-        this.name = reservationAddRequestDTO.getName();
-        this.date = reservationAddRequestDTO.getDate();
-        this.time = new ReservationTime(reservationAddRequestDTO.getReservationTimeId(), reservationAddRequestDTO.getStartAt());
+    public Reservation(String name, String date, ReservationTime reservationTime) {
+        this.name = name;
+        this.date = date;
+        this.reservationTime = reservationTime;
     }
 
     public Long getId() {
         return this.id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName(){
         return this.name;
     }
 
-    public ReservationTime getTime(){
-        return this.time;
+    public ReservationTime getReservationTime(){
+        return this.reservationTime;
     }
 
     public String getDate(){

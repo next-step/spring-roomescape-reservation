@@ -3,14 +3,14 @@ package roomescape.application.error.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import roomescape.application.error.code.ErrorCode;
-import roomescape.application.service.exception.ServiceException;
+import roomescape.application.error.exception.ApplicationException;
+import roomescape.domain.error.exception.DomainException;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static roomescape.application.error.code.ErrorCode.INVALID_API_REQUEST_PARAMETER;
+import static roomescape.application.error.code.ApplicationErrorCode.INVALID_API_REQUEST_PARAMETER;
 
 public class ErrorResponse {
 
@@ -21,24 +21,28 @@ public class ErrorResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final List<ApiValidationError> validationErrors;
 
-    public ErrorResponse(ErrorCode code, String message) {
-        this.code = code.name();
+    public ErrorResponse(String code, String message) {
+        this.code = code;
         this.message = message;
         this.validationErrors = Collections.emptyList();
     }
 
-    public ErrorResponse(ErrorCode code, List<ApiValidationError> validationErrors) {
-        this.code = code.name();
-        this.message = code.getMessage();
+    public ErrorResponse(String code, String message, List<ApiValidationError> validationErrors) {
+        this.code = code;
+        this.message = message;
         this.validationErrors = validationErrors;
     }
 
     public static ErrorResponse from(BindException ex) {
-        return new ErrorResponse(INVALID_API_REQUEST_PARAMETER, ApiValidationError.toApiValidationErrors(ex));
+        return new ErrorResponse(INVALID_API_REQUEST_PARAMETER.name(), ex.getMessage(), ApiValidationError.toApiValidationErrors(ex));
     }
 
-    public static ErrorResponse from(ServiceException ex) {
-        return new ErrorResponse(ex.getCode(), ex.getMessage());
+    public static ErrorResponse from(ApplicationException ex) {
+        return new ErrorResponse(ex.getCodeName(), ex.getMessage());
+    }
+
+    public static ErrorResponse from(DomainException ex) {
+        return new ErrorResponse(ex.getCodeName(), ex.getMessage());
     }
 
     public String getCode() {

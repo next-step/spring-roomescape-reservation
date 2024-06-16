@@ -10,6 +10,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import roomescape.application.api.dto.request.CreateReservationRequest;
 import roomescape.application.api.dto.request.CreateReservationTimeRequest;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,7 +39,11 @@ public class MissionStepTest {
     @Test
     void reservation() {
         CreateReservationRequest createReservationRequest =
-                new CreateReservationRequest("2023-08-05", "브라운", 1L);
+                new CreateReservationRequest(
+                        LocalDate.now().plusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        "브라운",
+                        1L
+                );
         CreateReservationTimeRequest createReservationTimeRequest =
                 new CreateReservationTimeRequest("21:11");
 

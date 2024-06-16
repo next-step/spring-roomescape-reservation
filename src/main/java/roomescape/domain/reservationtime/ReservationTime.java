@@ -30,4 +30,7 @@ public class ReservationTime {
         return this.startAt.startAt();
     }
 
+    public boolean isStartAtBefore(LocalTime localTime) {
+        return startAt.isBefore(localTime);
+    }
 }

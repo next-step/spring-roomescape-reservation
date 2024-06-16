@@ -5,28 +5,45 @@ import roomescape.application.mapper.ReservationEntityMapper;
 import roomescape.application.mapper.ReservationMapper;
 import roomescape.application.service.command.CreateReservationCommand;
 import roomescape.application.service.command.DeleteReservationCommand;
+import roomescape.application.service.component.reader.ReservationTimeReader;
 import roomescape.domain.reservation.Reservation;
+import roomescape.domain.reservation.vo.ReservationDate;
+import roomescape.domain.reservation.vo.ReservationId;
+import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.repository.ReservationRepository;
-import roomescape.repository.entity.ReservationEntity;
 
 @Service
 public class ReservationCommandService {
 
     private final ReservationRepository reservationRepository;
+    private final ReservationTimeReader reservationTimeReader;
 
-    public ReservationCommandService(ReservationRepository reservationRepository) {
+    public ReservationCommandService(
+            ReservationRepository reservationRepository,
+            ReservationTimeReader reservationTimeReader
+    ) {
         this.reservationRepository = reservationRepository;
+        this.reservationTimeReader = reservationTimeReader;
     }
 
-    public Reservation createReservation(CreateReservationCommand createReservationCommand) {
-        Reservation reservation = createReservationCommand.toReservation();
-        ReservationEntity savedEntity = reservationRepository.save(ReservationEntityMapper.toReservationEntity(reservation));
+    public Reservation createReservation(CreateReservationCommand command) {
+        ReservationTime reservationTime = reservationTimeReader.readById(command.getReservationTimeId());
 
-        return ReservationMapper.toReservation(savedEntity);
+        Reservation created = Reservation.create(
+                ReservationId.empty(),
+                new ReservationName(command.getReservationName()),
+                new ReservationDate(command.getReservationDate()),
+                reservationTime
+        );
+
+        return ReservationMapper.toReservation(
+                reservationRepository.save(ReservationEntityMapper.toReservationEntity(created))
+        );
     }
 
     public void deleteReservation(DeleteReservationCommand deleteReservationCommand) {
-        
+
         reservationRepository.delete(deleteReservationCommand.getReservationId());
     }
 }

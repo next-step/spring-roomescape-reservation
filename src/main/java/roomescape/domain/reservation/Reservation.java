@@ -1,8 +1,11 @@
 package roomescape.domain.reservation;
 
+import roomescape.domain.reservation.service.CreateReservationValidator;
+import roomescape.domain.reservation.service.SystemClockHolder;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.validator.ObjectValidator;
 
@@ -29,6 +32,27 @@ public class Reservation {
         this.reservationName = reservationName;
         this.reservationDate = reservationDate;
         this.reservationTimeId = reservationTimeId;
+    }
+
+    public static Reservation create(
+            ReservationId id,
+            ReservationName reservationName,
+            ReservationDate reservationDate,
+            ReservationTime reservationTime
+    ) {
+        CreateReservationValidator validator = new CreateReservationValidator(
+                reservationTime,
+                reservationDate,
+                new SystemClockHolder()
+        );
+        validator.validate();
+
+        return new Reservation(
+                id,
+                reservationName,
+                reservationDate,
+                new ReservationTimeId(reservationTime.getId())
+        );
     }
 
     public Long getId() {

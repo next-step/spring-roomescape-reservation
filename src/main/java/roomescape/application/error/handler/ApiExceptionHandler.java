@@ -17,6 +17,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<ErrorResponse> handleException(MethodArgumentNotValidException ex) {
         exceptionLogger.log(ex);
 
-        return ResponseEntityFactory.create(ex);
+        return ResponseEntityFactory.badRequest(ex);
     }
 }

@@ -1,11 +1,14 @@
 package roomescape.application.error.util;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
-import roomescape.application.error.code.ErrorCode;
 import roomescape.application.error.dto.ErrorResponse;
-import roomescape.application.service.exception.ServiceException;
+import roomescape.application.error.exception.ApplicationException;
+import roomescape.domain.error.exception.DomainException;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static roomescape.application.error.code.ApplicationErrorCode.RUN_TIME_EXCEPTION;
 
 public final class ResponseEntityFactory {
 
@@ -13,21 +16,27 @@ public final class ResponseEntityFactory {
         throw new UnsupportedOperationException(ResponseEntityFactory.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
     }
 
-    public static ResponseEntity<ErrorResponse> create(Exception ex, ErrorCode code) {
+    public static ResponseEntity<ErrorResponse> internalServerError(RuntimeException runtimeException) {
         return ResponseEntity
-                .status(code.getHttpStatus())
-                .body(new ErrorResponse(code, ex.getMessage()));
+                .status(INTERNAL_SERVER_ERROR)
+                .body(new ErrorResponse(RUN_TIME_EXCEPTION.name(), runtimeException.getMessage()));
     }
 
-    public static ResponseEntity<ErrorResponse> create(BindException ex) {
+    public static ResponseEntity<ErrorResponse> badRequest(BindException ex) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(BAD_REQUEST)
                 .body(ErrorResponse.from(ex));
     }
 
-    public static ResponseEntity<ErrorResponse> create(ServiceException ex) {
+    public static ResponseEntity<ErrorResponse> badRequest(ApplicationException ex) {
         return ResponseEntity
-                .status(ex.getHttpStatus())
+                .status(BAD_REQUEST)
                 .body(ErrorResponse.from(ex));
+    }
+
+    public static ResponseEntity<ErrorResponse> badRequest(DomainException domainException) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(ErrorResponse.from(domainException));
     }
 }

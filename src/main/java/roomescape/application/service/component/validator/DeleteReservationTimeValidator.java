@@ -1,10 +1,10 @@
 package roomescape.application.service.component.validator;
 
 import org.springframework.stereotype.Component;
-import roomescape.application.service.exception.DeleteReservationTimeValidateException;
+import roomescape.application.error.exception.DeleteReservationTimeValidateException;
 import roomescape.repository.ReservationRepository;
 
-import static roomescape.application.error.code.ErrorCode.EXIST_RESERVATION_AT_THIS_TIME;
+import static roomescape.application.error.code.ApplicationErrorCode.EXIST_RESERVATION_AT_THIS_TIME;
 
 @Component
 public class DeleteReservationTimeValidator {

@@ -14,7 +14,7 @@ public class Reservation {
 
     private final Long id;
     private final ReservationGuestName name;
-    private final ReservationTimeStamp timeStamp;
+    private final ReservationDateTime dateTime;
     private final ReservationStatus status;
     private final LocalDateTime canceledAt;
     private final LocalDateTime createdAt;
@@ -23,14 +23,14 @@ public class Reservation {
     private Reservation(
             final Long id,
             final ReservationGuestName name,
-            final ReservationTimeStamp timeStamp,
+            final ReservationDateTime dateTime,
             final ReservationStatus status,
             final LocalDateTime canceledAt,
             final LocalDateTime createdAt
     ) {
         this.id = id;
         this.name = name;
-        this.timeStamp = timeStamp;
+        this.dateTime = dateTime;
         this.status = status;
         this.canceledAt = canceledAt;
         this.createdAt = createdAt;
@@ -38,12 +38,12 @@ public class Reservation {
 
     public static Reservation defaultOf(
             final ReservationGuestName name,
-            final ReservationTimeStamp timeStamp,
+            final ReservationDateTime dateTime,
             final ClockHolder clockHolder
     ) {
         return Reservation.builder()
                 .name(name)
-                .timeStamp(timeStamp)
+                .dateTime(dateTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(clockHolder.getCurrentSeoulTime())
                 .build();
@@ -53,7 +53,7 @@ public class Reservation {
         return Reservation.builder()
                 .id(this.id)
                 .name(this.name)
-                .timeStamp(this.timeStamp)
+                .dateTime(this.dateTime)
                 .status(ReservationStatus.CANCELED)
                 .createdAt(this.createdAt)
                 .canceledAt(clockHolder.getCurrentSeoulTime())
@@ -61,11 +61,11 @@ public class Reservation {
     }
 
     public LocalDate fetchReservationDate() {
-        return this.timeStamp.getDate();
+        return this.dateTime.getDate();
     }
 
     public LocalTime fetchReservationTime() {
-        return this.timeStamp.getTime();
+        return this.dateTime.getTime();
     }
 
     public boolean matchesId(final Long id) {
@@ -76,8 +76,8 @@ public class Reservation {
         return this.name.equals(name);
     }
 
-    public boolean matchesTimestamp(final ReservationTimeStamp timeStamp) {
-        return this.timeStamp.equals(timeStamp);
+    public boolean matchesTimestamp(final ReservationDateTime timeStamp) {
+        return this.dateTime.equals(timeStamp);
     }
 
     public boolean isActive() {

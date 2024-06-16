@@ -3,9 +3,9 @@ package roomescape.domain.reservation.domain.model;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservation.model.ReservationDateTime;
 import roomescape.domain.reservation.model.ReservationGuestName;
 import roomescape.domain.reservation.model.ReservationStatus;
-import roomescape.domain.reservation.model.ReservationTimeStamp;
 import roomescape.global.infrastructure.ClockHolder;
 import roomescape.mock.FakeClockHolder;
 
@@ -25,7 +25,7 @@ class ReservationTest {
 
         Reservation sut = Reservation.defaultOf(
                 new ReservationGuestName("name"),
-                new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)),
+                new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)),
                 clockHolder
         );
 
@@ -41,7 +41,7 @@ class ReservationTest {
         final Reservation sut = Reservation.builder()
                 .id(1L)
                 .name(new ReservationGuestName("brie"))
-                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
@@ -55,11 +55,10 @@ class ReservationTest {
         assertAll(
                 () -> assertThat(actual.getId()).isEqualTo(1L),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
-                () -> assertThat(actual.getTimeStamp()).isEqualTo(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0))),
+                () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))),
                 () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
                 () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
         );
     }
-
 }

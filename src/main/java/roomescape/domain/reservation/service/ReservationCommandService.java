@@ -6,8 +6,8 @@ import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservation.model.ReservationDateTime;
 import roomescape.domain.reservation.model.ReservationGuestName;
-import roomescape.domain.reservation.model.ReservationTimeStamp;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.domain.reservation.service.request.ReserveRequest;
 import roomescape.domain.reservation.service.response.ReserveResponse;
@@ -27,7 +27,7 @@ public class ReservationCommandService {
 
         final Reservation newReservation = Reservation.defaultOf(
                 new ReservationGuestName(request.getName()),
-                ReservationTimeStamp.of(request.getDate(), request.getTime()),
+                ReservationDateTime.of(request.getDate(), request.getTime()),
                 clockHolder
         );
 
@@ -42,9 +42,9 @@ public class ReservationCommandService {
     }
 
     private void verifyDuplicatedReservationNotExist(final ReserveRequest request) {
-        final Optional<Reservation> reservationOpt = reservationRepository.findByNameAndTimestamp(
+        final Optional<Reservation> reservationOpt = reservationRepository.findByNameAndDateTime(
                 new ReservationGuestName(request.getName()),
-                ReservationTimeStamp.of(request.getDate(), request.getTime())
+                ReservationDateTime.of(request.getDate(), request.getTime())
         );
 
         if (reservationOpt.isEmpty()) {

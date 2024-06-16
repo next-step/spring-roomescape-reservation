@@ -4,9 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservation.model.ReservationDateTime;
 import roomescape.domain.reservation.model.ReservationGuestName;
 import roomescape.domain.reservation.model.ReservationStatus;
-import roomescape.domain.reservation.model.ReservationTimeStamp;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.domain.reservation.service.response.ReservationQueryResponse;
 import roomescape.support.IntegrationTestSupport;
@@ -33,14 +33,14 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
         // given
         final Reservation confirmed = Reservation.builder()
                 .name(new ReservationGuestName("confirmed"))
-                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
                 .status(ReservationStatus.CONFIRMED)
                 .build();
         repository.save(confirmed);
 
         final Reservation canceled = Reservation.builder()
                 .name(new ReservationGuestName("canceled"))
-                .timeStamp(new ReservationTimeStamp(LocalDateTime.of(2024, 3, 8, 11, 0)))
+                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 3, 8, 11, 0)))
                 .status(ReservationStatus.CANCELED)
                 .build();
         repository.save(canceled);

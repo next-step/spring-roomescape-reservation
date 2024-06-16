@@ -20,10 +20,10 @@ public class ReservationTimeCommandApi {
 
     @PostMapping("/times")
     public ResponseEntity<CreateReservationTimeResponse> createReservationTime(
-            @RequestBody @Valid CreateReservationTimeRequest createReservationTimeRequest
+            @RequestBody @Valid CreateReservationTimeRequest request
     ) {
         ReservationTime reservationTime =
-                reservationTimeService.createReservationTime(createReservationTimeRequest.toCreateReservationTimeCommand());
+                reservationTimeService.createReservationTime(request.toCreateReservationTimeCommand());
 
         return ResponseEntity.ok(CreateReservationTimeResponse.from(reservationTime));
     }

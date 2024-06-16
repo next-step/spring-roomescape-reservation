@@ -30,7 +30,7 @@ public class ReservationCommandService {
     public Reservation createReservation(CreateReservationCommand command) {
         ReservationTime reservationTime = reservationTimeReader.readById(command.getReservationTimeId());
 
-        Reservation created = Reservation.create(
+        Reservation createdReservation = Reservation.create(
                 ReservationId.empty(),
                 new ReservationName(command.getReservationName()),
                 new ReservationDate(command.getReservationDate()),
@@ -38,12 +38,11 @@ public class ReservationCommandService {
         );
 
         return ReservationMapper.toReservation(
-                reservationRepository.save(ReservationEntityMapper.toReservationEntity(created))
+                reservationRepository.save(ReservationEntityMapper.toReservationEntity(createdReservation))
         );
     }
 
-    public void deleteReservation(DeleteReservationCommand deleteReservationCommand) {
-
-        reservationRepository.delete(deleteReservationCommand.getReservationId());
+    public void deleteReservation(DeleteReservationCommand command) {
+        reservationRepository.delete(command.getReservationId());
     }
 }

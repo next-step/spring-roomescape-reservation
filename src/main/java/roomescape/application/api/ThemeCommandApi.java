@@ -21,8 +21,8 @@ public class ThemeCommandApi {
     }
 
     @PostMapping("/themes")
-    public ResponseEntity<CreateThemeResponse> createTheme(@RequestBody @Valid CreateThemeRequest createThemeRequest) {
-        Theme theme = themeService.createTheme(createThemeRequest.toCreateThemeCommand());
+    public ResponseEntity<CreateThemeResponse> createTheme(@RequestBody @Valid CreateThemeRequest request) {
+        Theme theme = themeService.createTheme(request.toCreateThemeCommand());
 
         return ResponseEntity
                 .created(URI.create(String.format("/themes/%d", theme.getId())))

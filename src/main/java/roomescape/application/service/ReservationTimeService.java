@@ -25,20 +25,20 @@ public class ReservationTimeService {
         this.deleteReservationTimeValidator = deleteReservationTimeValidator;
     }
 
-    public ReservationTime createReservationTime(CreateReservationTimeCommand createReservationTimeCommand) {
-        ReservationTime reservationTime = createReservationTimeCommand.toReservationTime();
-        ReservationTimeEntity savedReservationTime =
+    public ReservationTime createReservationTime(CreateReservationTimeCommand command) {
+        ReservationTime reservationTime = command.toReservationTime();
+        ReservationTimeEntity savedReservationTimeEntity =
                 reservationTimeRepository.save(ReservationTimeEntityMapper.toReservationTimeEntity(reservationTime));
 
-        return ReservationTimeMapper.toReservationTime(savedReservationTime);
+        return ReservationTimeMapper.toReservationTime(savedReservationTimeEntity);
     }
 
     public ReservationTimes findAllReservationTimes() {
         return ReservationTimeMapper.toReservationTimes(reservationTimeRepository.findAll());
     }
 
-    public void deleteReservationTime(DeleteReservationTimeCommand deleteReservationTimeCommand) {
-        deleteReservationTimeValidator.validate(deleteReservationTimeCommand.getReservationTimeId());
-        reservationTimeRepository.delete(deleteReservationTimeCommand.getReservationTimeId());
+    public void deleteReservationTime(DeleteReservationTimeCommand command) {
+        deleteReservationTimeValidator.validate(command.getReservationTimeId());
+        reservationTimeRepository.delete(command.getReservationTimeId());
     }
 }

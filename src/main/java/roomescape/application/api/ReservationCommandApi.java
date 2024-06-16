@@ -19,8 +19,8 @@ public class ReservationCommandApi {
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<CreateReservationResponse> createReservation(@RequestBody @Valid CreateReservationRequest createReservationRequest) {
-        Reservation reservation = reservationCommandService.createReservation(createReservationRequest.toCreateReservationCommand());
+    public ResponseEntity<CreateReservationResponse> createReservation(@RequestBody @Valid CreateReservationRequest request) {
+        Reservation reservation = reservationCommandService.createReservation(request.toCreateReservationCommand());
 
         return ResponseEntity.ok(CreateReservationResponse.from(reservation));
     }

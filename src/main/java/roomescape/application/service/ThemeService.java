@@ -19,8 +19,8 @@ public class ThemeService {
         this.themeRepository = themeRepository;
     }
 
-    public Theme createTheme(CreateThemeCommand createThemeCommand) {
-        Theme theme = createThemeCommand.toTheme();
+    public Theme createTheme(CreateThemeCommand command) {
+        Theme theme = command.toTheme();
         ThemeEntity themeEntity = themeRepository.save(ThemeEntityMapper.toThemeEntity(theme));
 
         return ThemeMapper.toTheme(themeEntity);
@@ -30,7 +30,7 @@ public class ThemeService {
         return ThemeMapper.toThemes(themeRepository.findAll());
     }
 
-    public void deleteTheme(DeleteThemeCommand deleteThemeCommand) {
-        themeRepository.delete(deleteThemeCommand.getThemeId());
+    public void deleteTheme(DeleteThemeCommand command) {
+        themeRepository.delete(command.getThemeId());
     }
 }

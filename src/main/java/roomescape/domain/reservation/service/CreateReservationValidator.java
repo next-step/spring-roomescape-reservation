@@ -13,25 +13,25 @@ public class CreateReservationValidator {
 
     private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm";
 
-    private final ReservationTime time;
+    private final ReservationTime reservationTime;
 
-    private final ReservationDate date;
+    private final ReservationDate reservationDate;
 
     private final ClockHolder clockHolder;
 
     public CreateReservationValidator(
-            ReservationTime time,
-            ReservationDate date,
+            ReservationTime reservationTime,
+            ReservationDate reservationDate,
             ClockHolder clockHolder
     ) {
-        this.time = time;
-        this.date = date;
+        this.reservationTime = reservationTime;
+        this.reservationDate = reservationDate;
         this.clockHolder = clockHolder;
     }
 
     public void validate() {
         LocalDateTime currentTime = clockHolder.getCurrentTime();
-        ReservationDateTime reservationDateTime = ReservationDateTime.of(date, time);
+        ReservationDateTime reservationDateTime = ReservationDateTime.of(reservationDate, reservationTime);
 
         if (reservationDateTime.isBefore(currentTime)) {
             throw new CreateReservationValidateException(

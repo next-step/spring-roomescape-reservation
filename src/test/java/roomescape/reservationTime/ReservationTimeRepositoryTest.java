@@ -14,6 +14,8 @@ import static org.assertj.core.api.Assertions.*;
 @JdbcTest
 class ReservationTimeRepositoryTest {
 
+    ReservationTimePolicy reservationTimePolicy = new ReservationTimePolicy();
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -22,7 +24,7 @@ class ReservationTimeRepositoryTest {
     @BeforeEach
     void setUp() {
 
-        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
+        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate, reservationTimePolicy);
 
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
@@ -44,7 +46,7 @@ class ReservationTimeRepositoryTest {
     @Test
     void creatTime(){
         // given
-        final ReservationTime request = new ReservationTime("15:40");
+        final ReservationTime request = new ReservationTime("15:40", reservationTimePolicy);
 
         // when
         final Long id = reservationTimeRepository.save(request);
@@ -58,7 +60,7 @@ class ReservationTimeRepositoryTest {
     @Test
     void deleteTime(){
         // given
-        final ReservationTime request = new ReservationTime("15:40");
+        final ReservationTime request = new ReservationTime("15:40", reservationTimePolicy);
         final Long id = reservationTimeRepository.save(request);
 
         // when
@@ -72,8 +74,8 @@ class ReservationTimeRepositoryTest {
     @Test
     void findAll(){
         // given
-        final ReservationTime reservationTime1 = new ReservationTime("15:40");
-        final ReservationTime reservationTime2 = new ReservationTime("16:40");
+        final ReservationTime reservationTime1 = new ReservationTime("15:40", reservationTimePolicy);
+        final ReservationTime reservationTime2 = new ReservationTime("16:40", reservationTimePolicy);
         final Long id1 = reservationTimeRepository.save(reservationTime1);
         final Long id2 = reservationTimeRepository.save(reservationTime2);
 
@@ -92,7 +94,7 @@ class ReservationTimeRepositoryTest {
     @Test
     void findById(){
         // given
-        final ReservationTime reservationTime = new ReservationTime("15:40");
+        final ReservationTime reservationTime = new ReservationTime("15:40", reservationTimePolicy);
         final Long id = reservationTimeRepository.save(reservationTime);
 
         // when

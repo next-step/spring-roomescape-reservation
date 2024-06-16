@@ -3,6 +3,7 @@ package roomescape.reservation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 import roomescape.reservationTime.ReservationTimeResponseDto;
 
 import java.util.List;
@@ -11,9 +12,13 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final ReservationPolicy reservationPolicy;
+    private final ReservationTimePolicy reservationTimePolicy;
 
-    public ReservationService(ReservationRepository reservationRepository) {
+    public ReservationService(ReservationRepository reservationRepository, ReservationPolicy reservationPolicy, ReservationTimePolicy reservationTimePolicy) {
         this.reservationRepository = reservationRepository;
+        this.reservationPolicy = reservationPolicy;
+        this.reservationTimePolicy = reservationTimePolicy;
     }
 
     public List<ReservationResponseDto> findAll() {
@@ -38,7 +43,9 @@ public class ReservationService {
                 .reservationTime(
                         new ReservationTime(
                                 reservationRequestDto.getReservationTimeRequestDto().getId(),
-                                reservationRequestDto.getReservationTimeRequestDto().getStartAt()))
+                                reservationRequestDto.getReservationTimeRequestDto().getStartAt(),
+                                reservationTimePolicy))
+                .reservationPolicy(reservationPolicy)
                 .build();
 
         final Long savedId = reservationRepository.save(reservation);

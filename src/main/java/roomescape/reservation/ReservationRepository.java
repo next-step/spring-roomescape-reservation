@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,22 +17,28 @@ public class ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final RowMapper<Reservation> reservationRowMapper;
+    private final ReservationPolicy reservationPolicy;
+    private final ReservationTimePolicy reservationTimePolicy;
 
-    public ReservationRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationRepository(JdbcTemplate jdbcTemplate, ReservationPolicy reservationPolicy, ReservationTimePolicy reservationTimePolicy) {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation")
                 .usingGeneratedKeyColumns("id");
+        this.reservationPolicy = reservationPolicy;
+
         this.reservationRowMapper = (resultSet, rowNum) -> new Reservation(
                 resultSet.getLong("reservation_id"),
                 resultSet.getString("reservation_name"),
                 resultSet.getString("reservation_date"),
                 new ReservationTime(
                         resultSet.getLong("time_id"),
-                        resultSet.getString("start_at")
-                )
+                        resultSet.getString("start_at"),
+                        reservationTimePolicy
+                ),
+                reservationPolicy
         );
-
+        this.reservationTimePolicy = reservationTimePolicy;
     }
 
     public List<Reservation> findAll() {
@@ -78,7 +85,7 @@ public class ReservationRepository {
                 on r.time_id = t.id
                 where r.id = ?
                 """;
-        Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
+        final Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
         return reservation;
 
     }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 import roomescape.reservationTime.ReservationTimeRepository;
 
 import java.util.Arrays;
@@ -24,12 +25,17 @@ class ReservationRepositoryTest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    ReservationTimePolicy reservationTimePolicy = new ReservationTimePolicy();
+    ReservationPolicy reservationPolicy = new ReservationPolicy();
+
     private ReservationTimeRepository reservationTimeRepository;
 
     @BeforeEach
     void setUp() {
-        reservationRepository = new ReservationRepository(jdbcTemplate);
-        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
+        reservationRepository = new ReservationRepository(jdbcTemplate, reservationPolicy, reservationTimePolicy);
+        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate, reservationTimePolicy);
+        reservationTimePolicy = new ReservationTimePolicy();
+        reservationPolicy = new ReservationPolicy();
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
@@ -50,12 +56,12 @@ class ReservationRepositoryTest {
     @Test
     void findAll() {
         // given
-        final ReservationTime requestTime = new ReservationTime("15:40");
+        final ReservationTime requestTime = new ReservationTime("15:40", reservationTimePolicy);
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", savedTime);
-        final Reservation reservation2 = new Reservation("심슨", "2023-08-05", savedTime);
+        final Reservation reservation1 = new Reservation("제이슨", "2024-08-05", savedTime, reservationPolicy);
+        final Reservation reservation2 = new Reservation("심슨", "2024-08-05", savedTime, reservationPolicy);
 
         List<Object[]> reservations = Arrays.asList(reservation1, reservation2).stream()
                 .map(reservation -> new Object[]{
@@ -66,9 +72,7 @@ class ReservationRepositoryTest {
 
         // when
         List<Reservation> actual = reservationRepository.findAll();
-        for (Reservation reservation : actual) {
-            System.out.println("reservation = " + reservation.toString());
-        }
+
         // then
         assertThat(actual).hasSize(2);
     }
@@ -77,11 +81,11 @@ class ReservationRepositoryTest {
     @Test
     void save() {
         // given
-        final ReservationTime requestTime = new ReservationTime("15:40");
+        final ReservationTime requestTime = new ReservationTime("15:40", reservationTimePolicy);
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation request = new Reservation("테스트", "2023-08-05", savedTime);
+        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime, reservationPolicy);
 
         // when
         Long savedReservationId = reservationRepository.save(request);
@@ -96,11 +100,11 @@ class ReservationRepositoryTest {
     @Test
     void deleteById() {
         // given
-        final ReservationTime requestTime = new ReservationTime("15:40");
+        final ReservationTime requestTime = new ReservationTime("15:40", reservationTimePolicy);
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation request = new Reservation("테스트", "2023-08-05", savedTime);
+        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime, reservationPolicy);
         Long savedReservationId = reservationRepository.save(request);
 
         // when

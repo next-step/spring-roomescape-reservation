@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 import roomescape.reservationTime.ReservationTimeRequestDto;
 import roomescape.reservationTime.ReservationTimeResponseDto;
 
@@ -22,6 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ReservationControllerTest {
 
+    @Autowired
+    private ReservationTimePolicy reservationTimePolicy;
+    @Autowired
+    private ReservationPolicy reservationPolicy;
+
     private ReservationRepository reservationRepository;
     private Long time1Id;
     private Long time2Id;
@@ -33,7 +39,7 @@ class ReservationControllerTest {
 
     @BeforeEach
     void setUp() {
-        reservationRepository = new ReservationRepository(jdbcTemplate);
+        reservationRepository = new ReservationRepository(jdbcTemplate, reservationPolicy, reservationTimePolicy);
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
@@ -60,8 +66,8 @@ class ReservationControllerTest {
                         """
         );
 
-        final ReservationTime request1 = new ReservationTime("15:40");
-        final ReservationTime request2 = new ReservationTime("16:40");
+        final ReservationTime request1 = new ReservationTime("15:40", reservationTimePolicy);
+        final ReservationTime request2 = new ReservationTime("16:40", reservationTimePolicy);
         List<Object[]> reservationTimes = Arrays.asList(request1, request2).stream()
                 .map(reservationTime -> new Object[]{reservationTime.getStartAt()})
                 .collect(Collectors.toList());
@@ -85,8 +91,8 @@ class ReservationControllerTest {
     void readReservation() {
 
 
-        final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", new ReservationTime(time1Id));
-        final Reservation reservation2 = new Reservation("심슨", "2023-08-05", new ReservationTime(time2Id));
+        final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", new ReservationTime(time1Id), reservationPolicy);
+        final Reservation reservation2 = new Reservation("심슨", "2023-08-05", new ReservationTime(time2Id), reservationPolicy);
 
         List<Object[]> reservations = Arrays.asList(reservation1, reservation2).stream()
                 .map(reservation -> new Object[]{reservation.getName(), reservation.getDate(), reservation.getReservationTime().getId()})
@@ -107,7 +113,7 @@ class ReservationControllerTest {
     @Test
     void createReservation() {
         // given
-        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", new ReservationTimeRequestDto(time1Id, time1));
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2025-08-05", new ReservationTimeRequestDto(time1Id, time1));
 
         // when
         var response = RestAssured.given().log().all()
@@ -128,7 +134,8 @@ class ReservationControllerTest {
     @Test
     void deleteReservation() {
         // given
-        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", new ReservationTimeRequestDto(time1Id, time1));
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2024-08-05",
+                new ReservationTimeRequestDto(time1Id, time1));
 
         // when
         var response1 = RestAssured.given().log().all()

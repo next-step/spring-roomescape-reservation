@@ -62,5 +62,15 @@ public class ReservationResponseDto {
         public ReservationResponseDto build() {
             return new ReservationResponseDto(id, name, date, reservationTimeResponseDto);
         }
+
+        @Override
+        public String toString() {
+            return "{ " +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", date='" + date + '\'' +
+                    ", reservationTimeResponseDto=" + reservationTimeResponseDto +
+                    '}';
+        }
     }
 }

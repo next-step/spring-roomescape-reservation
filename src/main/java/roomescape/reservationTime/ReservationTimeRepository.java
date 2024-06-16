@@ -15,16 +15,20 @@ public class ReservationTimeRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final RowMapper<ReservationTime> rowMapper;
+    private final ReservationTimePolicy reservationTimePolicy;
 
-    public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationTimeRepository(JdbcTemplate jdbcTemplate, ReservationTimePolicy reservationTimePolicy) {
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = (resultSet, rowNum) -> new ReservationTime(
                 resultSet.getLong("id"),
-                resultSet.getString("start_at")
+                resultSet.getString("start_at"),
+                reservationTimePolicy
+
         );
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation_time")
                 .usingGeneratedKeyColumns("id");
+        this.reservationTimePolicy = reservationTimePolicy;
     }
 
     public List<ReservationTime> findAll() {

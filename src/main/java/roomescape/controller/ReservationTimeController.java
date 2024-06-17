@@ -35,13 +35,13 @@ public class ReservationTimeController {
     @PostMapping
     public ResponseEntity<ReservationTimeCreateResponse> create(@Valid @RequestBody ReservationTimeRequest dto) {
         ReservationTimeCreateResponse time = reservationTimeService.createTime(dto);
-        return ResponseEntity.created(URI.create("/times/" + time.getId())).build();
+        return ResponseEntity.ok().body(time);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         reservationTimeService.deleteTime(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ExceptionHandler(DuplicatedReservationTime.class)

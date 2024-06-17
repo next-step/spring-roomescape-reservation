@@ -38,14 +38,14 @@ public class ThemeController {
     @PostMapping
     public ResponseEntity<ThemeCreateResponse> createTheme(@Valid @RequestBody ThemeCreateRequest request) {
         ThemeCreateResponse response = themeService.createTheme(request);
-        return ResponseEntity.created(URI.create("/themes/" + response.getId())).build();
+        return ResponseEntity.ok().body(response);
 
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheme(@PathVariable Long id) {
         themeService.deleteTheme(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
     @ExceptionHandler(DuplicatedThemeName.class)

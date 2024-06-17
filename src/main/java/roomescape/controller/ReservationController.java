@@ -29,20 +29,19 @@ public class ReservationController {
     @GetMapping
     public ResponseEntity<List<ReservationsResponse>> findReservations() {
         List<ReservationsResponse> list = reservationService.findReservations();
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok().body(list);
     }
 
     @PostMapping
     public ResponseEntity<ReservationCreateResponse> create(@Valid @RequestBody ReservationCreateRequest dto) {
-        dto.checkTimeAndThemeValidation();
         ReservationCreateResponse reservation = reservationService.createReservation(dto);
-        return ResponseEntity.created(URI.create("/reservation/" + reservation.getId())).build();
+        return ResponseEntity.ok().body(reservation);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         reservationService.deleteReservation(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 

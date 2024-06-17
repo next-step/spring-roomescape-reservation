@@ -20,7 +20,7 @@ public class ReservationCreateRequest {
     @NotNull(message = "테마을 입력해주세요.")
     @Positive(message = "해당 테마를 선택해주세요.")
     private Long themeId;
-    
+
     public ReservationCreateRequest() {
     }
 

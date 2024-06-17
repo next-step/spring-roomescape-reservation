@@ -14,6 +14,10 @@ CREATE TABLE reservation
     PRIMARY KEY (id)
 );
 
+CREATE INDEX time_id_idx ON reservation (time_id);
+CREATE INDEX theme_id_idx ON reservation (theme_id);
+
+
 CREATE TABLE reservation_time
 (
     id       BIGINT NOT NULL AUTO_INCREMENT,

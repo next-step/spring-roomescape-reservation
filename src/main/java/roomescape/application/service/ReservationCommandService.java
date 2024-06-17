@@ -32,12 +32,12 @@ public class ReservationCommandService {
     }
 
     public Reservation createReservation(CreateReservationCommand command) {
-        Long timeId = command.getReservationTimeId();
+        ReservationTimeId reservationTimeId = new ReservationTimeId(command.getReservationTimeId());
         ReservationDate reservationDate = new ReservationDate(command.getReservationDate());
 
-        createReservationValidator.validate(reservationDate, new ReservationTimeId(timeId));
+        createReservationValidator.validate(reservationDate, reservationTimeId);
 
-        ReservationTime reservationTime = reservationTimeReader.readById(timeId);
+        ReservationTime reservationTime = reservationTimeReader.readById(reservationTimeId);
         Reservation createdReservation = Reservation.create(
                 ReservationId.empty(),
                 new ReservationName(command.getReservationName()),

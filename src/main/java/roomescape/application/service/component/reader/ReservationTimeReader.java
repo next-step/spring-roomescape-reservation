@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import roomescape.application.error.exception.NotFoundEntityException;
 import roomescape.application.mapper.ReservationTimeMapper;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.repository.ReservationTimeRepository;
 
 import static roomescape.application.error.code.ApplicationErrorCode.NOT_FOUND_ENTITY;
@@ -17,12 +18,12 @@ public class ReservationTimeReader {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTime readById(Long reservationTimeId) {
+    public ReservationTime readById(ReservationTimeId reservationTimeId) {
         return ReservationTimeMapper.toReservationTime(
-                reservationTimeRepository.findById(reservationTimeId)
+                reservationTimeRepository.findById(reservationTimeId.id())
                         .orElseThrow(() -> new NotFoundEntityException(
                                 NOT_FOUND_ENTITY,
-                                String.format("[reservationTimeId:%d] 해당하는 엔티티를 찾을 수 없습니다.", reservationTimeId)
+                                String.format("[reservationTimeId:%d] 해당하는 엔티티를 찾을 수 없습니다.", reservationTimeId.id())
                         ))
         );
     }

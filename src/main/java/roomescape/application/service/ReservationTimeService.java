@@ -11,7 +11,6 @@ import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.ReservationTimes;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.repository.ReservationTimeRepository;
-import roomescape.repository.entity.ReservationTimeEntity;
 
 @Service
 public class ReservationTimeService {
@@ -33,10 +32,9 @@ public class ReservationTimeService {
         ReservationTime reservationTime = command.toReservationTime();
         createReservationTimeValidator.validate(reservationTime);
 
-        ReservationTimeEntity savedReservationTimeEntity =
-                reservationTimeRepository.save(ReservationTimeEntityMapper.toReservationTimeEntity(reservationTime));
-
-        return ReservationTimeMapper.toReservationTime(savedReservationTimeEntity);
+        return ReservationTimeMapper.toReservationTime(
+                reservationTimeRepository.save(ReservationTimeEntityMapper.toReservationTimeEntity(reservationTime))
+        );
     }
 
     public ReservationTimes findAllReservationTimes() {

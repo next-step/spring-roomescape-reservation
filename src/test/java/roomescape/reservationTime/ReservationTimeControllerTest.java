@@ -22,11 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class ReservationTimeControllerTest {
 
-    @Autowired
-    ReservationTimePolicy reservationTimePolicy;
-    @Autowired
-    ReservationPolicy reservationPolicy;
-
     ReservationTimeRepository reservationTimeRepository;
 
     @Autowired
@@ -34,7 +29,7 @@ class ReservationTimeControllerTest {
 
     @BeforeEach
     void setUp() {
-        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate, reservationTimePolicy);
+        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
@@ -65,8 +60,8 @@ class ReservationTimeControllerTest {
     @DisplayName("전체 예약을 조회 합니다.")
     @Test
     void getTimes() {
-        final ReservationTime request1 = new ReservationTime("15:40", reservationTimePolicy);
-        final ReservationTime request2 = new ReservationTime("16:40", reservationTimePolicy);
+        final ReservationTime request1 = new ReservationTime("15:40");
+        final ReservationTime request2 = new ReservationTime("16:40");
         List<Object[]> reservationTimes = Arrays.asList(request1, request2).stream()
                 .map(reservationTime -> new Object[]{reservationTime.getStartAt()})
                 .collect(Collectors.toList());
@@ -143,24 +138,6 @@ class ReservationTimeControllerTest {
 
         // then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }
-
-    @DisplayName("시간이 null 이면 예외가 발생한다.")
-    @Test
-    void addTimeException2() {
-
-        // given
-        final ReservationTimeRequestDto request = new ReservationTimeRequestDto(null);
-
-        // when
-        var response = RestAssured.given().log().all()
-                .contentType(ContentType.JSON)
-                .body(request)
-                .when().post("/times")
-                .then().log().all().extract();
-
-        // then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
     @DisplayName("시간이 null 이면 예외가 발생한다.")

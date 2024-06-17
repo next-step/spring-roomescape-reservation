@@ -25,17 +25,12 @@ class ReservationRepositoryTest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    ReservationTimePolicy reservationTimePolicy = new ReservationTimePolicy();
-    ReservationPolicy reservationPolicy = new ReservationPolicy();
-
     private ReservationTimeRepository reservationTimeRepository;
 
     @BeforeEach
     void setUp() {
-        reservationRepository = new ReservationRepository(jdbcTemplate, reservationPolicy, reservationTimePolicy);
-        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate, reservationTimePolicy);
-        reservationTimePolicy = new ReservationTimePolicy();
-        reservationPolicy = new ReservationPolicy();
+        reservationRepository = new ReservationRepository(jdbcTemplate);
+        reservationTimeRepository = new ReservationTimeRepository(jdbcTemplate);
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation");
         jdbcTemplate.execute("DROP TABLE IF EXISTS reservation_time");
 
@@ -56,12 +51,12 @@ class ReservationRepositoryTest {
     @Test
     void findAll() {
         // given
-        final ReservationTime requestTime = new ReservationTime("15:40", reservationTimePolicy);
+        final ReservationTime requestTime = new ReservationTime("15:40");
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation reservation1 = new Reservation("제이슨", "2024-08-05", savedTime, reservationPolicy);
-        final Reservation reservation2 = new Reservation("심슨", "2024-08-05", savedTime, reservationPolicy);
+        final Reservation reservation1 = new Reservation("제이슨", "2024-08-05", savedTime);
+        final Reservation reservation2 = new Reservation("심슨", "2024-08-05", savedTime);
 
         List<Object[]> reservations = Arrays.asList(reservation1, reservation2).stream()
                 .map(reservation -> new Object[]{
@@ -81,11 +76,11 @@ class ReservationRepositoryTest {
     @Test
     void save() {
         // given
-        final ReservationTime requestTime = new ReservationTime("15:40", reservationTimePolicy);
+        final ReservationTime requestTime = new ReservationTime("15:40");
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime, reservationPolicy);
+        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime);
 
         // when
         Long savedReservationId = reservationRepository.save(request);
@@ -100,11 +95,11 @@ class ReservationRepositoryTest {
     @Test
     void deleteById() {
         // given
-        final ReservationTime requestTime = new ReservationTime("15:40", reservationTimePolicy);
+        final ReservationTime requestTime = new ReservationTime("15:40");
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime, reservationPolicy);
+        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime);
         Long savedReservationId = reservationRepository.save(request);
 
         // when

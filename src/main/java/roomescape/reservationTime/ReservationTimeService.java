@@ -9,11 +9,9 @@ import java.util.List;
 public class ReservationTimeService {
 
     private final ReservationTimeRepository reservationTimeRepository;
-    private final ReservationTimePolicy reservationTimePolicy;
 
-    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository, ReservationTimePolicy reservationTimePolicy) {
+    public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
-        this.reservationTimePolicy = reservationTimePolicy;
     }
 
     public List<ReservationTimeResponseDto> getTimes() {
@@ -27,7 +25,7 @@ public class ReservationTimeService {
 
     @Transactional
     public ReservationTimeResponseDto addTime(ReservationTimeRequestDto reservationTimeRequestDto) {
-        final ReservationTime reservationTime = new ReservationTime(reservationTimeRequestDto.getStartAt(), reservationTimePolicy);
+        final ReservationTime reservationTime = new ReservationTime(reservationTimeRequestDto.getStartAt());
         final Long savedTimeId = reservationTimeRepository.save(reservationTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(savedTimeId);
         return new ReservationTimeResponseDto(savedTimeId, savedTime.getStartAt());

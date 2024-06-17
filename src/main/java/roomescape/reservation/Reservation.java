@@ -6,6 +6,8 @@ import java.util.Objects;
 
 public class Reservation {
 
+    private final static ReservationPolicy reservationPolicy = new ReservationPolicy();
+
     private Long id;
     private String name;
     private String date;
@@ -27,11 +29,11 @@ public class Reservation {
         return reservationTime;
     }
 
-    public Reservation(String name, String date, ReservationTime reservationTime, ReservationPolicy reservationPolicy) {
-        this(null, name, date, reservationTime, reservationPolicy);
+    public Reservation(String name, String date, ReservationTime reservationTime) {
+        this(null, name, date, reservationTime);
     }
 
-    public Reservation(Long id, String name, String date, ReservationTime reservationTime, ReservationPolicy reservationPolicy) {
+    public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         this.id = id;
         if(reservationPolicy.validateName(name)) {
             throw new IllegalArgumentException("예약자 이름에 특수문자가 포함되어 있습니다.");
@@ -64,7 +66,6 @@ public class Reservation {
         private String name;
         private String date;
         private ReservationTime reservationTime;
-        private ReservationPolicy reservationPolicy;
 
 
         public Builder id(Long id) {
@@ -87,13 +88,8 @@ public class Reservation {
             return this;
         }
 
-        public Builder reservationPolicy(ReservationPolicy reservationPolicy) {
-            this.reservationPolicy = reservationPolicy;
-            return this;
-        }
-
         public Reservation build() {
-            return new Reservation(id, name, date, reservationTime, reservationPolicy);
+            return new Reservation(id, name, date, reservationTime);
         }
     }
 

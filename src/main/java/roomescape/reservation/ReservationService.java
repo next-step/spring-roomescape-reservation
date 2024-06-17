@@ -12,13 +12,9 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final ReservationPolicy reservationPolicy;
-    private final ReservationTimePolicy reservationTimePolicy;
 
-    public ReservationService(ReservationRepository reservationRepository, ReservationPolicy reservationPolicy, ReservationTimePolicy reservationTimePolicy) {
+    public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
-        this.reservationPolicy = reservationPolicy;
-        this.reservationTimePolicy = reservationTimePolicy;
     }
 
     public List<ReservationResponseDto> findAll() {
@@ -43,9 +39,8 @@ public class ReservationService {
                 .reservationTime(
                         new ReservationTime(
                                 reservationRequestDto.getReservationTimeRequestDto().getId(),
-                                reservationRequestDto.getReservationTimeRequestDto().getStartAt(),
-                                reservationTimePolicy))
-                .reservationPolicy(reservationPolicy)
+                                reservationRequestDto.getReservationTimeRequestDto().getStartAt()
+                                ))
                 .build();
 
         final Long savedId = reservationRepository.save(reservation);

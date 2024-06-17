@@ -17,15 +17,12 @@ public class ReservationRepository {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
     private final RowMapper<Reservation> reservationRowMapper;
-    private final ReservationPolicy reservationPolicy;
-    private final ReservationTimePolicy reservationTimePolicy;
 
-    public ReservationRepository(JdbcTemplate jdbcTemplate, ReservationPolicy reservationPolicy, ReservationTimePolicy reservationTimePolicy) {
+    public ReservationRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation")
                 .usingGeneratedKeyColumns("id");
-        this.reservationPolicy = reservationPolicy;
 
         this.reservationRowMapper = (resultSet, rowNum) -> new Reservation(
                 resultSet.getLong("reservation_id"),
@@ -33,12 +30,9 @@ public class ReservationRepository {
                 resultSet.getString("reservation_date"),
                 new ReservationTime(
                         resultSet.getLong("time_id"),
-                        resultSet.getString("start_at"),
-                        reservationTimePolicy
-                ),
-                reservationPolicy
+                        resultSet.getString("start_at")
+                        )
         );
-        this.reservationTimePolicy = reservationTimePolicy;
     }
 
     public List<Reservation> findAll() {

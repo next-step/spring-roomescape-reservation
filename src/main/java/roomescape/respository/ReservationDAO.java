@@ -55,14 +55,16 @@ public class ReservationDAO {
     }
 
     public List<Reservation> readReservations() {
-        String sql = "SELECT " +
-                "r.id as reservation_id, " +
-                "r.name as reservation_name, " +
-                "r.date as reservation_date, " +
-                "t.id as time_id, " +
-                "t.start_at as time_start_at " +
-                "FROM reservation as r " +
-                "INNER JOIN reservation_time as t ON r.time_id = t.id ";
+        String sql = """
+                SELECT 
+                    r.id as reservation_id, 
+                    r.name as reservation_name, 
+                    r.date as reservation_date, 
+                    t.id as time_id, 
+                    t.start_at as time_start_at 
+                FROM reservation as r 
+                INNER JOIN reservation_time as t ON r.time_id = t.id
+                """;
 
         return jdbcTemplate.query(sql, rowMapper);
     }

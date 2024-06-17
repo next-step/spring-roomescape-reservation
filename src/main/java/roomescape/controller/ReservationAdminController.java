@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import roomescape.model.Reservation;
 import roomescape.model.ReservationCreateDto;
+import roomescape.model.ReservationCreateResponseDto;
 import roomescape.service.ReservationAdminService;
 
 import java.util.List;
@@ -24,11 +25,11 @@ public class ReservationAdminController {
     }
 
     @PostMapping("/reservations")
-    public ResponseEntity<Long> createReservation(@RequestBody ReservationCreateDto reservationCreateDto) {
+    public ResponseEntity<ReservationCreateResponseDto> createReservation(@RequestBody ReservationCreateDto reservationCreateDto) {
 
-        Long reservationId = reservationAdminService.createReservation(reservationCreateDto);
+        ReservationCreateResponseDto reservationResponse = reservationAdminService.createReservation(reservationCreateDto);
 
-        return ResponseEntity.ok().body(reservationId);
+        return ResponseEntity.ok(reservationResponse);
     }
 
     @GetMapping("/reservations")

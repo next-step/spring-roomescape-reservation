@@ -3,6 +3,7 @@ package roomescape.service;
 import org.springframework.stereotype.Service;
 import roomescape.model.Reservation;
 import roomescape.model.ReservationCreateDto;
+import roomescape.model.ReservationCreateResponseDto;
 import roomescape.model.ReservationTime;
 import roomescape.respository.ReservationDAO;
 import roomescape.respository.ReservationTimeDAO;
@@ -19,7 +20,7 @@ public class ReservationAdminService {
         this.reservationTimeDAO = reservationTimeDAO;
     }
 
-    public Long createReservation(ReservationCreateDto reservationCreateDto) {
+    public ReservationCreateResponseDto createReservation(ReservationCreateDto reservationCreateDto) {
         ReservationTime reservationTime = reservationTimeDAO.findReservationTimeById(reservationCreateDto.getTimeId());
         return reservationDAO.insertReservation(reservationCreateDto, reservationTime.getId());
     }

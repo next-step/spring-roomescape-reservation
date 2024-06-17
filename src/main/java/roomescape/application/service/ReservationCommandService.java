@@ -34,10 +34,10 @@ public class ReservationCommandService {
     public Reservation createReservation(CreateReservationCommand command) {
         ReservationTimeId reservationTimeId = new ReservationTimeId(command.getReservationTimeId());
         ReservationDate reservationDate = new ReservationDate(command.getReservationDate());
-
-        createReservationValidator.validate(reservationDate, reservationTimeId);
-
         ReservationTime reservationTime = reservationTimeReader.readById(reservationTimeId);
+
+        createReservationValidator.validate(reservationDate, reservationTime);
+
         Reservation createdReservation = Reservation.create(
                 ReservationId.empty(),
                 new ReservationName(command.getReservationName()),

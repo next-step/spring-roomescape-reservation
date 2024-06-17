@@ -3,7 +3,7 @@ package roomescape.application.service.component.validator;
 import org.springframework.stereotype.Component;
 import roomescape.application.error.exception.CreateReservationValidateException;
 import roomescape.domain.reservation.vo.ReservationDate;
-import roomescape.domain.reservationtime.vo.ReservationTimeId;
+import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.repository.ReservationRepository;
 
 import java.time.format.DateTimeFormatter;
@@ -21,14 +21,14 @@ public class CreateReservationValidator {
         this.reservationRepository = reservationRepository;
     }
 
-    public void validate(ReservationDate date, ReservationTimeId timeId) {
-        reservationRepository.findByDateAndTimeId(date.date(), timeId.id())
+    public void validate(ReservationDate date, ReservationTime time) {
+        reservationRepository.findByDateAndTimeId(date.date(), time.getId())
                 .ifPresent(entity -> {
                     throw new CreateReservationValidateException(
                             CANNOT_CREATE_EXIST_RESERVATION_AT_THIS_TIME,
                             String.format("[date:%s, timeId:%d] 이 시간에 존재하는 예약이 있어 예약을 생성할 수 없습니다.",
                                     date.date().format(DateTimeFormatter.ofPattern(DATE_FORMAT)),
-                                    timeId.id()
+                                    time.getId()
                             )
                     );
                 });

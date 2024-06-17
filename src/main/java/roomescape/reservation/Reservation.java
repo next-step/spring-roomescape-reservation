@@ -6,18 +6,28 @@ import java.util.Objects;
 
 public class Reservation {
 
+    private final static ReservationPolicy reservationPolicy = new ReservationPolicy();
+
     private Long id;
     private String name;
     private String date;
     private ReservationTime reservationTime;
 
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDate() { return date; }
+    public String getDate() {
+        return date;
+    }
 
-    public ReservationTime getReservationTime() { return reservationTime; }
+    public ReservationTime getReservationTime() {
+        return reservationTime;
+    }
 
     public Reservation(String name, String date, ReservationTime reservationTime) {
         this(null, name, date, reservationTime);
@@ -25,9 +35,17 @@ public class Reservation {
 
     public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         this.id = id;
+        if(reservationPolicy.validateName(name)) {
+            throw new IllegalArgumentException("예약자 이름에 특수문자가 포함되어 있습니다.");
+        }
         this.name = name;
+
+        if(reservationPolicy.validateDate(date)) {
+            throw new IllegalArgumentException("예약 날짜 형식이 올바르지 않습니다.");
+        }
         this.date = date;
         this.reservationTime = reservationTime;
+
     }
 
     @Override
@@ -72,7 +90,6 @@ public class Reservation {
 
         public Reservation build() {
             return new Reservation(id, name, date, reservationTime);
-
         }
     }
 
@@ -85,4 +102,5 @@ public class Reservation {
                 ", reservationTime='" + reservationTime + '\'' +
                 '}';
     }
+
 }

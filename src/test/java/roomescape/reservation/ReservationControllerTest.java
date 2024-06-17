@@ -5,11 +5,16 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 import roomescape.reservationTime.ReservationTimeRequestDto;
 import roomescape.reservationTime.ReservationTimeResponseDto;
 
@@ -84,6 +89,7 @@ class ReservationControllerTest {
     @Test
     void readReservation() {
 
+
         final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", new ReservationTime(time1Id));
         final Reservation reservation2 = new Reservation("심슨", "2023-08-05", new ReservationTime(time2Id));
 
@@ -106,7 +112,7 @@ class ReservationControllerTest {
     @Test
     void createReservation() {
         // given
-        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", new ReservationTimeRequestDto(time1Id, time1));
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2025-08-05", new ReservationTimeRequestDto(time1Id, time1));
 
         // when
         var response = RestAssured.given().log().all()
@@ -127,7 +133,8 @@ class ReservationControllerTest {
     @Test
     void deleteReservation() {
         // given
-        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2023-08-05", new ReservationTimeRequestDto(time1Id, time1));
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", "2024-08-05",
+                new ReservationTimeRequestDto(time1Id, time1));
 
         // when
         var response1 = RestAssured.given().log().all()
@@ -141,10 +148,48 @@ class ReservationControllerTest {
                 .contentType(ContentType.JSON)
                 .body(request)
                 .when().delete("/reservations/" + response1.as(ReservationResponseDto.class).getId())
-
                 .then().log().all().extract();
 
         // then
         assertThat(response2.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
+
+    @DisplayName("예약자 명이 null이거나 빈 문자열이면 예외가 발생합니다.")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createReservationEmptyName(final String name) {
+        // given
+        final ReservationRequestDto request = new ReservationRequestDto(name, "2025-08-05", new ReservationTimeRequestDto(time1Id, time1));
+
+        // when
+        var response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.jsonPath().getString("name")).isEqualTo("예약자 명 입력해주세요");
+    }
+
+    @DisplayName("예약일자가 null이거나 빈 문자열이면 예외가 발생합니다.")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createReservationEmptyDate(final String date) {
+        // given
+        final ReservationRequestDto request = new ReservationRequestDto("제이슨", date, new ReservationTimeRequestDto(time1Id, time1));
+
+        // when
+        var response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(request)
+                .when().post("/reservations")
+                .then().log().all().extract();
+
+        // then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.jsonPath().getString("date")).isEqualTo("예약일자를 입력해주세요");
+    }
+
 }

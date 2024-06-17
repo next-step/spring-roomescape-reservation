@@ -3,8 +3,10 @@ package roomescape.reservationTime;
 import java.util.Objects;
 
 public class ReservationTime {
+    private final static ReservationTimePolicy reservationTimePolicy = new ReservationTimePolicy();
 
     private Long id;
+
     private String startAt;
 
     public Long getId() {
@@ -20,11 +22,17 @@ public class ReservationTime {
     }
 
     public ReservationTime(String startAt) {
+        if (reservationTimePolicy.validateStartAt(startAt)) {
+            throw new IllegalArgumentException("예약 시간 형식이 올바르지 않습니다.");
+        }
         this.startAt = startAt;
     }
 
     public ReservationTime(Long id, String startAt) {
         this.id = id;
+        if (reservationTimePolicy.validateStartAt(startAt)) {
+            throw new IllegalArgumentException("예약 시간 형식이 올바르지 않습니다.");
+        }
         this.startAt = startAt;
     }
 
@@ -48,4 +56,5 @@ public class ReservationTime {
                 ", startAt='" + startAt + '\'' +
                 '}';
     }
+
 }

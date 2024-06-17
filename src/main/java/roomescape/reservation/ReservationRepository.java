@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ReservationRepository {
         this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation")
                 .usingGeneratedKeyColumns("id");
+
         this.reservationRowMapper = (resultSet, rowNum) -> new Reservation(
                 resultSet.getLong("reservation_id"),
                 resultSet.getString("reservation_name"),
@@ -29,9 +31,8 @@ public class ReservationRepository {
                 new ReservationTime(
                         resultSet.getLong("time_id"),
                         resultSet.getString("start_at")
-                )
+                        )
         );
-
     }
 
     public List<Reservation> findAll() {
@@ -78,7 +79,7 @@ public class ReservationRepository {
                 on r.time_id = t.id
                 where r.id = ?
                 """;
-        Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
+        final Reservation reservation = jdbcTemplate.queryForObject(sql, reservationRowMapper, id);
         return reservation;
 
     }

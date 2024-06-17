@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import roomescape.reservationTime.ReservationTime;
+import roomescape.reservationTime.ReservationTimePolicy;
 import roomescape.reservationTime.ReservationTimeRepository;
 
 import java.util.Arrays;
@@ -44,7 +45,6 @@ class ReservationRepositoryTest {
                 "date VARCHAR(255) NOT NULL, " +
                 "time_id BIGINT, " +   // 컬럼 수정
                 "PRIMARY KEY (id))");  // 외래키 제거
-
     }
 
     @DisplayName("예약 전체 조회")
@@ -55,8 +55,8 @@ class ReservationRepositoryTest {
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation reservation1 = new Reservation("제이슨", "2023-08-05", savedTime);
-        final Reservation reservation2 = new Reservation("심슨", "2023-08-05", savedTime);
+        final Reservation reservation1 = new Reservation("제이슨", "2024-08-05", savedTime);
+        final Reservation reservation2 = new Reservation("심슨", "2024-08-05", savedTime);
 
         List<Object[]> reservations = Arrays.asList(reservation1, reservation2).stream()
                 .map(reservation -> new Object[]{
@@ -67,9 +67,6 @@ class ReservationRepositoryTest {
 
         // when
         List<Reservation> actual = reservationRepository.findAll();
-        for (Reservation reservation : actual) {
-            System.out.println("reservation = " + reservation.toString());
-        }
 
         // then
         assertThat(actual).hasSize(2);
@@ -83,14 +80,13 @@ class ReservationRepositoryTest {
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation request = new Reservation("테스트", "2023-08-05", savedTime);
+        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime);
 
         // when
         Long savedReservationId = reservationRepository.save(request);
 
         // then
         Reservation actual = reservationRepository.findById(savedReservationId);
-
         assertThat(actual.getDate()).isEqualTo(request.getDate());
         assertThat(actual.getName()).isEqualTo(request.getName());
     }
@@ -103,7 +99,7 @@ class ReservationRepositoryTest {
         final Long id = reservationTimeRepository.save(requestTime);
         final ReservationTime savedTime = reservationTimeRepository.findById(id);
 
-        final Reservation request = new Reservation("테스트", "2023-08-05", savedTime);
+        final Reservation request = new Reservation("테스트", "2024-08-05", savedTime);
         Long savedReservationId = reservationRepository.save(request);
 
         // when
@@ -111,7 +107,6 @@ class ReservationRepositoryTest {
 
         // then
         assertThatThrownBy(() -> reservationRepository.findById(savedReservationId))
-
                 .isInstanceOf(DataAccessException.class);
 
 

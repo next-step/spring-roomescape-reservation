@@ -1,9 +1,13 @@
 package roomescape.reservation;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import roomescape.reservationTime.ReservationTimeRequestDto;
 
 public class ReservationRequestDto {
+    @NotBlank(message = "예약자 명 입력해주세요")
     private String name;
+    @NotBlank(message = "예약일자를 입력해주세요")
     private String date;
     private ReservationTimeRequestDto reservationTimeRequestDto;
 

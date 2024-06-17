@@ -14,6 +14,8 @@ import static org.assertj.core.api.Assertions.*;
 @JdbcTest
 class ReservationTimeRepositoryTest {
 
+    ReservationTimePolicy reservationTimePolicy = new ReservationTimePolicy();
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 

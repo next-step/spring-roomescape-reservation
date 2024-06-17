@@ -16,7 +16,7 @@ public class ReservationTimeResponseDto {
 
     @Override
     public String toString() {
-        return "ReservationTimeResponseDto{" +
+        return "{ " +
                 "id=" + id +
                 ", startAt='" + startAt + '\'' +
                 '}';

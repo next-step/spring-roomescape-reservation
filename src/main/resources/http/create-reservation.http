@@ -1,0 +1,9 @@
+### 예약 생성
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "date": "2024-06-19",
+  "name": "kilian",
+  "timeId": "1"
+}

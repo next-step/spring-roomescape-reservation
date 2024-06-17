@@ -5,6 +5,7 @@ import roomescape.repository.ReservationRepository;
 import roomescape.repository.entity.ReservationEntity;
 import roomescape.repository.projection.ReservationViewProjection;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +65,12 @@ public class InMemoryReservationRepository implements ReservationRepository {
 
     @Override
     public Optional<ReservationEntity> findByTimeId(Long timeId) {
+        // 미구현
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ReservationEntity> findByDateAndTimeId(LocalDate date, Long timeId) {
         // 미구현
         return Optional.empty();
     }

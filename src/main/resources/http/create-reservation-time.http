@@ -1,0 +1,7 @@
+### 예약 시간 생성
+POST http://localhost:8080/times
+Content-Type: application/json
+
+{
+  "startAt": "20:14"
+}

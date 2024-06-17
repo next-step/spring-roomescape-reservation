@@ -1,6 +1,6 @@
 package roomescape.exception;
 
-public class ErrorCodeResponse {
+public class ErrorCodeResponse extends RuntimeException {
 
     private ErrorCode errorCode;
 

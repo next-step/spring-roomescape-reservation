@@ -1,6 +1,7 @@
 package roomescape.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -10,6 +11,7 @@ import roomescape.domain.ReservationTime;
 import roomescape.dto.reservation.ReservationsResponse;
 import roomescape.dto.reservation.create.ReservationCreateRequest;
 import roomescape.dto.reservation.create.ReservationCreateResponse;
+import roomescape.exception.ErrorCodeResponse;
 import roomescape.repository.ReservationTimeRepository;
 import roomescape.service.ReservationService;
 
@@ -39,10 +41,14 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         reservationService.deleteReservation(id);
         return ResponseEntity.ok().build();
     }
 
-
+    @ExceptionHandler(ErrorCodeResponse.class)
+    public ResponseEntity<ErrorCodeResponse> handlerCustomErrorException(ErrorCodeResponse e) {
+        ErrorCodeResponse errorMsg = new ErrorCodeResponse(e.getErrorCode(), e.getMessage());
+        return new ResponseEntity<>(errorMsg, HttpStatus.BAD_REQUEST);
+    }
 }

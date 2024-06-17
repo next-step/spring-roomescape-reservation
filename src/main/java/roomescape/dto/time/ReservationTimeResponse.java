@@ -10,6 +10,10 @@ public class ReservationTimeResponse {
 
     private LocalTime startAt;
 
+    public static ReservationTimeResponse toDto(ReservationTime reservationTime) {
+        return new ReservationTimeResponse(reservationTime);
+    }
+
     public ReservationTimeResponse() {
     }
 

@@ -30,6 +30,16 @@ public class MissionStepTest {
         params.put("date", "2023-08-05");
         params.put("time", "15:40");
 
+        Map<String, String> timeParams = new HashMap<>();
+        timeParams.put("time", "15:40");
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(timeParams)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200);
+
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(params)

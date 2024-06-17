@@ -6,8 +6,11 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import roomescape.reservation.ReservationRepository;
 import roomescape.reservationTime.ReservationTime;
@@ -106,5 +109,62 @@ class ReservationThemeControllerTest {
 
         //then
         assertThat(response2.statusCode()).isEqualTo(204);
+    }
+
+    @DisplayName("테마 이름이 null이거나 빈 문자열이면 예외가 발생한다.")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createThemeEmptyName(final String name) {
+        //given
+        final ReservationThemeRequestDto requestDto1 = new ReservationThemeRequestDto(name, "게임을 시작하지~! (-_-)b", "https://soo1.com");
+
+        //when
+        var response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(requestDto1)
+                .when().post("/themes")
+                .then().log().all().extract();
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.jsonPath().getString("name")).isEqualTo("테마명을 입력 해주세요");
+    }
+
+    @DisplayName("테마 설명이 null이거나 빈 문자열이면 예외가 발생한다.")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createThemeEmptyDescription(final String description) {
+        //given
+        final ReservationThemeRequestDto requestDto1 = new ReservationThemeRequestDto("쏘우1", description, "https://soo1.com");
+
+        //when
+        var response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(requestDto1)
+                .when().post("/themes")
+                .then().log().all().extract();
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.jsonPath().getString("description")).isEqualTo("테마에 대한 설명을 입력해주세요");
+    }
+
+    @DisplayName("테마 썸네일이 null이거나 빈 문자열이면 예외가 발생한다.")
+    @ParameterizedTest
+    @NullAndEmptySource
+    void createThemeEmptyThumbnail(final String thumbnail) {
+        //given
+        final ReservationThemeRequestDto requestDto1 = new ReservationThemeRequestDto("쏘우1", "게임을 시작하지~! (-_-)b", thumbnail);
+
+        //when
+        var response = RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(requestDto1)
+                .when().post("/themes")
+                .then().log().all().extract();
+
+        //then
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(response.jsonPath().getString("thumbnail")).isEqualTo("썸네일 url 을 입력해주세요");
     }
 }

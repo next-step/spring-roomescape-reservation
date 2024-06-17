@@ -1,8 +1,11 @@
 package roomescape.reservationTime;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ReservationTimeRequestDto {
 
     private Long id;
+    @NotBlank(message = "예약 시간을 입력해주세요")
     private String startAt;
 
     public Long getId() {

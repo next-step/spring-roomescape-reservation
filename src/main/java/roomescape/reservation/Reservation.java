@@ -1,19 +1,14 @@
 package roomescape.reservation;
 
-import org.springframework.lang.NonNull;
 import roomescape.reservationTime.ReservationTime;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 public class Reservation {
 
     private Long id;
-    @NonNull
     private String name;
-    @NonNull
     private String date;
-    @NonNull
     private ReservationTime reservationTime;
 
     public Long getId() {
@@ -32,11 +27,11 @@ public class Reservation {
         return reservationTime;
     }
 
-    public Reservation(@NonNull String name, @NonNull String date, @NonNull ReservationTime reservationTime, ReservationPolicy reservationPolicy) {
+    public Reservation(String name, String date, ReservationTime reservationTime, ReservationPolicy reservationPolicy) {
         this(null, name, date, reservationTime, reservationPolicy);
     }
 
-    public Reservation(Long id, @NonNull String name, @NonNull String date, @NonNull ReservationTime reservationTime, ReservationPolicy reservationPolicy) {
+    public Reservation(Long id, String name, String date, ReservationTime reservationTime, ReservationPolicy reservationPolicy) {
         this.id = id;
         if(reservationPolicy.validateName(name)) {
             throw new IllegalArgumentException("예약자 이름에 특수문자가 포함되어 있습니다.");

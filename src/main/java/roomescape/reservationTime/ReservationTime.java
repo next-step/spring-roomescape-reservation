@@ -8,7 +8,6 @@ public class ReservationTime {
 
     private Long id;
 
-    @NonNull
     private String startAt;
 
     public Long getId() {
@@ -23,14 +22,14 @@ public class ReservationTime {
         this.id = id;
     }
 
-    public ReservationTime(@NonNull String startAt, ReservationTimePolicy reservationTimePolicy) {
+    public ReservationTime(String startAt, ReservationTimePolicy reservationTimePolicy) {
         if (reservationTimePolicy.validateStartAt(startAt)) {
             throw new IllegalArgumentException("예약 시간 형식이 올바르지 않습니다.");
         }
         this.startAt = startAt;
     }
 
-    public ReservationTime(Long id, @NonNull String startAt, ReservationTimePolicy reservationTimePolicy) {
+    public ReservationTime(Long id, String startAt, ReservationTimePolicy reservationTimePolicy) {
         this.id = id;
         if (reservationTimePolicy.validateStartAt(startAt)) {
             throw new IllegalArgumentException("예약 시간 형식이 올바르지 않습니다.");

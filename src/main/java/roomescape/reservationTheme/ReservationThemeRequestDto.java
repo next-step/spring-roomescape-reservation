@@ -1,10 +1,17 @@
 package roomescape.reservationTheme;
 
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.Objects;
 
 public class ReservationThemeRequestDto {
+    @NotEmpty(message = "테마명을 입력 해주세요")
     private String name;
+
+    @NotEmpty(message = "테마에 대한 설명을 입력해주세요")
     private String description;
+
+    @NotEmpty(message = "썸네일 url 을 입력해주세요")
     private String thumbnail;
 
     public String getName() {

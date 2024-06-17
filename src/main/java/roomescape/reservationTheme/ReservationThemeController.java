@@ -1,5 +1,6 @@
 package roomescape.reservationTheme;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ public class ReservationThemeController {
     }
 
     @PostMapping("/themes")
-    public ResponseEntity<ReservationThemeResponseDto> createTheme(@RequestBody ReservationThemeRequestDto requestDto) {
+    public ResponseEntity<ReservationThemeResponseDto> createTheme(@Valid @RequestBody ReservationThemeRequestDto requestDto) {
         final ReservationThemeResponseDto theme = reservationThemeService.createTheme(requestDto);
         HttpHeaders header = new HttpHeaders();
         header.add("Location", "/theme/" + theme.getId());

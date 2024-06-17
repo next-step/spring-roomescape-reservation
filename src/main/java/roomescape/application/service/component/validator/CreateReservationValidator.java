@@ -6,8 +6,6 @@ import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.repository.ReservationRepository;
 
-import java.time.format.DateTimeFormatter;
-
 import static roomescape.application.error.code.ApplicationErrorCode.CANNOT_CREATE_EXIST_RESERVATION_AT_THIS_TIME;
 
 @Component
@@ -27,7 +25,7 @@ public class CreateReservationValidator {
                     throw new CreateReservationValidateException(
                             CANNOT_CREATE_EXIST_RESERVATION_AT_THIS_TIME,
                             String.format("[date:%s, timeId:%d] 이 시간에 존재하는 예약이 있어 예약을 생성할 수 없습니다.",
-                                    date.date().format(DateTimeFormatter.ofPattern(DATE_FORMAT)),
+                                    date.getFormatted(DATE_FORMAT),
                                     time.getId()
                             )
                     );

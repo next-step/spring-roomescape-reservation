@@ -5,9 +5,11 @@ import roomescape.application.mapper.ReservationTimeEntityMapper;
 import roomescape.application.mapper.ReservationTimeMapper;
 import roomescape.application.service.command.CreateReservationTimeCommand;
 import roomescape.application.service.command.DeleteReservationTimeCommand;
+import roomescape.application.service.component.validator.CreateReservationTimeValidator;
 import roomescape.application.service.component.validator.DeleteReservationTimeValidator;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.ReservationTimes;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.repository.ReservationTimeRepository;
 import roomescape.repository.entity.ReservationTimeEntity;
 
@@ -16,17 +18,21 @@ public class ReservationTimeService {
 
     private final ReservationTimeRepository reservationTimeRepository;
     private final DeleteReservationTimeValidator deleteReservationTimeValidator;
+    private final CreateReservationTimeValidator createReservationTimeValidator;
 
     public ReservationTimeService(
             ReservationTimeRepository reservationTimeRepository,
-            DeleteReservationTimeValidator deleteReservationTimeValidator
-    ) {
+            DeleteReservationTimeValidator deleteReservationTimeValidator,
+            CreateReservationTimeValidator createReservationTimeValidator) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.deleteReservationTimeValidator = deleteReservationTimeValidator;
+        this.createReservationTimeValidator = createReservationTimeValidator;
     }
 
     public ReservationTime createReservationTime(CreateReservationTimeCommand command) {
         ReservationTime reservationTime = command.toReservationTime();
+        createReservationTimeValidator.validate(reservationTime);
+
         ReservationTimeEntity savedReservationTimeEntity =
                 reservationTimeRepository.save(ReservationTimeEntityMapper.toReservationTimeEntity(reservationTime));
 
@@ -38,7 +44,9 @@ public class ReservationTimeService {
     }
 
     public void deleteReservationTime(DeleteReservationTimeCommand command) {
-        deleteReservationTimeValidator.validate(command.getReservationTimeId());
+        ReservationTimeId reservationTimeId = command.toReservationTimeId();
+
+        deleteReservationTimeValidator.validate(reservationTimeId);
         reservationTimeRepository.delete(command.getReservationTimeId());
     }
 }

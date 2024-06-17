@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import roomescape.repository.ReservationTimeRepository;
 import roomescape.repository.entity.ReservationTimeEntity;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,29 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationTimeId);
+
+        try {
+            return Optional.ofNullable(
+                    namedParameterJdbcTemplate.queryForObject(
+                            sql,
+                            sqlParameterSource,
+                            (resultSet, rowNum) -> new ReservationTimeEntity(
+                                    resultSet.getLong(TABLE_COLUMN_ID),
+                                    resultSet.getTime(TABLE_COLUMN_START_AT).toLocalTime()
+                            )
+                    )
+            );
+        } catch (Exception ex) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<ReservationTimeEntity> findByStartAt(LocalTime startAt) {
+        String sql = "SELECT * FROM reservation_time WHERE start_at = :start_at";
+
+        MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                .addValue(TABLE_COLUMN_START_AT, startAt);
 
         try {
             return Optional.ofNullable(

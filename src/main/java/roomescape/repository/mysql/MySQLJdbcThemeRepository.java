@@ -9,6 +9,7 @@ import roomescape.repository.entity.ThemeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -40,11 +41,11 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, generatedKeyHolder);
 
-        long id = Optional.ofNullable(generatedKeyHolder.getKey())
-                .orElse(themeEntity.getId())
-                .longValue();
+        if (Objects.isNull(generatedKeyHolder.getKey())) {
+            return themeEntity;
+        }
 
-        return themeEntity.changeId(id);
+        return themeEntity.changeId(generatedKeyHolder.getKey().longValue());
     }
 
     @Override

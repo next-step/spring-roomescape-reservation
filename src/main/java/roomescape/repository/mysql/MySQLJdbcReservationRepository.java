@@ -12,6 +12,7 @@ import roomescape.repository.projection.ReservationViewProjection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Primary
@@ -50,11 +51,11 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, generatedKeyHolder);
 
-        long id = Optional.ofNullable(generatedKeyHolder.getKey())
-                .orElse(reservationEntity.getId())
-                .longValue();
+        if (Objects.isNull(generatedKeyHolder.getKey())) {
+            return reservationEntity;
+        }
 
-        return reservationEntity.changeId(id);
+        return reservationEntity.changeId(generatedKeyHolder.getKey().longValue());
     }
 
     @Override

@@ -1,49 +1,21 @@
 package roomescape.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import roomescape.model.Reservation;
-import roomescape.model.ReservationCreateDto;
-import roomescape.model.ReservationCreateResponseDto;
-import roomescape.service.ReservationAdminService;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/reservations")
+@RequestMapping("/admin")
 public class ReservationAdminController {
 
-    private final ReservationAdminService reservationAdminService;
-
-    public ReservationAdminController(ReservationAdminService reservationAdminService) {
-        this.reservationAdminService = reservationAdminService;
+    @GetMapping("/time")
+    public String getReservationTimePage() {
+        return "admin/time";
     }
 
-    @GetMapping("/admin/reservation")
+    @GetMapping("/reservation")
     public String getReservationPage() {
         return "admin/reservation";
     }
 
-    @PostMapping
-    public ResponseEntity<ReservationCreateResponseDto> createReservation(@RequestBody ReservationCreateDto reservationCreateDto) {
-
-        ReservationCreateResponseDto reservationResponse = reservationAdminService.createReservation(reservationCreateDto);
-
-        return ResponseEntity.ok(reservationResponse);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Reservation>> getReservation() {
-        List<Reservation> reservations = reservationAdminService.getReservations();
-        return ResponseEntity.ok().body(reservations);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
-
-        reservationAdminService.deleteReservation(id);
-
-        return ResponseEntity.ok().build();
-    }
 }

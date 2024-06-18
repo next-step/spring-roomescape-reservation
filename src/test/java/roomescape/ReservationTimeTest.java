@@ -106,7 +106,8 @@ public class ReservationTimeTest {
                 .when().get("/times")
                 .then().log().all().extract();
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("", ReservationTimeResponse.class)).hasSize(0);
     }
 
     @Test

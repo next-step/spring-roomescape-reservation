@@ -164,7 +164,8 @@ public class ReservationTest {
                 .when().get("/reservations")
                 .then().log().all().extract();
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("", ReservationResponse.class)).hasSize(0);
     }
 
     @Test

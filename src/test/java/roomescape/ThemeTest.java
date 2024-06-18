@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.dto.ReservationRequest;
-import roomescape.dto.ReservationTimeRequest;
-import roomescape.dto.ThemeRequest;
-import roomescape.dto.ThemeResponse;
+import roomescape.dto.*;
 import roomescape.service.ReservationService;
 import roomescape.service.ReservationTimeService;
 import roomescape.service.ThemeService;
@@ -88,6 +85,18 @@ public class ThemeTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.jsonPath().getList("", ThemeResponse.class)).hasSize(1);
+    }
+
+    @Test
+    @DisplayName("ThemeController - read() : no created theme")
+    void 등록된_예약_시간_없는_경우__예약_시간_조회() {
+        var response = RestAssured
+                .given().log().all()
+                .when().get("/themes")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.jsonPath().getList("", ThemeResponse.class)).hasSize(0);
     }
 
     @Test

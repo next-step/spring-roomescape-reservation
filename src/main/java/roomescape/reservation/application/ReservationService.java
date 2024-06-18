@@ -33,7 +33,7 @@ public class ReservationService {
 
     public List<ReservationResponse> findAll() {
         List<Reservation> reservations = reservationRepository.findAll();
-        return ReservationResponse.toResponses(reservations);
+        return ReservationResponse.fromReservations(reservations);
     }
 
     public ReservationResponse findOne(Long id) {

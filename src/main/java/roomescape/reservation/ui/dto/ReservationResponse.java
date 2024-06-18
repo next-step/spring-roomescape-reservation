@@ -51,7 +51,7 @@ public class ReservationResponse {
         return theme;
     }
 
-    public static List<ReservationResponse> toResponses(List<Reservation> reservations) {
+    public static List<ReservationResponse> fromReservations(List<Reservation> reservations) {
         return reservations.stream().map(ReservationResponse::from).toList();
     }
 }

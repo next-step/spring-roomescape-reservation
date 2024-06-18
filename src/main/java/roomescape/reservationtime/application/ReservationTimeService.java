@@ -23,7 +23,7 @@ public class ReservationTimeService {
 
     public List<ReservationTimeResponse> findAll() {
         List<ReservationTime> times = reservationTimeRepository.findAll();
-        return ReservationTimeResponse.toResponses(times);
+        return ReservationTimeResponse.fromReservationTimes(times);
     }
 
     public ReservationTimeResponse findOne(Long id) {

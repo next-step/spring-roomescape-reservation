@@ -42,7 +42,7 @@ public class ThemeResponse {
         return thumbnail;
     }
 
-    public static List<ThemeResponse> toResponses(List<Theme> themes) {
+    public static List<ThemeResponse> fromThemes(List<Theme> themes) {
         return themes.stream().map(ThemeResponse::from).toList();
     }
 }

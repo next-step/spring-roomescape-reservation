@@ -21,7 +21,7 @@ public class ThemeService {
 
     public List<ThemeResponse> findAll() {
         List<Theme> themes = themeRepository.findAll();
-        return ThemeResponse.toResponses(themes);
+        return ThemeResponse.fromThemes(themes);
     }
 
     public ThemeResponse findOne(Long id) {

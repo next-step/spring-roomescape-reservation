@@ -15,13 +15,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(new ExceptionResponse(exception.getMessage()));
+                .body(ExceptionResponse.createByMessage(exception.getMessage()));
     }
 
     @ExceptionHandler({EmptyResultDataAccessException.class, BadRequestException.class})
     public ResponseEntity<ExceptionResponse> handleBadRequestException(Exception exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ExceptionResponse(exception.getMessage()));
+                .body(ExceptionResponse.createByMessage(exception.getMessage()));
     }
 }

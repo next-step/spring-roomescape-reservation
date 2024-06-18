@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class ReservationController {
+public class ReservationTimeController {
 
-    @RequestMapping("/admin/reservation")
-    public String reservationLegacy() {
-        return "admin/reservation";
+    @RequestMapping("/admin/time")
+    public String reservationTime() {
+        return "admin/time";
     }
 }

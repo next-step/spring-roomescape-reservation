@@ -12,14 +12,14 @@ public class CreateReservationResponse {
     private Long id;
     private String name;
     private String date;
-    private String time;
+    private CreateReservationTimeResponse time;
 
     public static CreateReservationResponse of(CreateReservationResult result){
         return CreateReservationResponse.builder()
             .id(result.getId())
             .name(result.getName())
             .date(result.getDate())
-            .time(result.getTime())
+            .time(CreateReservationTimeResponse.of(result.getTime()))
             .build();
     }
 }

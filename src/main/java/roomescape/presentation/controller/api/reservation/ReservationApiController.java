@@ -6,6 +6,7 @@ import roomescape.application.service.reservation.ReservationService;
 import roomescape.presentation.dto.request.CreateReservationRequest;
 import roomescape.presentation.dto.response.CreateReservationResponse;
 import roomescape.presentation.dto.response.GetReservationListResponse;
+import roomescape.presentation.dto.response.GetReservationTimeListResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class ReservationApiController {
                                 .id(reservation.getId())
                                 .name(reservation.getName())
                                 .date(reservation.getDate())
-                                .time(reservation.getTime())
+                                .time(GetReservationTimeListResponse.of(reservation.getTime()))
                                 .build())
                         .collect(Collectors.toList())
         );
@@ -44,9 +45,9 @@ public class ReservationApiController {
         );
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(
-            @RequestParam Long id
+            @PathVariable Long id
     ) {
         reservationService.deleteReservation(id);
         return ResponseEntity.ok().build();

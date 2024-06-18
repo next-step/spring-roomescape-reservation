@@ -11,5 +11,5 @@ public class GetReservationListResponse {
     private Long id;
     private String name;
     private String date;
-    private String time;
+    private GetReservationTimeListResponse time;
 }

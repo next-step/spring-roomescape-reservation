@@ -11,13 +11,13 @@ import roomescape.application.dto.command.CreateReservationCommand;
 public class CreateReservationRequest {
     private String name;
     private String date;
-    private String time;
+    private String timeId;
 
     public CreateReservationCommand toCommand() {
         return CreateReservationCommand.builder()
             .name(name)
             .date(date)
-            .time(time)
+            .timeId(timeId)
             .build();
     }
 }

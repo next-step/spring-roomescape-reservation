@@ -7,8 +7,6 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class CreateReservationCommand {
-    private String name;
-    private String date;
-    private String timeId;
+public class CreateReservationTimeCommand {
+    private String startAt;
 }

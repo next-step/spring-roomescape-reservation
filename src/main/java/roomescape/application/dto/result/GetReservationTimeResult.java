@@ -7,9 +7,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class GetReservationResult {
+public class GetReservationTimeResult {
     private Long id;
-    private String name;
-    private String date;
-    private GetReservationTimeResult time;
+    private String startAt;
 }

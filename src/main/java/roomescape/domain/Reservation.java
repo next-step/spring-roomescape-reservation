@@ -11,9 +11,9 @@ public class Reservation {
     private Long id;
     private String name;
     private String date;
-    private String time;
+    private ReservationTime time;
 
-    public Reservation(Long id, String name, String date, String time
+    public Reservation(Long id, String name, String date, ReservationTime time
     ) {
         this.id = id;
         this.name = name;
@@ -22,6 +22,6 @@ public class Reservation {
     }
 
     public static Reservation create(CreateReservationCommand command) {
-        return new Reservation(null, command.getName(), command.getDate(), command.getTime());
+        return new Reservation(null, command.getName(), command.getDate(), null);
     }
 }

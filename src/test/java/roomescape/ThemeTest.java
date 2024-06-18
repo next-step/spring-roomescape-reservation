@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.dto.*;
-import roomescape.service.ReservationService;
-import roomescape.service.ReservationTimeService;
-import roomescape.service.ThemeService;
+import roomescape.reservation.ui.dto.ReservationRequest;
+import roomescape.reservationtime.ui.dto.ReservationTimeRequest;
+import roomescape.reservation.application.ReservationService;
+import roomescape.reservationtime.application.ReservationTimeService;
+import roomescape.theme.application.ThemeService;
+import roomescape.theme.ui.dto.ThemeRequest;
+import roomescape.theme.ui.dto.ThemeResponse;
 
 import java.time.LocalDate;
 

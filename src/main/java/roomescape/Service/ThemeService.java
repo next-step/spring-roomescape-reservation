@@ -21,10 +21,6 @@ public class ThemeService {
 
     public List<ThemeResponse> findAll() {
         List<Theme> themes = themeRepository.findAll();
-
-        if (themes.isEmpty()) {
-            throw new NotFoundException("등록된 테마가 없습니다.");
-        }
         return ThemeResponse.toResponses(themes);
     }
 

@@ -21,17 +21,17 @@ public class ReservationJdbcTemplateRepository implements ReservationRepository 
     }
 
     private final RowMapper<Reservation> rowMapper = (resultSet, rowNum) -> {
-        ReservationTime reservationTime = new ReservationTime(
+        ReservationTime reservationTime = ReservationTime.of(
                 resultSet.getLong("time_id"),
                 resultSet.getString("time_start_at")
         );
-        Theme theme = new Theme(
+        Theme theme = Theme.of(
                 resultSet.getLong("theme_id"),
                 resultSet.getString("theme_name"),
                 resultSet.getString("theme_description"),
                 resultSet.getString("theme_thumbnail")
         );
-        return new Reservation(
+        return Reservation.of(
                 resultSet.getLong("reservation_id"),
                 resultSet.getString("reservation_name"),
                 resultSet.getString("reservation_date"),

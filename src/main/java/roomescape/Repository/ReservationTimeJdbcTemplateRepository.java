@@ -19,7 +19,7 @@ public class ReservationTimeJdbcTemplateRepository implements ReservationTimeRep
     }
 
     private final RowMapper<ReservationTime> rowMapper = (resultSet, rowNum) -> {
-        return new ReservationTime(
+        return ReservationTime.of(
                 resultSet.getLong("id"),
                 resultSet.getString("start_at")
         );

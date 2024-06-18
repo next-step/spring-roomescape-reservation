@@ -19,7 +19,7 @@ public class ThemeJdbcTemplateRepository implements ThemeRepository {
     }
 
     private final RowMapper<Theme> rowMapper = (resultSet, rowNum) -> {
-        return new Theme(
+        return Theme.of(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
                 resultSet.getString("description"),

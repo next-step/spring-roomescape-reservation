@@ -38,7 +38,7 @@ public class ReservationService {
 
     public ReservationResponse findOne(Long id) {
         Reservation reservation = reservationRepository.findById(id);
-        return new ReservationResponse(reservation);
+        return ReservationResponse.from(reservation);
     }
 
     public long make(ReservationRequest request) {

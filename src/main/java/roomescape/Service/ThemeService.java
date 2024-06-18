@@ -26,7 +26,7 @@ public class ThemeService {
 
     public ThemeResponse findOne(Long id) {
         Theme theme = themeRepository.findById(id);
-        return new ThemeResponse(theme);
+        return ThemeResponse.from(theme);
     }
 
     public long add(ThemeRequest request) {

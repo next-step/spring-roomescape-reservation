@@ -10,18 +10,20 @@ public class ThemeResponse {
     private final String description;
     private final String thumbnail;
 
-    public ThemeResponse(Long id, String name, String description, String thumbnail) {
+    private ThemeResponse(Long id, String name, String description, String thumbnail) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
     }
 
-    public ThemeResponse(Theme theme) {
-        this.id = theme.getId();
-        this.name = theme.getName();
-        this.description = theme.getDescription();
-        this.thumbnail = theme.getThumbnail();
+    public static ThemeResponse from(Theme theme) {
+        return new ThemeResponse(
+                theme.getId(),
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail()
+        );
     }
 
     public Long getId() {
@@ -41,6 +43,6 @@ public class ThemeResponse {
     }
 
     public static List<ThemeResponse> toResponses(List<Theme> themes) {
-        return themes.stream().map(ThemeResponse::new).toList();
+        return themes.stream().map(ThemeResponse::from).toList();
     }
 }

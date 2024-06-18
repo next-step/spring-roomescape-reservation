@@ -13,9 +13,11 @@ public class ReservationTimeResponse {
         this.startAt = startAt;
     }
 
-    public ReservationTimeResponse(ReservationTime reservationTime) {
-        this.id = reservationTime.getId();
-        this.startAt = reservationTime.getStartAt();
+    public static ReservationTimeResponse from(ReservationTime reservationTime) {
+        return new ReservationTimeResponse(
+                reservationTime.getId(),
+                reservationTime.getStartAt()
+        );
     }
 
     public Long getId() {
@@ -27,6 +29,6 @@ public class ReservationTimeResponse {
     }
 
     public static List<ReservationTimeResponse> toResponses(List<ReservationTime> reservationTimes) {
-        return reservationTimes.stream().map(ReservationTimeResponse::new).toList();
+        return reservationTimes.stream().map(ReservationTimeResponse::from).toList();
     }
 }

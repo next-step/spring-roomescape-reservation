@@ -28,7 +28,7 @@ public class ReservationTimeService {
 
     public ReservationTimeResponse findOne(Long id) {
         ReservationTime time = reservationTimeRepository.findById(id);
-        return new ReservationTimeResponse(time);
+        return ReservationTimeResponse.from(time);
     }
 
     public long add(ReservationTimeRequest request) {

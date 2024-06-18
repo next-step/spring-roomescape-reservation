@@ -22,7 +22,8 @@ public class ReservationTimeService {
     public ReservationTimeService(
             ReservationTimeRepository reservationTimeRepository,
             DeleteReservationTimeValidator deleteReservationTimeValidator,
-            CreateReservationTimeValidator createReservationTimeValidator) {
+            CreateReservationTimeValidator createReservationTimeValidator
+    ) {
         this.reservationTimeRepository = reservationTimeRepository;
         this.deleteReservationTimeValidator = deleteReservationTimeValidator;
         this.createReservationTimeValidator = createReservationTimeValidator;

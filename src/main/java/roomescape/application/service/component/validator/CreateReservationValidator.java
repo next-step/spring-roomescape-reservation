@@ -19,14 +19,14 @@ public class CreateReservationValidator {
         this.reservationRepository = reservationRepository;
     }
 
-    public void validate(ReservationDate date, ReservationTime time) {
-        reservationRepository.findByDateAndTimeId(date.date(), time.getId())
+    public void validate(ReservationDate reservationDate, ReservationTime reservationTime) {
+        reservationRepository.findByDateAndTimeId(reservationDate.date(), reservationTime.getId())
                 .ifPresent(entity -> {
                     throw new CreateReservationValidateException(
                             CANNOT_CREATE_EXIST_RESERVATION_AT_THIS_TIME,
                             String.format("[date:%s, timeId:%d] 이 시간에 존재하는 예약이 있어 예약을 생성할 수 없습니다.",
-                                    date.getFormatted(DATE_FORMAT),
-                                    time.getId()
+                                    reservationDate.getFormatted(DATE_FORMAT),
+                                    reservationTime.getId()
                             )
                     );
                 });

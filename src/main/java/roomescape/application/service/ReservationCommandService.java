@@ -25,7 +25,8 @@ public class ReservationCommandService {
     public ReservationCommandService(
             ReservationRepository reservationRepository,
             ReservationTimeReader reservationTimeReader,
-            CreateReservationValidator createReservationValidator) {
+            CreateReservationValidator createReservationValidator
+    ) {
         this.reservationRepository = reservationRepository;
         this.reservationTimeReader = reservationTimeReader;
         this.createReservationValidator = createReservationValidator;

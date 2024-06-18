@@ -18,13 +18,13 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ReservationResponse>> read() {
         List<ReservationResponse> reservations = reservationService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(reservations);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ReservationResponse> create(@RequestBody ReservationRequest request) {
         Long reservationId = reservationService.make(request);
         ReservationResponse reservation = reservationService.findOne(reservationId);

@@ -18,13 +18,13 @@ public class ReservationTimeController {
         this.reservationTimeService = reservationTimeService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ReservationTimeResponse>> read() {
         List<ReservationTimeResponse> reservationTimes = reservationTimeService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(reservationTimes);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ReservationTimeResponse> create(@RequestBody ReservationTimeRequest request) {
         long id = reservationTimeService.add(request);
         ReservationTimeResponse reservationTime = reservationTimeService.findOne(id);

@@ -18,13 +18,13 @@ public class ThemeController {
         this.themeService = themeService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<ThemeResponse>> read() {
         List<ThemeResponse> themes = themeService.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(themes);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ThemeResponse> create(@RequestBody ThemeRequest request) {
         long themeId = themeService.add(request);
         ThemeResponse theme = themeService.findOne(themeId);

@@ -6,7 +6,6 @@ import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.ReservationTime;
-import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.validator.ObjectValidator;
 
 import java.time.LocalDate;
@@ -19,19 +18,20 @@ public class Reservation {
 
     private final ReservationDate reservationDate;
 
-    private final ReservationTimeId reservationTimeId;
+    private final ReservationTime reservationTime;
+
 
     public Reservation(
             ReservationId id,
             ReservationName reservationName,
             ReservationDate reservationDate,
-            ReservationTimeId reservationTimeId
+            ReservationTime reservationTime
     ) {
-        ObjectValidator.validateNotNull(id, reservationName, reservationDate, reservationTimeId);
+        ObjectValidator.validateNotNull(id, reservationName, reservationDate, reservationTime);
         this.id = id;
         this.reservationName = reservationName;
         this.reservationDate = reservationDate;
-        this.reservationTimeId = reservationTimeId;
+        this.reservationTime = reservationTime;
     }
 
     public static Reservation create(
@@ -41,8 +41,8 @@ public class Reservation {
             ReservationTime reservationTime
     ) {
         CreateReservationValidator validator = new CreateReservationValidator(
-                reservationTime,
                 reservationDate,
+                reservationTime,
                 new SystemClockHolder()
         );
         validator.validate();
@@ -51,7 +51,7 @@ public class Reservation {
                 id,
                 reservationName,
                 reservationDate,
-                new ReservationTimeId(reservationTime.getId())
+                reservationTime
         );
     }
 
@@ -72,6 +72,6 @@ public class Reservation {
     }
 
     public Long getReservationTimeId() {
-        return this.reservationTimeId.id();
+        return reservationTime.getId();
     }
 }

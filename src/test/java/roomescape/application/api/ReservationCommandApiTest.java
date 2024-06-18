@@ -17,9 +17,12 @@ import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
+import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -45,7 +48,10 @@ class ReservationCommandApiTest {
                 new ReservationId(1L),
                 new ReservationName("kilian"),
                 new ReservationDate(LocalDate.of(2024, 6, 6)),
-                new ReservationTimeId(1L)
+                new ReservationTime(
+                        new ReservationTimeId(1L),
+                        new ReservationTimeStartAt(LocalTime.of(17, 42))
+                )
         );
     }
 

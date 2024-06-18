@@ -25,11 +25,11 @@ class CreateReservationValidatorTest {
         class reservationTimeIsAfterNow {
 
             private final CreateReservationValidator validator = new CreateReservationValidator(
+                    new ReservationDate(LocalDate.of(2024, 6, 17)),
                     new ReservationTime(
                             new ReservationTimeId(1L),
                             new ReservationTimeStartAt(LocalTime.of(18, 0))
                     ),
-                    new ReservationDate(LocalDate.of(2024, 6, 17)),
                     new FakeClockHolder()
             );
 
@@ -53,11 +53,11 @@ class CreateReservationValidatorTest {
         class reservationTimeIsBeforeNow {
 
             private final CreateReservationValidator validator = new CreateReservationValidator(
+                    new ReservationDate(LocalDate.of(2024, 6, 17)),
                     new ReservationTime(
                             new ReservationTimeId(1L),
                             new ReservationTimeStartAt(LocalTime.of(18, 0))
                     ),
-                    new ReservationDate(LocalDate.of(2024, 6, 17)),
                     new FakeClockHolder()
             );
 

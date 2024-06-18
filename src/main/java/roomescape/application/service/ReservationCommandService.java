@@ -47,7 +47,8 @@ public class ReservationCommandService {
         );
 
         return ReservationMapper.toReservation(
-                reservationRepository.save(ReservationEntityMapper.toReservationEntity(createdReservation))
+                reservationRepository.save(ReservationEntityMapper.toReservationEntity(createdReservation)),
+                reservationTime
         );
     }
 

@@ -24,11 +24,48 @@ public class MissionStepTest {
     }
 
     @Test
-    void reservation() {
+    void reservationTime() {
+        createReservationTime();
+
+        RestAssured.given().log().all()
+                .when().get("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(1));
+
+        RestAssured.given().log().all()
+                .when().delete("/times/1")
+                .then().log().all()
+                .statusCode(200);
+
+        RestAssured.given().log().all()
+                .when().get("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(0));
+    }
+
+    @Test
+    void createReservationTime() {
         Map<String, String> params = new HashMap<>();
+        params.put("startAt", "15:40");
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(params)
+                .when().post("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("id", is(1));
+    }
+
+    @Test
+    void reservation() {
+        createReservationTime();
+
+        Map<String, Object> params = new HashMap<>();
         params.put("name", "브라운");
         params.put("date", "2023-08-05");
-        params.put("time", "15:40");
+        params.put("timeId", 1);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

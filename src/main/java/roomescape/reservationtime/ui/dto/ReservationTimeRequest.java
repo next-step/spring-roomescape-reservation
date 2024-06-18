@@ -1,6 +1,9 @@
 package roomescape.reservationtime.ui.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ReservationTimeRequest {
+    @NotBlank
     private String startAt;
 
     private ReservationTimeRequest() {

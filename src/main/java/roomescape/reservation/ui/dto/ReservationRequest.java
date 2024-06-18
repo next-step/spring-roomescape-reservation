@@ -1,9 +1,16 @@
 package roomescape.reservation.ui.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class ReservationRequest {
+    @NotBlank
     private String name;
+    @NotBlank
     private String date;
+    @NotNull
     private Long timeId;
+    @NotNull
     private Long themeId;
 
     private ReservationRequest() {

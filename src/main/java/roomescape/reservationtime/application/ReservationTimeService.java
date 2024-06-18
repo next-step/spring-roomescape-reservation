@@ -58,7 +58,7 @@ public class ReservationTimeService {
 
     public void delete(Long id) {
         checkReservationMatchWith(id);
-        long deleteCount = reservationTimeRepository.cancelById(id);
+        long deleteCount = reservationTimeRepository.deleteById(id);
 
         if (deleteCount == 0) {
             throw new NotFoundException("id와 일치하는 예약 시간이 없습니다.");

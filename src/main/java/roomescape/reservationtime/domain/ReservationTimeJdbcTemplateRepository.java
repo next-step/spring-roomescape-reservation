@@ -65,7 +65,7 @@ public class ReservationTimeJdbcTemplateRepository implements ReservationTimeRep
     }
 
     @Override
-    public long cancelById(Long id) {
+    public long deleteById(Long id) {
         String sql = "delete from reservation_time where id = ?";
         return jdbcTemplate.update(sql, id);
     }

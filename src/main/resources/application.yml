@@ -1,0 +1,38 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  datasource:
+    url: jdbc:h2:mem:database
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    check-template-location: true
+    suffix: .html
+    cache: false
+
+  server:
+    error:
+      whitelabel:
+        enabled: false
+
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: DEBUG
+
+jpa:
+  hibernate:
+    ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  defer-datasource-initialization: true
+
+sql:
+  init:
+    mode: always

@@ -2,6 +2,7 @@ package roomescape.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import roomescape.entities.Reservation;
 import roomescape.repositories.ReservationRepository;
 import roomescape.reservation.data.ReservationSearchResponse;
 
@@ -12,12 +13,19 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    @Autowired
     public ReservationService(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<ReservationSearchResponse> searchAllReservations() {
-        return null;
+    public List<Reservation> searchAllReservations() {
+        return reservationRepository.findAll();
+    }
+
+    public Reservation addReservation(Reservation reservation) {
+        return reservationRepository.save(reservation);
+    }
+
+    public void cancelReservation(Long id) {
+        reservationRepository.deleteById(id);
     }
 }

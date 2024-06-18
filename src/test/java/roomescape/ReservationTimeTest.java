@@ -22,7 +22,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {"server.port=8888"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationTimeTest {
     @Autowired
@@ -31,6 +31,7 @@ public class ReservationTimeTest {
     private ReservationTimeService reservationTimeService;
     @Autowired
     private ThemeService themeService;
+    private final String URL = "http://localhost:8888";
 
     private long makeDummyReservation() {
         long timeId = reservationTimeService.add(ReservationTimeRequest.create("13:00"));
@@ -47,7 +48,7 @@ public class ReservationTimeTest {
                 .given().log().all()
                 .body(ReservationTimeRequest.create(startAt))
                 .contentType(ContentType.JSON)
-                .when().post("/times")
+                .when().post(URL + "/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -64,7 +65,7 @@ public class ReservationTimeTest {
                 .given().log().all()
                 .body(ReservationTimeRequest.create(startAt))
                 .contentType(ContentType.JSON)
-                .when().post("/times")
+                .when().post(URL + "/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -78,7 +79,7 @@ public class ReservationTimeTest {
                 .given().log().all()
                 .body(ReservationTimeRequest.create(startAt))
                 .contentType(ContentType.JSON)
-                .when().post("/times")
+                .when().post(URL + "/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -91,7 +92,7 @@ public class ReservationTimeTest {
 
         var response = RestAssured
                 .given().log().all()
-                .when().get("/times")
+                .when().get(URL + "/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -103,7 +104,7 @@ public class ReservationTimeTest {
     void 등록된_예약_시간_없는_경우__예약_시간_조회() {
         var response = RestAssured
                 .given().log().all()
-                .when().get("/times")
+                .when().get(URL + "/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -117,7 +118,7 @@ public class ReservationTimeTest {
 
         var response = RestAssured
                 .given().log().all()
-                .when().delete("/times/1")
+                .when().delete(URL + "/times/1")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -128,7 +129,7 @@ public class ReservationTimeTest {
     void 존재하지_않는_예약_시간_삭제() {
         var response = RestAssured
                 .given().log().all()
-                .when().delete("/times/1")
+                .when().delete(URL + "/times/1")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
@@ -140,7 +141,7 @@ public class ReservationTimeTest {
         long reservationId = makeDummyReservation();
         var response = RestAssured
                 .given().log().all()
-                .when().delete("/times/" + reservationId)
+                .when().delete(URL + "/times/" + reservationId)
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());

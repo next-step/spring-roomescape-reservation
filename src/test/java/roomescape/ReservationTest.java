@@ -20,7 +20,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties = {"server.port=8888"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ReservationTest {
     @Autowired
@@ -29,6 +29,7 @@ public class ReservationTest {
     private ReservationTimeService reservationTimeService;
     @Autowired
     private ThemeService themeService;
+    private final String URL = "http://localhost:8888";
 
     private void makeDummyTimesAndThemes() {
         reservationTimeService.add(ReservationTimeRequest.create("13:00"));
@@ -48,7 +49,7 @@ public class ReservationTest {
                 .given().log().all()
                 .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
@@ -68,7 +69,7 @@ public class ReservationTest {
                 .given().log().all()
                 .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -85,7 +86,7 @@ public class ReservationTest {
                 .given().log().all()
                 .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -102,7 +103,7 @@ public class ReservationTest {
                 .given().log().all()
                 .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
@@ -119,7 +120,7 @@ public class ReservationTest {
                 .given().log().all()
                 .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());
@@ -136,7 +137,7 @@ public class ReservationTest {
                 .given().log().all()
                 .body(ReservationRequest.create("brown", date, 1L, 1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
@@ -149,7 +150,7 @@ public class ReservationTest {
 
         var response = RestAssured
                 .given().log().all()
-                .when().get("/reservations")
+                .when().get(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -161,7 +162,7 @@ public class ReservationTest {
     void 예약이_없는_경우_예약_조회() {
         var response = RestAssured
                 .given().log().all()
-                .when().get("/reservations")
+                .when().get(URL + "/reservations")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -175,7 +176,7 @@ public class ReservationTest {
 
         var response = RestAssured
                 .given().log().all()
-                .when().delete("/reservations/1")
+                .when().delete(URL + "/reservations/1")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -186,7 +187,7 @@ public class ReservationTest {
     void 존재하지_않는_예약_취소() {
         var response = RestAssured
                 .given().log().all()
-                .when().delete("/reservations/1")
+                .when().delete(URL + "/reservations/1")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NOT_FOUND.value());

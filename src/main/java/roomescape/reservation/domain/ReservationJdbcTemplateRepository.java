@@ -42,48 +42,59 @@ public class ReservationJdbcTemplateRepository implements ReservationRepository 
 
     @Override
     public List<Reservation> findAll() {
-        String sql = "SELECT " +
-                "r.id as reservation_id, " +
-                "r.name as reservation_name, " +
-                "r.date as reservation_date, " +
-                "t.id as time_id, " +
-                "t.start_at as time_start_at, " +
-                "th.id as theme_id, " +
-                "th.name as theme_name, " +
-                "th.description as theme_description, " +
-                "th.thumbnail as theme_thumbnail " +
-                "FROM reservation as r " +
-                "INNER JOIN reservation_time as t " +
-                "ON r.time_id = t.id " +
-                "INNER JOIN theme as th " +
-                "ON r.theme_id = th.id";
+        String sql = """
+                SELECT
+                    r.id as reservation_id,
+                    r.name as reservation_name,
+                    r.date as reservation_date,
+                    t.id as time_id,
+                    t.start_at as time_start_at,
+                    th.id as theme_id,
+                    th.name as theme_name,
+                    th.description as theme_description,
+                    th.thumbnail as theme_thumbnail
+                FROM reservation as r
+                INNER JOIN reservation_time as t
+                    ON r.time_id = t.id
+                INNER JOIN theme as th
+                    ON r.theme_id = th.id
+                """;
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
     public Reservation findById(Long id) {
-        String sql = "SELECT " +
-                "r.id as reservation_id, " +
-                "r.name as reservation_name, " +
-                "r.date as reservation_date, " +
-                "t.id as time_id, " +
-                "t.start_at as time_start_at, " +
-                "th.id as theme_id, " +
-                "th.name as theme_name, " +
-                "th.description as theme_description, " +
-                "th.thumbnail as theme_thumbnail " +
-                "FROM reservation as r " +
-                "INNER JOIN reservation_time as t " +
-                "ON r.time_id = t.id " +
-                "INNER JOIN theme as th " +
-                "ON r.theme_id = th.id " +
-                "WHERE r.id = ?";
+        String sql = """
+                    SELECT
+                        r.id as reservation_id,
+                        r.name as reservation_name,
+                        r.date as reservation_date,
+                        t.id as time_id,
+                        t.start_at as time_start_at,
+                        th.id as theme_id,
+                        th.name as theme_name,
+                        th.description as theme_description,
+                        th.thumbnail as theme_thumbnail
+                    FROM reservation as r
+                    INNER JOIN reservation_time as t
+                        ON r.time_id = t.id
+                    INNER JOIN theme as th
+                        ON r.theme_id = th.id
+                    WHERE r.id = ?
+                    """;
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     @Override
     public Long countMatchWith(String date, Long timeId, Long themeId) {
-        String sql = "select count(*) from reservation where date = ? and time_id = ? and theme_id = ?";
+        String sql = """
+                    select count(*)
+                    from reservation
+                    where
+                        date = ? and
+                        time_id = ? and
+                        theme_id = ?
+                    """;
         return jdbcTemplate.queryForObject(sql, Long.class, date, timeId, themeId);
     }
 
@@ -91,7 +102,11 @@ public class ReservationJdbcTemplateRepository implements ReservationRepository 
     public long save(String name, String date, Long timeId, Long themeId) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            String sql = "insert into reservation (name, date, time_id, theme_id) values (?, ?, ?, ?)";
+            String sql = """
+                        insert into reservation
+                        (name, date, time_id, theme_id)
+                        values (?, ?, ?, ?)
+                        """;
             PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, name);
             ps.setString(2, date);
@@ -104,7 +119,10 @@ public class ReservationJdbcTemplateRepository implements ReservationRepository 
 
     @Override
     public long deleteById(Long id) {
-        String sql = "delete from reservation where id = ?";
+        String sql = """
+                    delete from reservation
+                    where id = ?
+                    """;
         return jdbcTemplate.update(sql, id);
     }
 }

@@ -29,26 +29,41 @@ public class ThemeJdbcTemplateRepository implements ThemeRepository {
 
     @Override
     public List<Theme> findAll() {
-        String sql = "select * from theme";
+        String sql = """
+                    select *
+                    from theme
+                    """;
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
     public Theme findById(Long id) {
-        String sql = "select * from theme where id = ?";
+        String sql = """
+                    select *
+                    from theme
+                    where id = ?""";
         return jdbcTemplate.queryForObject(sql, rowMapper, id);
     }
 
     @Override
     public Theme findByName(String name) {
-        String sql = "select * from theme where name = ?";
+        String sql = """
+                    select *
+                    from theme
+                    where name = ?
+                    """;
         return jdbcTemplate.queryForObject(sql, rowMapper, name);
     }
 
     @Override
     public Long countReservationMatchWith(Long id) {
-        String sql = "select count(*) from reservation as r inner join theme as t on r.theme_id = t.id where t.id = ?";
-
+        String sql = """
+                    select count(*)
+                    from reservation as r
+                    inner join theme as t
+                    on r.theme_id = t.id
+                    where t.id = ?
+                    """;
         return jdbcTemplate.queryForObject(sql, Long.class, id);
     }
 
@@ -56,7 +71,11 @@ public class ThemeJdbcTemplateRepository implements ThemeRepository {
     public long save(String name, String description, String thumbnail) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            String sql = "insert into theme (name, description, thumbnail) values (?, ?, ?)";
+            String sql = """
+                        insert into theme
+                        (name, description, thumbnail)
+                        values (?, ?, ?)
+                        """;
             PreparedStatement ps = connection.prepareStatement(sql, new String[] {"id"});
             ps.setString(1, name);
             ps.setString(2, description);
@@ -68,7 +87,10 @@ public class ThemeJdbcTemplateRepository implements ThemeRepository {
 
     @Override
     public long deleteById(Long id) {
-        String sql = "delete from theme where id = ?";
+        String sql = """
+                    delete from theme
+                    where id = ?
+                    """;
         return jdbcTemplate.update(sql, id);
     }
 }

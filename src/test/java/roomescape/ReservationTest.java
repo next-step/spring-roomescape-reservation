@@ -27,11 +27,10 @@ public class ReservationTest {
     private ReservationService reservationService;
     @Autowired
     private ReservationTimeService reservationTimeService;
-
     @Autowired
     private ThemeService themeService;
 
-    private void set() {
+    private void makeDummyTimesAndThemes() {
         reservationTimeService.add(new ReservationTimeRequest("13:00"));
         reservationTimeService.add(new ReservationTimeRequest("15:00"));
         themeService.add(new ThemeRequest("theme1", "bla", ""));
@@ -43,7 +42,7 @@ public class ReservationTest {
     void 예약() {
         String name = "yeeun";
         String date = LocalDate.now().plusWeeks(1).toString();
-        set();
+        makeDummyTimesAndThemes();
 
         var response = RestAssured
                 .given().log().all()
@@ -63,7 +62,7 @@ public class ReservationTest {
     void 과거_날짜_시간_예약() {
         String name = "yeeun";
         String date = LocalDate.now().minusWeeks(1).toString();
-        set();
+        makeDummyTimesAndThemes();
 
         var response = RestAssured
                 .given().log().all()
@@ -80,7 +79,7 @@ public class ReservationTest {
     void 당일_예약() {
         String name = "yeeun";
         String date = LocalDate.now().toString();
-        set();
+        makeDummyTimesAndThemes();
 
         var response = RestAssured
                 .given().log().all()
@@ -97,7 +96,7 @@ public class ReservationTest {
     void 존재하지_않는_시간_예약() {
         String name = "yeeun";
         String date = LocalDate.now().plusWeeks(1).toString();
-        new ThemeTest().테마_생성();
+        themeService.add(new ThemeRequest("a", "b", "c"));
 
         var response = RestAssured
                 .given().log().all()
@@ -114,7 +113,7 @@ public class ReservationTest {
     void 존재하지_않는_테마_예약() {
         String name = "yeeun";
         String date = LocalDate.now().plusWeeks(1).toString();
-        new ReservationTimeTest().예약_시간_생성();
+        reservationTimeService.add(new ReservationTimeRequest("13:00"));
 
         var response = RestAssured
                 .given().log().all()
@@ -130,7 +129,7 @@ public class ReservationTest {
     @DisplayName("ReservationController - create() duplicated date, time and theme")
     void 중복_예약() {
         String date = LocalDate.now().plusWeeks(1).toString();
-        set();
+        makeDummyTimesAndThemes();
         reservationService.make(new ReservationRequest("yeeun", date, 1L, 1L));
 
         var response = RestAssured

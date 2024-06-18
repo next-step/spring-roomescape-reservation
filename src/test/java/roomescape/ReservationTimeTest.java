@@ -33,10 +33,10 @@ public class ReservationTimeTest {
     private ThemeService themeService;
 
     private long makeDummyReservation() {
-        long timeId = reservationTimeService.add(new ReservationTimeRequest("13:00"));
-        long themeId = themeService.add(new ThemeRequest("a", "b", "c"));
+        long timeId = reservationTimeService.add(ReservationTimeRequest.create("13:00"));
+        long themeId = themeService.add(ThemeRequest.create("a", "b", "c"));
         String date = LocalDate.now().plusWeeks(1).toString();
-        return reservationService.make(new ReservationRequest("yeeun", date, timeId, themeId));
+        return reservationService.make(ReservationRequest.create("yeeun", date, timeId, themeId));
     }
 
     @Test
@@ -45,7 +45,7 @@ public class ReservationTimeTest {
         String startAt = "13:00";
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationTimeRequest(startAt))
+                .body(ReservationTimeRequest.create(startAt))
                 .contentType(ContentType.JSON)
                 .when().post("/times")
                 .then().log().all().extract();
@@ -62,7 +62,7 @@ public class ReservationTimeTest {
         String startAt = "13:00";
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationTimeRequest(startAt))
+                .body(ReservationTimeRequest.create(startAt))
                 .contentType(ContentType.JSON)
                 .when().post("/times")
                 .then().log().all().extract();
@@ -76,7 +76,7 @@ public class ReservationTimeTest {
     void 유효하지_않은_예약_시간_생성(String startAt) {
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationTimeRequest(startAt))
+                .body(ReservationTimeRequest.create(startAt))
                 .contentType(ContentType.JSON)
                 .when().post("/times")
                 .then().log().all().extract();

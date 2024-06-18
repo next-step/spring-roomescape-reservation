@@ -31,10 +31,10 @@ public class ReservationTest {
     private ThemeService themeService;
 
     private void makeDummyTimesAndThemes() {
-        reservationTimeService.add(new ReservationTimeRequest("13:00"));
-        reservationTimeService.add(new ReservationTimeRequest("15:00"));
-        themeService.add(new ThemeRequest("theme1", "bla", ""));
-        themeService.add(new ThemeRequest("theme2", "fun", ""));
+        reservationTimeService.add(ReservationTimeRequest.create("13:00"));
+        reservationTimeService.add(ReservationTimeRequest.create("15:00"));
+        themeService.add(ThemeRequest.create("theme1", "bla", ""));
+        themeService.add(ThemeRequest.create("theme2", "fun", ""));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ReservationTest {
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationRequest(name, date, 1L, 1L))
+                .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
                 .when().post("/reservations")
                 .then().log().all().extract();
@@ -66,7 +66,7 @@ public class ReservationTest {
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationRequest(name, date, 1L, 1L))
+                .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
                 .when().post("/reservations")
                 .then().log().all().extract();
@@ -83,7 +83,7 @@ public class ReservationTest {
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationRequest(name, date, 1L, 1L))
+                .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
                 .when().post("/reservations")
                 .then().log().all().extract();
@@ -96,11 +96,11 @@ public class ReservationTest {
     void 존재하지_않는_시간_예약() {
         String name = "yeeun";
         String date = LocalDate.now().plusWeeks(1).toString();
-        themeService.add(new ThemeRequest("a", "b", "c"));
+        themeService.add(ThemeRequest.create("a", "b", "c"));
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationRequest(name, date, 1L, 1L))
+                .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
                 .when().post("/reservations")
                 .then().log().all().extract();
@@ -113,11 +113,11 @@ public class ReservationTest {
     void 존재하지_않는_테마_예약() {
         String name = "yeeun";
         String date = LocalDate.now().plusWeeks(1).toString();
-        reservationTimeService.add(new ReservationTimeRequest("13:00"));
+        reservationTimeService.add(ReservationTimeRequest.create("13:00"));
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationRequest(name, date, 1L, 1L))
+                .body(ReservationRequest.create(name, date, 1L, 1L))
                 .contentType(ContentType.JSON)
                 .when().post("/reservations")
                 .then().log().all().extract();
@@ -130,11 +130,11 @@ public class ReservationTest {
     void 중복_예약() {
         String date = LocalDate.now().plusWeeks(1).toString();
         makeDummyTimesAndThemes();
-        reservationService.make(new ReservationRequest("yeeun", date, 1L, 1L));
+        reservationService.make(ReservationRequest.create("yeeun", date, 1L, 1L));
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationRequest("brown", date, 1L, 1L))
+                .body(ReservationRequest.create("brown", date, 1L, 1L))
                 .contentType(ContentType.JSON)
                 .when().post("/reservations")
                 .then().log().all().extract();

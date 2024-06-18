@@ -28,10 +28,10 @@ public class ThemeTest {
     private ThemeService themeService;
 
     private long makeDummyReservation() {
-        long timeId = reservationTimeService.add(new ReservationTimeRequest("13:00"));
-        long themeId = themeService.add(new ThemeRequest("a", "b", "c"));
+        long timeId = reservationTimeService.add(ReservationTimeRequest.create("13:00"));
+        long themeId = themeService.add(ThemeRequest.create("a", "b", "c"));
         String date = LocalDate.now().plusWeeks(1).toString();
-        return reservationService.make(new ReservationRequest("yeeun", date, timeId, themeId));
+        return reservationService.make(ReservationRequest.create("yeeun", date, timeId, themeId));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ThemeTest {
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ThemeRequest(name, description, thumbnail))
+                .body(ThemeRequest.create(name, description, thumbnail))
                 .contentType(ContentType.JSON)
                 .when().post("/themes")
                 .then().log().all().extract();
@@ -65,7 +65,7 @@ public class ThemeTest {
 
         var response = RestAssured
                 .given().log().all()
-                .body(new ThemeRequest(name, description, thumbnail))
+                .body(ThemeRequest.create(name, description, thumbnail))
                 .contentType(ContentType.JSON)
                 .when().post("/themes")
                 .then().log().all().extract();

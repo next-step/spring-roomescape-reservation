@@ -3,12 +3,15 @@ package roomescape.dto;
 public class ReservationTimeRequest {
     private String startAt;
 
-    public ReservationTimeRequest() {
-
+    private ReservationTimeRequest() {
     }
 
-    public ReservationTimeRequest(String startAt) {
+    private ReservationTimeRequest(String startAt) {
         this.startAt = startAt;
+    }
+
+    public static ReservationTimeRequest create(String startAt) {
+        return new ReservationTimeRequest(startAt);
     }
 
     public String getStartAt() {

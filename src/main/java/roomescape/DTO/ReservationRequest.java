@@ -6,15 +6,18 @@ public class ReservationRequest {
     private Long timeId;
     private Long themeId;
 
-    public ReservationRequest() {
-
+    private ReservationRequest() {
     }
 
-    public ReservationRequest(String name, String date, Long timeId, Long themeId) {
+    private ReservationRequest(String name, String date, Long timeId, Long themeId) {
         this.name = name;
         this.date = date;
         this.timeId = timeId;
         this.themeId = themeId;
+    }
+
+    public static ReservationRequest create(String name, String date, Long timeId, Long themeId) {
+        return new ReservationRequest(name, date, timeId, themeId);
     }
 
     public String getName() {

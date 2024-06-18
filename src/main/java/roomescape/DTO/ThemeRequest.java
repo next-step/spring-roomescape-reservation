@@ -5,10 +5,14 @@ public class ThemeRequest {
     private final String description;
     private final String thumbnail;
 
-    public ThemeRequest(String name, String description, String thumbnail) {
+    private ThemeRequest(String name, String description, String thumbnail) {
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
+    }
+
+    public static ThemeRequest create(String name, String description, String thumbnail) {
+        return new ThemeRequest(name, description, thumbnail);
     }
 
     public String getName() {

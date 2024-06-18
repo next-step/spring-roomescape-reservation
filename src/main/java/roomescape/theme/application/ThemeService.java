@@ -1,6 +1,5 @@
 package roomescape.theme.application;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import roomescape.theme.ui.dto.ThemeRequest;
 import roomescape.theme.ui.dto.ThemeResponse;
@@ -14,9 +13,13 @@ import java.util.List;
 @Service
 public class ThemeService {
     private final ThemeRepository themeRepository;
+    private final ThemeValidator themeValidator;
 
-    public ThemeService(ThemeRepository themeRepository) {
+    public ThemeService(
+            ThemeRepository themeRepository,
+            ThemeValidator themeValidator) {
         this.themeRepository = themeRepository;
+        this.themeValidator = themeValidator;
     }
 
     public List<ThemeResponse> findAll() {
@@ -30,22 +33,12 @@ public class ThemeService {
     }
 
     public long add(ThemeRequest request) {
-        validateDuplicated(request.getName());
+        themeValidator.validateRequest(request);
         return themeRepository.save(
                 request.getName(),
                 request.getDescription(),
                 request.getThumbnail()
         );
-    }
-
-    private void validateDuplicated(String name) {
-        try {
-            Theme theme = themeRepository.findByName(name);
-
-            throw new BadRequestException("이미 존재하는 테마입니다.");
-        }
-        catch (EmptyResultDataAccessException ignored) {
-        }
     }
 
     public void delete(Long id) {

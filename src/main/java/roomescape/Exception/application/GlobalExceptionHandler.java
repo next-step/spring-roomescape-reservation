@@ -1,4 +1,4 @@
-package roomescape.application;
+package roomescape.exception.application;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
                 .body(ExceptionResponse.createByMessage(exception.getMessage()));
     }
 
-    @ExceptionHandler({EmptyResultDataAccessException.class, BadRequestException.class})
+    @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ExceptionResponse> handleBadRequestException(Exception exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

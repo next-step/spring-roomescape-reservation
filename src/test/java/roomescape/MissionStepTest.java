@@ -9,6 +9,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import roomescape.application.api.dto.request.CreateReservationRequest;
 import roomescape.application.api.dto.request.CreateReservationTimeRequest;
+import roomescape.application.api.dto.request.CreateThemeRequest;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +48,20 @@ public class MissionStepTest {
                 );
         CreateReservationTimeRequest createReservationTimeRequest =
                 new CreateReservationTimeRequest("21:11");
+
+        CreateThemeRequest createThemeRequest = new CreateThemeRequest(
+                "레벨2 탈출",
+                "우테코 레벨2를 탈출하는 내용입니다.",
+                "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg"
+        );
+
+        RestAssured.given().log().all()
+                .contentType(ContentType.JSON)
+                .body(createThemeRequest)
+                .when().post("/themes")
+                .then().log().all()
+                .statusCode(201)
+                .body("id", is(1));
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)

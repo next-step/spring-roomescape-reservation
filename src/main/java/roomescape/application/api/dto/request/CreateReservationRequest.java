@@ -51,4 +51,8 @@ public class CreateReservationRequest {
     public Long getTimeId() {
         return timeId;
     }
+
+    public Long getThemeId() {
+        return themeId;
+    }
 }

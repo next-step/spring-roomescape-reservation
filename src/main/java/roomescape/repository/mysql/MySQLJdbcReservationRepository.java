@@ -62,7 +62,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public List<ReservationEntity> findAll() {
-        String sql = "SELECT id, name, date, time_id FROM reservation";
+        String sql = "SELECT * FROM reservation";
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
             List<ReservationEntity> reservationEntities = new ArrayList<>();

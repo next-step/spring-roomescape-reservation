@@ -30,6 +30,7 @@ class InMemoryReservationRepositoryTest {
                         1L,
                         "kilian",
                         LocalDate.of(2024, 6, 8),
+                        1L,
                         1L
                 ));
             }
@@ -41,6 +42,7 @@ class InMemoryReservationRepositoryTest {
                         1L,
                         "brie",
                         LocalDate.of(2024, 6, 8),
+                        1L,
                         1L
                 );
 
@@ -66,6 +68,7 @@ class InMemoryReservationRepositoryTest {
                         1L,
                         "kilian",
                         LocalDate.of(2024, 6, 8),
+                        1L,
                         1L
                 );
 
@@ -101,6 +104,7 @@ class InMemoryReservationRepositoryTest {
                                 1L,
                                 "kilian",
                                 LocalDate.of(2024, 6, 8),
+                                1L,
                                 1L
                         )
                 );

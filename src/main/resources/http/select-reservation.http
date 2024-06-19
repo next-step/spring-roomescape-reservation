@@ -1,2 +1,6 @@
 ## 예약 조회
 GET http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+}

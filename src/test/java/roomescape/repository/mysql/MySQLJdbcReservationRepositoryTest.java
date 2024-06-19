@@ -41,6 +41,7 @@ class MySQLJdbcReservationRepositoryTest {
                                 1L,
                                 "kilian",
                                 LocalDate.of(2024, 6, 8),
+                                1L,
                                 1L
                         ));
             }
@@ -52,6 +53,7 @@ class MySQLJdbcReservationRepositoryTest {
                         1L,
                         "brie",
                         LocalDate.of(2024, 6, 8),
+                        1L,
                         1L
                 );
 
@@ -75,6 +77,7 @@ class MySQLJdbcReservationRepositoryTest {
                         1L,
                         "kilian",
                         LocalDate.of(2024, 6, 8),
+                        1L,
                         1L
                 );
 
@@ -109,6 +112,7 @@ class MySQLJdbcReservationRepositoryTest {
                                 1L,
                                 "kilian",
                                 LocalDate.of(2024, 6, 8),
+                                1L,
                                 1L
                         ));
                 List<ReservationEntity> savedEntities = mySQLJdbcReservationRepository.findAll();

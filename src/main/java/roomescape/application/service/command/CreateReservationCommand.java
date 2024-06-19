@@ -10,10 +10,18 @@ public class CreateReservationCommand {
 
     private final Long reservationTimeId;
 
-    public CreateReservationCommand(String reservationName, LocalDate reservationDate, Long reservationTimeId) {
+    private final Long themeId;
+
+    public CreateReservationCommand(
+            String reservationName,
+            LocalDate reservationDate,
+            Long reservationTimeId,
+            Long themeId
+    ) {
         this.reservationName = reservationName;
         this.reservationDate = reservationDate;
         this.reservationTimeId = reservationTimeId;
+        this.themeId = themeId;
     }
 
     public String getReservationName() {
@@ -26,5 +34,9 @@ public class CreateReservationCommand {
 
     public Long getReservationTimeId() {
         return reservationTimeId;
+    }
+
+    public Long getThemeId() {
+        return themeId;
     }
 }

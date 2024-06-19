@@ -20,18 +20,24 @@ public class CreateReservationRequest {
     @NotBlank
     private final String name;
 
-    @NotNull(message = "이 값은 필수입니다.")
     @Positive
+    @NotNull(message = "이 값은 필수입니다.")
     private final Long timeId;
 
-    public CreateReservationRequest(String date, String name, Long timeId) {
+    @Positive
+    @NotNull(message = "이 값은 필수입니다.")
+    private final Long themeId;
+
+
+    public CreateReservationRequest(String date, String name, Long timeId, Long themeId) {
         this.date = date;
         this.name = name;
         this.timeId = timeId;
+        this.themeId = themeId;
     }
 
     public CreateReservationCommand toCreateReservationCommand() {
-        return new CreateReservationCommand(name, LocalDate.parse(date, DateTimeFormatter.ofPattern(DATETIME_FORMAT)), timeId);
+        return new CreateReservationCommand(name, LocalDate.parse(date, DateTimeFormatter.ofPattern(DATETIME_FORMAT)), timeId, themeId);
     }
 
     public String getDate() {

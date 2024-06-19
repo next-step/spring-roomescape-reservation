@@ -6,6 +6,7 @@ import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.theme.Theme;
 import roomescape.domain.validator.ObjectValidator;
 
 import java.time.LocalDate;
@@ -20,25 +21,30 @@ public class Reservation {
 
     private final ReservationTime reservationTime;
 
+    private final Theme theme;
+
 
     public Reservation(
             ReservationId id,
             ReservationName reservationName,
             ReservationDate reservationDate,
-            ReservationTime reservationTime
+            ReservationTime reservationTime,
+            Theme theme
     ) {
-        ObjectValidator.validateNotNull(id, reservationName, reservationDate, reservationTime);
+        ObjectValidator.validateNotNull(id, reservationName, reservationDate, reservationTime, theme);
         this.id = id;
         this.reservationName = reservationName;
         this.reservationDate = reservationDate;
         this.reservationTime = reservationTime;
+        this.theme = theme;
     }
 
     public static Reservation create(
             ReservationId id,
             ReservationName reservationName,
             ReservationDate reservationDate,
-            ReservationTime reservationTime
+            ReservationTime reservationTime,
+            Theme theme
     ) {
         CreateReservationValidator validator = new CreateReservationValidator(
                 reservationDate,
@@ -51,7 +57,8 @@ public class Reservation {
                 id,
                 reservationName,
                 reservationDate,
-                reservationTime
+                reservationTime,
+                theme
         );
     }
 
@@ -73,5 +80,9 @@ public class Reservation {
 
     public Long getReservationTimeId() {
         return reservationTime.getId();
+    }
+
+    public Long getThemeId() {
+        return this.theme.getId();
     }
 }

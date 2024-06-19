@@ -14,7 +14,8 @@ public final class ReservationEntityMapper {
                 reservation.getId(),
                 reservation.getReservationName(),
                 reservation.getReservationDate(),
-                reservation.getReservationTimeId()
+                reservation.getReservationTimeId(),
+                reservation.getThemeId()
         );
     }
 }

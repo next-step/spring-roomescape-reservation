@@ -8,7 +8,6 @@ import roomescape.application.service.command.DeleteThemeCommand;
 import roomescape.domain.theme.Theme;
 import roomescape.domain.theme.Themes;
 import roomescape.repository.ThemeRepository;
-import roomescape.repository.entity.ThemeEntity;
 
 @Service
 public class ThemeService {
@@ -21,9 +20,10 @@ public class ThemeService {
 
     public Theme createTheme(CreateThemeCommand command) {
         Theme theme = command.toTheme();
-        ThemeEntity themeEntity = themeRepository.save(ThemeEntityMapper.toThemeEntity(theme));
 
-        return ThemeMapper.toTheme(themeEntity);
+        return ThemeMapper.toTheme(
+                themeRepository.save(ThemeEntityMapper.toThemeEntity(theme))
+        );
     }
 
     public Themes findAllThemes() {

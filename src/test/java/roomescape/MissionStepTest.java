@@ -42,6 +42,7 @@ public class MissionStepTest {
                 new CreateReservationRequest(
                         LocalDate.now().plusYears(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                         "브라운",
+                        1L,
                         1L
                 );
         CreateReservationTimeRequest createReservationTimeRequest =

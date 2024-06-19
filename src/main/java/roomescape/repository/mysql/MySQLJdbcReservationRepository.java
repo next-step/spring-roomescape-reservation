@@ -23,6 +23,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
     private static final String TABLE_COLUMN_NAME = "name";
     private static final String TABLE_COLUMN_DATE = "date";
     private static final String TABLE_COLUMN_TIME_ID = "time_id";
+    private static final String TABLE_COLUMN_THEME_ID = "theme_id";
 
     private static final String TABLE_COLUMN_RESERVATION_ID = "reservation_id";
     private static final String TABLE_COLUMN_RESERVATION_NAME = "reservation_name";
@@ -39,15 +40,16 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public ReservationEntity save(ReservationEntity reservationEntity) {
-        String sql = "INSERT INTO reservation (id, name, date, time_id) VALUES (:id, :name, :date, :time_id) " +
-                "ON DUPLICATE KEY UPDATE name = VALUES(name), date = VALUES(date), time_id = VALUES(time_id)";
+        String sql = "INSERT INTO reservation (id, name, date, time_id, theme_id) VALUES (:id, :name, :date, :time_id, :theme_id) " +
+                "ON DUPLICATE KEY UPDATE name = VALUES(name), date = VALUES(date), time_id = VALUES(time_id), theme_id = VALUES(theme_id)";
 
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationEntity.getId())
                 .addValue(TABLE_COLUMN_NAME, reservationEntity.getReservationName())
                 .addValue(TABLE_COLUMN_DATE, reservationEntity.getReservationDate())
-                .addValue(TABLE_COLUMN_TIME_ID, reservationEntity.getReservationTimeId());
+                .addValue(TABLE_COLUMN_TIME_ID, reservationEntity.getReservationTimeId())
+                .addValue(TABLE_COLUMN_THEME_ID, reservationEntity.getThemeId());
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource, generatedKeyHolder);
 
@@ -70,7 +72,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                                 resultSet.getLong(TABLE_COLUMN_ID),
                                 resultSet.getString(TABLE_COLUMN_NAME),
                                 resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
-                                resultSet.getLong(TABLE_COLUMN_TIME_ID)
+                                resultSet.getLong(TABLE_COLUMN_TIME_ID),
+                                resultSet.getLong(TABLE_COLUMN_THEME_ID)
                         )
                 );
             }
@@ -104,7 +107,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                                     resultSet.getLong(TABLE_COLUMN_ID),
                                     resultSet.getString(TABLE_COLUMN_NAME),
                                     resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
-                                    resultSet.getLong(TABLE_COLUMN_TIME_ID)
+                                    resultSet.getLong(TABLE_COLUMN_TIME_ID),
+                                    resultSet.getLong(TABLE_COLUMN_THEME_ID)
                             )
                     )
             );
@@ -159,7 +163,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                                     resultSet.getLong(TABLE_COLUMN_ID),
                                     resultSet.getString(TABLE_COLUMN_NAME),
                                     resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
-                                    resultSet.getLong(TABLE_COLUMN_TIME_ID)
+                                    resultSet.getLong(TABLE_COLUMN_TIME_ID),
+                                    resultSet.getLong(TABLE_COLUMN_THEME_ID)
                             )
                     )
             );
@@ -184,7 +189,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                                     resultSet.getLong(TABLE_COLUMN_ID),
                                     resultSet.getString(TABLE_COLUMN_NAME),
                                     resultSet.getDate(TABLE_COLUMN_DATE).toLocalDate(),
-                                    resultSet.getLong(TABLE_COLUMN_TIME_ID)
+                                    resultSet.getLong(TABLE_COLUMN_TIME_ID),
+                                    resultSet.getLong(TABLE_COLUMN_THEME_ID)
                             )
                     )
             );

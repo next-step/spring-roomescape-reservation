@@ -3,7 +3,8 @@ POST http://localhost:8080/reservations
 Content-Type: application/json
 
 {
-  "date": "2024-06-19",
+  "date": "2024-06-20",
   "name": "kilian",
-  "timeId": "1"
+  "timeId": "1",
+  "themeId": "1"
 }

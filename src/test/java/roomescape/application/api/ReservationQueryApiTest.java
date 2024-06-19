@@ -17,6 +17,7 @@ import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
+import roomescape.domain.theme.vo.ThemeName;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -47,7 +48,8 @@ class ReservationQueryApiTest {
                 new ReservationName("kilian"),
                 new ReservationDate(LocalDate.of(2024, 6, 6)),
                 new ReservationTimeId(1L),
-                new ReservationTimeStartAt(LocalTime.of(18, 24))
+                new ReservationTimeStartAt(LocalTime.of(18, 24)),
+                new ThemeName("레벨2 탈출")
         );
 
         reservationViews = new ReservationViews(List.of(reservationView));

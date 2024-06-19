@@ -41,4 +41,14 @@ class AdminPageControllerTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
+
+    @Test
+    void themePage() {
+        ExtractableResponse<Response> response = RestAssured
+                .given().log().all()
+                .when().get("/admin/theme")
+                .then().log().all().extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+    }
 }

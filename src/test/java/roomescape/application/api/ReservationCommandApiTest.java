@@ -83,7 +83,7 @@ class ReservationCommandApiTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(createReservationRequest))
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(content().string(objectMapper.writeValueAsString(expectedResponse)));
     }
 
@@ -97,6 +97,6 @@ class ReservationCommandApiTest {
         mockMvc.perform(
                         delete("/reservations/{reservationId}", reservationId)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

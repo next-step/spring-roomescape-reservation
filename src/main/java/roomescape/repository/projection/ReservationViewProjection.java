@@ -15,18 +15,22 @@ public class ReservationViewProjection {
 
     private final LocalTime reservationTimeStartAt;
 
+    private final String themeName;
+
     public ReservationViewProjection(
             Long reservationId,
             String reservationName,
             LocalDate reservationDate,
             Long reservationTimeId,
-            LocalTime reservationTimeStartAt
+            LocalTime reservationTimeStartAt,
+            String themeName
     ) {
         this.reservationId = reservationId;
         this.reservationName = reservationName;
         this.reservationDate = reservationDate;
         this.reservationTimeId = reservationTimeId;
         this.reservationTimeStartAt = reservationTimeStartAt;
+        this.themeName = themeName;
     }
 
     public Long getReservationId() {
@@ -47,5 +51,9 @@ public class ReservationViewProjection {
 
     public LocalTime getReservationTimeStartAt() {
         return reservationTimeStartAt;
+    }
+
+    public String getThemeName() {
+        return themeName;
     }
 }

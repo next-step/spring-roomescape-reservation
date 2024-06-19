@@ -7,6 +7,7 @@ import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
+import roomescape.domain.theme.vo.ThemeName;
 import roomescape.repository.projection.ReservationViewProjection;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public final class ReservationViewMapper {
                 new ReservationName(reservationViewProjection.getReservationName()),
                 new ReservationDate(reservationViewProjection.getReservationDate()),
                 new ReservationTimeId(reservationViewProjection.getReservationTimeId()),
-                new ReservationTimeStartAt(reservationViewProjection.getReservationTimeStartAt())
+                new ReservationTimeStartAt(reservationViewProjection.getReservationTimeStartAt()),
+                new ThemeName(reservationViewProjection.getThemeName())
         );
     }
 

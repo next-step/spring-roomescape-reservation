@@ -30,6 +30,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
     private static final String TABLE_COLUMN_RESERVATION_DATE = "reservation_date";
     private static final String TABLE_COLUMN_RESERVATION_TIME_ID = "time_id";
     private static final String TABLE_COLUMN_RESERVATION_TIME_START_AT = "time_start_at";
+    private static final String TABLE_COLUMN_THEME_NAME = "theme_name";
 
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -124,10 +125,13 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                 "    r.name as reservation_name, " +
                 "    r.date as reservation_date, " +
                 "    t.id as time_id, " +
-                "    t.start_at as time_start_at " +
+                "    t.start_at as time_start_at, " +
+                "    m.name as theme_name " +
                 "FROM reservation as r " +
                 "inner join reservation_time as t " +
-                "on r.time_id = t.id";
+                "on r.time_id = t.id " +
+                "inner join theme as m " +
+                "on r.theme_id = m.id";
 
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
@@ -139,7 +143,8 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                                 resultSet.getString(TABLE_COLUMN_RESERVATION_NAME),
                                 resultSet.getDate(TABLE_COLUMN_RESERVATION_DATE).toLocalDate(),
                                 resultSet.getLong(TABLE_COLUMN_RESERVATION_TIME_ID),
-                                resultSet.getTime(TABLE_COLUMN_RESERVATION_TIME_START_AT).toLocalTime()
+                                resultSet.getTime(TABLE_COLUMN_RESERVATION_TIME_START_AT).toLocalTime(),
+                                resultSet.getString(TABLE_COLUMN_THEME_NAME)
                         )
                 );
             }

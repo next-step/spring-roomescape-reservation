@@ -9,6 +9,8 @@ import roomescape.application.service.ReservationTimeService;
 import roomescape.application.service.command.DeleteReservationTimeCommand;
 import roomescape.domain.reservationtime.ReservationTime;
 
+import java.net.URI;
+
 @RestController
 public class ReservationTimeCommandApi {
 
@@ -25,13 +27,15 @@ public class ReservationTimeCommandApi {
         ReservationTime reservationTime =
                 reservationTimeService.createReservationTime(request.toCreateReservationTimeCommand());
 
-        return ResponseEntity.ok(CreateReservationTimeResponse.from(reservationTime));
+        return ResponseEntity
+                .created(URI.create(String.format("/times/%d", reservationTime.getId())))
+                .body(CreateReservationTimeResponse.from(reservationTime));
     }
 
     @DeleteMapping("/times/{reservationTimeId}")
     public ResponseEntity<Void> deleteReservationTime(@PathVariable Long reservationTimeId) {
         reservationTimeService.deleteReservationTime(new DeleteReservationTimeCommand(reservationTimeId));
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

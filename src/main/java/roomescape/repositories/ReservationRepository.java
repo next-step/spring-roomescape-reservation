@@ -54,7 +54,6 @@ public class ReservationRepository {
         List<Reservation> reservations = jdbcTemplate.query(sql, new RowMapper<Reservation>() {
             @Override
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                System.out.println(rs);
                 return new Reservation( //TODO
                     rs.getLong("id"),
                     rs.getString("date"),

@@ -1,6 +1,6 @@
 package roomescape.entities;
 
-import roomescape.reservationTime.data.ReservationTimeAddRequestDto;
+import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
 
 public class ReservationTime {
     private Long id;

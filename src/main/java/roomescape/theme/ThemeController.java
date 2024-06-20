@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/themes")
 public class ThemeController {
-
     final private ThemeService themeService;
 
     public ThemeController(ThemeService themeService) {
@@ -38,5 +37,4 @@ public class ThemeController {
     public void deleteTheme(@PathVariable("id") Long id){
         themeService.deleteThemeById(id);
     }
-
 }

@@ -27,4 +27,15 @@ public class ReservationAddRequestDto {
     public String getTime() {
         return this.time;
     }
+
+    public boolean validateTime(){
+        String[] times = time.split(":");
+        int hour = Integer.parseInt(times[0]);
+        int minute = Integer.parseInt(times[1]);
+
+        if (hour >= 0 && hour <= 24 && minute >= 0 && minute <= 59){
+            return true;
+        }
+        return false;
+    }
 }

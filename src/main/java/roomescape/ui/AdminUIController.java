@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 @Controller
 public class AdminUIController {
-
     @GetMapping("/")
     public String index(){
         return "index";
@@ -27,5 +26,4 @@ public class AdminUIController {
     public String reservation(){
         return "admin/reservation";
     }
-
 }

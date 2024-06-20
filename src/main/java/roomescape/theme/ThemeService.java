@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class ThemeService {
-
     final private ThemeRepository themeRepository;
 
     public ThemeService(ThemeRepository themeRepository) {

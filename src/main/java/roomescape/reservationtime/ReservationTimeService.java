@@ -1,4 +1,4 @@
-package roomescape.reservationTime;
+package roomescape.reservationtime;
 
 
 import org.springframework.stereotype.Service;
@@ -9,9 +9,7 @@ import java.util.List;
 
 @Service
 public class ReservationTimeService {
-
     private final ReservationTimeRepository reservationTimeRepository;
-
 
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
         this.reservationTimeRepository = reservationTimeRepository;

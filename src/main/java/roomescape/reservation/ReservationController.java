@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import roomescape.entities.Reservation;
 import roomescape.entities.ReservationTime;
+import roomescape.errors.ErrorCode;
+import roomescape.exceptions.SpringRoomException;
 import roomescape.reservation.data.ReservationAddRequestDto;
-import roomescape.reservationTime.ReservationTimeService;
+import roomescape.reservationtime.ReservationTimeService;
 
 import java.util.List;
 
@@ -21,7 +23,6 @@ import java.util.List;
 public class ReservationController {
     private final ReservationService reservationService;
     private final ReservationTimeService reservationTimeService;
-
 
     public ReservationController(ReservationService reservationService, ReservationTimeService reservationTimeService) {
         this.reservationService = reservationService;
@@ -36,6 +37,9 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Reservation> addReservation(@RequestBody ReservationAddRequestDto reservationAddRequestDto) {
+        if (!reservationAddRequestDto.validateTime()) {
+            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
         ReservationTime reservationTime = reservationTimeService.findByTime(reservationAddRequestDto.getTime());
         Reservation reservation = reservationService.addReservation(new Reservation(reservationAddRequestDto.getName(), reservationAddRequestDto.getDate(), reservationTime));
         return ResponseEntity.ok().body(reservation);

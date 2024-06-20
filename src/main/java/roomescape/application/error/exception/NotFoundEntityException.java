@@ -2,7 +2,7 @@ package roomescape.application.error.exception;
 
 import roomescape.application.error.code.ApplicationErrorCode;
 
-public class NotFoundEntityException extends ApplicationException {
+public class NotFoundEntityException extends NotFoundException {
     public NotFoundEntityException(ApplicationErrorCode code) {
         super(code);
     }

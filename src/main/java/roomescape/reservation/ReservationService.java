@@ -16,11 +16,11 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public List<Reservation> searchAllReservations() {
+    public List<Reservation> findAllReservations() {
         return reservationRepository.findAll();
     }
 
-    public Reservation addReservation(Reservation reservation) {
+    public Reservation saveReservation(Reservation reservation) {
 
         return reservationRepository.save(reservation);
     }

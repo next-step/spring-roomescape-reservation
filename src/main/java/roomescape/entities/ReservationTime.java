@@ -1,5 +1,7 @@
 package roomescape.entities;
 
+import roomescape.errors.ErrorCode;
+import roomescape.exceptions.SpringRoomException;
 import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
 
 public class ReservationTime {
@@ -14,6 +16,9 @@ public class ReservationTime {
     }
 
     public ReservationTime(String time){
+        if (!isValidTime(time)){
+            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
         this.time = time;
     }
 

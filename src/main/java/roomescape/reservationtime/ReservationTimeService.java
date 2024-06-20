@@ -20,11 +20,15 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public void addTime(ReservationTime reservationTime){
+    public void saveTime(ReservationTime reservationTime){
         reservationTimeRepository.save(reservationTime);
     }
 
-    public List<ReservationTime> searchAllTimes(){
+    public ReservationTime findByTime(String time){
+        return reservationTimeRepository.findByTime(time);
+    }
+
+    public List<ReservationTime> findAllTimes(){
         return reservationTimeRepository.findAll();
     }
 
@@ -33,9 +37,5 @@ public class ReservationTimeService {
             throw new SpringRoomException(ErrorCode.RESERVATION_TIME_CANNOT_BE_DELETED);
         }
         reservationTimeRepository.deleteById(id);
-    }
-
-    public ReservationTime findByTime(String time){
-        return reservationTimeRepository.findByTime(time);
     }
 }

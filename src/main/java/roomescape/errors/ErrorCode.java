@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
   INVALID_INPUT_VALUE(HttpStatus.BAD_REQUEST, 400, "잘못된 입력 값입니다."),
+  RESERVATION_TIME_CANNOT_BE_DELETED(HttpStatus.BAD_REQUEST, 400, "예약된 시간은 삭제할 수 없습니다."),
   NOT_FOUND(HttpStatus.NOT_FOUND, 404, "데이터를 찾을 수 없습니다.");
 
   private final HttpStatus httpStatus;

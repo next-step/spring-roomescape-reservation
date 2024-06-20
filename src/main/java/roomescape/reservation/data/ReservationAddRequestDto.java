@@ -1,6 +1,8 @@
 package roomescape.reservation.data;
 
 import roomescape.entities.ReservationTime;
+import roomescape.errors.ErrorCode;
+import roomescape.exceptions.SpringRoomException;
 
 public class ReservationAddRequestDto {
     private String name;
@@ -14,6 +16,9 @@ public class ReservationAddRequestDto {
         this.name = name;
         this.date = date;
         this.time = reservationTime.getTime();
+        if (!validateTime(reservationTime.getTime())){
+            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE);
+        }
     }
 
     public String getName() {
@@ -28,7 +33,7 @@ public class ReservationAddRequestDto {
         return this.time;
     }
 
-    public boolean validateTime(){
+    public boolean validateTime(String time){
         String[] times = time.split(":");
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);

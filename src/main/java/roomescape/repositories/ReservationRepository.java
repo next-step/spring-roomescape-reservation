@@ -42,13 +42,13 @@ public class ReservationRepository {
 
     public List<Reservation> findAll(){
         String sql = """
-                      select r.id as reservation_id,
-                      r.name as reservation_name,
-                      r.date as reservation_date,
-                      t.time as time
-               from reservation as r
-               inner join reservation_time as t
-               on r.time_id = t.id
+                      SELECT r.id AS reservation_id,
+                      r.name AS reservation_name,
+                      r.date AS reservation_date,
+                      t.time AS time
+               FROM reservation AS r
+               INNER JOIN reservation_time AS t
+               ON r.time_id = t.id
             """;
 
         List<Reservation> reservations = jdbcTemplate.query(sql, new RowMapper<Reservation>() {
@@ -63,6 +63,30 @@ public class ReservationRepository {
             }
         });
         return reservations;
+    }
+
+    public Reservation findByReservationTimeId(Long Id){
+        String sql = """
+          SELECT r.id AS reservation_id,
+              r.name AS reservation_name,
+              r.date AS reservation_date,
+              t.time AS time
+          FROM reservation AS r
+          INNER JOIN reservation_time AS t
+          ON r.time_id = t.id
+        """;
+        Reservation reservation = jdbcTemplate.queryForObject(sql, new RowMapper<Reservation>() {
+            @Override
+            public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Reservation(
+                    rs.getLong("reservation_id"),
+                    rs.getString("reservation_date"),
+                    rs.getString("reservation_name"),
+                    new ReservationTime(rs.getLong("reservation_id"), rs.getString("time"))
+                );
+            }
+        });
+        return reservation;
     }
 
     public void deleteById(Long id){

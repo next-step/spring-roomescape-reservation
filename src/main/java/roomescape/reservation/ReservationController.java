@@ -30,16 +30,13 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reservation>> searchReservations(){
+    public ResponseEntity<List<Reservation>> findAllReservations(){
         List<Reservation> res = reservationService.searchAllReservations();
         return ResponseEntity.ok().body(res);
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> addReservation(@RequestBody ReservationAddRequestDto reservationAddRequestDto) {
-        if (!reservationAddRequestDto.validateTime()) {
-            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE);
-        }
+    public ResponseEntity<Reservation> saveReservation(@RequestBody ReservationAddRequestDto reservationAddRequestDto) {
         ReservationTime reservationTime = reservationTimeService.findByTime(reservationAddRequestDto.getTime());
         Reservation reservation = reservationService.addReservation(new Reservation(reservationAddRequestDto.getName(), reservationAddRequestDto.getDate(), reservationTime));
         return ResponseEntity.ok().body(reservation);

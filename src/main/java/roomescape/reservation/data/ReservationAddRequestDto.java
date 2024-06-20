@@ -18,7 +18,7 @@ public class ReservationAddRequestDto {
         this.date = date;
         this.time = reservationTime.getTime();
         if (!validateTime(reservationTime.getTime())){
-            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE);
+            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
         }
     }
 

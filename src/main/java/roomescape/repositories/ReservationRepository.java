@@ -1,5 +1,6 @@
 package roomescape.repositories;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationRepository {
@@ -37,7 +39,7 @@ public class ReservationRepository {
 
         Long id = keyHolder.getKey().longValue();
 
-        return new Reservation(keyHolder.getKey().longValue(), reservation.getDate(), reservation.getName(), reservation.getReservationTime());
+        return new Reservation(keyHolder.getKey().longValue(), reservation.getName(), reservation.getDate(), reservation.getReservationTime());
     }
 
     public List<Reservation> findAll(){
@@ -56,8 +58,8 @@ public class ReservationRepository {
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Reservation( //TODO
                     rs.getLong("id"),
-                    rs.getString("date"),
                     rs.getString("name"),
+                    rs.getString("date"),
                     new ReservationTime(rs.getLong("id"), rs.getString("time"))
                 );
             }
@@ -65,7 +67,7 @@ public class ReservationRepository {
         return reservations;
     }
 
-    public Reservation findByReservationTimeId(Long Id){
+    public Reservation findByReservationTimeId(Long id){
         String sql = """
           SELECT r.id AS reservation_id,
               r.name AS reservation_name,
@@ -74,8 +76,9 @@ public class ReservationRepository {
           FROM reservation AS r
           INNER JOIN reservation_time AS t
           ON r.time_id = t.id
+          WHERE r.time_id = ?
         """;
-        Reservation reservation = jdbcTemplate.queryForObject(sql, new RowMapper<Reservation>() {
+        Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<Reservation>() {
             @Override
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Reservation(
@@ -87,6 +90,35 @@ public class ReservationRepository {
             }
         });
         return reservation;
+    }
+
+    public Optional<Reservation> findByDateAndTime(String date, String time){
+        String sql = """
+          SELECT r.id AS reservation_id,
+              r.name AS reservation_name,
+              r.date AS reservation_date,
+              t.time AS time
+          FROM reservation AS r
+          INNER JOIN reservation_time AS t
+          ON r.time_id = t.id
+          WHERE r.date = ? AND t.time = ?
+        """;
+        try {
+            Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{date, time}, new RowMapper<Reservation>() {
+                @Override
+                public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return new Reservation(
+                      rs.getLong("reservation_id"),
+                      rs.getString("reservation_date"),
+                      rs.getString("reservation_name"),
+                      new ReservationTime(rs.getLong("reservation_id"), rs.getString("time"))
+                    );
+                }
+            });
+            return Optional.ofNullable(reservation);
+        } catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
     }
 
     public void deleteById(Long id){

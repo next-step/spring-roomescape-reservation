@@ -7,6 +7,7 @@ import roomescape.errors.ErrorCode;
 import roomescape.exceptions.SpringRoomException;
 import roomescape.repositories.ReservationRepository;
 import roomescape.repositories.ReservationTimeRepository;
+import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
 
 import java.util.List;
 
@@ -20,8 +21,9 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public void saveTime(ReservationTime reservationTime){
-        reservationTimeRepository.save(reservationTime);
+    public ReservationTime saveTime(ReservationTimeAddRequestDto reservationTimeAddRequestDto){
+        ReservationTime reservationTime = new ReservationTime(reservationTimeAddRequestDto.getTime());
+        return reservationTimeRepository.save(reservationTime);
     }
 
     public ReservationTime findByTime(String time){
@@ -34,7 +36,7 @@ public class ReservationTimeService {
 
     public void cancelReservationTime(Long id){
         if (reservationRepository.findByReservationTimeId(id) != null) {
-            throw new SpringRoomException(ErrorCode.RESERVATION_TIME_CANNOT_BE_DELETED);
+            throw new SpringRoomException(ErrorCode.RESERVATION_TIME_CANNOT_BE_DELETED, "Reservation time cannot be deleted because it is used in a reservation");
         }
         reservationTimeRepository.deleteById(id);
     }

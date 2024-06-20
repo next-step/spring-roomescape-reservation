@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class MissionStepTest {
+class MissionStepTest {
 
     @Test
     void page() {
@@ -27,7 +28,8 @@ public class MissionStepTest {
     void reservation() {
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+        String nextDay = LocalDate.now().plusDays(1).toString();
+        params.put("date", nextDay);
         params.put("time", "15:40");
 
         Map<String, String> timeParams = new HashMap<>();

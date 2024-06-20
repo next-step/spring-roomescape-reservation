@@ -2,22 +2,14 @@ package roomescape.entities;
 
 import roomescape.errors.ErrorCode;
 import roomescape.exceptions.SpringRoomException;
-import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
 
 public class ReservationTime {
     private Long id;
     private String time;
 
-    public ReservationTime(ReservationTimeAddRequestDto reservationTimeAddRequestDTO) {
-        if (!isValidTime(reservationTimeAddRequestDTO.getTime())){
-            throw new IllegalArgumentException();
-        }
-        this.time = reservationTimeAddRequestDTO.getTime();
-    }
-
     public ReservationTime(String time){
         if (!isValidTime(time)){
-            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE);
+            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
         }
         this.time = time;
     }

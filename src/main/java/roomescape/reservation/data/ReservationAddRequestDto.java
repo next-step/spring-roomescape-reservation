@@ -16,8 +16,8 @@ public class ReservationAddRequestDto {
     public ReservationAddRequestDto(String name, String date, ReservationTime reservationTime) {
         this.name = name;
         this.date = date;
-        this.time = reservationTime.getTime();
-        if (!validateTime(reservationTime.getTime())){
+        this.time = reservationTime.getStartAt();
+        if (!isValidateTime(reservationTime.getStartAt())){
             throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
         }
     }
@@ -38,7 +38,7 @@ public class ReservationAddRequestDto {
         return this.time;
     }
 
-    public boolean validateTime(String time){
+    public boolean isValidateTime(String time){
         String[] times = time.split(":");
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);

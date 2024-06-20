@@ -22,12 +22,12 @@ public class ReservationTimeService {
     }
 
     public ReservationTime saveTime(ReservationTimeAddRequestDto reservationTimeAddRequestDto){
-        ReservationTime reservationTime = new ReservationTime(reservationTimeAddRequestDto.getTime());
+        ReservationTime reservationTime = new ReservationTime(reservationTimeAddRequestDto.getStartAt());
         return reservationTimeRepository.save(reservationTime);
     }
 
-    public ReservationTime findByTime(String time){
-        return reservationTimeRepository.findByTime(time);
+    public ReservationTime findByStartAt(String startAt){
+        return reservationTimeRepository.findByStartAt(startAt);
     }
 
     public List<ReservationTime> findAllTimes(){
@@ -35,7 +35,7 @@ public class ReservationTimeService {
     }
 
     public void cancelReservationTime(Long id){
-        if (reservationRepository.findByReservationTimeId(id) != null) {
+        if (reservationRepository.findByReservationTimeId(id).isPresent()) {
             throw new SpringRoomException(ErrorCode.RESERVATION_TIME_CANNOT_BE_DELETED, "Reservation time cannot be deleted because it is used in a reservation");
         }
         reservationTimeRepository.deleteById(id);

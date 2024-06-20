@@ -14,6 +14,7 @@ import roomescape.entities.ReservationTime;
 import roomescape.errors.ErrorCode;
 import roomescape.exceptions.SpringRoomException;
 import roomescape.reservation.data.ReservationAddRequestDto;
+import roomescape.reservation.data.ReservationResponseDto;
 import roomescape.reservationtime.ReservationTimeService;
 
 import java.util.List;
@@ -30,14 +31,14 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Reservation>> findAllReservations(){
-        List<Reservation> res = reservationService.findAllReservations();
+    public ResponseEntity<List<ReservationResponseDto>> findAllReservations(){
+        List<ReservationResponseDto> res = reservationService.findAllReservations();
         return ResponseEntity.ok().body(res);
     }
 
     @PostMapping
     public ResponseEntity<Reservation> saveReservation(@RequestBody ReservationAddRequestDto reservationAddRequestDto) {
-        ReservationTime reservationTime = reservationTimeService.findByTime(reservationAddRequestDto.getTime());
+        ReservationTime reservationTime = reservationTimeService.findByStartAt(reservationAddRequestDto.getTime());
         Reservation reservation = reservationService.saveReservation(new Reservation(reservationAddRequestDto.getName(), reservationAddRequestDto.getDate(), reservationTime));
         return ResponseEntity.ok().body(reservation);
     }

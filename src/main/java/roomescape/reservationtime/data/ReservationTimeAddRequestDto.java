@@ -1,10 +1,10 @@
 package roomescape.reservationtime.data;
 
 public class ReservationTimeAddRequestDto {
-    private String time;
+    private String startAt;
 
-    public String getTime(){
-        return this.time;
+    public String getStartAt(){
+        return this.startAt;
     }
 
 }

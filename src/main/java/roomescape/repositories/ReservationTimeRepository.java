@@ -19,9 +19,9 @@ public class ReservationTimeRepository {
     }
 
     public ReservationTime save(ReservationTime reservationTime){
-        String sql = "INSERT INTO RESERVATION_TIME(time) VALUES(?)";
+        String sql = "INSERT INTO RESERVATION_TIME(start_at) VALUES(?)";
 
-        jdbcTemplate.update(sql, reservationTime.getTime());
+        jdbcTemplate.update(sql, reservationTime.getStartAt());
         return reservationTime;
     }
 
@@ -32,7 +32,7 @@ public class ReservationTimeRepository {
             public ReservationTime mapRow(ResultSet rs, int rowNum) throws SQLException {
                 ReservationTime time = new ReservationTime(
                         rs.getLong("id"),
-                        rs.getString("time")
+                        rs.getString("start_at")
                 );
                 return time;
             }
@@ -45,16 +45,16 @@ public class ReservationTimeRepository {
         jdbcTemplate.update(sql, id);
     }
 
-    public ReservationTime findByTime(String time){
-        String sql = "SELECT * FROM RESERVATION_TIME WHERE time = ?";
-        return jdbcTemplate.queryForObject(sql, new RowMapper<ReservationTime>() {
+    public ReservationTime findByStartAt(String startAt){
+        String sql = "SELECT * FROM RESERVATION_TIME WHERE start_at = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{startAt}, new RowMapper<ReservationTime>() {
             @Override
             public ReservationTime mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new ReservationTime(
                         rs.getLong("id"),
-                        rs.getString("time")
+                        rs.getString("start_at")
                 );
             }
-        }, time);
+        });
     }
 }

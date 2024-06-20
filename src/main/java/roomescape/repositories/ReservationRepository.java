@@ -47,7 +47,7 @@ public class ReservationRepository {
                       SELECT r.id AS reservation_id,
                       r.name AS reservation_name,
                       r.date AS reservation_date,
-                      t.time AS time
+                      t.start_at AS time
                FROM reservation AS r
                INNER JOIN reservation_time AS t
                ON r.time_id = t.id
@@ -67,29 +67,33 @@ public class ReservationRepository {
         return reservations;
     }
 
-    public Reservation findByReservationTimeId(Long id){
+    public Optional<Reservation> findByReservationTimeId(Long id){
         String sql = """
           SELECT r.id AS reservation_id,
               r.name AS reservation_name,
               r.date AS reservation_date,
-              t.time AS time
+              t.start_at AS time
           FROM reservation AS r
           INNER JOIN reservation_time AS t
           ON r.time_id = t.id
           WHERE r.time_id = ?
         """;
-        Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<Reservation>() {
-            @Override
-            public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Reservation(
-                    rs.getLong("reservation_id"),
-                    rs.getString("reservation_date"),
-                    rs.getString("reservation_name"),
-                    new ReservationTime(rs.getLong("reservation_id"), rs.getString("time"))
-                );
-            }
-        });
-        return reservation;
+        try {
+            Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<Reservation>() {
+                @Override
+                public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    return new Reservation(
+                      rs.getLong("reservation_id"),
+                      rs.getString("reservation_date"),
+                      rs.getString("reservation_name"),
+                      new ReservationTime(rs.getLong("reservation_id"), rs.getString("time"))
+                    );
+                }
+            });
+            return Optional.ofNullable(reservation);
+        } catch (EmptyResultDataAccessException e){
+            return Optional.empty();
+        }
     }
 
     public Optional<Reservation> findByDateAndTime(String date, String time){
@@ -97,11 +101,11 @@ public class ReservationRepository {
           SELECT r.id AS reservation_id,
               r.name AS reservation_name,
               r.date AS reservation_date,
-              t.time AS time
+              t.start_at AS time
           FROM reservation AS r
           INNER JOIN reservation_time AS t
           ON r.time_id = t.id
-          WHERE r.date = ? AND t.time = ?
+          WHERE r.date = ? AND t.start_at = ?
         """;
         try {
             Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{date, time}, new RowMapper<Reservation>() {

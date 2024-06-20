@@ -1,5 +1,6 @@
 package roomescape.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import roomescape.errors.ErrorCode;
 import roomescape.exceptions.SpringRoomException;
 
@@ -41,7 +42,7 @@ public class Reservation {
 
     public boolean isValidReservedDateTime(String date, ReservationTime reservationTime){
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime reservedDateTime = LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(reservationTime.getTime()));
+        LocalDateTime reservedDateTime = LocalDateTime.of(LocalDate.parse(date), LocalTime.parse(reservationTime.getStartAt()));
         return now.isBefore(reservedDateTime);
     }
 }

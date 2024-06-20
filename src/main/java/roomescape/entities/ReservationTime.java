@@ -28,7 +28,6 @@ public class ReservationTime {
     }
 
     private boolean isValidStartAt(String startAt){
-        System.out.println(startAt);
         String[] times = startAt.split(":");
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);

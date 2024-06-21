@@ -4,8 +4,7 @@ import roomescape.domain.reservation.Reservation;
 
 public class CreateReservationResponse {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String TIME_FORMAT = "HH:mm";
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
 
     private final Long id;
 
@@ -13,21 +12,21 @@ public class CreateReservationResponse {
 
     private final String date;
 
-    private final String time;
+    private final Long timeId;
 
-    public CreateReservationResponse(Long id, String name, String date, String time) {
+    public CreateReservationResponse(Long id, String name, String date, Long timeId) {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
     }
 
     public static CreateReservationResponse from(Reservation reservation) {
         return new CreateReservationResponse(
                 reservation.getId(),
                 reservation.getReservationName(),
-                reservation.fetchReservationDateTime(DATE_FORMAT),
-                reservation.fetchReservationDateTime(TIME_FORMAT)
+                reservation.getFormattedReservationDate(DATE_PATTERN),
+                reservation.getReservationTimeId()
         );
     }
 
@@ -43,7 +42,7 @@ public class CreateReservationResponse {
         return date;
     }
 
-    public String getTime() {
-        return time;
+    public Long getTimeId() {
+        return timeId;
     }
 }

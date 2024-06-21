@@ -1,33 +1,42 @@
 package roomescape.application.service.command;
 
-import roomescape.domain.reservation.Reservation;
-import roomescape.domain.reservation.vo.ReservationDateTime;
-import roomescape.domain.reservation.vo.ReservationName;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class CreateReservationCommand {
 
-    private final String name;
-    private final LocalDateTime reservationDateTime;
+    private final String reservationName;
 
-    public CreateReservationCommand(String name, LocalDateTime reservationDateTime) {
-        this.name = name;
-        this.reservationDateTime = reservationDateTime;
+    private final LocalDate reservationDate;
+
+    private final Long reservationTimeId;
+
+    private final Long themeId;
+
+    public CreateReservationCommand(
+            String reservationName,
+            LocalDate reservationDate,
+            Long reservationTimeId,
+            Long themeId
+    ) {
+        this.reservationName = reservationName;
+        this.reservationDate = reservationDate;
+        this.reservationTimeId = reservationTimeId;
+        this.themeId = themeId;
     }
 
-    public String getName() {
-        return name;
+    public String getReservationName() {
+        return reservationName;
     }
 
-    public LocalDateTime getReservationDateTime() {
-        return reservationDateTime;
+    public LocalDate getReservationDate() {
+        return reservationDate;
     }
 
-    public Reservation toReservation() {
-        return new Reservation(
-                new ReservationName(this.name),
-                new ReservationDateTime(this.getReservationDateTime())
-        );
+    public Long getReservationTimeId() {
+        return reservationTimeId;
+    }
+
+    public Long getThemeId() {
+        return themeId;
     }
 }

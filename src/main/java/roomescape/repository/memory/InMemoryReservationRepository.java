@@ -3,9 +3,12 @@ package roomescape.repository.memory;
 import org.springframework.stereotype.Repository;
 import roomescape.repository.ReservationRepository;
 import roomescape.repository.entity.ReservationEntity;
+import roomescape.repository.projection.ReservationViewProjection;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -48,15 +51,28 @@ public class InMemoryReservationRepository implements ReservationRepository {
     }
 
     @Override
-    public ReservationEntity findById(Long reservationId) {
+    public Optional<ReservationEntity> findById(Long reservationId) {
         return this.reservationEntities.stream()
                 .filter(reservationEntity -> reservationEntity.isSameId(reservationId))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(
-                        String.format(
-                                "[id:%d] id에 해당하는 reservation 엔티티가 존재하지 않습니다.", reservationId
-                        )
-                ));
+                .findAny();
+    }
+
+    @Override
+    public List<ReservationViewProjection> findAllReservationViewProjection() {
+        // 미구현
+        return null;
+    }
+
+    @Override
+    public Optional<ReservationEntity> findByTimeId(Long timeId) {
+        // 미구현
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ReservationEntity> findByDateAndTimeId(LocalDate date, Long timeId) {
+        // 미구현
+        return Optional.empty();
     }
 
     private boolean containSameId(Long id) {

@@ -9,17 +9,17 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
-import roomescape.repository.config.MySQLJdbcReservationRepositoryConfig;
+import roomescape.repository.config.MySQLJdbcRepositoryConfig;
 import roomescape.repository.entity.ReservationEntity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(MySQLJdbcReservationRepositoryConfig.class)
+@Import(MySQLJdbcRepositoryConfig.class)
 @Sql({"classpath:db/schema/schema.sql", "classpath:db/data/init.sql"})
 class MySQLJdbcReservationRepositoryTest {
 
@@ -36,11 +36,14 @@ class MySQLJdbcReservationRepositoryTest {
 
             @BeforeEach
             void setUp() {
-                mySQLJdbcReservationRepository.save(new ReservationEntity(
-                        1L,
-                        "kilian",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
-                ));
+                mySQLJdbcReservationRepository.save(
+                        new ReservationEntity(
+                                1L,
+                                "kilian",
+                                LocalDate.of(2024, 6, 8),
+                                1L,
+                                1L
+                        ));
             }
 
             @Test
@@ -49,43 +52,50 @@ class MySQLJdbcReservationRepositoryTest {
                 ReservationEntity expected = new ReservationEntity(
                         1L,
                         "brie",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
+                        LocalDate.of(2024, 6, 8),
+                        1L,
+                        1L
                 );
 
                 mySQLJdbcReservationRepository.save(expected);
-                ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L);
+                ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L)
+                        .orElseThrow(() -> new IllegalStateException("엔티티를 찾을 수 없습니다."));
 
                 assertSoftly(softly -> softly.assertThat(actual.getReservationName()).isEqualTo("brie")
                 );
             }
         }
-    }
 
-    @Nested
-    @DisplayName("id가 존재하지 않는 엔티티라면")
-    class NotContainEntity {
+        @Nested
+        @DisplayName("id가 존재하지 않는 엔티티라면")
+        class NotContainEntity {
 
-        @Test
-        @DisplayName("저장 한다.")
-        void saveEntity() {
-            ReservationEntity expected = new ReservationEntity(
-                    1L,
-                    "kilian",
-                    LocalDateTime.of(2024, 6, 8, 17, 22)
-            );
+            @Test
+            @DisplayName("저장 한다.")
+            void saveEntity() {
+                ReservationEntity expected = new ReservationEntity(
+                        1L,
+                        "kilian",
+                        LocalDate.of(2024, 6, 8),
+                        1L,
+                        1L
+                );
 
-            mySQLJdbcReservationRepository.save(expected);
+                mySQLJdbcReservationRepository.save(expected);
 
-            ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L);
-            List<ReservationEntity> all = mySQLJdbcReservationRepository.findAll();
+                ReservationEntity actual = mySQLJdbcReservationRepository.findById(1L)
+                        .orElseThrow(() -> new IllegalStateException("엔티티를 찾을 수 없습니다."));
+                List<ReservationEntity> all = mySQLJdbcReservationRepository.findAll();
 
-            assertSoftly(softly -> {
-                        softly.assertThat(actual.getReservationName()).isEqualTo("kilian");
-                        softly.assertThat(all.size()).isEqualTo(1);
-                    }
-            );
+                assertSoftly(softly -> {
+                            softly.assertThat(actual.getReservationName()).isEqualTo("kilian");
+                            softly.assertThat(all.size()).isEqualTo(1);
+                        }
+                );
+            }
         }
     }
+
 
     @Nested
     @DisplayName("delete 함수를 수행할 때")
@@ -97,11 +107,14 @@ class MySQLJdbcReservationRepositoryTest {
             @Test
             @DisplayName("삭제 한다.")
             void delete() {
-                mySQLJdbcReservationRepository.save(new ReservationEntity(
-                        1L,
-                        "kilian",
-                        LocalDateTime.of(2024, 6, 8, 17, 22)
-                ));
+                mySQLJdbcReservationRepository.save(
+                        new ReservationEntity(
+                                1L,
+                                "kilian",
+                                LocalDate.of(2024, 6, 8),
+                                1L,
+                                1L
+                        ));
                 List<ReservationEntity> savedEntities = mySQLJdbcReservationRepository.findAll();
 
                 mySQLJdbcReservationRepository.delete(1L);

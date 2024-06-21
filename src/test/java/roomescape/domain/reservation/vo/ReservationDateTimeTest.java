@@ -12,12 +12,12 @@ class ReservationDateTimeTest {
     private static final String TIME_FORMAT = "HH:mm";
 
     @Test
-    void fetchReservationDateTimeTest() {
+    void getFormatted() {
         LocalDateTime localDateTime = LocalDateTime.of(2024, 6, 6, 19, 25);
         ReservationDateTime reservationDateTime = new ReservationDateTime(localDateTime);
 
-        String dateActual = reservationDateTime.fetchReservationDateTime(DATE_FORMAT);
-        String timeActual = reservationDateTime.fetchReservationDateTime(TIME_FORMAT);
+        String dateActual = reservationDateTime.getFormatted(DATE_FORMAT);
+        String timeActual = reservationDateTime.getFormatted(TIME_FORMAT);
 
         assertSoftly(softly -> {
                     softly.assertThat(dateActual).isEqualTo("2024-06-06");

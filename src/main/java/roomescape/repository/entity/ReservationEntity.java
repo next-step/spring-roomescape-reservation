@@ -1,22 +1,32 @@
 package roomescape.repository.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class ReservationEntity {
 
     private final Long id;
     private final String reservationName;
-    private final LocalDateTime reservationDateTime;
+    private final LocalDate reservationDate;
+    private final Long reservationTimeId;
+    private final Long themeId;
 
-    public ReservationEntity(Long id, String reservationName, LocalDateTime reservationDateTime) {
+    public ReservationEntity(
+            Long id,
+            String reservationName,
+            LocalDate reservationDate,
+            Long reservationTimeId,
+            Long themeId
+    ) {
         this.id = id;
         this.reservationName = reservationName;
-        this.reservationDateTime = reservationDateTime;
+        this.reservationDate = reservationDate;
+        this.reservationTimeId = reservationTimeId;
+        this.themeId = themeId;
     }
 
     public ReservationEntity changeId(Long id) {
-        return new ReservationEntity(id, this.reservationName, this.reservationDateTime);
+        return new ReservationEntity(id, this.reservationName, this.reservationDate, this.reservationTimeId, themeId);
     }
 
     public boolean isSameId(ReservationEntity reservationEntity) {
@@ -35,7 +45,15 @@ public class ReservationEntity {
         return reservationName;
     }
 
-    public LocalDateTime getReservationDateTime() {
-        return reservationDateTime;
+    public LocalDate getReservationDate() {
+        return reservationDate;
+    }
+
+    public Long getReservationTimeId() {
+        return reservationTimeId;
+    }
+
+    public Long getThemeId() {
+        return themeId;
     }
 }

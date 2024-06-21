@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import roomescape.dto.theme.ThemeResponse;
 import roomescape.dto.theme.create.ThemeCreateRequest;
 import roomescape.dto.theme.create.ThemeCreateResponse;
-import roomescape.exception.custom.DuplicatedThemeName;
+import roomescape.exception.custom.DuplicatedThemeNameException;
 import roomescape.service.ThemeService;
 
-import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -48,8 +47,8 @@ public class ThemeController {
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(DuplicatedThemeName.class)
-    public ResponseEntity<String> handleDuplicatedThemeNameException(DuplicatedThemeName e) {
+    @ExceptionHandler(DuplicatedThemeNameException.class)
+    public ResponseEntity<String> handleDuplicatedThemeNameException(DuplicatedThemeNameException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }

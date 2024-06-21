@@ -3,17 +3,13 @@ package roomescape.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import roomescape.dto.time.ReservationTimeRequest;
 import roomescape.dto.time.ReservationTimeResponse;
 import roomescape.dto.time.create.ReservationTimeCreateResponse;
-import roomescape.exception.ErrorCode;
-import roomescape.exception.ErrorCodeResponse;
-import roomescape.exception.custom.DuplicatedReservationTime;
+import roomescape.exception.custom.DuplicatedReservationTimeException;
 import roomescape.service.ReservationTimeService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -44,8 +40,8 @@ public class ReservationTimeController {
         return ResponseEntity.ok().build();
     }
 
-    @ExceptionHandler(DuplicatedReservationTime.class)
-    public ResponseEntity<String> handleDuplicatedReservationTimeException(DuplicatedReservationTime e) {
+    @ExceptionHandler(DuplicatedReservationTimeException.class)
+    public ResponseEntity<String> handleDuplicatedReservationTimeException(DuplicatedReservationTimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }

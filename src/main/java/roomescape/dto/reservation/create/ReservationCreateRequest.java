@@ -13,12 +13,12 @@ public class ReservationCreateRequest {
     @Size(min = 2, max = 12, message = "예약자는 2글자 이상 12글자 이하입니다.")
     private String name;
 
-    @NotNull(message = "시간을 입력해주세요.")
-    @Positive(message = "해당 시간을 선택해주세요.")
+    @NotNull(message = "시간을 선택해주세요.")
+    @Positive(message = "존재하지 않는 예약 시간입니다. 다시 확인해주세요.")
     private Long timeId;
 
-    @NotNull(message = "테마을 입력해주세요.")
-    @Positive(message = "해당 테마를 선택해주세요.")
+    @NotNull(message = "테마을 선택해주세요.")
+    @Positive(message = "존재하지 않는 테마입니다. 다시 확인해주세요.")
     private Long themeId;
 
     public ReservationCreateRequest() {

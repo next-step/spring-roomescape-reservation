@@ -7,7 +7,9 @@ public enum ErrorCode {
 
     INVALID_TIME_ZONE,
 
-    //500
-    Internal_Server_Error
+
+    INVALID_RESULT,
+
+    INTERNAL_SERVER_ERROR
 
 }

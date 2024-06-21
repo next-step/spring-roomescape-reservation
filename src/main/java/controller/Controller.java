@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @org.springframework.stereotype.Controller
 public class Controller {
 
     private List<Reserve> reserves = new ArrayList<>();
-    private Long id = 0L;
+    private AtomicLong id = new AtomicLong(0);
 
     @GetMapping("/")
     public String home() {
@@ -31,7 +32,7 @@ public class Controller {
 
     @PostMapping("/reservations")
     public ResponseEntity<Reserve> addReserve(@RequestBody Reserve reserve) {
-        reserve.setId(id++);
+        reserve.setId(id.incrementAndGet());
         reserves.add(reserve);
         return ResponseEntity.created(URI.create("api/reserve/" + reserve.getId())).body(reserve);
     }

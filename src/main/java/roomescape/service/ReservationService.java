@@ -65,6 +65,7 @@ public class ReservationService {
         //예약 날짜
         LocalDate reservatedDate = LocalDate.parse(request.getDate());
         LocalDate currentDate = LocalDate.now();
+
         if (reservatedDate.isBefore(currentDate) ||
                 reservatedDate.equals(currentDate) && reservatedTime.getStartAt().isBefore(currentTime)) {
             throw new ErrorCodeResponse(ErrorCode.INVALID_TIME_ZONE, "예약 시간을 다시 확인해주세요.");

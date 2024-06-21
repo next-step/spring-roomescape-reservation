@@ -1,4 +1,4 @@
-package roomescape.repository;
+package roomescape.model;
 
 import java.util.concurrent.atomic.AtomicLong;
 

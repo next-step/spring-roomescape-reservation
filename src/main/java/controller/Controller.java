@@ -1,19 +1,14 @@
 package controller;
 
 import domain.Reserve;
-import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @org.springframework.stereotype.Controller
 public class Controller {
-
-    private List<Reserve> reserves = new ArrayList<>();
-    private AtomicLong id = new AtomicLong(0);
+    private JdbcTemplate jdbcTemplate;
 
     @GetMapping("/")
     public String home() {
@@ -26,20 +21,43 @@ public class Controller {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<Reserve>> readReserve() {
-        return ResponseEntity.ok().body(reserves);
+    public List<Reserve> readReserve() {
+        String sql = "select id, name, date, time from reservation";
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) -> {
+                    Reserve reserve = new Reserve(
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            rs.getString("date"),
+                            rs.getString("time")
+                    );
+                    return reserve;
+                });
     }
 
+    @GetMapping("/reservations/{id}")
+    public List<Reserve> findReserve(@PathVariable Long id) {
+        String sql = "select id, name, date, time from reservation where id = ?";
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) -> {
+                    Reserve reserve = new Reserve(
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            rs.getString("date"),
+                            rs.getString("time")
+                    );
+                    return reserve;
+                }, id);
+    }
     @PostMapping("/reservations")
-    public ResponseEntity<Reserve> addReserve(@RequestBody Reserve reserve) {
-        reserve.setId(id.incrementAndGet());
-        reserves.add(reserve);
-        return ResponseEntity.created(URI.create("api/reserve/" + reserve.getId())).body(reserve);
+    public void addReserve(@RequestBody Reserve reserve) {
+        String sql = "insert into reservation(name, date, time) values (?, ?, ?)";
+        jdbcTemplate.update(sql, reserve.getName(), reserve.getDate(), reserve.getTime());
     }
 
     @DeleteMapping("/reservations/{id}")
-    public ResponseEntity<Void> deleteReserve(@PathVariable Long id) {
-        reserves.remove(id);
-        return ResponseEntity.ok().build();
+    public int deleteReserve(@PathVariable Long id) {
+        String sql = "delete from reservation where id = ?";
+        return jdbcTemplate.update(sql, id);
     }
 }

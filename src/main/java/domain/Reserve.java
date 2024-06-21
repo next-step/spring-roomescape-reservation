@@ -1,12 +1,12 @@
 package domain;
 
 public class Reserve {
-    long id;
-    String name;
-    String date;
-    String time;
+    private long id;
+    private String name;
+    private String date;
+    private Time time;
 
-    public Reserve(long id, String name, String date, String time) {
+    public Reserve(long id, String name, String date, Time time) {
         this.id = id;
         this.name = name;
         this.date = date;

@@ -1,18 +1,39 @@
 package roomescape.reservation.data;
 
-import java.time.Instant;
-import java.time.LocalDate;
+import lombok.Getter;
+import roomescape.entities.Reservation;
+import roomescape.entities.ReservationTime;
+import roomescape.entities.Theme;
 
-public class ReservationAddRequestDTO {
-    private Long id;
+@Getter
+public class ReservationAddRequestDto {
     private String name;
-    private LocalDate date;
-    private Instant time;
 
-    public ReservationAddRequestDTO(Long id, String name, LocalDate date, Instant time) {
-        this.id = id;
+    private String date;
+
+    private Long timeId;
+
+    private Long themeId;
+
+    public ReservationAddRequestDto() {
+    }
+
+    public ReservationAddRequestDto(String name,
+                                    String date,
+                                    Long timeId,
+                                    Long themeId) {
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
+        this.themeId = themeId;
+    }
+
+    public Reservation toEntity(){
+        return new Reservation(
+          this.name,
+          this.date,
+          new ReservationTime(this.timeId, ""),
+          new Theme(this.themeId, "", "", "")
+      );
     }
 }

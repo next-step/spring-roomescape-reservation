@@ -5,7 +5,9 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.reservation.data.ReservationAddRequestDto;
 import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
+import roomescape.theme.data.ThemeAddRequestDto;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -27,11 +29,12 @@ class MissionStepTest {
 
     @Test
     void reservation() {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", "브라운");
-        String nextDay = LocalDate.now().plusDays(1).toString();
-        params.put("date", nextDay);
-        params.put("time", "15:40");
+        ReservationAddRequestDto reservationAddRequestDto = new ReservationAddRequestDto(
+          "브라운",
+          LocalDate.now().plusDays(1).toString(),
+          1L,
+          1L
+        );
 
         ReservationTimeAddRequestDto reservationTimeAddRequest =
           new ReservationTimeAddRequestDto("15:40");
@@ -43,9 +46,22 @@ class MissionStepTest {
                 .then().log().all()
                 .statusCode(200);
 
+        ThemeAddRequestDto themeAddRequestDto = new ThemeAddRequestDto(
+          "테마1",
+          "테마1 설명",
+          "테마1 썸네일"
+        );
+
+        RestAssured.given().log().all()
+            .contentType(ContentType.JSON)
+              .body(themeAddRequestDto)
+                .when().post("/themes")
+                .then().log().all()
+                .statusCode(200);
+
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(params)
+                .body(reservationAddRequestDto)
                 .when().post("/reservations")
                 .then().log().all()
                 .statusCode(200)

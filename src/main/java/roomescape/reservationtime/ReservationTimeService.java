@@ -26,8 +26,8 @@ public class ReservationTimeService {
         return reservationTimeRepository.save(reservationTime);
     }
 
-    public ReservationTime findByStartAt(String startAt){
-        return reservationTimeRepository.findByStartAt(startAt);
+    public ReservationTime findById(Long id){
+        return reservationTimeRepository.findById(id);
     }
 
     public List<ReservationTime> findAllTimes(){

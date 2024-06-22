@@ -19,6 +19,10 @@ public class ThemeService {
         return themeRepository.findAllThemes();
     }
 
+    public Theme findById(Long id) {
+        return themeRepository.findById(id);
+    }
+
     public Theme save(ThemeAddRequestDto themeAddRequestDto){
         Theme theme = new Theme(
           themeAddRequestDto.getName(),

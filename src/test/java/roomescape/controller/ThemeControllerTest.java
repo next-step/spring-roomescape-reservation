@@ -2,58 +2,53 @@ package roomescape.controller;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.domain.Reservation;
-import roomescape.dto.reservation.create.ReservationCreateRequest;
 import roomescape.dto.theme.create.ThemeCreateRequest;
-import roomescape.dto.time.ReservationTimeRequest;
-import roomescape.service.ReservationService;
-import roomescape.service.ReservationTimeService;
-import roomescape.service.ThemeService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ReservationControllerTest {
+class ThemeControllerTest {
 
     @Autowired
-    ReservationService reservationService;
-    @Autowired
-    ThemeService themeService;
-    @Autowired
-    ReservationTimeService reservationTimeService;
+    ThemeController themeController;
+
 
     @BeforeEach
     void init() {
-        themeService.createTheme(new ThemeCreateRequest("엄청 무서운 이야기", "설명은 없습니다.", "https://gg"));
-        reservationTimeService.createTime(new ReservationTimeRequest("12:00"));
-        reservationService.createReservation(new ReservationCreateRequest("2024-06-23", "brown", 1L, 1L));
+        themeController.createTheme(new ThemeCreateRequest(
+                "엄청 무서운 이야기", "설명은 없습니다.", "https://gg")
+        );
     }
 
     @Test
-    void create() {
-        var response = RestAssured
+    void findThemes() {
+         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationCreateRequest("2024-06-23", "hardy", 1L,1L))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().get("/themes")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
+
     @Test
-    void list() {
+    void create() {
         var response = RestAssured
                 .given().log().all()
+                .body(new ThemeCreateRequest("엄청 무서운 이야기", "설명은 없습니다.", "https://gg"))
                 .contentType(ContentType.JSON)
-                .when().get("/reservations")
+                .when().post("/themes")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -61,13 +56,14 @@ class ReservationControllerTest {
 
     @Test
     void delete() {
+        //init 메서드에 theme 추가
         var response = RestAssured
                 .given().log().all()
+//                .body()
                 .contentType(ContentType.JSON)
-                .when().delete("reservations/1")
+                .when().delete("themes/1")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
-
 }

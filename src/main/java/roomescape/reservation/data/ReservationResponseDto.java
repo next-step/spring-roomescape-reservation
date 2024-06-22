@@ -2,7 +2,6 @@ package roomescape.reservation.data;
 
 import lombok.Getter;
 import roomescape.entities.Reservation;
-import roomescape.entities.ReservationTime;
 
 import java.util.List;
 import java.util.stream.Collectors;

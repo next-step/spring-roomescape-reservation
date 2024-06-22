@@ -1,7 +1,6 @@
 package roomescape.repositories;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -9,8 +8,6 @@ import roomescape.entities.Theme;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -24,18 +21,15 @@ public class ThemeRepository {
 
     public List<Theme> findAllThemes(){
         String sql = "SELECT * FROM THEME";
-        List<Theme> themes = jdbcTemplate.query(sql, new RowMapper<Theme>() {
-            @Override
-            public Theme mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Theme theme = new Theme(
-                  rs.getLong("id"),
-                  rs.getString("name"),
-                  rs.getString("description"),
-                  rs.getString("thumbnail")
-                );
-                return theme;
-            }
-        });
+        List<Theme> themes = jdbcTemplate.query(sql, (rs, rowNum) -> {
+              Theme theme = new Theme(
+                rs.getLong("id"),
+                rs.getString("name"),
+                rs.getString("description"),
+                rs.getString("thumbnail")
+              );
+              return theme;
+          });
 
         return themes;
     }

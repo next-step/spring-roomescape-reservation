@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -32,12 +33,12 @@ class MissionStepTest {
         params.put("date", nextDay);
         params.put("time", "15:40");
 
-        Map<String, String> timeParams = new HashMap<>();
-        timeParams.put("time", "15:40");
+        ReservationTimeAddRequestDto reservationTimeAddRequest =
+          new ReservationTimeAddRequestDto("15:40");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(timeParams)
+                .body(reservationTimeAddRequest)
                 .when().post("/times")
                 .then().log().all()
                 .statusCode(200);

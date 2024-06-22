@@ -2,7 +2,6 @@ package roomescape.repositories;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -11,8 +10,6 @@ import roomescape.entities.ReservationTime;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,19 +49,16 @@ public class ReservationRepository {
                ON r.time_id = t.id
             """;
 
-        List<Reservation> reservations = jdbcTemplate.query(sql, new RowMapper<Reservation>() {
-            @Override
-            public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Reservation(
-                    rs.getLong("id"),
-                    rs.getString("name"),
-                    rs.getString("date"),
-                    new ReservationTime(
-                      rs.getLong("id"),
-                      rs.getString("time"))
-                );
-            }
-        });
+        List<Reservation> reservations = jdbcTemplate.query(sql,
+          (rs, rowNum) -> new Reservation(
+            rs.getLong("reservation_id"),
+            rs.getString("reservation_date"),
+            rs.getString("reservation_name"),
+            new ReservationTime(
+              rs.getLong("reservation_id"),
+              rs.getString("time"))
+          ));
+
         return reservations;
     }
 
@@ -79,21 +73,18 @@ public class ReservationRepository {
           ON r.time_id = t.id
           WHERE r.time_id = ?
         """;
+
         try {
             Reservation reservation = jdbcTemplate.queryForObject(
-              sql, new Object[]{id}, new RowMapper<Reservation>() {
-                @Override
-                public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    return new Reservation(
-                      rs.getLong("reservation_id"),
-                      rs.getString("reservation_date"),
-                      rs.getString("reservation_name"),
-                      new ReservationTime(
-                        rs.getLong("reservation_id"),
-                        rs.getString("time"))
-                    );
-                }
-            });
+              sql, (rs, rowNum) -> new Reservation(
+                rs.getLong("reservation_id"),
+                rs.getString("reservation_date"),
+                rs.getString("reservation_name"),
+                new ReservationTime(
+                  rs.getLong("reservation_id"),
+                  rs.getString("time"))
+              ), id);
+
             return Optional.ofNullable(reservation);
         } catch (EmptyResultDataAccessException e){
             return Optional.empty();
@@ -113,17 +104,16 @@ public class ReservationRepository {
         """;
 
         try {
-            Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{date, time}, new RowMapper<Reservation>() {
-                @Override
-                public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    return new Reservation(
-                      rs.getLong("reservation_id"),
-                      rs.getString("reservation_date"),
-                      rs.getString("reservation_name"),
-                      new ReservationTime(rs.getLong("reservation_id"), rs.getString("time"))
-                    );
-                }
-            });
+            Reservation reservation = jdbcTemplate.queryForObject(sql,
+              (rs, rowNum) -> new Reservation(
+                rs.getLong("reservation_id"),
+                rs.getString("reservation_date"),
+                rs.getString("reservation_name"),
+                new ReservationTime(
+                  rs.getLong("reservation_id"),
+                  rs.getString("time"))
+              ), date, time);
+
             return Optional.ofNullable(reservation);
         } catch (EmptyResultDataAccessException e){
             return Optional.empty();

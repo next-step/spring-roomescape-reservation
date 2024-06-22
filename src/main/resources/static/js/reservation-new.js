@@ -1,7 +1,9 @@
 let isEditing = false;
 const RESERVATION_API_ENDPOINT = '/reservations';
 const TIME_API_ENDPOINT = '/times';
+const THEME_API_ENDPOINT = '/themes';
 const timesOptions = [];
+const themesOptions = [];
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-button').addEventListener('click', addInputRow);
@@ -11,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(error => console.error('Error fetching reservations:', error));
 
   fetchTimes();
+  fetchThemes();
 });
 
 function render(data) {
@@ -20,10 +23,11 @@ function render(data) {
   data.forEach(item => {
     const row = tableBody.insertRow();
 
-    row.insertCell(0).textContent = item.id;
-    row.insertCell(1).textContent = item.name;
-    row.insertCell(2).textContent = item.date;
-    row.insertCell(3).textContent = item.time.startAt;
+    row.insertCell(0).textContent = item.id;            // 예약 id
+    row.insertCell(1).textContent = item.name;          // 예약자명
+    row.insertCell(2).textContent = item.theme.name;    // 테마명
+    row.insertCell(3).textContent = item.date;          // 예약 날짜
+    row.insertCell(4).textContent = item.time.startAt;  // 시작 시간
 
     const actionCell = row.insertCell(row.cells.length);
     actionCell.appendChild(createActionButton('삭제', 'btn-danger', deleteRow));
@@ -36,6 +40,14 @@ function fetchTimes() {
         timesOptions.push(...data);
       })
       .catch(error => console.error('Error fetching time:', error));
+}
+
+function fetchThemes() {
+  requestRead(THEME_API_ENDPOINT)
+      .then(data => {
+        themesOptions.push(...data);
+      })
+      .catch(error => console.error('Error fetching theme:', error));
 }
 
 function createSelect(options, defaultText, selectId, textProperty) {
@@ -77,8 +89,9 @@ function addInputRow() {
   const nameInput = createInput('text');
   const dateInput = createInput('date');
   const timeDropdown = createSelect(timesOptions, "시간 선택", 'time-select', 'startAt');
+  const themeDropdown = createSelect(themesOptions, "테마 선택", 'theme-select', 'name');
 
-  const cellFieldsToCreate = ['', nameInput, dateInput, timeDropdown];
+  const cellFieldsToCreate = ['', nameInput, themeDropdown, dateInput, timeDropdown];
 
   cellFieldsToCreate.forEach((field, index) => {
     const cell = row.insertCell(index);
@@ -119,12 +132,14 @@ function saveRow(event) {
   const row = event.target.parentNode.parentNode;
   const nameInput = row.querySelector('input[type="text"]');
   const dateInput = row.querySelector('input[type="date"]');
-  const timeSelect = row.querySelector('select');
+  const timeSelect = row.querySelector('#time-select');
+  const themeSelect = row.querySelector('#theme-select');
 
   const reservation = {
     name: nameInput.value,
     date: dateInput.value,
-    timeId: timeSelect.value
+    timeId: timeSelect.value,
+    themeId: themeSelect.value
   };
 
   requestCreate(reservation)

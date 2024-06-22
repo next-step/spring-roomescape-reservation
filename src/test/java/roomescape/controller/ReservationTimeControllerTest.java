@@ -8,52 +8,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.domain.Reservation;
 import roomescape.dto.reservation.create.ReservationCreateRequest;
-import roomescape.dto.theme.create.ThemeCreateRequest;
 import roomescape.dto.time.ReservationTimeRequest;
 import roomescape.service.ReservationService;
 import roomescape.service.ReservationTimeService;
-import roomescape.service.ThemeService;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ReservationControllerTest {
+class ReservationTimeControllerTest {
 
-    @Autowired
-    ReservationService reservationService;
-    @Autowired
-    ThemeService themeService;
     @Autowired
     ReservationTimeService reservationTimeService;
 
     @BeforeEach
     void init() {
-        themeService.createTheme(new ThemeCreateRequest("엄청 무서운 이야기", "설명은 없습니다.", "https://gg"));
         reservationTimeService.createTime(new ReservationTimeRequest("12:00"));
-        reservationService.createReservation(new ReservationCreateRequest("2024-06-23", "brown", 1L, 1L));
     }
 
     @Test
     void create() {
         var response = RestAssured
                 .given().log().all()
-                .body(new ReservationCreateRequest("2024-06-23", "hardy", 1L,1L))
+                .body(new ReservationTimeRequest("12:00"))
                 .contentType(ContentType.JSON)
-                .when().post("/reservations")
+                .when().post("/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
     @Test
-    void list() {
+    void findTimes() {
         var response = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .when().get("/reservations")
+                .when().get("/times")
                 .then().log().all().extract();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
@@ -64,10 +55,8 @@ class ReservationControllerTest {
         var response = RestAssured
                 .given().log().all()
                 .contentType(ContentType.JSON)
-                .when().delete("reservations/1")
-                .then().log().all().extract();
+                .when().delete("/times/1");
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
-
 }

@@ -1,53 +1,54 @@
 package roomescape.controller;
 
-import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.Reservation;
-import roomescape.dto.ReservationDto;
-import roomescape.dto.ReservationTimeDto;
-import roomescape.repository.ReservationRepository;
+import roomescape.domain.ReservationTime;
+import roomescape.dto.reservation.ReservationsResponse;
+import roomescape.dto.reservation.create.ReservationCreateRequest;
+import roomescape.dto.reservation.create.ReservationCreateResponse;
+import roomescape.exception.ErrorCodeResponse;
 import roomescape.repository.ReservationTimeRepository;
+import roomescape.service.ReservationService;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
-@Controller
-@ResponseBody
+@RestController
+@RequestMapping("/reservations")
 public class ReservationController {
 
-    private final ReservationRepository reservationRepository;
-    private final ReservationTimeRepository reservationTimeRepository;
+    private final ReservationService reservationService;
 
-    public ReservationController(ReservationRepository reservationRepository,
-                                 ReservationTimeRepository reservationTimeRepository) {
-        this.reservationRepository = reservationRepository;
-        this.reservationTimeRepository = reservationTimeRepository;
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
-    @GetMapping("/reservations")
-    public ResponseEntity<List<ReservationDto>> list() {
-        List<ReservationDto> list = reservationRepository.findReservations();
-        return ResponseEntity.ok(list);
+    @GetMapping
+    public ResponseEntity<List<ReservationsResponse>> findReservations() {
+        List<ReservationsResponse> list = reservationService.findReservations();
+        return ResponseEntity.ok().body(list);
     }
 
-    @PostMapping("/reservations")
-    public ResponseEntity<Reservation> create(@RequestBody ReservationDto dto) {
-        ReservationTimeDto timeDto = reservationTimeRepository.findReservationTimeById(dto.getTimeId());
-        Reservation reservation = reservationRepository.create(dto, timeDto);
-        System.out.println(reservation);
+    @PostMapping
+    public ResponseEntity<ReservationCreateResponse> create(@Valid @RequestBody ReservationCreateRequest dto) {
+        ReservationCreateResponse reservation = reservationService.createReservation(dto);
         return ResponseEntity.ok().body(reservation);
     }
 
-    @DeleteMapping("/reservations/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        reservationRepository.deleteReservation(id);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        reservationService.deleteReservation(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(ErrorCodeResponse.class)
+    public ResponseEntity<ErrorCodeResponse> handlerCustomErrorException(ErrorCodeResponse e) {
+        ErrorCodeResponse errorMsg = new ErrorCodeResponse(e.getErrorCode(), e.getMessage());
+        return new ResponseEntity<>(errorMsg, HttpStatus.BAD_REQUEST);
     }
 }

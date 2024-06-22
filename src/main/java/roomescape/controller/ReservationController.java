@@ -1,38 +1,35 @@
 package roomescape.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import roomescape.model.Reservation;
+import roomescape.service.ReservationService;
 
-import java.util.ArrayList;
+import java.sql.PreparedStatement;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/reservations")
 public class ReservationController {
-    private List<Reservation> reservations = new ArrayList<>();
-    private AtomicLong index = new AtomicLong(1);
+    private final ReservationService reservationService;
+
+    @Autowired
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
     @PostMapping
-    public Reservation create(@RequestBody Reservation reservation) {
-        Reservation newReservation = Reservation.toEntity(reservation, index);
-        reservations.add(newReservation);
-        return newReservation;
+    public int insert(@RequestBody Reservation reservation) {
+        return reservationService.addReservation(reservation);
     }
 
     @GetMapping
     public List<Reservation> read() {
-        return reservations;
+        return reservationService.lookUpReservation();
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        Reservation reservation = reservations.stream()
-                .filter(findReservation -> Objects.equals(findReservation.getId(), id))
-                .findFirst()
-                .orElseThrow(RuntimeException::new);
-
-        reservations.remove(reservation);
+    public void delete(@PathVariable int id) {
+        reservationService.deleteReservation(id);
     }
 }

@@ -1,7 +1,6 @@
 package roomescape.model;
 
 public class Reservation {
-
     private Long id;
     private String name;
     private String date;

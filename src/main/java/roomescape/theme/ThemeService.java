@@ -20,7 +20,12 @@ public class ThemeService {
     }
 
     public Theme save(ThemeAddRequestDto themeAddRequestDto){
-        Theme theme = new Theme(themeAddRequestDto.getName(), themeAddRequestDto.getDescription(), themeAddRequestDto.getThumbnail());
+        Theme theme = new Theme(
+          themeAddRequestDto.getName(),
+          themeAddRequestDto.getDescription(),
+          themeAddRequestDto.getThumbnail()
+        );
+
         return themeRepository.save(theme);
     }
 

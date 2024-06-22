@@ -4,7 +4,7 @@ package roomescape.reservationtime;
 import org.springframework.stereotype.Service;
 import roomescape.entities.ReservationTime;
 import roomescape.errors.ErrorCode;
-import roomescape.exceptions.SpringRoomException;
+import roomescape.exceptions.RoomEscapeException;
 import roomescape.repositories.ReservationRepository;
 import roomescape.repositories.ReservationTimeRepository;
 import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
@@ -36,7 +36,7 @@ public class ReservationTimeService {
 
     public void cancelReservationTime(Long id){
         if (reservationRepository.findByReservationTimeId(id).isPresent()) {
-            throw new SpringRoomException(ErrorCode.RESERVATION_TIME_CANNOT_BE_DELETED, "Reservation time cannot be deleted because it is used in a reservation");
+            throw new RoomEscapeException(ErrorCode.RESERVATION_TIME_CANNOT_BE_DELETED, "Reservation time cannot be deleted because it is used in a reservation");
         }
         reservationTimeRepository.deleteById(id);
     }

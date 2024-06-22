@@ -1,8 +1,7 @@
 package roomescape.entities;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import roomescape.errors.ErrorCode;
-import roomescape.exceptions.SpringRoomException;
+import roomescape.exceptions.RoomEscapeException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,7 +14,7 @@ public class Reservation {
     private ReservationTime reservationTime;
     public Reservation(Long id, String name, String date, ReservationTime reservationTime) {
         if (!isValidReservedDateTime(date, reservationTime)){
-            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE, "예약 날짜가 현재 시간보다 이전입니다.");
+            throw new RoomEscapeException(ErrorCode.INVALID_INPUT_VALUE, "예약 날짜가 현재 시간보다 이전입니다.");
         }
         this.id = id;
         this.name = name;

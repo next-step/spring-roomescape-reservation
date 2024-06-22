@@ -47,7 +47,8 @@ public class ReservationTimeRepository {
 
     public ReservationTime findByStartAt(String startAt){
         String sql = "SELECT * FROM RESERVATION_TIME WHERE start_at = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{startAt}, new RowMapper<ReservationTime>() {
+        return jdbcTemplate.queryForObject(
+          sql, new Object[]{startAt}, new RowMapper<ReservationTime>() {
             @Override
             public ReservationTime mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new ReservationTime(

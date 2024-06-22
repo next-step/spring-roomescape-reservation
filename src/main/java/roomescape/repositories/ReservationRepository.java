@@ -28,18 +28,17 @@ public class ReservationRepository {
         String sql = "INSERT INTO RESERVATION(date, time_id, name) VALUES(?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    sql,
-                    new String[]{"id"});
+            PreparedStatement ps = connection.prepareStatement(sql, new String[]{"id"});
             ps.setString(1, reservation.getDate());
             ps.setLong(2, reservation.getReservationTime().getId());
             ps.setString(3, reservation.getName());
             return ps;
         }, keyHolder);
 
-        Long id = keyHolder.getKey().longValue();
-
-        return new Reservation(keyHolder.getKey().longValue(), reservation.getName(), reservation.getDate(), reservation.getReservationTime());
+        return new Reservation(keyHolder.getKey().longValue(),
+          reservation.getName(),
+          reservation.getDate(),
+          reservation.getReservationTime());
     }
 
     public List<Reservation> findAll(){
@@ -56,11 +55,13 @@ public class ReservationRepository {
         List<Reservation> reservations = jdbcTemplate.query(sql, new RowMapper<Reservation>() {
             @Override
             public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Reservation( //TODO
+                return new Reservation(
                     rs.getLong("id"),
                     rs.getString("name"),
                     rs.getString("date"),
-                    new ReservationTime(rs.getLong("id"), rs.getString("time"))
+                    new ReservationTime(
+                      rs.getLong("id"),
+                      rs.getString("time"))
                 );
             }
         });
@@ -79,14 +80,17 @@ public class ReservationRepository {
           WHERE r.time_id = ?
         """;
         try {
-            Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{id}, new RowMapper<Reservation>() {
+            Reservation reservation = jdbcTemplate.queryForObject(
+              sql, new Object[]{id}, new RowMapper<Reservation>() {
                 @Override
                 public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
                     return new Reservation(
                       rs.getLong("reservation_id"),
                       rs.getString("reservation_date"),
                       rs.getString("reservation_name"),
-                      new ReservationTime(rs.getLong("reservation_id"), rs.getString("time"))
+                      new ReservationTime(
+                        rs.getLong("reservation_id"),
+                        rs.getString("time"))
                     );
                 }
             });
@@ -107,6 +111,7 @@ public class ReservationRepository {
           ON r.time_id = t.id
           WHERE r.date = ? AND t.start_at = ?
         """;
+
         try {
             Reservation reservation = jdbcTemplate.queryForObject(sql, new Object[]{date, time}, new RowMapper<Reservation>() {
                 @Override

@@ -3,7 +3,7 @@ package roomescape.reservation.data;
 import roomescape.entities.Reservation;
 import roomescape.entities.ReservationTime;
 import roomescape.errors.ErrorCode;
-import roomescape.exceptions.SpringRoomException;
+import roomescape.exceptions.RoomEscapeException;
 
 public class ReservationAddRequestDto {
     private String name;
@@ -18,7 +18,7 @@ public class ReservationAddRequestDto {
         this.date = date;
         this.time = reservationTime.getStartAt();
         if (!isValidateTime(reservationTime.getStartAt())){
-            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
+            throw new RoomEscapeException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
         }
     }
 
@@ -43,9 +43,6 @@ public class ReservationAddRequestDto {
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);
 
-        if (hour >= 0 && hour <= 24 && minute >= 0 && minute <= 59){
-            return true;
-        }
-        return false;
+        return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
     }
 }

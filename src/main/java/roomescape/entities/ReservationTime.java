@@ -1,7 +1,7 @@
 package roomescape.entities;
 
 import roomescape.errors.ErrorCode;
-import roomescape.exceptions.SpringRoomException;
+import roomescape.exceptions.RoomEscapeException;
 
 public class ReservationTime {
     private Long id;
@@ -9,7 +9,7 @@ public class ReservationTime {
 
     public ReservationTime(String startAt){
         if (!isValidStartAt(startAt)){
-            throw new SpringRoomException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
+            throw new RoomEscapeException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
         }
         this.startAt = startAt;
     }

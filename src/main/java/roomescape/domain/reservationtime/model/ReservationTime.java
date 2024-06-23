@@ -34,7 +34,7 @@ public class ReservationTime {
         this.createdAt = createdAt;
     }
 
-    public static ReservationTime from(final LocalTime startAt, ClockHolder clockHolder) {
+    public static ReservationTime defaultOf(final LocalTime startAt, ClockHolder clockHolder) {
         return ReservationTime.builder()
                 .startAt(startAt)
                 .createdAt(clockHolder.getCurrentSeoulTime())
@@ -56,5 +56,14 @@ public class ReservationTime {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ReservationTime{" +
+               "id=" + id +
+               ", startAt=" + startAt +
+               ", createdAt=" + createdAt +
+               '}';
     }
 }

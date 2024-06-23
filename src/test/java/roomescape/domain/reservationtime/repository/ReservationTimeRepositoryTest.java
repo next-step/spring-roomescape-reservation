@@ -131,4 +131,23 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
         List<ReservationTime> actual = sut.findAll();
         assertThat(actual).hasSize(0);
     }
+
+    @Test
+    void getByStartAt() {
+        // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime saved = sut.save(time);
+
+        // when
+        final ReservationTime actual = sut.getByStartAt(LocalTime.of(12, 0));
+
+        // then
+        assertAll(
+                () -> assertThat(actual.getId().getValue()).isEqualTo(saved.getId().getValue()),
+                () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(12, 0))
+        );
+    }
 }

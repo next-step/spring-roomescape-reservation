@@ -3,6 +3,7 @@ package roomescape.domain.reservation.model;
 import lombok.Builder;
 import lombok.Getter;
 import roomescape.domain.reservation.exception.ReservationException;
+import roomescape.domain.reservationtime.model.ReservationTime;
 import roomescape.global.infrastructure.ClockHolder;
 
 import java.time.LocalDate;
@@ -15,16 +16,18 @@ public class Reservation {
 
     private final Long id;
     private final ReservationGuestName name;
-    private final ReservationDateTime dateTime;
+    private final ReservationDate date;
+    private final ReservationTime time;
     private final ReservationStatus status;
     private final LocalDateTime canceledAt;
     private final LocalDateTime createdAt;
 
     @Builder
-    private Reservation(
+    public Reservation(
             final Long id,
             final ReservationGuestName name,
-            final ReservationDateTime dateTime,
+            final ReservationDate date,
+            final ReservationTime time,
             final ReservationStatus status,
             final LocalDateTime canceledAt,
             final LocalDateTime createdAt
@@ -32,8 +35,11 @@ public class Reservation {
         if (Objects.isNull(name)) {
             throw ReservationException.nullField("name");
         }
-        if (Objects.isNull(dateTime)) {
-            throw ReservationException.nullField("dateTime");
+        if (Objects.isNull(date)) {
+            throw ReservationException.nullField("date");
+        }
+        if (Objects.isNull(time)) {
+            throw ReservationException.nullField("time");
         }
         if (Objects.isNull(status)) {
             throw ReservationException.nullField("status");
@@ -44,7 +50,8 @@ public class Reservation {
 
         this.id = id;
         this.name = name;
-        this.dateTime = dateTime;
+        this.date = date;
+        this.time = time;
         this.status = status;
         this.canceledAt = canceledAt;
         this.createdAt = createdAt;
@@ -52,12 +59,14 @@ public class Reservation {
 
     public static Reservation defaultOf(
             final ReservationGuestName name,
-            final ReservationDateTime dateTime,
+            final ReservationDate date,
+            final ReservationTime time,
             final ClockHolder clockHolder
     ) {
         return Reservation.builder()
                 .name(name)
-                .dateTime(dateTime)
+                .date(date)
+                .time(time)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(clockHolder.getCurrentSeoulTime())
                 .build();
@@ -67,7 +76,8 @@ public class Reservation {
         return Reservation.builder()
                 .id(this.id)
                 .name(this.name)
-                .dateTime(this.dateTime)
+                .date(this.date)
+                .time(this.time)
                 .status(ReservationStatus.CANCELED)
                 .createdAt(this.createdAt)
                 .canceledAt(clockHolder.getCurrentSeoulTime())
@@ -75,11 +85,11 @@ public class Reservation {
     }
 
     public LocalDate fetchReservationDate() {
-        return this.dateTime.getDate();
+        return this.date.getValue();
     }
 
     public LocalTime fetchReservationTime() {
-        return this.dateTime.getTime();
+        return this.time.getStartAt();
     }
 
     public boolean isActive() {

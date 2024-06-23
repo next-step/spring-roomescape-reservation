@@ -4,29 +4,43 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDateTime;
+import roomescape.domain.reservation.model.ReservationDate;
 import roomescape.domain.reservation.model.ReservationGuestName;
 import roomescape.domain.reservation.model.ReservationStatus;
+import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
 import roomescape.support.IntegrationTestSupport;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class JdbcReservationRepositoryTest extends IntegrationTestSupport {
+class ReservationRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
-    JdbcReservationRepository sut;
+    ReservationRepository sut;
+
+    @Autowired
+    ReservationTimeRepository timeRepository;
 
     @Test
     void save() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -38,7 +52,8 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
-                () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))),
+                () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
+                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
@@ -48,9 +63,16 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void save_exists_id() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -59,7 +81,8 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
         final Reservation newReservation = Reservation.builder()
                 .id(saved.getId())
                 .name(new ReservationGuestName("new-name"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2025, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CANCELED)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
@@ -71,7 +94,8 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("new-name")),
-                () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2025, 6, 8, 12, 0))),
+                () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
+                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 6, 4, 12, 0))
         );
@@ -80,9 +104,16 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void findById() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -97,7 +128,8 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
-                () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))),
+                () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
+                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
@@ -110,41 +142,18 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    void findByNameAndDateTime() {
-        // given
-        final Reservation reservation = Reservation.builder()
-                .name(new ReservationGuestName("name"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
-                .status(ReservationStatus.CONFIRMED)
-                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
-                .build();
-        sut.save(reservation);
-
-        // when
-        final Optional<Reservation> actualOpt = sut.findByNameAndDateTime(
-                new ReservationGuestName("name"),
-                new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))
-        );
-
-        // then
-        assertThat(actualOpt).isNotEmpty();
-
-        final Reservation actual = actualOpt.get();
-        assertAll(
-                () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
-                () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
-                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
-        );
-    }
-
-    @Test
     void findAll() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation r1 = Reservation.builder()
                 .name(new ReservationGuestName("r1"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -152,7 +161,8 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
 
         final Reservation r2 = Reservation.builder()
                 .name(new ReservationGuestName("r2"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2025, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CANCELED)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
@@ -173,16 +183,24 @@ class JdbcReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void deleteAllInBatch() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
-
-        // when
-        final Reservation actual = sut.save(reservation);
+        sut.save(reservation);
 
         sut.deleteAllInBatch();
+
+        final List<Reservation> actual = sut.findAll();
+        assertThat(actual).hasSize(0);
     }
 }

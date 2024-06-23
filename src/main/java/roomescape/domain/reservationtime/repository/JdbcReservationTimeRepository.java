@@ -114,6 +114,19 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
         return jdbcTemplate.query(SELECT_RESERVATION_TIME_SQL, RESERVATION_TIME_ROW_MAPPER);
     }
 
+    @Override
+    public Optional<ReservationTime> findByStartAt(final LocalTime startAt) {
+        return queryForReservationTime(
+                generateSelectSqlWithWhereClause("where start_at = ?"),
+                toIsoLocal(startAt)
+        );
+    }
+
+    @Override
+    public ReservationTime getByStartAt(final LocalTime startAt) {
+        return findByStartAt(startAt).orElseThrow(() -> ReservationTimeNotFoundException.fromStartAt(startAt));
+    }
+
     private String generateSelectSqlWithWhereClause(String whereClause) {
         return SELECT_RESERVATION_TIME_SQL + " " + whereClause;
     }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import roomescape.domain.reservationtime.model.ReservationTime;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 public class ReservationTimeAppendHttpResponse {
@@ -24,5 +25,11 @@ public class ReservationTimeAppendHttpResponse {
                 time.getIdValue(),
                 time.getStartAt()
         );
+    }
+
+    public static List<ReservationTimeAppendHttpResponse> from(final List<ReservationTime> times) {
+        return times.stream()
+                .map(ReservationTimeAppendHttpResponse::from)
+                .toList();
     }
 }

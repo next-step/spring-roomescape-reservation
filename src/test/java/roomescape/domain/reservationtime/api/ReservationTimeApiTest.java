@@ -28,5 +28,12 @@ class ReservationTimeApiTest extends RestAssuredTestSupport {
                         "id", is(1),
                         "startAt", is("10:00")
                 );
+
+        // 예약 시간 전체 조회
+        RestAssured.given().log().all()
+                .when().get("/times")
+                .then().log().all()
+                .statusCode(200)
+                .body("size()", is(1));
     }
 }

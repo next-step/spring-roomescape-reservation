@@ -1,37 +1,34 @@
 package roomescape.entities;
 
-import roomescape.reservationTime.data.ReservationTimeAddRequestDto;
+import roomescape.errors.ErrorCode;
+import roomescape.exceptions.RoomEscapeException;
 
 public class ReservationTime {
     private Long id;
-    private String time;
+    private String startAt;
 
-    public ReservationTime(ReservationTimeAddRequestDto reservationTimeAddRequestDTO) {
-        if (!isValidTime(reservationTimeAddRequestDTO.getTime())){
-            throw new IllegalArgumentException();
+    public ReservationTime(String startAt){
+        if (!isValidStartAt(startAt)){
+            throw new RoomEscapeException(ErrorCode.INVALID_INPUT_VALUE, "잘못된 시간 형식입니다.");
         }
-        this.time = reservationTimeAddRequestDTO.getTime();
+        this.startAt = startAt;
     }
 
-    public ReservationTime(String time){
-        this.time = time;
-    }
-
-    public ReservationTime(Long reservationTimeId, String time) {
+    public ReservationTime(Long reservationTimeId, String startAt) {
         this.id = reservationTimeId;
-        this.time = time;
+        this.startAt = startAt;
     }
 
     public Long getId() {
         return this.id;
     }
 
-    public String getTime() {
-        return this.time;
+    public String getStartAt() {
+        return this.startAt;
     }
 
-    private boolean isValidTime(String time){
-        String[] times = time.split(":");
+    private boolean isValidStartAt(String startAt){
+        String[] times = startAt.split(":");
         int hour = Integer.parseInt(times[0]);
         int minute = Integer.parseInt(times[1]);
 

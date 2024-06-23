@@ -5,7 +5,11 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import roomescape.reservation.data.ReservationAddRequestDto;
+import roomescape.reservationtime.data.ReservationTimeAddRequestDto;
+import roomescape.theme.data.ThemeAddRequestDto;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +17,7 @@ import static org.hamcrest.Matchers.is;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class MissionStepTest {
+class MissionStepTest {
 
     @Test
     void page() {
@@ -25,24 +29,39 @@ public class MissionStepTest {
 
     @Test
     void reservation() {
-        Map<String, String> params = new HashMap<>();
-        params.put("name", "브라운");
-        params.put("date", "2023-08-05");
-        params.put("time", "15:40");
+        ReservationAddRequestDto reservationAddRequestDto = new ReservationAddRequestDto(
+          "브라운",
+          LocalDate.now().plusDays(1).toString(),
+          1L,
+          1L
+        );
 
-        Map<String, String> timeParams = new HashMap<>();
-        timeParams.put("time", "15:40");
+        ReservationTimeAddRequestDto reservationTimeAddRequest =
+          new ReservationTimeAddRequestDto("15:40");
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(timeParams)
+                .body(reservationTimeAddRequest)
                 .when().post("/times")
+                .then().log().all()
+                .statusCode(200);
+
+        ThemeAddRequestDto themeAddRequestDto = new ThemeAddRequestDto(
+          "테마1",
+          "테마1 설명",
+          "테마1 썸네일"
+        );
+
+        RestAssured.given().log().all()
+            .contentType(ContentType.JSON)
+              .body(themeAddRequestDto)
+                .when().post("/themes")
                 .then().log().all()
                 .statusCode(200);
 
         RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
-                .body(params)
+                .body(reservationAddRequestDto)
                 .when().post("/reservations")
                 .then().log().all()
                 .statusCode(200)

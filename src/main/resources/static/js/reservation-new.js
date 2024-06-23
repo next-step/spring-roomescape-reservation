@@ -27,7 +27,6 @@ function render(data) {
     row.insertCell(1).textContent = item.name;          // 예약자명
     row.insertCell(2).textContent = item.theme.name;    // 테마명
     row.insertCell(3).textContent = item.date;          // 예약 날짜
-//    row.insertCell(3).textContent = item.time;
     row.insertCell(4).textContent = item.time.startAt;  // 시작 시간
 
     const actionCell = row.insertCell(row.cells.length);

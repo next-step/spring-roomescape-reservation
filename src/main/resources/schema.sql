@@ -11,7 +11,7 @@ CREATE TABLE theme
 CREATE TABLE reservation_time
 (
     id   BIGINT       NOT NULL AUTO_INCREMENT,
-    time VARCHAR(255) NOT NULL,
+    start_at VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 

@@ -46,7 +46,7 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
 
     @Override
     public Optional<ReservationTimeEntity> findById(Long reservationTimeId) {
-        String sql = "SELECT * FROM reservation_time WHERE id = :id";
+        String sql = "SELECT id, start_at FROM reservation_time WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationTimeId);
@@ -69,7 +69,7 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
 
     @Override
     public Optional<ReservationTimeEntity> findByStartAt(LocalTime startAt) {
-        String sql = "SELECT * FROM reservation_time WHERE start_at = :start_at";
+        String sql = "SELECT id, start_at FROM reservation_time WHERE start_at = :start_at";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_START_AT, startAt);
@@ -92,7 +92,7 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
 
     @Override
     public List<ReservationTimeEntity> findAll() {
-        String sql = "SELECT * FROM reservation_time";
+        String sql = "SELECT id, start_at FROM reservation_time";
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
             List<ReservationTimeEntity> reservationTimeEntities = new ArrayList<>();

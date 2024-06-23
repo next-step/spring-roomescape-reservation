@@ -33,7 +33,7 @@ public class FindAllReservationsResponse {
                         reservationView.getFormattedReservationTimeStartAt(TIME_PATTERN)
                 ),
                 new Theme(
-                        reservationView.getReservationName()
+                        reservationView.getThemeId(), reservationView.getThemeName()
                 )
         );
     }
@@ -87,10 +87,17 @@ public class FindAllReservationsResponse {
 
     private static class Theme {
 
+        private final Long id;
+
         private final String name;
 
-        public Theme(String name) {
+        public Theme(Long id, String name) {
+            this.id = id;
             this.name = name;
+        }
+
+        public Long getId() {
+            return id;
         }
 
         public String getName() {

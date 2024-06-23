@@ -63,7 +63,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public List<ReservationEntity> findAll() {
-        String sql = "SELECT * FROM reservation";
+        String sql = "SELECT id, name, date, time_id, theme_id FROM reservation";
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
             List<ReservationEntity> reservationEntities = new ArrayList<>();
@@ -94,7 +94,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public Optional<ReservationEntity> findById(Long reservationId) {
-        String sql = "SELECT * FROM reservation WHERE id = :id";
+        String sql = "SELECT id, name, date, time_id, theme_id FROM reservation WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, reservationId);
@@ -126,6 +126,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                 "    r.date as reservation_date, " +
                 "    t.id as time_id, " +
                 "    t.start_at as time_start_at, " +
+                "    m.id as theme_id, " +
                 "    m.name as theme_name " +
                 "FROM reservation as r " +
                 "inner join reservation_time as t " +
@@ -144,6 +145,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
                                 resultSet.getDate(TABLE_COLUMN_RESERVATION_DATE).toLocalDate(),
                                 resultSet.getLong(TABLE_COLUMN_RESERVATION_TIME_ID),
                                 resultSet.getTime(TABLE_COLUMN_RESERVATION_TIME_START_AT).toLocalTime(),
+                                resultSet.getLong(TABLE_COLUMN_THEME_ID),
                                 resultSet.getString(TABLE_COLUMN_THEME_NAME)
                         )
                 );
@@ -180,7 +182,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
 
     @Override
     public Optional<ReservationEntity> findByDateAndTimeId(LocalDate date, Long timeId) {
-        String sql = "SELECT * FROM reservation WHERE date = :date and time_id = :time_id";
+        String sql = "SELECT id, name, date, time_id, theme_id FROM reservation WHERE date = :date and time_id = :time_id";
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_DATE, date)
                 .addValue(TABLE_COLUMN_TIME_ID, timeId);

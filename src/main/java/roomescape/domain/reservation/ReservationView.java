@@ -5,6 +5,7 @@ import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
+import roomescape.domain.theme.vo.ThemeId;
 import roomescape.domain.theme.vo.ThemeName;
 import roomescape.domain.validator.ObjectValidator;
 
@@ -20,6 +21,8 @@ public class ReservationView {
 
     private final ReservationTimeStartAt reservationTimeStartAt;
 
+    private final ThemeId themeId;
+
     private final ThemeName themeName;
 
     public ReservationView(
@@ -28,6 +31,7 @@ public class ReservationView {
             ReservationDate reservationDate,
             ReservationTimeId reservationTimeId,
             ReservationTimeStartAt reservationTimeStartAt,
+            ThemeId themeId,
             ThemeName themeName
     ) {
         ObjectValidator.validateNotNull(reservationId, reservationName, reservationDate, reservationTimeId, reservationTimeStartAt);
@@ -36,6 +40,7 @@ public class ReservationView {
         this.reservationDate = reservationDate;
         this.reservationTimeId = reservationTimeId;
         this.reservationTimeStartAt = reservationTimeStartAt;
+        this.themeId = themeId;
         this.themeName = themeName;
     }
 
@@ -59,7 +64,11 @@ public class ReservationView {
         return this.reservationTimeId.id();
     }
 
-    public ThemeName getThemeName() {
-        return themeName;
+    public Long getThemeId() {
+        return themeId.id();
+    }
+
+    public String getThemeName() {
+        return themeName.name();
     }
 }

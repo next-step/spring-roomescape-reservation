@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
+import roomescape.application.api.config.MockMvcCharacterEncodingConfig;
 import roomescape.application.api.dto.response.FindAllReservationsResponse;
 import roomescape.application.service.ReservationQueryService;
 import roomescape.domain.reservation.ReservationView;
@@ -17,6 +19,7 @@ import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
+import roomescape.domain.theme.vo.ThemeId;
 import roomescape.domain.theme.vo.ThemeName;
 
 import java.time.LocalDate;
@@ -29,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReservationQueryApi.class)
+@Import({MockMvcCharacterEncodingConfig.class})
 class ReservationQueryApiTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -49,6 +53,7 @@ class ReservationQueryApiTest {
                 new ReservationDate(LocalDate.of(2024, 6, 6)),
                 new ReservationTimeId(1L),
                 new ReservationTimeStartAt(LocalTime.of(18, 24)),
+                new ThemeId(1L),
                 new ThemeName("레벨2 탈출")
         );
 

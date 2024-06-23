@@ -50,7 +50,7 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
 
     @Override
     public Optional<ThemeEntity> findById(Long themeId) {
-        String sql = "SELECT * FROM theme WHERE id = :id";
+        String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
                 .addValue(TABLE_COLUMN_ID, themeId);
@@ -75,7 +75,7 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
 
     @Override
     public List<ThemeEntity> findAll() {
-        String sql = "SELECT * FROM theme";
+        String sql = "SELECT id, name, description, thumbnail FROM theme";
 
         return namedParameterJdbcTemplate.query(sql, resultSet -> {
             List<ThemeEntity> themeEntities = new ArrayList<>();

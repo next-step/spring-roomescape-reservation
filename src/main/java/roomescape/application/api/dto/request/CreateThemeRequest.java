@@ -23,4 +23,16 @@ public class CreateThemeRequest {
     public CreateThemeCommand toCommand() {
         return new CreateThemeCommand(name, description, thumbnail);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
 }

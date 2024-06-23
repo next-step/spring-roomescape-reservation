@@ -1,8 +1,9 @@
 package roomescape.domain.reservation.repository;
 
 import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDateTime;
+import roomescape.domain.reservation.model.ReservationDate;
 import roomescape.domain.reservation.model.ReservationGuestName;
+import roomescape.domain.reservationtime.model.ReservationTimeId;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +16,11 @@ public interface ReservationRepository {
 
     Optional<Reservation> findById(Long reservationId);
 
-    Optional<Reservation> findByNameAndDateTime(ReservationGuestName name, ReservationDateTime dateTime);
+    Optional<Reservation> findBy(
+            ReservationGuestName name,
+            ReservationDate date,
+            ReservationTimeId timeId
+    );
 
     void deleteAllInBatch();
 }

@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDateTime;
+import roomescape.domain.reservation.model.ReservationDate;
 import roomescape.domain.reservation.model.ReservationGuestName;
 import roomescape.domain.reservation.model.ReservationStatus;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.domain.reservation.service.request.ReserveRequest;
 import roomescape.domain.reservation.service.response.ReserveResponse;
+import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
 import roomescape.global.infrastructure.ClockHolder;
 import roomescape.mock.FakeClockHolder;
 import roomescape.support.IntegrationTestSupport;
@@ -31,16 +33,25 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     ReservationCommandService sut;
 
     @Autowired
-    ReservationRepository repository;
+    ReservationRepository reservationRepository;
+
+    @Autowired
+    ReservationTimeRepository timeRepository;
 
     @DisplayName("예약 정보로 예약을 생성한다.")
     @Test
     void reserve() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 8))
-                .time(LocalTime.of(12, 0))
+                .timeId(savedTime.getIdValue())
                 .build();
 
         // when
@@ -59,27 +70,39 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     @Test
     void cancel() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("brie"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        final Reservation saved = repository.save(reservation);
+        final Reservation saved = reservationRepository.save(reservation);
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
 
-        final ReservationCommandService sut = new ReservationCommandService(repository, clockHolder);
+        final ReservationCommandService sut = new ReservationCommandService(
+                reservationRepository,
+                timeRepository,
+                clockHolder
+        );
 
         // when
         sut.cancel(new ReservationId(saved.getId()));
 
         // then
-        assertThat(repository.findAll()).hasSize(1);
+        assertThat(reservationRepository.findAll()).hasSize(1);
 
-        final Reservation actual = repository.findById(saved.getId()).get();
+        final Reservation actual = reservationRepository.findById(saved.getId()).get();
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
-                () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))),
+                () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
+                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
                 () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
@@ -90,18 +113,25 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     @Test
     void reserve_exception() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("brie"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        repository.save(reservation);
+        reservationRepository.save(reservation);
 
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
-                .date(LocalDate.of(2024, 6, 8))
-                .time(LocalTime.of(12, 0))
+                .date(LocalDate.of(2024, 6, 23))
+                .timeId(savedTime.getIdValue())
                 .build();
 
         // when & then
@@ -113,19 +143,26 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     @Test
     void reserve_no_exception() {
         // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
         final Reservation reservation = Reservation.builder()
                 .id(1L)
                 .name(new ReservationGuestName("brie"))
-                .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
                 .status(ReservationStatus.CANCELED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        repository.save(reservation);
+        reservationRepository.save(reservation);
 
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
-                .date(LocalDate.of(2024, 6, 8))
-                .time(LocalTime.of(12, 0))
+                .date(LocalDate.of(2024, 6, 23))
+                .timeId(savedTime.getIdValue())
                 .build();
 
         // when & then

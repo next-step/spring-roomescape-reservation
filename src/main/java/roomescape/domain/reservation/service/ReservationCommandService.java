@@ -6,11 +6,14 @@ import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDateTime;
+import roomescape.domain.reservation.model.ReservationDate;
 import roomescape.domain.reservation.model.ReservationGuestName;
 import roomescape.domain.reservation.repository.ReservationRepository;
 import roomescape.domain.reservation.service.request.ReserveRequest;
 import roomescape.domain.reservation.service.response.ReserveResponse;
+import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.model.ReservationTimeId;
+import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
 import roomescape.global.infrastructure.ClockHolder;
 
 import java.util.Optional;
@@ -20,14 +23,17 @@ import java.util.Optional;
 public class ReservationCommandService {
 
     private final ReservationRepository reservationRepository;
+    private final ReservationTimeRepository timeRepository;
     private final ClockHolder clockHolder;
 
     public ReserveResponse reserve(final ReserveRequest request) {
         verifyDuplicatedReservationNotExist(request);
 
+        final ReservationTime time = timeRepository.getById(new ReservationTimeId(request.getTimeId()));
         final Reservation newReservation = Reservation.defaultOf(
                 new ReservationGuestName(request.getName()),
-                ReservationDateTime.of(request.getDate(), request.getTime()),
+                new ReservationDate(request.getDate()),
+                time,
                 clockHolder
         );
 
@@ -42,9 +48,10 @@ public class ReservationCommandService {
     }
 
     private void verifyDuplicatedReservationNotExist(final ReserveRequest request) {
-        final Optional<Reservation> reservationOpt = reservationRepository.findByNameAndDateTime(
+        final Optional<Reservation> reservationOpt = reservationRepository.findBy(
                 new ReservationGuestName(request.getName()),
-                ReservationDateTime.of(request.getDate(), request.getTime())
+                new ReservationDate(request.getDate()),
+                new ReservationTimeId(request.getTimeId())
         );
 
         if (reservationOpt.isEmpty()) {

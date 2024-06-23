@@ -31,11 +31,7 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void save() {
         // given
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
@@ -63,11 +59,7 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void save_exists_id() {
         // given
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
@@ -104,11 +96,7 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void findById() {
         // given
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))
@@ -142,13 +130,51 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
+    void findByNameDateTime() {
+        // given
+        final ReservationTime time = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
+        final Reservation reservation = Reservation.builder()
+                .name(new ReservationGuestName("name"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(time)
+                .status(ReservationStatus.CONFIRMED)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation);
+
+        // when
+        final Optional<Reservation> actualOpt = sut.findBy(
+                new ReservationGuestName("name"),
+                new ReservationDate(LocalDate.of(2024, 6, 23)),
+                time.getId()
+        );
+
+        // then
+        assertThat(actualOpt).isPresent();
+        final Reservation actual = actualOpt.get();
+
+        assertAll(
+                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
+                () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
+                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
+                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
+                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
+        );
+    }
+
+    private ReservationTime saveTime(LocalTime startAt, LocalDateTime createdAt) {
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(startAt)
+                .createdAt(createdAt)
+                .build();
+        return timeRepository.save(time);
+    }
+
+    @Test
     void findAll() {
         // given
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation r1 = Reservation.builder()
                 .name(new ReservationGuestName("r1"))
@@ -183,11 +209,7 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     @Test
     void deleteAllInBatch() {
         // given
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("name"))

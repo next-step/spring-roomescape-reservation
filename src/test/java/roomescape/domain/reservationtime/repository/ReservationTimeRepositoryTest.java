@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.domain.reservationtime.model.ReservationTime;
 import roomescape.support.IntegrationTestSupport;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -22,6 +23,7 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
         // save1
         final ReservationTime time = ReservationTime.builder()
                 .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
 
         final ReservationTime actual = sut.save(time);
@@ -34,6 +36,7 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
         // save2
         final ReservationTime time2 = ReservationTime.builder()
                 .startAt(LocalTime.of(13, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
 
         final ReservationTime actual2 = sut.save(time2);
@@ -51,12 +54,14 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
         // given
         final ReservationTime time = ReservationTime.builder()
                 .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         final ReservationTime saved = sut.save(time);
 
         final ReservationTime idExists = ReservationTime.builder()
                 .id(saved.getId())
                 .startAt(LocalTime.of(6, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
 
         // when
@@ -72,6 +77,7 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
         // given
         final ReservationTime time = ReservationTime.builder()
                 .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         final ReservationTime saved = sut.save(time);
 
@@ -90,11 +96,13 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
         // given
         final ReservationTime time = ReservationTime.builder()
                 .startAt(LocalTime.of(6, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         sut.save(time);
 
         final ReservationTime time2 = ReservationTime.builder()
                 .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         sut.save(time2);
 
@@ -114,6 +122,7 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
     void deleteAllInBatch() {
         final ReservationTime time = ReservationTime.builder()
                 .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         sut.save(time);
 

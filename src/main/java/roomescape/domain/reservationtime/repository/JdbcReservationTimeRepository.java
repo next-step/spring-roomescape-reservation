@@ -12,10 +12,13 @@ import roomescape.domain.reservationtime.model.ReservationTime;
 import roomescape.domain.reservationtime.model.ReservationTimeId;
 
 import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
 
 @Repository
 public class JdbcReservationTimeRepository implements ReservationTimeRepository {
@@ -23,13 +26,15 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
     public static final String SELECT_RESERVATION_TIME_SQL = """
             select
                 id,
-                start_at
+                start_at,
+                created_at
             from reservation_times""";
 
     private static final RowMapper<ReservationTime> RESERVATION_TIME_ROW_MAPPER =
             (rs, rowNum) -> ReservationTime.builder()
                     .id(new ReservationTimeId(rs.getLong("id")))
                     .startAt(LocalTime.parse(rs.getString("start_at")))
+                    .createdAt(LocalDateTime.parse(rs.getString("created_at")))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
@@ -51,12 +56,14 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
     private void updateAll(final ReservationTime time) {
         final String updateSql = """
                 update reservation_times set
-                    start_at = ?
+                    start_at = ?,
+                    created_at = ?
                 where id = ?""";
 
         final int updateCount = jdbcTemplate.update(
                 updateSql,
-                time.getStartAt(),
+                toIsoLocal(time.getStartAt()),
+                toIsoLocal(time.getCreatedAt()),
                 time.getIdValue()
         );
 
@@ -71,11 +78,12 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
     private ReservationTime insertWithKeyHolder(final ReservationTime time) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        String insertSql = "insert into reservation_times (start_at) values (?)";
+        String insertSql = "insert into reservation_times (start_at, created_at) values (?, ?)";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
-            ps.setString(1, time.getStartAt().toString());
+            ps.setString(1, toIsoLocal(time.getStartAt()));
+            ps.setString(2, toIsoLocal(time.getCreatedAt()));
             return ps;
         }, keyHolder);
 
@@ -84,6 +92,7 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
         return ReservationTime.builder()
                 .id(new ReservationTimeId(generatedId))
                 .startAt(time.getStartAt())
+                .createdAt(time.getCreatedAt())
                 .build();
     }
 

@@ -1,14 +1,16 @@
-package roomescape.model;
+package roomescape.dto;
 
-public class Reservation {
+import roomescape.model.ReservationTime;
+
+public class ReservationRs {
     private Long id;
     private String name;
     private String date;
     private ReservationTime time;
 
-    public Reservation() {}
+    public ReservationRs() {}
 
-    public Reservation(Long id, String name, String date, ReservationTime time) {
+    public ReservationRs(Long id, String name, String date, ReservationTime time) {
         this.id = id;
         this.name = name;
         this.date = date;

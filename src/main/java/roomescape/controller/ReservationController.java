@@ -1,10 +1,9 @@
 package roomescape.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import roomescape.dto.ReservationRequest;
-import roomescape.model.Reservation;
+import roomescape.dto.ReservationRq;
+import roomescape.dto.ReservationRs;
 import roomescape.service.ReservationService;
 
 import java.util.List;
@@ -14,23 +13,22 @@ import java.util.List;
 public class ReservationController {
     private final ReservationService reservationService;
 
-    @Autowired
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
     // 예약 조회
     @GetMapping
-    public ResponseEntity<List<Reservation>> getReservations() {
-        List<Reservation> reservations = reservationService.getAllReservations();
+    public ResponseEntity<List<ReservationRs>> getReservations() {
+        List<ReservationRs> reservations = reservationService.getAllReservations();
         return ResponseEntity.ok().body(reservations);
     }
 
     // 예약 추가
     @PostMapping
-    public ResponseEntity<Reservation> addReservation(@RequestBody ReservationRequest reservationRequest) {
-        Reservation reservation = reservationService.addReservation(reservationRequest);
-        return ResponseEntity.ok().body(reservation);
+    public ResponseEntity<ReservationRs> addReservation(@RequestBody ReservationRq reservationRq) {
+        ReservationRs reservationRs = reservationService.addReservation(reservationRq);
+        return ResponseEntity.ok().body(reservationRs);
     }
 
     // 예약 취소

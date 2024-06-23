@@ -1,51 +1,66 @@
 package roomescape.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import roomescape.dto.ReservationRequest;
+import roomescape.dto.ReservationRq;
+import roomescape.dto.ReservationRs;
 import roomescape.model.Reservation;
 import roomescape.model.ReservationTime;
 import roomescape.repository.ReservationRepository;
 import roomescape.repository.ReservationTimeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservationTimeRepository reservationTimeRepository;
 
-    @Autowired
     public ReservationService(ReservationRepository reservationRepository, ReservationTimeRepository reservationTimeRepository) {
         this.reservationRepository = reservationRepository;
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<ReservationRs> getAllReservations() {
+        return reservationRepository.findAll().stream()
+                .map(reservation -> new ReservationRs(
+                        reservation.getId(),
+                        reservation.getName(),
+                        reservation.getDate(),
+                        reservation.getTime()
+                ))
+                .toList();
     }
 
-    public Reservation addReservation(ReservationRequest reservationRequest) {
+    public ReservationRs addReservation(ReservationRq reservationRq) {
         // timeId를 Long으로 변환하고, 예약 시간을 조회
-        Long timeId = reservationRequest.getTimeIdAsLong();
-        if (timeId == null) {
-            throw new IllegalArgumentException("Invalid time ID");
-        }
+        Optional<Long> optionalTimeId = Optional.ofNullable(reservationRq.getTimeId());
+        Long timeId = optionalTimeId.orElseThrow(
+                () -> new IllegalArgumentException("Invalid time ID")
+        );
 
-        ReservationTime reservationTime = reservationTimeRepository.findById(timeId);
-        if (reservationTime == null) {
-            throw new IllegalArgumentException("Reservation time not found");
-        }
+        Optional<ReservationTime> optionalReservationTime = Optional.ofNullable(reservationTimeRepository.findById(timeId));
+        ReservationTime reservationTime = optionalReservationTime.orElseThrow(
+                () -> new IllegalArgumentException("Reservation time not found")
+        );
 
         // Reservation 객체 생성
-        Reservation reservation = new Reservation();
-        reservation.setName(reservationRequest.getName());
-        reservation.setDate(reservationRequest.getDate());
-        reservation.setTime(reservationTime);
+        Reservation reservation = new Reservation(
+                null,
+                reservationRq.getName(),
+                reservationRq.getDate(),
+                reservationTime
+        );
 
         // 예약 저장
-        reservationRepository.save(reservation);
-        return reservation;
+        Long id = reservationRepository.save(reservation);
+
+        return new ReservationRs(
+                id,
+                reservation.getName(),
+                reservation.getDate(),
+                reservation.getTime()
+        );
     }
 
     public void deleteReservation(Long id) {

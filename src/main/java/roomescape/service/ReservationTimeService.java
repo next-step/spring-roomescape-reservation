@@ -1,8 +1,8 @@
 package roomescape.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import roomescape.model.ReservationTime;
+import roomescape.dto.ReservationTimeRq;
+import roomescape.dto.ReservationTimeRs;
 import roomescape.repository.ReservationTimeRepository;
 
 import java.util.List;
@@ -11,17 +11,19 @@ import java.util.List;
 public class ReservationTimeService {
     private final ReservationTimeRepository reservationTimeRepository;
 
-    @Autowired
     public ReservationTimeService(ReservationTimeRepository reservationTimeRepository) {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public List<ReservationTime> getAllReservationTimes() {
-        return reservationTimeRepository.findAll();
+    public List<ReservationTimeRs> getAllReservationTimes() {
+        return reservationTimeRepository.findAll().stream()
+                .map(reservationTime -> new ReservationTimeRs(reservationTime.getId(), reservationTime.getStartAt()))
+                .toList();
     }
 
-    public void addReservationTime(ReservationTime reservationTime) {
-        reservationTimeRepository.save(reservationTime);
+    public ReservationTimeRs addReservationTime(ReservationTimeRq reservationTimeRq) {
+        Long id = reservationTimeRepository.save(reservationTimeRq);
+        return new ReservationTimeRs(id, reservationTimeRq.getStartAt());
     }
 
     public void deleteReservationTime(Long id) {

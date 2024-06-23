@@ -1,9 +1,9 @@
 package roomescape.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import roomescape.model.ReservationTime;
+import roomescape.dto.ReservationTimeRq;
+import roomescape.dto.ReservationTimeRs;
 import roomescape.service.ReservationTimeService;
 
 import java.util.List;
@@ -13,23 +13,22 @@ import java.util.List;
 public class ReservationTimeController {
     private final ReservationTimeService reservationTimeService;
 
-    @Autowired
     public ReservationTimeController(ReservationTimeService reservationTimeService) {
         this.reservationTimeService = reservationTimeService;
     }
 
     // 시간 조회
     @GetMapping
-    public ResponseEntity<List<ReservationTime>> getReservationTimes() {
-        List<ReservationTime> reservationTimes = reservationTimeService.getAllReservationTimes();
+    public ResponseEntity<List<ReservationTimeRs>> getReservationTimes() {
+        List<ReservationTimeRs> reservationTimes = reservationTimeService.getAllReservationTimes();
         return ResponseEntity.ok().body(reservationTimes);
     }
 
     // 시간 추가
     @PostMapping
-    public ResponseEntity<ReservationTime> addReservationTime(@RequestBody ReservationTime reservationTime) {
-        reservationTimeService.addReservationTime(reservationTime);
-        return ResponseEntity.ok().body(reservationTime);
+    public ResponseEntity<ReservationTimeRs> addReservationTime(@RequestBody ReservationTimeRq reservationTimeRq) {
+        ReservationTimeRs reservationTimeRs = reservationTimeService.addReservationTime(reservationTimeRq);
+        return ResponseEntity.ok().body(reservationTimeRs);
     }
 
     // 시간 삭제

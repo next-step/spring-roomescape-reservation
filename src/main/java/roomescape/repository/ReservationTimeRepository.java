@@ -1,20 +1,21 @@
 package roomescape.repository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.dto.ReservationTimeRq;
 import roomescape.model.ReservationTime;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 @Repository
 public class ReservationTimeRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -39,9 +40,21 @@ public class ReservationTimeRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ReservationTimeRowMapper());
     }
 
-    public int save(ReservationTime reservationTime) {
+    public Long save(ReservationTimeRq reservationTimeRq) {
         String sql = "INSERT INTO reservation_time (start_at) VALUES (?)";
-        return jdbcTemplate.update(sql, reservationTime.getStartAt());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, reservationTimeRq.getStartAt());
+                return ps;
+            }
+        }, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     public int deleteById(Long id) {

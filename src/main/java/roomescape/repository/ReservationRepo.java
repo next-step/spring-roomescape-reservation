@@ -47,8 +47,8 @@ public class ReservationRepo {
                 "t.id as time_id, t.start_at as start_at, " +
                 "th.id as theme_id, th.name as theme_name, th.description as theme_description, th.thumbnail as theme_thumbnail " +
                 "FROM reservation as r " +
-                "INNER JOIN reservation_time as t ON r.time_id = t.id " +
-                "INNER JOIN theme as th ON r.theme_id = th.id";
+                "LEFT JOIN reservation_time as t ON r.time_id = t.id " +
+                "LEFT JOIN theme as th ON r.theme_id = th.id";
 
         return jdbcTemplate.query(sql, this::mapReservation);
     }

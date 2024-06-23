@@ -7,8 +7,6 @@ import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.repository.ReservationTimeRepository;
 
-import static roomescape.application.error.code.ApplicationErrorCode.NOT_FOUND_ENTITY;
-
 @Component
 public class ReservationTimeReader {
 
@@ -18,13 +16,10 @@ public class ReservationTimeReader {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTime readById(ReservationTimeId reservationTimeId) {
+    public ReservationTime readById(ReservationTimeId timeId) {
         return ReservationTimeMapper.toReservationTime(
-                reservationTimeRepository.findById(reservationTimeId.id())
-                        .orElseThrow(() -> new NotFoundEntityException(
-                                NOT_FOUND_ENTITY,
-                                String.format("[reservationTimeId:%d] 해당하는 엔티티를 찾을 수 없습니다.", reservationTimeId.id())
-                        ))
+                reservationTimeRepository.findById(timeId.id())
+                        .orElseThrow(() -> NotFoundEntityException.reservationTime(timeId))
         );
     }
 }

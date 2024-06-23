@@ -1,19 +1,18 @@
 package roomescape.application.error.exception;
 
 import roomescape.application.error.code.ApplicationErrorCode;
+import roomescape.application.error.key.ApplicationErrorKeys;
 
 public class ApplicationException extends RuntimeException {
 
     private final ApplicationErrorCode code;
 
-    public ApplicationException(ApplicationErrorCode code) {
-        super(code.getMessage());
-        this.code = code;
-    }
+    private final ApplicationErrorKeys keys;
 
-    public ApplicationException(ApplicationErrorCode code, String message) {
-        super(message);
+    public ApplicationException(ApplicationErrorCode code, ApplicationErrorKeys keys) {
+        super(keys.toMessage() + code.getMessage());
         this.code = code;
+        this.keys = keys;
     }
 
     public ApplicationErrorCode getCode() {

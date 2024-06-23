@@ -5,8 +5,6 @@ import roomescape.application.error.exception.DeleteReservationTimeValidateExcep
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.repository.ReservationRepository;
 
-import static roomescape.application.error.code.ApplicationErrorCode.CANNOT_DELETE_EXIST_RESERVATION_AT_THIS_TIME;
-
 @Component
 public class DeleteReservationTimeValidator {
 
@@ -19,7 +17,7 @@ public class DeleteReservationTimeValidator {
     public void validate(ReservationTimeId timeId) {
         reservationRepository.findByTimeId(timeId.id())
                 .ifPresent(entity -> {
-                    throw new DeleteReservationTimeValidateException(CANNOT_DELETE_EXIST_RESERVATION_AT_THIS_TIME);
+                    throw DeleteReservationTimeValidateException.existReservation(timeId);
                 });
     }
 }

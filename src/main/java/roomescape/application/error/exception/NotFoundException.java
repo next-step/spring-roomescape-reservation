@@ -1,14 +1,11 @@
 package roomescape.application.error.exception;
 
 import roomescape.application.error.code.ApplicationErrorCode;
+import roomescape.application.error.key.ApplicationErrorKeys;
 
 public class NotFoundException extends ApplicationException {
 
-    public NotFoundException(ApplicationErrorCode code) {
-        super(code);
-    }
-
-    public NotFoundException(ApplicationErrorCode code, String message) {
-        super(code, message);
+    public NotFoundException(ApplicationErrorCode code, ApplicationErrorKeys keys) {
+        super(code, keys);
     }
 }

@@ -82,18 +82,6 @@ public class Reservation {
         return this.dateTime.getTime();
     }
 
-    public boolean matchesId(final Long id) {
-        return this.id.equals(id);
-    }
-
-    public boolean matchesName(final ReservationGuestName name) {
-        return this.name.equals(name);
-    }
-
-    public boolean matchesTimestamp(final ReservationDateTime timeStamp) {
-        return this.dateTime.equals(timeStamp);
-    }
-
     public boolean isActive() {
         return !canceled();
     }

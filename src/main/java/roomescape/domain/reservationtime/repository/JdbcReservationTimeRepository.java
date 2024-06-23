@@ -1,5 +1,6 @@
 package roomescape.domain.reservationtime.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,27 +22,24 @@ import java.util.Optional;
 import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
 
 @Repository
+@RequiredArgsConstructor
 public class JdbcReservationTimeRepository implements ReservationTimeRepository {
 
     public static final String SELECT_RESERVATION_TIME_SQL = """
             select
-                id,
+                time_id,
                 start_at,
                 created_at
             from reservation_times""";
 
-    private static final RowMapper<ReservationTime> RESERVATION_TIME_ROW_MAPPER =
+    public static final RowMapper<ReservationTime> RESERVATION_TIME_ROW_MAPPER =
             (rs, rowNum) -> ReservationTime.builder()
-                    .id(new ReservationTimeId(rs.getLong("id")))
+                    .id(new ReservationTimeId(rs.getLong("time_id")))
                     .startAt(LocalTime.parse(rs.getString("start_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
-
-    public JdbcReservationTimeRepository(final JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public ReservationTime save(final ReservationTime time) {
@@ -58,7 +56,7 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
                 update reservation_times set
                     start_at = ?,
                     created_at = ?
-                where id = ?""";
+                where time_id = ?""";
 
         final int updateCount = jdbcTemplate.update(
                 updateSql,
@@ -69,7 +67,7 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
 
         if (updateCount != 1) {
             throw new ReservationTimeException(
-                    "Error occurred while updating ReservationTime where id=%d. Affected row is not 1 but %d."
+                    "Error occurred while updating ReservationTime where time_id=%d. Affected row is not 1 but %d."
                             .formatted(time.getIdValue(), updateCount)
             );
         }
@@ -81,7 +79,7 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
         String insertSql = "insert into reservation_times (start_at, created_at) values (?, ?)";
 
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"id"});
+            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"time_id"});
             ps.setString(1, toIsoLocal(time.getStartAt()));
             ps.setString(2, toIsoLocal(time.getCreatedAt()));
             return ps;
@@ -104,7 +102,7 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
     @Override
     public Optional<ReservationTime> findById(final ReservationTimeId timeId) {
         return queryForReservationTime(
-                generateSelectSqlWithWhereClause("where id = ?"),
+                generateSelectSqlWithWhereClause("where time_id = ?"),
                 timeId.getValue()
         );
     }

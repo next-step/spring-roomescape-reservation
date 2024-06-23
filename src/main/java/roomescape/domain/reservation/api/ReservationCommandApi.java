@@ -31,5 +31,4 @@ public class ReservationCommandApi {
         commandService.cancel(new ReservationId(reservationId));
         return ResponseEntity.ok().build();
     }
-
 }

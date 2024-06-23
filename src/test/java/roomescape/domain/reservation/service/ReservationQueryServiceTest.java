@@ -35,6 +35,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("confirmed"))
                 .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
                 .status(ReservationStatus.CONFIRMED)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         repository.save(confirmed);
 
@@ -42,6 +43,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("canceled"))
                 .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 3, 8, 11, 0)))
                 .status(ReservationStatus.CANCELED)
+                .createdAt(LocalDateTime.of(2023, 6, 4, 12, 0))
                 .build();
         repository.save(canceled);
 
@@ -55,5 +57,4 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                         tuple("confirmed", LocalDate.of(2024, 6, 8), LocalTime.of(12, 0))
                 );
     }
-
 }

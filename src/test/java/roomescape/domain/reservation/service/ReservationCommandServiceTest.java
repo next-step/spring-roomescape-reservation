@@ -60,26 +60,24 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     void cancel() {
         // given
         final Reservation reservation = Reservation.builder()
-                .id(1L)
                 .name(new ReservationGuestName("brie"))
                 .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
                 .status(ReservationStatus.CONFIRMED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        final Long reservationId = repository.save(reservation).getId();
+        final Reservation saved = repository.save(reservation);
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
 
         final ReservationCommandService sut = new ReservationCommandService(repository, clockHolder);
 
         // when
-        sut.cancel(new ReservationId(reservationId));
+        sut.cancel(new ReservationId(saved.getId()));
 
         // then
         assertThat(repository.findAll()).hasSize(1);
 
-        final Reservation actual = repository.findById(reservationId).get();
+        final Reservation actual = repository.findById(saved.getId()).get();
         assertAll(
-                () -> assertThat(actual.getId()).isEqualTo(1L),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDateTime()).isEqualTo(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0))),
                 () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
@@ -93,7 +91,6 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     void reserve_exception() {
         // given
         final Reservation reservation = Reservation.builder()
-                .id(1L)
                 .name(new ReservationGuestName("brie"))
                 .dateTime(new ReservationDateTime(LocalDateTime.of(2024, 6, 8, 12, 0)))
                 .status(ReservationStatus.CONFIRMED)

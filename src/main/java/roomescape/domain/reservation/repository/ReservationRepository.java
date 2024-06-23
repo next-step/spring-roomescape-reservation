@@ -16,4 +16,6 @@ public interface ReservationRepository {
     Optional<Reservation> findById(Long reservationId);
 
     Optional<Reservation> findByNameAndDateTime(ReservationGuestName name, ReservationDateTime dateTime);
+
+    void deleteAllInBatch();
 }

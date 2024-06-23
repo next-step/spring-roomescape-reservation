@@ -6,8 +6,6 @@ import roomescape.application.error.key.ApplicationErrorKeys;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservationtime.ReservationTime;
 
-import java.util.List;
-
 import static roomescape.application.error.code.ApplicationErrorCode.CANNOT_CREATE_EXIST_RESERVATION_AT_THIS_TIME;
 
 public class CreateReservationValidateException extends ApplicationException {
@@ -26,11 +24,9 @@ public class CreateReservationValidateException extends ApplicationException {
     ) {
         return new CreateReservationValidateException(
                 CANNOT_CREATE_EXIST_RESERVATION_AT_THIS_TIME,
-                new ApplicationErrorKeys(
-                        List.of(
-                                new ApplicationErrorKey(ERROR_KEY_NAME_DATE, reservationDate.getFormatted(DATE_FORMAT)),
-                                new ApplicationErrorKey(ERROR_KEY_TIME_ID, reservationTime.getId().toString())
-                        )
+                ApplicationErrorKeys.of(
+                        new ApplicationErrorKey(ERROR_KEY_NAME_DATE, reservationDate.getFormatted(DATE_FORMAT)),
+                        new ApplicationErrorKey(ERROR_KEY_TIME_ID, reservationTime.getId().toString())
                 )
         );
     }

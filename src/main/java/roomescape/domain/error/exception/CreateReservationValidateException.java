@@ -6,7 +6,6 @@ import roomescape.domain.error.key.DomainErrorKeys;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import static roomescape.domain.error.code.DomainErrorCode.CANNOT_CREATE_RESERVATION_FOR_PAST_TIME;
 
@@ -23,12 +22,10 @@ public class CreateReservationValidateException extends DomainException {
     public static CreateReservationValidateException pastTime(LocalDateTime dateTime) {
         return new CreateReservationValidateException(
                 CANNOT_CREATE_RESERVATION_FOR_PAST_TIME,
-                new DomainErrorKeys(
-                        List.of(
-                                new DomainErrorKey(
-                                        ERROR_KEY_NAME_RESERVATION_TIME,
-                                        dateTime.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT)))
-                        )
+                DomainErrorKeys.of(
+                        new DomainErrorKey(
+                                ERROR_KEY_NAME_RESERVATION_TIME,
+                                dateTime.format(DateTimeFormatter.ofPattern(DATETIME_FORMAT)))
                 )
         );
     }

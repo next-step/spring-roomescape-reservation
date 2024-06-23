@@ -32,7 +32,7 @@ public class ReservationTimeApi {
     }
 
     @GetMapping("/times")
-    public ResponseEntity<List<ReservationTimeAppendHttpResponse>> append() {
+    public ResponseEntity<List<ReservationTimeAppendHttpResponse>> fetchAll() {
         List<ReservationTime> times = timeQueryService.fetchAll();
 
         final List<ReservationTimeAppendHttpResponse> response = ReservationTimeAppendHttpResponse.from(times);

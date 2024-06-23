@@ -4,13 +4,15 @@ public class ReservationRq {
     private String name;
     private String date;
     private Long timeId;
+    private Long themeId;
 
     public ReservationRq() {}
 
-    public ReservationRq(String name, String date, Long timeId) {
+    public ReservationRq(String name, String date, Long timeId, Long themeId) {
         this.name = name;
         this.date = date;
         this.timeId = timeId;
+        this.themeId = themeId;
     }
 
     public String getName() {
@@ -35,5 +37,13 @@ public class ReservationRq {
 
     public void setTimeId(Long timeId) {
         this.timeId = timeId;
+    }
+
+    public Long getThemeId() {
+        return themeId;
+    }
+
+    public void setThemeId(Long themeId) {
+        this.themeId = themeId;
     }
 }

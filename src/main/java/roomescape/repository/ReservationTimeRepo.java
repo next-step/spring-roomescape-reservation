@@ -13,31 +13,27 @@ import java.sql.*;
 import java.util.List;
 
 @Repository
-public class ReservationTimeRepository {
+public class ReservationTimeRepo {
     private final JdbcTemplate jdbcTemplate;
 
-    public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationTimeRepo(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    private ReservationTime mapReservationTime(ResultSet rs, int rowNum) throws SQLException {
+        Long id = rs.getLong("id");
+        String startAt = rs.getString("start_at");
+        return new ReservationTime(id, startAt);
     }
 
     public List<ReservationTime> findAll() {
         String sql = "SELECT * FROM reservation_time";
-        return jdbcTemplate.query(sql, new ReservationTimeRowMapper());
-    }
-
-    private static class ReservationTimeRowMapper implements RowMapper<ReservationTime> {
-        @Override
-        public ReservationTime mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ReservationTime reservationTime = new ReservationTime();
-            reservationTime.setId(rs.getLong("id"));
-            reservationTime.setStartAt(rs.getString("start_at"));
-            return reservationTime;
-        }
+        return jdbcTemplate.query(sql, this::mapReservationTime);
     }
 
     public ReservationTime findById(Long id) {
         String sql = "SELECT * FROM reservation_time WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new ReservationTimeRowMapper());
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, this::mapReservationTime);
     }
 
     public Long save(ReservationTimeRq reservationTimeRq) {

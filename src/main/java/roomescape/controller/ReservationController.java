@@ -6,6 +6,7 @@ import roomescape.dto.ReservationRq;
 import roomescape.dto.ReservationRs;
 import roomescape.service.ReservationService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,14 +29,14 @@ public class ReservationController {
     @PostMapping
     public ResponseEntity<ReservationRs> addReservation(@RequestBody ReservationRq reservationRq) {
         ReservationRs reservationRs = reservationService.addReservation(reservationRq);
-        return ResponseEntity.ok().body(reservationRs);
+        return ResponseEntity.created(URI.create("/reservations/" + reservationRs.getId())).body(reservationRs);
     }
 
     // 예약 취소
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
         reservationService.deleteReservation(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -2,6 +2,7 @@ package roomescape.domain.reservation.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import roomescape.domain.reservation.exception.ReservationException;
 import roomescape.global.infrastructure.ClockHolder;
 
 import java.time.LocalDate;
@@ -28,6 +29,19 @@ public class Reservation {
             final LocalDateTime canceledAt,
             final LocalDateTime createdAt
     ) {
+        if (Objects.isNull(name)) {
+            throw ReservationException.nullField("name");
+        }
+        if (Objects.isNull(dateTime)) {
+            throw ReservationException.nullField("dateTime");
+        }
+        if (Objects.isNull(status)) {
+            throw ReservationException.nullField("status");
+        }
+        if (Objects.isNull(createdAt)) {
+            throw ReservationException.nullField("createdAt");
+        }
+
         this.id = id;
         this.name = name;
         this.dateTime = dateTime;
@@ -100,5 +114,4 @@ public class Reservation {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }

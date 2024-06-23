@@ -20,6 +20,10 @@ dependencies {
 
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    // jdbc
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
     // h2
     runtimeOnly 'com.h2database:h2'

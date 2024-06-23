@@ -61,7 +61,7 @@ class ThemeCommandApiTest {
                 "https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg"
         );
 
-        given(themeService.createTheme(any())).willReturn(theme);
+        given(themeService.create(any())).willReturn(theme);
 
         CreateThemeResponse response = CreateThemeResponse.from(theme);
 
@@ -79,7 +79,7 @@ class ThemeCommandApiTest {
     void deleteReservationTimeTest() throws Exception {
         Long themeId = 1L;
 
-        doNothing().when(themeService).deleteTheme(any());
+        doNothing().when(themeService).delete(any());
 
         mockMvc.perform(
                 delete("/themes/{themeId}", themeId)

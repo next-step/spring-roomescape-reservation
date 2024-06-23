@@ -14,7 +14,7 @@ public class ReservationQueryService {
         this.reservationRepository = reservationRepository;
     }
 
-    public ReservationViews findAllReservations() {
+    public ReservationViews findAll() {
         return ReservationViewMapper.toReservationViews(reservationRepository.findAllReservationViewProjection());
     }
 }

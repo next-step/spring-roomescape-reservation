@@ -20,19 +20,7 @@ public class CreateThemeRequest {
         this.thumbnail = thumbnail;
     }
 
-    public CreateThemeCommand toCreateThemeCommand() {
+    public CreateThemeCommand toCommand() {
         return new CreateThemeCommand(name, description, thumbnail);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
     }
 }

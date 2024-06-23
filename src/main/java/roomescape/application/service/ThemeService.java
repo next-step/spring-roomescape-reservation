@@ -18,7 +18,7 @@ public class ThemeService {
         this.themeRepository = themeRepository;
     }
 
-    public Theme createTheme(CreateThemeCommand command) {
+    public Theme create(CreateThemeCommand command) {
         Theme theme = command.toTheme();
 
         return ThemeMapper.toTheme(
@@ -26,11 +26,11 @@ public class ThemeService {
         );
     }
 
-    public Themes findAllThemes() {
+    public Themes findAll() {
         return ThemeMapper.toThemes(themeRepository.findAll());
     }
 
-    public void deleteTheme(DeleteThemeCommand command) {
+    public void delete(DeleteThemeCommand command) {
         themeRepository.delete(command.getThemeId());
     }
 }

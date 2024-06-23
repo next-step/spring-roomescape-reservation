@@ -58,7 +58,7 @@ class ReservationQueryApiTest {
     @Test
     @DisplayName("예약 전체 조회 API 컨트롤러 테스트")
     void findAllReservationsTest() throws Exception {
-        given(reservationQueryService.findAllReservations()).willReturn(reservationViews);
+        given(reservationQueryService.findAll()).willReturn(reservationViews);
         List<FindAllReservationsResponse> response =
                 FindAllReservationsResponse.toFindAllReservationsResponses(reservationViews);
 

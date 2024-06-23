@@ -21,11 +21,10 @@ public class ReservationTimeCommandApi {
     }
 
     @PostMapping("/times")
-    public ResponseEntity<CreateReservationTimeResponse> createReservationTime(
+    public ResponseEntity<CreateReservationTimeResponse> create(
             @RequestBody @Valid CreateReservationTimeRequest request
     ) {
-        ReservationTime reservationTime =
-                reservationTimeService.createReservationTime(request.toCreateReservationTimeCommand());
+        ReservationTime reservationTime = reservationTimeService.create(request.toCommand());
 
         return ResponseEntity
                 .created(URI.create(String.format("/times/%d", reservationTime.getId())))
@@ -33,8 +32,8 @@ public class ReservationTimeCommandApi {
     }
 
     @DeleteMapping("/times/{reservationTimeId}")
-    public ResponseEntity<Void> deleteReservationTime(@PathVariable Long reservationTimeId) {
-        reservationTimeService.deleteReservationTime(new DeleteReservationTimeCommand(reservationTimeId));
+    public ResponseEntity<Void> delete(@PathVariable Long reservationTimeId) {
+        reservationTimeService.delete(new DeleteReservationTimeCommand(reservationTimeId));
 
         return ResponseEntity.noContent().build();
     }

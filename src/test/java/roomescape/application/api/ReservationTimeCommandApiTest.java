@@ -53,7 +53,7 @@ class ReservationTimeCommandApiTest {
     void createReservationTimeTest() throws Exception {
         CreateReservationTimeRequest request = new CreateReservationTimeRequest("20:21");
 
-        given(reservationTimeService.createReservationTime(any())).willReturn(reservationTime);
+        given(reservationTimeService.create(any())).willReturn(reservationTime);
 
         CreateReservationTimeResponse response = CreateReservationTimeResponse.from(reservationTime);
 
@@ -70,7 +70,7 @@ class ReservationTimeCommandApiTest {
     void deleteReservationTimeTest() throws Exception {
         Long reservationTimeId = 1L;
 
-        doNothing().when(reservationTimeService).deleteReservationTime(any());
+        doNothing().when(reservationTimeService).delete(any());
 
         mockMvc.perform(
                 delete("/times/{reservationTimeId}", reservationTimeId)

@@ -21,7 +21,7 @@ public class CreateReservationTimeRequest {
         this.startAt = startAt;
     }
 
-    public CreateReservationTimeCommand toCreateReservationTimeCommand() {
+    public CreateReservationTimeCommand toCommand() {
         return new CreateReservationTimeCommand(LocalTime.parse(this.startAt, DateTimeFormatter.ofPattern(TIME_FORMAT)));
     }
 

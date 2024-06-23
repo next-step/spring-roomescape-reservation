@@ -22,7 +22,7 @@ public class ReservationCommandApi {
 
     @PostMapping("/reservations")
     public ResponseEntity<CreateReservationResponse> createReservation(@RequestBody @Valid CreateReservationRequest request) {
-        Reservation reservation = reservationCommandService.createReservation(request.toCreateReservationCommand());
+        Reservation reservation = reservationCommandService.create(request.toCreateReservationCommand());
 
         return ResponseEntity.created(URI.create(String.format("/reservations/%d", reservation.getId())))
                 .body(CreateReservationResponse.from(reservation));
@@ -30,7 +30,7 @@ public class ReservationCommandApi {
 
     @DeleteMapping("/reservations/{reservationId}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId) {
-        reservationCommandService.deleteReservation(new DeleteReservationCommand(reservationId));
+        reservationCommandService.delete(new DeleteReservationCommand(reservationId));
 
         return ResponseEntity.noContent().build();
     }

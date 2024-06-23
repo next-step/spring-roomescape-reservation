@@ -12,8 +12,8 @@ public final class ReservationEntityMapper {
     public static ReservationEntity toReservationEntity(Reservation reservation) {
         return new ReservationEntity(
                 reservation.getId(),
-                reservation.getReservationName(),
-                reservation.getReservationDate(),
+                reservation.getName(),
+                reservation.getDate(),
                 reservation.getReservationTimeId(),
                 reservation.getThemeId()
         );

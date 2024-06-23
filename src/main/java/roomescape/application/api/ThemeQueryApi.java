@@ -19,8 +19,8 @@ public class ThemeQueryApi {
     }
 
     @GetMapping("/themes")
-    public ResponseEntity<List<FindAllThemesResponse>> findAllThemes() {
-        Themes themes = themeService.findAllThemes();
+    public ResponseEntity<List<FindAllThemesResponse>> findAll() {
+        Themes themes = themeService.findAll();
 
         return ResponseEntity.ok(FindAllThemesResponse.toFindAllThemesResponses(themes));
     }

@@ -49,7 +49,7 @@ class ReservationTimeQueryApiTest {
     @Test
     @DisplayName("예약시간 전체 조회 API 컨트롤러 테스트")
     void findAllReservationsTest() throws Exception {
-        given(reservationTimeService.findAllReservationTimes()).willReturn(reservationTimes);
+        given(reservationTimeService.findAll()).willReturn(reservationTimes);
         List<FindAllReservationTimesResponse> response = FindAllReservationTimesResponse.toFindAllReservationResponses(reservationTimes);
 
         mockMvc.perform(

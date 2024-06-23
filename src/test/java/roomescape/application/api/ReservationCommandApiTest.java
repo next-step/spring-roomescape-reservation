@@ -73,7 +73,7 @@ class ReservationCommandApiTest {
         CreateReservationRequest createReservationRequest =
                 new CreateReservationRequest("2024-06-06", reservationName, 1L, 1L);
 
-        given(reservationCommandService.createReservation(any()))
+        given(reservationCommandService.create(any()))
                 .willReturn(reservation);
 
         CreateReservationResponse expectedResponse = CreateReservationResponse.from(reservation);
@@ -92,7 +92,7 @@ class ReservationCommandApiTest {
     void deleteReservationTest() throws Exception {
         Long reservationId = 1L;
 
-        doNothing().when(reservationCommandService).deleteReservation(any());
+        doNothing().when(reservationCommandService).delete(any());
 
         mockMvc.perform(
                         delete("/reservations/{reservationId}", reservationId)

@@ -57,7 +57,7 @@ class ThemeQueryApiTest {
     @Test
     @DisplayName("방탈출 테마 전체 조회 API 컨트롤러 테스트")
     void findAllReservationsTest() throws Exception {
-        given(themeService.findAllThemes()).willReturn(themes);
+        given(themeService.findAll()).willReturn(themes);
         List<FindAllThemesResponse> response = FindAllThemesResponse.toFindAllThemesResponses(themes);
 
         mockMvc.perform(

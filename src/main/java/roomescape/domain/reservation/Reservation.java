@@ -15,71 +15,61 @@ public class Reservation {
 
     private final ReservationId id;
 
-    private final ReservationName reservationName;
+    private final ReservationName name;
 
-    private final ReservationDate reservationDate;
+    private final ReservationDate date;
 
-    private final ReservationTime reservationTime;
+    private final ReservationTime time;
 
     private final Theme theme;
 
 
     public Reservation(
             ReservationId id,
-            ReservationName reservationName,
-            ReservationDate reservationDate,
-            ReservationTime reservationTime,
+            ReservationName name,
+            ReservationDate date,
+            ReservationTime time,
             Theme theme
     ) {
-        ObjectValidator.validateNotNull(id, reservationName, reservationDate, reservationTime, theme);
+        ObjectValidator.validateNotNull(id, name, date, time, theme);
         this.id = id;
-        this.reservationName = reservationName;
-        this.reservationDate = reservationDate;
-        this.reservationTime = reservationTime;
+        this.name = name;
+        this.date = date;
+        this.time = time;
         this.theme = theme;
     }
 
     public static Reservation create(
             ReservationId id,
-            ReservationName reservationName,
-            ReservationDate reservationDate,
-            ReservationTime reservationTime,
+            ReservationName name,
+            ReservationDate date,
+            ReservationTime time,
             Theme theme
     ) {
-        CreateReservationValidator validator = new CreateReservationValidator(
-                reservationDate,
-                reservationTime,
-                new SystemClockHolder()
-        );
+        CreateReservationValidator validator = new CreateReservationValidator(date, time, new SystemClockHolder());
         validator.validate();
 
-        return new Reservation(
-                id,
-                reservationName,
-                reservationDate,
-                reservationTime,
-                theme
-        );
+        return new Reservation(id, name, date, time, theme);
     }
 
     public Long getId() {
         return id.id();
     }
 
-    public String getReservationName() {
-        return reservationName.name();
+    public String getName() {
+        return name.name();
     }
 
     public String getFormattedReservationDate(String pattern) {
-        return this.reservationDate.getFormatted(pattern);
+        return this.date.getFormatted(pattern);
     }
 
-    public LocalDate getReservationDate() {
-        return this.reservationDate.date();
+    public LocalDate getDate() {
+        return this.date.date();
     }
 
     public Long getReservationTimeId() {
-        return reservationTime.getId();
+        return time.getId();
     }
 
     public Long getThemeId() {

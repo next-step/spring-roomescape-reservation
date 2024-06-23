@@ -19,8 +19,8 @@ public class ReservationQueryApi {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<FindAllReservationsResponse>> findAllReservations() {
-        ReservationViews reservationViews = reservationQueryService.findAllReservations();
+    public ResponseEntity<List<FindAllReservationsResponse>> findAll() {
+        ReservationViews reservationViews = reservationQueryService.findAll();
 
         return ResponseEntity.ok(FindAllReservationsResponse.toFindAllReservationsResponses(reservationViews));
     }

@@ -29,7 +29,7 @@ public class ReservationTimeService {
         this.createReservationTimeValidator = createReservationTimeValidator;
     }
 
-    public ReservationTime createReservationTime(CreateReservationTimeCommand command) {
+    public ReservationTime create(CreateReservationTimeCommand command) {
         ReservationTime reservationTime = command.toReservationTime();
         createReservationTimeValidator.validate(reservationTime);
 
@@ -38,11 +38,11 @@ public class ReservationTimeService {
         );
     }
 
-    public ReservationTimes findAllReservationTimes() {
+    public ReservationTimes findAll() {
         return ReservationTimeMapper.toReservationTimes(reservationTimeRepository.findAll());
     }
 
-    public void deleteReservationTime(DeleteReservationTimeCommand command) {
+    public void delete(DeleteReservationTimeCommand command) {
         ReservationTimeId reservationTimeId = command.toReservationTimeId();
 
         deleteReservationTimeValidator.validate(reservationTimeId);

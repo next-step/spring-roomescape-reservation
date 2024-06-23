@@ -36,7 +36,7 @@ public class ReservationCommandService {
         this.reservationCreator = reservationCreator;
     }
 
-    public Reservation createReservation(CreateReservationCommand command) {
+    public Reservation create(CreateReservationCommand command) {
         ReservationTime reservationTime = reservationTimeReader.readById(new ReservationTimeId(command.getReservationTimeId()));
         Theme theme = themeReader.readById(new ThemeId(command.getThemeId()));
 
@@ -48,7 +48,7 @@ public class ReservationCommandService {
         );
     }
 
-    public void deleteReservation(DeleteReservationCommand command) {
+    public void delete(DeleteReservationCommand command) {
         reservationRepository.delete(command.getReservationId());
     }
 }

@@ -21,8 +21,8 @@ public class ThemeCommandApi {
     }
 
     @PostMapping("/themes")
-    public ResponseEntity<CreateThemeResponse> createTheme(@RequestBody @Valid CreateThemeRequest request) {
-        Theme theme = themeService.createTheme(request.toCreateThemeCommand());
+    public ResponseEntity<CreateThemeResponse> create(@RequestBody @Valid CreateThemeRequest request) {
+        Theme theme = themeService.create(request.toCommand());
 
         return ResponseEntity
                 .created(URI.create(String.format("/themes/%d", theme.getId())))
@@ -30,8 +30,8 @@ public class ThemeCommandApi {
     }
 
     @DeleteMapping("/themes/{themeId}")
-    public ResponseEntity<Void> deleteTheme(@PathVariable Long themeId) {
-        themeService.deleteTheme(new DeleteThemeCommand(themeId));
+    public ResponseEntity<Void> delete(@PathVariable Long themeId) {
+        themeService.delete(new DeleteThemeCommand(themeId));
 
         return ResponseEntity.noContent().build();
     }

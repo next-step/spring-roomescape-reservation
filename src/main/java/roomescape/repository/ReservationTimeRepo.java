@@ -2,7 +2,6 @@ package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -11,6 +10,7 @@ import roomescape.model.ReservationTime;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ReservationTimeRepo {
@@ -31,9 +31,15 @@ public class ReservationTimeRepo {
         return jdbcTemplate.query(sql, this::mapReservationTime);
     }
 
-    public ReservationTime findById(Long id) {
-        String sql = "SELECT * FROM reservation_time WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, this::mapReservationTime);
+    public Optional<ReservationTime> findById(Long id) {
+        String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
+        List<ReservationTime> results = jdbcTemplate.query(sql, new Object[]{id}, this::mapReservationTime);
+
+        if (results.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(results.get(0));
+        }
     }
 
     public Long save(ReservationTimeRq reservationTimeRq) {

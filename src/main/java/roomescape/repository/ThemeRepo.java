@@ -10,6 +10,7 @@ import roomescape.model.Theme;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ThemeRepo {
@@ -32,9 +33,15 @@ public class ThemeRepo {
         return jdbcTemplate.query(sql, this::mapTheme);
     }
 
-    public Theme findById(Long id) {
+    public Optional<Theme> findById(Long id) {
         String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, this::mapTheme);
+        List<Theme> results = jdbcTemplate.query(sql, new Object[]{id}, this::mapTheme);
+
+        if (results.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(results.get(0));
+        }
     }
 
     public Long save(ThemeRq themeRq) {

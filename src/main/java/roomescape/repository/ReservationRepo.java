@@ -1,27 +1,28 @@
 package roomescape.repository;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.model.Reservation;
-import roomescape.model.ReservationTime;
-import roomescape.model.Theme;
+import roomescape.model.*;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public class ReservationRepo {
     private final JdbcTemplate jdbcTemplate;
 
+    public ReservationRepo(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     private Reservation mapReservation(ResultSet rs, int rowNum) throws SQLException {
         Long reservationId = rs.getLong("reservation_id");
         String reservationName = rs.getString("reservation_name");
-        String reservationDate = rs.getString("reservation_date");
+        LocalDate reservationDate = LocalDate.parse(rs.getString("reservation_date"));
 
         // 예약 시간
         Long timeId = rs.getLong("time_id");
@@ -36,10 +37,6 @@ public class ReservationRepo {
         Theme theme = new Theme(themeId, themeName, themeDescription, themeThumbnail);
 
         return new Reservation(reservationId, reservationName, reservationDate, time, theme);
-    }
-
-    public ReservationRepo(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<Reservation> findAll() {
@@ -63,7 +60,7 @@ public class ReservationRepo {
             public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, reservation.getName());
-                ps.setString(2, reservation.getDate());
+                ps.setString(2, String.valueOf(reservation.getDate()));
                 ps.setLong(3, reservation.getTime().getId());
                 ps.setLong(4, reservation.getTheme().getId());
                 return ps;
@@ -78,4 +75,9 @@ public class ReservationRepo {
         return jdbcTemplate.update(sql, id);
     }
 
+    public boolean existsByDateAndTimeId(LocalDate date, Long timeId) {
+        String sql = "SELECT COUNT(*) FROM reservation WHERE date = ? AND time_id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, date, timeId);
+        return count != null && count > 0;
+    }
 }

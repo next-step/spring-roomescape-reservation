@@ -3,6 +3,9 @@ package roomescape.service;
 import org.springframework.stereotype.Service;
 import roomescape.dto.ReservationRq;
 import roomescape.dto.ReservationRs;
+import roomescape.exception.DuplicateReservationException;
+import roomescape.exception.InvalidReservationException;
+import roomescape.exception.ResourceNotFoundException;
 import roomescape.model.Reservation;
 import roomescape.model.ReservationTime;
 import roomescape.model.Theme;
@@ -10,8 +13,8 @@ import roomescape.repository.ReservationRepo;
 import roomescape.repository.ReservationTimeRepo;
 import roomescape.repository.ThemeRepo;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -38,22 +41,15 @@ public class ReservationService {
     }
 
     public ReservationRs addReservation(ReservationRq reservationRq) {
-        Optional<Long> optionalTimeId = Optional.ofNullable(reservationRq.getTimeId());
-        Long timeId = optionalTimeId.orElseThrow(
-                () -> new IllegalArgumentException("Invalid time ID")
-        );
+        validateReservationRequest(reservationRq);
 
-        Optional<ReservationTime> optionalReservationTime = Optional.ofNullable(reservationTimeRepo.findById(timeId));
-        ReservationTime reservationTime = optionalReservationTime.orElseThrow(
-                () -> new IllegalArgumentException("Reservation time not found")
-        );
+        ReservationTime reservationTime = reservationTimeRepo.findById(reservationRq.getTimeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation time not found"));
+        Theme theme = themeRepo.findById(reservationRq.getThemeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Theme not found"));
 
-        Optional<Theme> optionalTheme = Optional.ofNullable(themeRepo.findById(reservationRq.getThemeId()));
-        Theme theme = optionalTheme.orElseThrow(
-                () -> new IllegalArgumentException("Theme not found")
-        );
+        checkForDuplicateReservation(reservationRq.getDate(), reservationRq.getTimeId());
 
-        // Reservation 객체 생성
         Reservation reservation = new Reservation(
                 null,
                 reservationRq.getName(),
@@ -62,7 +58,6 @@ public class ReservationService {
                 theme
         );
 
-        // 예약 저장
         Long id = reservationRepo.save(reservation);
 
         return new ReservationRs(
@@ -76,5 +71,21 @@ public class ReservationService {
 
     public void deleteReservation(Long id) {
         reservationRepo.deleteById(id);
+    }
+
+    private void validateReservationRequest(ReservationRq reservationRq) {
+        if (reservationRq.getName() == null || reservationRq.getName().isEmpty()) {
+            throw new InvalidReservationException("Reservation name is invalid");
+        }
+        if (reservationRq.getDate() == null || reservationRq.getDate().isBefore(LocalDate.now())) {
+            throw new InvalidReservationException("Reservation date is invalid or in the past");
+        }
+    }
+
+    private void checkForDuplicateReservation(LocalDate date, Long timeId) {
+        boolean exists = reservationRepo.existsByDateAndTimeId(date, timeId);
+        if (exists) {
+            throw new DuplicateReservationException("A reservation already exists for this date and time");
+        }
     }
 }

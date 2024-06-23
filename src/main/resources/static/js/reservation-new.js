@@ -163,15 +163,28 @@ function deleteRow(event) {
 function requestCreate(reservation) {
   const requestOptions = {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(reservation)
   };
 
   return fetch(RESERVATION_API_ENDPOINT, requestOptions)
-      .then(response => {
-        if (response.status === 201) return response.json();
-        throw new Error('Create failed');
-      });
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then(message => {
+          throw new Error(message || 'Create failed');
+        });
+      }
+    })
+    .then(data => {
+      // 성공적인 응답을 처리합니다.
+      console.log('Reservation created:', data);
+    })
+    .catch(error => {
+      // 예외 상황을 처리하고, 메시지를 alert로 표시합니다.
+      alert('Error: ' + error.message);
+    });
 }
 
 function requestDelete(id) {

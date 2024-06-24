@@ -2,7 +2,7 @@ package roomescape.application.service.component.reader;
 
 import org.springframework.stereotype.Component;
 import roomescape.application.error.exception.NotFoundEntityException;
-import roomescape.application.mapper.ThemeMapper;
+import roomescape.application.service.mapper.ThemeMapper;
 import roomescape.domain.theme.Theme;
 import roomescape.domain.theme.vo.ThemeId;
 import roomescape.repository.ThemeRepository;

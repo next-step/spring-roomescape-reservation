@@ -45,7 +45,7 @@ public class MySQLJdbcThemeRepository implements ThemeRepository {
             return themeEntity;
         }
 
-        return themeEntity.changeId(generatedKeyHolder.getKey().longValue());
+        return themeEntity.withId(generatedKeyHolder.getKey().longValue());
     }
 
     @Override

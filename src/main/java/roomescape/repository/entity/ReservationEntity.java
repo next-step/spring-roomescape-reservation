@@ -25,7 +25,7 @@ public class ReservationEntity {
         this.themeId = themeId;
     }
 
-    public ReservationEntity changeId(Long id) {
+    public ReservationEntity withId(Long id) {
         return new ReservationEntity(id, this.reservationName, this.reservationDate, this.reservationTimeId, themeId);
     }
 

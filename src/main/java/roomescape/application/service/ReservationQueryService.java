@@ -1,7 +1,7 @@
 package roomescape.application.service;
 
 import org.springframework.stereotype.Service;
-import roomescape.application.mapper.ReservationViewMapper;
+import roomescape.application.service.mapper.ReservationViewMapper;
 import roomescape.domain.reservation.ReservationViews;
 import roomescape.repository.ReservationRepository;
 

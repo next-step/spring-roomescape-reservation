@@ -20,7 +20,7 @@ public class ReservationTimeEntity {
         return startAt;
     }
 
-    public ReservationTimeEntity changeId(Long id) {
+    public ReservationTimeEntity withId(Long id) {
         return new ReservationTimeEntity(id, this.startAt);
     }
 }

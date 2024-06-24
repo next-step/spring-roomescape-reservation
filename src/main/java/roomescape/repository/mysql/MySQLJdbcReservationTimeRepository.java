@@ -41,7 +41,7 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
             return reservationTimeEntity;
         }
 
-        return reservationTimeEntity.changeId(generatedKeyHolder.getKey().longValue());
+        return reservationTimeEntity.withId(generatedKeyHolder.getKey().longValue());
     }
 
     @Override

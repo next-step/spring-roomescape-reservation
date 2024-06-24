@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
-import roomescape.application.api.dto.request.CreateReservationRequest;
-import roomescape.application.api.dto.request.CreateReservationTimeRequest;
-import roomescape.application.api.dto.request.CreateThemeRequest;
+import roomescape.application.presentation.api.dto.request.CreateReservationRequest;
+import roomescape.application.presentation.api.dto.request.CreateReservationTimeRequest;
+import roomescape.application.presentation.api.dto.request.CreateThemeRequest;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

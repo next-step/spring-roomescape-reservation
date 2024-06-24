@@ -58,7 +58,7 @@ public class MySQLJdbcReservationRepository implements ReservationRepository {
             return reservationEntity;
         }
 
-        return reservationEntity.changeId(generatedKeyHolder.getKey().longValue());
+        return reservationEntity.withId(generatedKeyHolder.getKey().longValue());
     }
 
     @Override

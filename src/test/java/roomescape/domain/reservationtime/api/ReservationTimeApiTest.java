@@ -2,6 +2,7 @@ package roomescape.domain.reservationtime.api;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
 import roomescape.support.RestAssuredTestSupport;
 
@@ -18,16 +19,17 @@ class ReservationTimeApiTest extends RestAssuredTestSupport {
         timeAppendHttpRequest.put("startAt", "10:00");
 
         // 예약 시간 추가
-        RestAssured.given().log().all()
+        final ValidatableResponse response = RestAssured.given().log().all()
                 .contentType(ContentType.JSON)
                 .body(timeAppendHttpRequest)
                 .when().post("/times")
                 .then().log().all()
                 .statusCode(200)
                 .body(
-                        "id", is(1),
                         "startAt", is("10:00")
                 );
+
+        final Long timeId = ((Integer) response.extract().path("id")).longValue();
 
         // 예약 시간 전체 조회
         RestAssured.given().log().all()
@@ -38,7 +40,9 @@ class ReservationTimeApiTest extends RestAssuredTestSupport {
 
         // 예약 시간 삭제
         RestAssured.given().log().all()
-                .when().delete("/times/1")
+                .when()
+                .pathParam("timeId", timeId)
+                .delete("/times/{timeId}")
                 .then().log().all()
                 .statusCode(200);
 

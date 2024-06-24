@@ -9,20 +9,4 @@ public class PageController {
     public String home() {
         return "/admin/index";
     }
-
-    @GetMapping("/admin/reservation")
-    public String reservation() {
-        return "/admin/reservation-new";
-    }
-
-    @GetMapping("/admin/time")
-    public String time() {
-        return "/admin/time";
-    }
-
-    @GetMapping("/admin/theme")
-    public String theme() {
-        return "/admin/theme";
-    }
-
 }

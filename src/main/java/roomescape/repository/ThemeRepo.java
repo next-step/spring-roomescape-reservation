@@ -1,7 +1,6 @@
 package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -49,15 +48,12 @@ public class ThemeRepo {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, themeRq.getName());
-                ps.setString(2, themeRq.getDescription());
-                ps.setString(3, themeRq.getThumbnail());
-                return ps;
-            }
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, themeRq.getName());
+            ps.setString(2, themeRq.getDescription());
+            ps.setString(3, themeRq.getThumbnail());
+            return ps;
         }, keyHolder);
 
         return keyHolder.getKey().longValue();

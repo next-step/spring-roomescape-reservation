@@ -41,8 +41,6 @@ public class ReservationService {
     }
 
     public ReservationRs addReservation(ReservationRq reservationRq) {
-        validateReservationRequest(reservationRq);
-
         ReservationTime reservationTime = reservationTimeRepo.findById(reservationRq.getTimeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation time not found"));
         Theme theme = themeRepo.findById(reservationRq.getThemeId())
@@ -71,15 +69,6 @@ public class ReservationService {
 
     public void deleteReservation(Long id) {
         reservationRepo.deleteById(id);
-    }
-
-    private void validateReservationRequest(ReservationRq reservationRq) {
-        if (reservationRq.getName() == null || reservationRq.getName().isEmpty()) {
-            throw new InvalidReservationException("Reservation name is invalid");
-        }
-        if (reservationRq.getDate() == null || reservationRq.getDate().isBefore(LocalDate.now())) {
-            throw new InvalidReservationException("Reservation date is invalid or in the past");
-        }
     }
 
     private void checkForDuplicateReservation(LocalDate date, Long timeId) {

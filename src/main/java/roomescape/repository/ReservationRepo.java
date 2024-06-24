@@ -1,7 +1,6 @@
 package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -40,12 +39,14 @@ public class ReservationRepo {
     }
 
     public List<Reservation> findAll() {
-        String sql = "SELECT r.id as reservation_id, r.name as reservation_name, r.date as reservation_date, " +
-                "t.id as time_id, t.start_at as start_at, " +
-                "th.id as theme_id, th.name as theme_name, th.description as theme_description, th.thumbnail as theme_thumbnail " +
-                "FROM reservation as r " +
-                "LEFT JOIN reservation_time as t ON r.time_id = t.id " +
-                "LEFT JOIN theme as th ON r.theme_id = th.id";
+        String sql = """
+                SELECT r.id as reservation_id, r.name as reservation_name, r.date as reservation_date,
+                t.id as time_id, t.start_at as start_at,
+                th.id as theme_id, th.name as theme_name, th.description as theme_description, th.thumbnail as theme_thumbnail
+                FROM reservation as r
+                LEFT JOIN reservation_time as t ON r.time_id = t.id
+                LEFT JOIN theme as th ON r.theme_id = th.id
+                """;
 
         return jdbcTemplate.query(sql, this::mapReservation);
     }
@@ -55,16 +56,13 @@ public class ReservationRepo {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(new PreparedStatementCreator() {
-            @Override
-            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, reservation.getName());
-                ps.setString(2, String.valueOf(reservation.getDate()));
-                ps.setLong(3, reservation.getTime().getId());
-                ps.setLong(4, reservation.getTheme().getId());
-                return ps;
-            }
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, reservation.getName());
+            ps.setString(2, String.valueOf(reservation.getDate()));
+            ps.setLong(3, reservation.getTime().getId());
+            ps.setLong(4, reservation.getTheme().getId());
+            return ps;
         }, keyHolder);
 
         return keyHolder.getKey().longValue();

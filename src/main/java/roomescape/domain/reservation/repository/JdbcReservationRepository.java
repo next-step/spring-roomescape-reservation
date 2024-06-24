@@ -133,6 +133,12 @@ public class JdbcReservationRepository implements ReservationRepository {
     }
 
     @Override
+    public List<Reservation> findAllByTimeId(final ReservationTimeId timeId) {
+        final String selectSql = generateSelectSqlWithWhereCondition("where t.time_id = ?");
+        return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, timeId.getValue());
+    }
+
+    @Override
     public Optional<Reservation> findById(final Long reservationId) {
         final String selectSql = generateSelectSqlWithWhereCondition("where reservation_id = ?");
         return queryForReservation(selectSql, reservationId);

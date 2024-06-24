@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.model.ReservationTimeId;
 import roomescape.support.IntegrationTestSupport;
 
 import java.time.LocalDateTime;
@@ -149,5 +150,23 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getId().getValue()).isEqualTo(saved.getId().getValue()),
                 () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(12, 0))
         );
+    }
+
+    @Test
+    void delete() {
+        // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime saved = sut.save(time);
+        final ReservationTimeId timeId = saved.getId();
+
+        // when
+        sut.delete(timeId);
+
+        // when
+        final List<ReservationTime> actual = sut.findAll();
+        assertThat(actual).hasSize(0);
     }
 }

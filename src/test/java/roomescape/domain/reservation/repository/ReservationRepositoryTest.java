@@ -225,4 +225,39 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
         final List<Reservation> actual = sut.findAll();
         assertThat(actual).hasSize(0);
     }
+
+    @Test
+    void findByTimeId() {
+        // given
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
+
+        final Reservation reservation = Reservation.builder()
+                .name(new ReservationGuestName("name1"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
+                .status(ReservationStatus.CONFIRMED)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation);
+
+        final Reservation reservation2 = Reservation.builder()
+                .name(new ReservationGuestName("name2"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
+                .status(ReservationStatus.CONFIRMED)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation2);
+
+        // when
+        final List<Reservation> actual = sut.findAllByTimeId(savedTime.getId());
+
+        // then
+        assertThat(actual).hasSize(2)
+                .extracting("name")
+                .containsExactlyInAnyOrder(
+                        new ReservationGuestName("name1"),
+                        new ReservationGuestName("name2")
+                );
+    }
 }

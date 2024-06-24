@@ -125,6 +125,12 @@ public class JdbcReservationTimeRepository implements ReservationTimeRepository 
         return findByStartAt(startAt).orElseThrow(() -> ReservationTimeNotFoundException.fromStartAt(startAt));
     }
 
+    @Override
+    public void delete(final ReservationTimeId timeId) {
+        final String deleteSql = "delete from reservation_times t where t.time_id = ?";
+        jdbcTemplate.update(deleteSql, timeId.getValue());
+    }
+
     private String generateSelectSqlWithWhereClause(String whereClause) {
         return SELECT_RESERVATION_TIME_SQL + " " + whereClause;
     }

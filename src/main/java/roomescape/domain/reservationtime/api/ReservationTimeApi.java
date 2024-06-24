@@ -2,11 +2,9 @@ package roomescape.domain.reservationtime.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.model.ReservationTimeId;
 import roomescape.domain.reservationtime.service.ReservationTimeAppendRequest;
 import roomescape.domain.reservationtime.service.ReservationTimeCommandService;
 import roomescape.domain.reservationtime.service.ReservationTimeQueryService;
@@ -38,5 +36,13 @@ public class ReservationTimeApi {
         final List<ReservationTimeAppendHttpResponse> response = ReservationTimeAppendHttpResponse.from(times);
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/times/{timeId}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long timeId
+    ) {
+        timeCommandService.delete(new ReservationTimeId(timeId));
+        return ResponseEntity.ok().build();
     }
 }

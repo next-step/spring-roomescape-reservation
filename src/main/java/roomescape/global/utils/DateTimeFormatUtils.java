@@ -1,5 +1,6 @@
 package roomescape.global.utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,5 +16,9 @@ public class DateTimeFormatUtils {
 
     public static String toIsoLocal(final LocalTime target) {
         return target.format(DateTimeFormatter.ISO_LOCAL_TIME);
+    }
+
+    public static String toIsoLocal(final LocalDate target) {
+        return target.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }

@@ -6,20 +6,15 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.time.ReservationTimeRepository;
 
 @Repository
 public class ReservationRepository {
 
   private final JdbcTemplate jdbcTemplate;
   private final ReservationRowMapper rowMapper = new ReservationRowMapper();
-  private final ReservationTimeRepository timeRepository;
 
-
-  public ReservationRepository(JdbcTemplate jdbcTemplate,
-      ReservationTimeRepository timeRepository) {
+  public ReservationRepository(JdbcTemplate jdbcTemplate) {
     this.jdbcTemplate = jdbcTemplate;
-    this.timeRepository = timeRepository;
   }
 
   public List<Reservation> findAll() {

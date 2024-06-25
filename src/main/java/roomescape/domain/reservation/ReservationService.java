@@ -7,6 +7,7 @@ import roomescape.infra.reservation.ReservationRepository;
 
 @Service
 public class ReservationService {
+
   private final ReservationRepository repository;
 
   public ReservationService(ReservationRepository repository) {
@@ -15,6 +16,9 @@ public class ReservationService {
 
   @Transactional
   public Reservation create(CreateReservation reservation) {
+    if (repository.isExists(reservation)) {
+      throw new ReservationIsExists();
+    }
     long savedId = repository.save(reservation);
     return repository.getById(savedId);
   }
@@ -26,7 +30,9 @@ public class ReservationService {
   @Transactional
   public void delete(long id) {
     Reservation byId = repository.getById(id);
-    if (byId == null) throw new ReservationNotFound();
+    if (byId == null) {
+      throw new ReservationNotFound();
+    }
     repository.delete(id);
   }
 }

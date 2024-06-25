@@ -27,6 +27,12 @@ public class ReservationRepository {
         rowMapper);
   }
 
+  public boolean isExists(CreateReservation reservation) {
+    return jdbcTemplate.queryForObject(
+        "select count(id) from reservation where date=? and time_id=?",
+        (rs, i) -> rs.getLong(1) > 0, reservation.date(), reservation.timeId());
+  }
+
   public Reservation getById(Long id) {
     Reservation reservation = null;
     try {

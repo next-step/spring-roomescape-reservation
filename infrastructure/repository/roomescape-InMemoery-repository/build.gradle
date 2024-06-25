@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':infrastructure:repository:roomescape-repository')
+    implementation 'org.springframework.boot:spring-boot-starter'
+}

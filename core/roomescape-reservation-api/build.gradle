@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(':domain:roomescape-reservation-domain')
+    implementation project(':infrastructure:repository:roomescape-repository')
+    implementation project(':infrastructure:repository:roomescape-mysql-jdbc-repository')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    testImplementation 'io.rest-assured:rest-assured:5.3.1'
+}

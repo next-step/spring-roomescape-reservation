@@ -19,7 +19,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public int insert(@RequestBody Reservation reservation) {
+    public Long insert(@RequestBody Reservation reservation) {
         return reservationService.addReservation(reservation);
     }
 
@@ -29,7 +29,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Long id) {
         reservationService.deleteReservation(id);
     }
 }

@@ -12,30 +12,30 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import roomescape.domain.theme.CreateTheme;
 import roomescape.domain.theme.Theme;
-import roomescape.infra.theme.ThemeRepository;
+import roomescape.domain.theme.ThemeService;
 
 @RestController
 @RequestMapping("themes")
 public class ThemeController {
-  private final ThemeRepository themeRepository;
+  private final ThemeService service;
 
-  public ThemeController(ThemeRepository themeRepository) {
-    this.themeRepository = themeRepository;
+  public ThemeController(ThemeService service) {
+    this.service = service;
   }
 
   @PostMapping
   public Theme create(@RequestBody CreateTheme theme) {
-    return themeRepository.create(theme);
+    return service.create(theme);
   }
 
   @GetMapping
   public List<Theme> findAll() {
-    return themeRepository.findAll();
+    return service.findAll();
   }
 
   @DeleteMapping("{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable("id") long id) {
-    themeRepository.delete(id);
+    service.delete(id);
   }
 }

@@ -35,8 +35,26 @@
 </nav>
 
 <div class="content-container">
-  <h2 class="content-container-title">방탈출 어드민</h2>
+  <h2 class="content-container-title">테마 관리 페이지</h2>
+  <div class="table-header">
+    <button id="add-button" class="btn btn-custom mb-2 float-right">테마 추가</button>
+  </div>
+  <div class="table-container"/>
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">순서</th>
+      <th scope="col">제목</th>
+      <th scope="col">설명</th>
+      <th scope="col">썸네일 URL</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
 </div>
 
+<script src="/js/theme.js"></script>
 </body>
 </html>

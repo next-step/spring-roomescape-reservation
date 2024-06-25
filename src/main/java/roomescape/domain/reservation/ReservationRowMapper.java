@@ -3,9 +3,11 @@ package roomescape.domain.reservation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import roomescape.domain.theme.Theme;
 import roomescape.domain.time.ReservationTime;
 
+@Component
 class ReservationRowMapper implements RowMapper<Reservation> {
   @Override
   public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {

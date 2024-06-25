@@ -11,10 +11,11 @@ import org.springframework.stereotype.Repository;
 public class ReservationTimeRepository {
 
   private final JdbcTemplate jdbcTemplate;
-  private final ReservationTimeRowMapper rowMapper = new ReservationTimeRowMapper();
+  private final ReservationTimeRowMapper rowMapper;
 
-  public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
+  public ReservationTimeRepository(JdbcTemplate jdbcTemplate, ReservationTimeRowMapper rowMapper) {
     this.jdbcTemplate = jdbcTemplate;
+    this.rowMapper = rowMapper;
   }
 
   public List<ReservationTime> findAll() {

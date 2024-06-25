@@ -1,6 +1,7 @@
 package roomescape.domain.theme;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -8,9 +9,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ThemeRepository {
   private final JdbcTemplate template;
+  private final ThemeRowMapper rowMapper;
 
-  public ThemeRepository(JdbcTemplate template) {
+  public ThemeRepository(JdbcTemplate template, ThemeRowMapper rowMapper) {
     this.template = template;
+    this.rowMapper = rowMapper;
   }
 
   public Theme create(CreateTheme theme) {
@@ -25,4 +28,11 @@ public class ThemeRepository {
     }, generatedKeyHolder);
     return theme.toDomain(generatedKeyHolder.getKey().longValue());
   }
+
+  public List<Theme> findAll() {
+    return template.query("select * from theme", rowMapper);
+  }
+
+
+
 }

@@ -1,5 +1,7 @@
 package roomescape.api.theme;
 
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,5 +22,10 @@ public class ThemeController {
   @PostMapping
   public Theme create(@RequestBody CreateTheme theme) {
     return themeRepository.create(theme);
+  }
+
+  @GetMapping
+  public List<Theme> findAll() {
+    return themeRepository.findAll();
   }
 }

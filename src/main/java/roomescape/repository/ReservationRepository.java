@@ -3,50 +3,59 @@ package roomescape.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.model.Reservation;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ReservationRepository {
-    private JdbcTemplate jdbcTemplate;
-    private RowMapper<Reservation> rowMapper = (resultSet, rowNum) -> new Reservation(
+    private final JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert jdbcInsert;
+    private final RowMapper<Reservation> rowMapper = (resultSet, rowNum) -> new Reservation(
             resultSet.getLong("id"),
             resultSet.getString("name"),
             resultSet.getString("date"),
-            resultSet.getString("time")
+            resultSet.getLong("time_id")
     );
 
     @Autowired
-    public ReservationRepository(JdbcTemplate jdbcTemplate) {
+    public ReservationRepository(SimpleJdbcInsert jdbcInsert, JdbcTemplate jdbcTemplate, DataSource dataSource) {
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("reservation")
+                .usingGeneratedKeyColumns("id");
     }
 
-    public int save(Reservation reservation) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connect -> {
-            PreparedStatement ps = connect.prepareStatement(
-                    "INSERT INTO reservation (name, date, time) VALUES(?, ?, ?)",
-                    new String[]{"id"});
-            ps.setString(1, reservation.getName());
-            ps.setString(2, reservation.getDate());
-            ps.setString(3, reservation.getTime());
-            return ps;
-        }, keyHolder);
+    public Long save(Reservation reservation) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", reservation.getId());
+        params.put("name", reservation.getName());
+        params.put("date", reservation.getDate());
+        params.put("time_id", reservation.getTimeId());
 
-        return (int)keyHolder.getKey().longValue();
+        return jdbcInsert.executeAndReturnKey(params).longValue();
     }
 
     public List<Reservation> readAll() {
-        String sql = "SELECT * FROM reservation";
+        String sql = "SELECT \n" +
+                "r.id as reservation_id, \n" +
+                "r.name as reservation_name, \n" +
+                "r.date as reservation_date, \n" +
+                "t.id as time_id, \n" +
+                "t.start_at as time_start_at \n" +
+                "FROM reservation as r inner join reservation_time as t on r.time_id = t.id";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
-    public void deleteById(int id) {
+    public void deleteById(Long id) {
         String sql = "DELETE FROM reservation WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }

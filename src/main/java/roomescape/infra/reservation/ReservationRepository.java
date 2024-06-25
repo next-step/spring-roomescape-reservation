@@ -3,6 +3,7 @@ package roomescape.infra.reservation;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -27,12 +28,18 @@ public class ReservationRepository {
   }
 
   public Reservation getById(Long id) {
-    return jdbcTemplate.queryForObject(
-        "select * from reservation inner join reservation_time on reservation.time_id = reservation_time.id inner join theme on theme.id= reservation.id where r.id=?",
-        rowMapper, id);
+    Reservation reservation = null;
+    try {
+      reservation = jdbcTemplate.queryForObject(
+          "select * from reservation inner join reservation_time on reservation.time_id = reservation_time.id inner join theme on theme.id= reservation.id where reservation.id=?",
+          rowMapper, id);
+    } catch (EmptyResultDataAccessException ignored) {
+
+    }
+    return reservation;
   }
 
-  public Reservation save(CreateReservation newReservation) {
+  public long save(CreateReservation newReservation) {
     GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
     int updatedRow = jdbcTemplate.update(con -> {
       PreparedStatement statement = con.prepareStatement(
@@ -44,7 +51,7 @@ public class ReservationRepository {
       statement.setLong(4, newReservation.themeId());
       return statement;
     }, generatedKeyHolder);
-    return getById(generatedKeyHolder.getKeyAs(Long.class));
+    return generatedKeyHolder.getKeyAs(Long.class);
   }
 
   public void delete(long id) {

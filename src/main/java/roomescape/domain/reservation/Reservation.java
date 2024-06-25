@@ -3,22 +3,23 @@ package roomescape.domain.reservation;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
+import roomescape.domain.time.ReservationTime;
 
 public class Reservation {
   private final long id;
   private String name;
   private LocalDate date;
-  private LocalTime time;
+  private ReservationTime reservationTime;
 
   public Reservation(long id) {
     this.id = id;
   }
 
-  public Reservation(long id, String name, LocalDate date, LocalTime time) {
+  public Reservation(long id, String name, LocalDate date, ReservationTime reservationTime) {
     this.id = id;
     this.name = name;
     this.date = date;
-    this.time = time;
+    this.reservationTime = reservationTime;
   }
 
   public long getId() {
@@ -33,24 +34,7 @@ public class Reservation {
     return date;
   }
 
-  public LocalTime getTime() {
-    return time;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Reservation that = (Reservation) o;
-    return id == that.id;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
+  public ReservationTime getReservationTime() {
+    return reservationTime;
   }
 }

@@ -1,0 +1,17 @@
+###
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "name": "조현창",
+  "date": "2023-01-01",
+  "time": "11:21"
+}
+###
+GET http://localhost:8080/reservations
+Accept: application/json
+
+###
+GET http://localhost:8080/reservations/1
+Accept: application/json
+

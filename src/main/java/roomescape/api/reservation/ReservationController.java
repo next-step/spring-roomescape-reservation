@@ -29,7 +29,8 @@ public class ReservationController {
 
   @GetMapping
   public List<Reservation> findReservations() {
-    return repository.findAll();
+    List<Reservation> result = repository.findAll();
+    return result;
   }
 
   @GetMapping("{id}")

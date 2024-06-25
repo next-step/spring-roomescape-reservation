@@ -32,7 +32,9 @@ public class ThemeRepository {
   public List<Theme> findAll() {
     return template.query("select * from theme", rowMapper);
   }
-
+  public void delete(long id) {
+    template.update("delete from theme where id=?", id);
+  }
 
 
 }

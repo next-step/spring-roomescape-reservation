@@ -46,3 +46,6 @@ content-type: application/json
 
 ###
 GET localhost:8080/themes HTTP/1.1
+
+###
+DELETE localhost:8080/themes/1

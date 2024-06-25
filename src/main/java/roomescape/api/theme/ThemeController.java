@@ -24,6 +24,7 @@ public class ThemeController {
   }
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public Theme create(@RequestBody CreateTheme theme) {
     return service.create(theme);
   }

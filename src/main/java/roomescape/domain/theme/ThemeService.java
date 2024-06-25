@@ -17,8 +17,10 @@ public class ThemeService {
     return repository.findAll();
   }
 
+  @Transactional
   public Theme create(CreateTheme theme) {
-    return repository.create(theme);
+    long savedId = repository.create(theme);
+    return repository.findOne(savedId);
   }
 
   @Transactional

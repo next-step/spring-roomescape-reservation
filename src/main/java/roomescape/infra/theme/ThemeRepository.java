@@ -25,7 +25,7 @@ public class ThemeRepository {
         (rs, i) -> rs.getLong(1) > 0, theme.getId());
   }
 
-  public Theme create(CreateTheme theme) {
+  public long create(CreateTheme theme) {
     GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
     template.update(con -> {
       PreparedStatement statement = con.prepareStatement(
@@ -35,7 +35,7 @@ public class ThemeRepository {
       statement.setString(3, theme.thumbnail());
       return statement;
     }, generatedKeyHolder);
-    return theme.toDomain(generatedKeyHolder.getKey().longValue());
+    return generatedKeyHolder.getKey().longValue();
   }
 
   public List<Theme> findAll() {

@@ -16,7 +16,7 @@ public class ReservationService {
         this.reservationRepository = reservationRepository;
     }
 
-    public int addReservation(Reservation reservation) {
+    public Long addReservation(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
 
@@ -24,7 +24,7 @@ public class ReservationService {
         return reservationRepository.readAll();
     }
 
-    public void deleteReservation(int id) {
+    public void deleteReservation(Long id) {
         reservationRepository.deleteById(id);
     }
 }

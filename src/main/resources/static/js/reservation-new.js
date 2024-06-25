@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-button').addEventListener('click', addInputRow);
 
   requestRead(RESERVATION_API_ENDPOINT)
-      .then(render)
-      .catch(error => console.error('Error fetching reservations:', error));
+  .then(render)
+  .catch(error => console.error('Error fetching reservations:', error));
 
   fetchTimes();
   fetchThemes();
@@ -36,18 +36,18 @@ function render(data) {
 
 function fetchTimes() {
   requestRead(TIME_API_ENDPOINT)
-      .then(data => {
-        timesOptions.push(...data);
-      })
-      .catch(error => console.error('Error fetching time:', error));
+  .then(data => {
+    timesOptions.push(...data);
+  })
+  .catch(error => console.error('Error fetching time:', error));
 }
 
 function fetchThemes() {
   requestRead(THEME_API_ENDPOINT)
-      .then(data => {
-        themesOptions.push(...data);
-      })
-      .catch(error => console.error('Error fetching theme:', error));
+  .then(data => {
+    themesOptions.push(...data);
+  })
+  .catch(error => console.error('Error fetching theme:', error));
 }
 
 function createSelect(options, defaultText, selectId, textProperty) {
@@ -80,7 +80,9 @@ function createActionButton(label, className, eventListener) {
 }
 
 function addInputRow() {
-  if (isEditing) return;  // 이미 편집 중인 경우 추가하지 않음
+  if (isEditing) {
+    return;
+  }  // 이미 편집 중인 경우 추가하지 않음
 
   const tableBody = document.getElementById('table-body');
   const row = tableBody.insertRow();
@@ -88,10 +90,13 @@ function addInputRow() {
 
   const nameInput = createInput('text');
   const dateInput = createInput('date');
-  const timeDropdown = createSelect(timesOptions, "시간 선택", 'time-select', 'startAt');
-  const themeDropdown = createSelect(themesOptions, "테마 선택", 'theme-select', 'name');
+  const timeDropdown = createSelect(timesOptions, "시간 선택", 'time-select',
+      'startAt');
+  const themeDropdown = createSelect(themesOptions, "테마 선택", 'theme-select',
+      'name');
 
-  const cellFieldsToCreate = ['', nameInput, themeDropdown, dateInput, timeDropdown];
+  const cellFieldsToCreate = ['', nameInput, themeDropdown, dateInput,
+    timeDropdown];
 
   cellFieldsToCreate.forEach((field, index) => {
     const cell = row.insertCell(index);
@@ -143,10 +148,10 @@ function saveRow(event) {
   };
 
   requestCreate(reservation)
-      .then(() => {
-        location.reload();
-      })
-      .catch(error => console.error('Error:', error));
+  .then(() => {
+    location.reload();
+  })
+  .catch(error => console.error('Error:', error));
 
   isEditing = false;  // isEditing 값을 false로 설정
 }
@@ -156,8 +161,8 @@ function deleteRow(event) {
   const reservationId = row.cells[0].textContent;
 
   requestDelete(reservationId)
-      .then(() => row.remove())
-      .catch(error => console.error('Error:', error));
+  .then(() => row.remove())
+  .catch(error => console.error('Error:', error));
 }
 
 function requestCreate(reservation) {
@@ -168,10 +173,15 @@ function requestCreate(reservation) {
   };
 
   return fetch(RESERVATION_API_ENDPOINT, requestOptions)
-      .then(response => {
-        if (response.status === 201) return response.json();
-        throw new Error('Create failed');
-      });
+  .then(response => {
+    if (response.status === 201) {
+      return response.json();
+    }
+    return response.json()
+    .then(e => {
+      throw new Error(e)
+    });
+  });
 }
 
 function requestDelete(id) {
@@ -180,15 +190,21 @@ function requestDelete(id) {
   };
 
   return fetch(`${RESERVATION_API_ENDPOINT}/${id}`, requestOptions)
-      .then(response => {
-        if (response.status !== 204) throw new Error('Delete failed');
+  .then(response => {
+    if (response.status !== 204) {
+      return response.json().then(res => {
+        throw new Error(res)
       });
+    }
+  });
 }
 
 function requestRead(endpoint) {
   return fetch(endpoint)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Read failed');
-      });
+  .then(response => {
+    if (response.status === 200) {
+      return response.json();
+    }
+    throw new Error('Read failed');
+  });
 }

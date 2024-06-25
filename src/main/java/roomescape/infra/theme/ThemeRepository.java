@@ -1,10 +1,12 @@
-package roomescape.domain.theme;
+package roomescape.infra.theme;
 
 import java.sql.PreparedStatement;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.domain.theme.CreateTheme;
+import roomescape.domain.theme.Theme;
 
 @Repository
 public class ThemeRepository {

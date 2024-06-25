@@ -1,9 +1,10 @@
-package roomescape.domain.reservation;
+package roomescape.infra.reservation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import roomescape.domain.reservation.Reservation;
 import roomescape.domain.theme.Theme;
 import roomescape.domain.time.ReservationTime;
 

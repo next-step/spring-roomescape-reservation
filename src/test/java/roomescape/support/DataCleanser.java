@@ -15,7 +15,7 @@ public class DataCleanser {
     ReservationRepository reservationRepository;
 
     public void clean() {
-        reservationTimeRepository.deleteAllInBatch();
         reservationRepository.deleteAllInBatch();
+        reservationTimeRepository.deleteAllInBatch();
     }
 }

@@ -177,7 +177,7 @@ function requestCreate(reservation) {
     if (response.status === 201) {
       return response.json();
     }
-    return response.json()
+    return response.text()
     .then(e => {
       throw new Error(e)
     });
@@ -192,7 +192,7 @@ function requestDelete(id) {
   return fetch(`${RESERVATION_API_ENDPOINT}/${id}`, requestOptions)
   .then(response => {
     if (response.status !== 204) {
-      return response.json().then(res => {
+      return response.text().then(res => {
         throw new Error(res)
       });
     }

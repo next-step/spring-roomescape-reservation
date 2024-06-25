@@ -3,6 +3,7 @@ package roomescape.infra.time;
 import java.sql.PreparedStatement;
 import java.sql.Time;
 import java.util.List;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -20,13 +21,23 @@ public class ReservationTimeRepository {
     this.rowMapper = rowMapper;
   }
 
+  public boolean isUsed(ReservationTime time) {
+    return jdbcTemplate.queryForObject("select exists(id) from reservation where time_id=?",
+        (rs, i) -> rs.getBoolean(1), time.getId());
+  }
+
   public List<ReservationTime> findAll() {
     return jdbcTemplate.query("select id, start_at from reservation_time", rowMapper);
   }
 
   public ReservationTime findById(long id) {
-    return jdbcTemplate.queryForObject("select id, start_at from reservation_time where id=?",
-        ReservationTime.class, id);
+    ReservationTime reservationTime = null;
+    try {
+      reservationTime = jdbcTemplate.queryForObject(
+          "select id, start_at from reservation_time where id=?", ReservationTime.class, id);
+    } catch (EmptyResultDataAccessException ignored) {
+    }
+    return reservationTime;
   }
 
   public void deleteById(long id) {

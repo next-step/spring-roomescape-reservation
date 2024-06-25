@@ -21,8 +21,8 @@ public class ThemeRepository {
   }
 
   public boolean isUsedInReservation(Theme theme) {
-    return template.queryForObject("select exists(id) from reservation where theme_id = ?",
-        (rs, i) -> rs.getBoolean(1), theme.getId());
+    return template.queryForObject("select count(id) from reservation where theme_id = ? limit 1",
+        (rs, i) -> rs.getLong(1) > 0, theme.getId());
   }
 
   public Theme create(CreateTheme theme) {

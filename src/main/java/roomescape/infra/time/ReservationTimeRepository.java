@@ -22,8 +22,8 @@ public class ReservationTimeRepository {
   }
 
   public boolean isUsed(ReservationTime time) {
-    return jdbcTemplate.queryForObject("select exists(id) from reservation where time_id=?",
-        (rs, i) -> rs.getBoolean(1), time.getId());
+    return jdbcTemplate.queryForObject("select count(id) from reservation where time_id=? limit 1",
+        (rs, i) -> rs.getLong(1) > 0, time.getId());
   }
 
   public List<ReservationTime> findAll() {
@@ -34,7 +34,7 @@ public class ReservationTimeRepository {
     ReservationTime reservationTime = null;
     try {
       reservationTime = jdbcTemplate.queryForObject(
-          "select id, start_at from reservation_time where id=?", ReservationTime.class, id);
+          "select id, start_at from reservation_time where id=?", rowMapper, id);
     } catch (EmptyResultDataAccessException ignored) {
     }
     return reservationTime;

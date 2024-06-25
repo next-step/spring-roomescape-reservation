@@ -29,8 +29,7 @@ public class ReservationController {
 
   @GetMapping
   public List<Reservation> findReservations() {
-    List<Reservation> result = repository.findAll();
-    return result;
+    return repository.findAll();
   }
 
   @GetMapping("{id}")
@@ -40,7 +39,6 @@ public class ReservationController {
 
   @PostMapping
   public Reservation create(@RequestBody CreateReservation createReservation) {
-    System.out.println("createReservation = " + createReservation);
     return repository.save(createReservation);
   }
 

@@ -4,16 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 import roomescape.model.ReservationTime;
 
 import javax.sql.DataSource;
-import java.sql.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class ReservationTimeRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -25,17 +24,17 @@ public class ReservationTimeRepository {
     );
 
     @Autowired
-    public ReservationTimeRepository(JdbcTemplate jdbcTemplate, SimpleJdbcInsert jdbcInsert, DataSource dataSource) {
+    public ReservationTimeRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation_time")
                 .usingGeneratedKeyColumns("id");
     }
 
-    public ReservationTime save(String startAt) {
+    public Long save(ReservationTime reservationTime) {
         Map<String, Object> params = new HashMap<>();
-        params.put("startAt", startAt);
-        return new ReservationTime(jdbcInsert.executeAndReturnKey(params).longValue(), startAt);
+        params.put("start_at", reservationTime.getStartAt());
+        return jdbcInsert.executeAndReturnKey(params).longValue();
     }
 
     public List<ReservationTime> readAll() {

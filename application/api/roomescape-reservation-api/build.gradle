@@ -1,6 +1,6 @@
 dependencies {
-    implementation project(':domain:roomescape-reservation-domain')
-    implementation project(':infrastructure:repository:roomescape-mysql-jdbc-repository')
+    implementation project(':core:core-domain:roomescape-reservation-domain')
+    implementation project(':core:core-db:roomescape-mysql-jdbc-db')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'

@@ -1,12 +1,12 @@
 package roomescape.domain.reservation;
 
-import roomescape.domain.reservation.service.CreateReservationValidator;
-import roomescape.domain.reservation.service.SystemClockHolder;
+import roomescape.domain.SystemClockHolder;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.theme.Theme;
+import roomescape.domain.validator.CreateReservationValidator;
 import roomescape.domain.validator.ObjectValidator;
 
 import java.time.LocalDate;
@@ -46,8 +46,7 @@ public class Reservation {
             ReservationTime time,
             Theme theme
     ) {
-        CreateReservationValidator validator = new CreateReservationValidator(date, time, new SystemClockHolder());
-        validator.validate();
+        CreateReservationValidator.validate(date, time, new SystemClockHolder());
 
         return new Reservation(id, name, date, time, theme);
     }

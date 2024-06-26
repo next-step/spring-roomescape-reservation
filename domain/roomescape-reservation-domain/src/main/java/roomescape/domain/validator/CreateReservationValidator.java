@@ -1,5 +1,6 @@
-package roomescape.domain.reservation.service;
+package roomescape.domain.validator;
 
+import roomescape.domain.ClockHolder;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.error.exception.CreateReservationValidateException;

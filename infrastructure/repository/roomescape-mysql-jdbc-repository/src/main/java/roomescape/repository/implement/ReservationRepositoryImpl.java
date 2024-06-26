@@ -4,12 +4,12 @@ import org.springframework.stereotype.Repository;
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.ReservationRepository;
 import roomescape.domain.reservation.ReservationViews;
-import roomescape.error.exception.NotFoundDomainException;
 import roomescape.repository.ReservationJdbcRepository;
 import roomescape.repository.entity.ReservationEntity;
 import roomescape.repository.projection.ReservationViewProjection;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -33,10 +33,9 @@ public class ReservationRepositoryImpl implements ReservationRepository {
     }
 
     @Override
-    public Reservation findById(Long reservationId) {
+    public Optional<Reservation> findById(Long reservationId) {
         return repository.findById(reservationId)
-                .orElseThrow(() -> NotFoundDomainException.notFoundReservation(reservationId))
-                .toDomain();
+                .map(ReservationEntity::toDomain);
     }
 
     @Override

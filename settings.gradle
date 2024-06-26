@@ -3,6 +3,5 @@ rootProject.name = 'spring-roomescape-reservation'
 include 'core:roomescape-reservation-api'
 include 'domain:roomescape-reservation-domain'
 include 'infrastructure:repository:roomescape-InMemoery-repository'
-include 'infrastructure:repository:roomescape-repository'
 include 'infrastructure:repository:roomescape-mysql-jdbc-repository'
 

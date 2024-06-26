@@ -4,11 +4,11 @@ import org.springframework.stereotype.Repository;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.ReservationTimeRepository;
 import roomescape.domain.reservationtime.ReservationTimes;
-import roomescape.error.exception.NotFoundDomainException;
 import roomescape.repository.ReservationTimeJdbcRepository;
 import roomescape.repository.entity.ReservationTimeEntity;
 
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -27,10 +27,9 @@ public class ReservationTimeRepositoryImpl implements ReservationTimeRepository 
     }
 
     @Override
-    public ReservationTime findById(Long timeId) {
+    public Optional<ReservationTime> findById(Long timeId) {
         return repository.findById(timeId)
-                .orElseThrow(() -> NotFoundDomainException.notFoundReservationTime(timeId))
-                .toDomain();
+                .map(ReservationTimeEntity::toDomain);
     }
 
     @Override

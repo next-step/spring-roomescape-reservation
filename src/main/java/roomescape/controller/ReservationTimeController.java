@@ -19,8 +19,8 @@ public class ReservationTimeController {
     }
 
     @PostMapping
-    public ReservationTime insert(@RequestBody String startAt) {
-        return reservationTimeService.addReservation(startAt);
+    public Long insert(@RequestBody ReservationTime reservationTime) {
+        return reservationTimeService.addReservationTime(reservationTime);
     }
 
     @GetMapping
@@ -30,6 +30,6 @@ public class ReservationTimeController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        reservationTimeService.deleteReservation(id);
+        reservationTimeService.deleteReservationTime(id);
     }
 }

@@ -21,37 +21,32 @@ public class ReservationRepository {
     private final SimpleJdbcInsert jdbcInsert;
     private final RowMapper<Reservation> rowMapper = (resultSet, rowNum) -> new Reservation(
             resultSet.getLong("id"),
-            resultSet.getString("name"),
+            resultSet.getString("reservation_name"),
+            resultSet.getString("theme_name"),
             resultSet.getString("date"),
-            resultSet.getLong("time_id")
+            resultSet.getString("start_at")
     );
 
     @Autowired
-    public ReservationRepository(SimpleJdbcInsert jdbcInsert, JdbcTemplate jdbcTemplate, DataSource dataSource) {
+    public ReservationRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+        this.jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("reservation")
                 .usingGeneratedKeyColumns("id");
     }
 
     public Long save(Reservation reservation) {
         Map<String, Object> params = new HashMap<>();
-        params.put("id", reservation.getId());
         params.put("name", reservation.getName());
         params.put("date", reservation.getDate());
         params.put("time_id", reservation.getTimeId());
+        params.put("theme_id", reservation.getThemeId());
 
         return jdbcInsert.executeAndReturnKey(params).longValue();
     }
 
     public List<Reservation> readAll() {
-        String sql = "SELECT \n" +
-                "r.id as reservation_id, \n" +
-                "r.name as reservation_name, \n" +
-                "r.date as reservation_date, \n" +
-                "t.id as time_id, \n" +
-                "t.start_at as time_start_at \n" +
-                "FROM reservation as r inner join reservation_time as t on r.time_id = t.id";
+        String sql = "SELECT r.id, r.name as reservation_name, t.name as theme_name, r.date, rt.start_at as start_at FROM reservation as r INNER JOIN reservation_time as rt ON r.time_id = rt.id INNER JOIN theme as t ON r.theme_id = t.id";
         return jdbcTemplate.query(sql, rowMapper);
     }
 

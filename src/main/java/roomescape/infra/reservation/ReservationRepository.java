@@ -24,7 +24,7 @@ public class ReservationRepository {
   public List<Reservation> findAll() {
     return jdbcTemplate.query(
         "select * from reservation inner join reservation_time on reservation.time_id = reservation_time.id inner join theme on theme.id= reservation.id",
-        rowMapper);
+        rowMapper).stream().map(ReservationEntity::toDomain).toList();
   }
 
   public boolean isExists(CreateReservation reservation) {
@@ -38,7 +38,7 @@ public class ReservationRepository {
     try {
       reservation = jdbcTemplate.queryForObject(
           "select * from reservation inner join reservation_time on reservation.time_id = reservation_time.id inner join theme on theme.id= reservation.id where reservation.id=?",
-          rowMapper, id);
+          rowMapper, id).toDomain();
     } catch (EmptyResultDataAccessException ignored) {
 
     }

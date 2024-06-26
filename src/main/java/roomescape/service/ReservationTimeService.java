@@ -18,15 +18,15 @@ public class ReservationTimeService {
         this.reservationTimeRepository = reservationTimeRepository;
     }
 
-    public ReservationTime addReservation(String startAt) {
-        return reservationTimeRepository.save(startAt);
+    public Long addReservationTime(ReservationTime reservationTime) {
+        return reservationTimeRepository.save(reservationTime);
     }
 
     public List<ReservationTime> lookUpReservationTime() {
         return reservationTimeRepository.readAll();
     }
 
-    public void deleteReservation(Long id) {
+    public void deleteReservationTime(Long id) {
         reservationTimeRepository.deleteById(id);
     }
 }

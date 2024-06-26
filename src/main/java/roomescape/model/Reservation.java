@@ -7,12 +7,16 @@ public class Reservation {
     private String name;
     private String date;
     private Long timeId;
+    private Long themeId;
+    private String themeName;
+    private String startAt;
 
-    public Reservation(Long id, String name, String date, Long timeId) {
+    public Reservation(long id, String name, String themeName, String date, String startAt) {
         this.id = id;
         this.name = name;
+        this.themeName = themeName;
         this.date = date;
-        this.timeId = timeId;
+        this.startAt = startAt;
     }
 
     public Long getId() {
@@ -29,5 +33,17 @@ public class Reservation {
 
     public Long getTimeId() {
         return timeId;
+    }
+
+    public Long getThemeId() {
+        return themeId;
+    }
+
+    public String getThemeName() {
+        return themeName;
+    }
+
+    public String getStartAt() {
+        return startAt;
     }
 }

@@ -13,7 +13,7 @@ import static roomescape.application.error.code.ApplicationErrorCode.RUN_TIME_EX
 public final class ResponseEntityFactory {
 
     private ResponseEntityFactory() {
-        throw new UnsupportedOperationException(ResponseEntityFactory.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+        throw new UnsupportedOperationException(this.getClass().getName() + "의 인스턴스는 생성되어서 안됩니다.");
     }
 
     public static ResponseEntity<ErrorResponse> internalServerError(RuntimeException runtimeException) {

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public final class ThemeMapper {
 
     private ThemeMapper() {
-        throw new UnsupportedOperationException(ThemeMapper.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+        throw new UnsupportedOperationException(this.getClass().getName() + "의 인스턴스는 생성되어서 안됩니다.");
     }
 
     public static Theme toTheme(ThemeEntity themeEntity) {

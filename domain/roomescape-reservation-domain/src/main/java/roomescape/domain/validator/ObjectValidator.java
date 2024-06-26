@@ -10,7 +10,7 @@ public final class ObjectValidator {
     private static final String NOT_NULL_MESSAGE = "%s는 null값이면 안됩니다.";
 
     private ObjectValidator() {
-        throw new UnsupportedOperationException(ObjectValidator.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+        throw new UnsupportedOperationException(this.getClass().getName() + "의 인스턴스는 생성되어서 안됩니다.");
     }
 
     public static void validateNotNull(Object... objects) {

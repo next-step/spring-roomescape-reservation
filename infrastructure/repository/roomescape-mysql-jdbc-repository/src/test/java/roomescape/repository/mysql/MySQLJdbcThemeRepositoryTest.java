@@ -6,19 +6,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
-import roomescape.repository.config.MySQLJdbcRepositoryConfig;
 import roomescape.repository.entity.ThemeEntity;
 
 import java.util.List;
 
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
-@JdbcTest
+@SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(MySQLJdbcRepositoryConfig.class)
 @Sql({"classpath:db/schema/schema.sql", "classpath:db/data/init.sql"})
 class MySQLJdbcThemeRepositoryTest {
 

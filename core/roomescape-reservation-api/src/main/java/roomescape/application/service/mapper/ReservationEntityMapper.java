@@ -6,7 +6,7 @@ import roomescape.repository.entity.ReservationEntity;
 public final class ReservationEntityMapper {
 
     private ReservationEntityMapper() {
-        throw new UnsupportedOperationException(ReservationEntityMapper.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+        throw new UnsupportedOperationException(this.getClass().getName() + "의 인스턴스는 생성되어서 안됩니다.");
     }
 
     public static ReservationEntity toReservationEntity(Reservation reservation) {

@@ -6,7 +6,7 @@ import roomescape.repository.entity.ThemeEntity;
 public final class ThemeEntityMapper {
 
     private ThemeEntityMapper() {
-        throw new UnsupportedOperationException(ThemeEntityMapper.class.getName() + "의 인스턴스는 생성되어서 안됩니다.");
+        throw new UnsupportedOperationException(this.getClass().getName() + "의 인스턴스는 생성되어서 안됩니다.");
     }
 
     public static ThemeEntity toThemeEntity(Theme theme) {

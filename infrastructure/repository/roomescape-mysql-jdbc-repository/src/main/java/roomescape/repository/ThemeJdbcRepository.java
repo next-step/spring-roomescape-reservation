@@ -5,7 +5,7 @@ import roomescape.repository.entity.ThemeEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface ThemeRepository {
+public interface ThemeJdbcRepository {
 
     ThemeEntity save(ThemeEntity themeEntity);
 

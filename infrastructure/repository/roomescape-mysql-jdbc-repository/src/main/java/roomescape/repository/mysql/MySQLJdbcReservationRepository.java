@@ -3,8 +3,8 @@ package roomescape.repository.mysql;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Repository;
-import roomescape.repository.ReservationRepository;
+import org.springframework.stereotype.Component;
+import roomescape.repository.ReservationJdbcRepository;
 import roomescape.repository.entity.ReservationEntity;
 import roomescape.repository.projection.ReservationViewProjection;
 
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Repository
-public class MySQLJdbcReservationRepository implements ReservationRepository {
+@Component
+public class MySQLJdbcReservationRepository implements ReservationJdbcRepository {
 
     private static final String TABLE_COLUMN_ID = "id";
     private static final String TABLE_COLUMN_NAME = "name";

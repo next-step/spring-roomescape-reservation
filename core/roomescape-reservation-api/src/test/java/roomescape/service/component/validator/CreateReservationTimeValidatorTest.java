@@ -10,10 +10,9 @@ import org.springframework.test.context.jdbc.Sql;
 import roomescape.application.error.exception.CreateReservationTimeValidateException;
 import roomescape.application.service.component.validator.CreateReservationTimeValidator;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.ReservationTimeRepository;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
-import roomescape.repository.ReservationTimeRepository;
-import roomescape.repository.entity.ReservationTimeEntity;
 
 import java.time.LocalTime;
 
@@ -29,7 +28,10 @@ class CreateReservationTimeValidatorTest {
     @DisplayName("이미 생성한 시작 시간의 예약 시간은 생성할 수 없다.")
     void CannotCreateExistStartAt() {
         reservationTimeRepository.save(
-                new ReservationTimeEntity(1L, LocalTime.of(12, 55))
+                new ReservationTime(
+                        new ReservationTimeId(1L),
+                        new ReservationTimeStartAt(LocalTime.of(12, 55))
+                )
         );
 
         CreateReservationTimeValidator validator = new CreateReservationTimeValidator(reservationTimeRepository);

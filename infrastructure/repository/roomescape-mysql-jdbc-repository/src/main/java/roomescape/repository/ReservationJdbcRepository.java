@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReservationRepository {
+public interface ReservationJdbcRepository {
 
     ReservationEntity save(ReservationEntity reservationEntity);
 

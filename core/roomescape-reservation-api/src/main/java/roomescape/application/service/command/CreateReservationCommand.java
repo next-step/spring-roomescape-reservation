@@ -37,6 +37,6 @@ public class CreateReservationCommand {
     }
 
     public Long getThemeId() {
-        return themeId;
+        return this.themeId;
     }
 }

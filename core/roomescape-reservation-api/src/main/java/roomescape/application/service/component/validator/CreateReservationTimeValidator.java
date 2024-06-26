@@ -3,22 +3,20 @@ package roomescape.application.service.component.validator;
 import org.springframework.stereotype.Component;
 import roomescape.application.error.exception.CreateReservationTimeValidateException;
 import roomescape.domain.reservationtime.ReservationTime;
-import roomescape.repository.ReservationTimeRepository;
+import roomescape.domain.reservationtime.ReservationTimeRepository;
 
 @Component
 public class CreateReservationTimeValidator {
 
+    private final ReservationTimeRepository repository;
 
-    private final ReservationTimeRepository reservationTimeRepository;
-
-    public CreateReservationTimeValidator(ReservationTimeRepository reservationTimeRepository) {
-        this.reservationTimeRepository = reservationTimeRepository;
+    public CreateReservationTimeValidator(ReservationTimeRepository repository) {
+        this.repository = repository;
     }
 
     public void validate(ReservationTime reservationTime) {
-        reservationTimeRepository.findByStartAt(reservationTime.getStartAt())
-                .ifPresent(entity -> {
-                    throw CreateReservationTimeValidateException.existTime(reservationTime);
-                });
+        if (repository.existByStartAt(reservationTime.getStartAt())) {
+            throw CreateReservationTimeValidateException.existTime(reservationTime);
+        }
     }
 }

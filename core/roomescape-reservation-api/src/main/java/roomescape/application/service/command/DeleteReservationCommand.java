@@ -9,6 +9,6 @@ public class DeleteReservationCommand {
     }
 
     public Long getReservationId() {
-        return reservationId;
+        return this.reservationId;
     }
 }

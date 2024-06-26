@@ -1,6 +1,7 @@
 package roomescape.domain.validator;
 
 import roomescape.domain.ClockHolder;
+import roomescape.domain.reservation.ReservationDateTime;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.error.exception.CreateReservationValidateException;
@@ -15,10 +16,10 @@ public final class CreateReservationValidator {
 
     public static void validate(ReservationDate date, ReservationTime time, ClockHolder clockHolder) {
         LocalDateTime currentTime = clockHolder.getCurrentTime();
-        LocalDateTime startDateTime = LocalDateTime.of(date.date(), time.getStartAt());
+        ReservationDateTime reservationDateTime = new ReservationDateTime(date, time);
 
-        if (startDateTime.isBefore(currentTime)) {
-            throw CreateReservationValidateException.pastTime(startDateTime);
+        if (reservationDateTime.isBefore(currentTime)) {
+            throw CreateReservationValidateException.pastTime(reservationDateTime.toLocalDateTime());
         }
     }
 }

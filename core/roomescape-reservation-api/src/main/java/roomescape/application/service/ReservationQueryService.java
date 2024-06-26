@@ -1,9 +1,8 @@
 package roomescape.application.service;
 
 import org.springframework.stereotype.Service;
-import roomescape.application.service.mapper.ReservationViewMapper;
+import roomescape.domain.reservation.ReservationRepository;
 import roomescape.domain.reservation.ReservationViews;
-import roomescape.repository.ReservationRepository;
 
 @Service
 public class ReservationQueryService {
@@ -15,6 +14,6 @@ public class ReservationQueryService {
     }
 
     public ReservationViews findAll() {
-        return ReservationViewMapper.toReservationViews(reservationRepository.findAllReservationViewProjection());
+        return reservationRepository.findAllReservationViews();
     }
 }

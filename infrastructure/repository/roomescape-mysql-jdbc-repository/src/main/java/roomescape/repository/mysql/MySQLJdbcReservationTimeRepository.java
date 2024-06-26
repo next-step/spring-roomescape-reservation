@@ -3,8 +3,8 @@ package roomescape.repository.mysql;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.stereotype.Repository;
-import roomescape.repository.ReservationTimeRepository;
+import org.springframework.stereotype.Component;
+import roomescape.repository.ReservationTimeJdbcRepository;
 import roomescape.repository.entity.ReservationTimeEntity;
 
 import java.time.LocalTime;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Repository
-public class MySQLJdbcReservationTimeRepository implements ReservationTimeRepository {
+@Component
+public class MySQLJdbcReservationTimeRepository implements ReservationTimeJdbcRepository {
 
     private static final String TABLE_COLUMN_ID = "id";
     private static final String TABLE_COLUMN_START_AT = "start_at";
@@ -45,11 +45,11 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
     }
 
     @Override
-    public Optional<ReservationTimeEntity> findById(Long reservationTimeId) {
+    public Optional<ReservationTimeEntity> findById(Long id) {
         String sql = "SELECT id, start_at FROM reservation_time WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue(TABLE_COLUMN_ID, reservationTimeId);
+                .addValue(TABLE_COLUMN_ID, id);
 
         try {
             return Optional.ofNullable(
@@ -109,11 +109,11 @@ public class MySQLJdbcReservationTimeRepository implements ReservationTimeReposi
     }
 
     @Override
-    public void delete(Long reservationTimeId) {
+    public void delete(Long id) {
         String sql = "DELETE FROM reservation_time WHERE id = :id";
 
         MapSqlParameterSource sqlParameterSource = new MapSqlParameterSource()
-                .addValue(TABLE_COLUMN_ID, reservationTimeId);
+                .addValue(TABLE_COLUMN_ID, id);
 
         namedParameterJdbcTemplate.update(sql, sqlParameterSource);
     }

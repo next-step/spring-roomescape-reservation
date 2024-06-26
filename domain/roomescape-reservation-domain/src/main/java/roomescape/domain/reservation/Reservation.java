@@ -5,7 +5,9 @@ import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.theme.Theme;
+import roomescape.domain.theme.vo.ThemeId;
 import roomescape.domain.validator.CreateReservationValidator;
 import roomescape.domain.validator.ObjectValidator;
 
@@ -19,24 +21,24 @@ public class Reservation {
 
     private final ReservationDate date;
 
-    private final ReservationTime time;
+    private final ReservationTimeId timeId;
 
-    private final Theme theme;
+    private final ThemeId themeId;
 
 
     public Reservation(
             ReservationId id,
             ReservationName name,
             ReservationDate date,
-            ReservationTime time,
-            Theme theme
+            ReservationTimeId timeId,
+            ThemeId themeId
     ) {
-        ObjectValidator.validateNotNull(id, name, date, time, theme);
+        ObjectValidator.validateNotNull(id, name, date, timeId, themeId);
+        this.timeId = timeId;
+        this.themeId = themeId;
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
-        this.theme = theme;
     }
 
     public static Reservation create(
@@ -48,7 +50,13 @@ public class Reservation {
     ) {
         CreateReservationValidator.validate(date, time, new SystemClockHolder());
 
-        return new Reservation(id, name, date, time, theme);
+        return new Reservation(
+                id,
+                name,
+                date,
+                new ReservationTimeId(time.getId()),
+                new ThemeId(theme.getId())
+        );
     }
 
     public Long getId() {
@@ -59,7 +67,7 @@ public class Reservation {
         return name.name();
     }
 
-    public String getFormattedReservationDate(String pattern) {
+    public String getFormatDate(String pattern) {
         return this.date.getFormatted(pattern);
     }
 
@@ -68,10 +76,10 @@ public class Reservation {
     }
 
     public Long getReservationTimeId() {
-        return time.getId();
+        return timeId.id();
     }
 
     public Long getThemeId() {
-        return this.theme.getId();
+        return this.themeId.id();
     }
 }

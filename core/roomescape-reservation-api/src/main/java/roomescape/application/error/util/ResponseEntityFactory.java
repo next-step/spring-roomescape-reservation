@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import roomescape.application.error.dto.ErrorResponse;
 import roomescape.application.error.exception.ApplicationException;
-import roomescape.application.error.exception.NotFoundException;
 import roomescape.error.exception.DomainException;
+import roomescape.error.exception.NotFoundDomainException;
 
 import static org.springframework.http.HttpStatus.*;
 import static roomescape.application.error.code.ApplicationErrorCode.RUN_TIME_EXCEPTION;
@@ -40,7 +40,7 @@ public final class ResponseEntityFactory {
                 .body(ErrorResponse.from(domainException));
     }
 
-    public static ResponseEntity<ErrorResponse> notFound(NotFoundException notFoundException) {
+    public static ResponseEntity<ErrorResponse> notFound(NotFoundDomainException notFoundException) {
         return ResponseEntity
                 .status(NOT_FOUND)
                 .body(ErrorResponse.from(notFoundException));

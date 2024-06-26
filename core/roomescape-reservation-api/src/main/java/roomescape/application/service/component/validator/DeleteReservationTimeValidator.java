@@ -2,8 +2,8 @@ package roomescape.application.service.component.validator;
 
 import org.springframework.stereotype.Component;
 import roomescape.application.error.exception.DeleteReservationTimeValidateException;
+import roomescape.domain.reservation.ReservationRepository;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
-import roomescape.repository.ReservationRepository;
 
 @Component
 public class DeleteReservationTimeValidator {
@@ -15,9 +15,8 @@ public class DeleteReservationTimeValidator {
     }
 
     public void validate(ReservationTimeId timeId) {
-        reservationRepository.findByTimeId(timeId.id())
-                .ifPresent(entity -> {
-                    throw DeleteReservationTimeValidateException.existReservation(timeId);
-                });
+        if (reservationRepository.existByTimeId(timeId.id())) {
+            throw DeleteReservationTimeValidateException.existReservation(timeId);
+        }
     }
 }

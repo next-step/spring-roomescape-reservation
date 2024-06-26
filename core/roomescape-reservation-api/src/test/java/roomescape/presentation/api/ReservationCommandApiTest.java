@@ -18,17 +18,10 @@ import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
-import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
-import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
-import roomescape.domain.theme.Theme;
-import roomescape.domain.theme.vo.ThemeDescription;
 import roomescape.domain.theme.vo.ThemeId;
-import roomescape.domain.theme.vo.ThemeName;
-import roomescape.domain.theme.vo.ThemeThumbnail;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -42,10 +35,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ReservationCommandApiTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
     @MockBean
     private ReservationCommandService reservationCommandService;
+
     @Autowired
     private MockMvc mockMvc;
+
     private Reservation reservation;
 
     @BeforeEach
@@ -54,16 +50,8 @@ class ReservationCommandApiTest {
                 new ReservationId(1L),
                 new ReservationName("kilian"),
                 new ReservationDate(LocalDate.of(2024, 6, 6)),
-                new ReservationTime(
-                        new ReservationTimeId(1L),
-                        new ReservationTimeStartAt(LocalTime.of(17, 42))
-                ),
-                new Theme(
-                        new ThemeId(1L),
-                        new ThemeName("레벨2 탈출"),
-                        new ThemeDescription("우테코 레벨2를 탈출하는 내용입니다."),
-                        new ThemeThumbnail("https://i.pinimg.com/236x/6e/bc/46/6ebc461a94a49f9ea3b8bbe2204145d4.jpg")
-                )
+                new ReservationTimeId(1L),
+                new ThemeId(1L)
         );
     }
 

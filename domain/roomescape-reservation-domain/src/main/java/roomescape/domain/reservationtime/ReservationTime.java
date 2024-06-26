@@ -22,7 +22,7 @@ public class ReservationTime {
         return id.id();
     }
 
-    public String getFormattedStartAt(String pattern) {
+    public String getFormatStartAt(String pattern) {
         return startAt.getFormatted(pattern);
     }
 

@@ -5,12 +5,10 @@ import roomescape.application.service.command.CreateReservationTimeCommand;
 import roomescape.application.service.command.DeleteReservationTimeCommand;
 import roomescape.application.service.component.validator.CreateReservationTimeValidator;
 import roomescape.application.service.component.validator.DeleteReservationTimeValidator;
-import roomescape.application.service.mapper.ReservationTimeEntityMapper;
-import roomescape.application.service.mapper.ReservationTimeMapper;
 import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.ReservationTimeRepository;
 import roomescape.domain.reservationtime.ReservationTimes;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
-import roomescape.repository.ReservationTimeRepository;
 
 @Service
 public class ReservationTimeService {
@@ -33,13 +31,11 @@ public class ReservationTimeService {
         ReservationTime reservationTime = command.toReservationTime();
         createReservationTimeValidator.validate(reservationTime);
 
-        return ReservationTimeMapper.toReservationTime(
-                reservationTimeRepository.save(ReservationTimeEntityMapper.toReservationTimeEntity(reservationTime))
-        );
+        return reservationTimeRepository.save(reservationTime);
     }
 
     public ReservationTimes findAll() {
-        return ReservationTimeMapper.toReservationTimes(reservationTimeRepository.findAll());
+        return reservationTimeRepository.findAll();
     }
 
     public void delete(DeleteReservationTimeCommand command) {

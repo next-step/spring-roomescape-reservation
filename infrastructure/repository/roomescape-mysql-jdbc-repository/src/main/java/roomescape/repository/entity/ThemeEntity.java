@@ -1,5 +1,11 @@
 package roomescape.repository.entity;
 
+import roomescape.domain.theme.Theme;
+import roomescape.domain.theme.vo.ThemeDescription;
+import roomescape.domain.theme.vo.ThemeId;
+import roomescape.domain.theme.vo.ThemeName;
+import roomescape.domain.theme.vo.ThemeThumbnail;
+
 public class ThemeEntity {
 
     private final Long id;
@@ -15,6 +21,15 @@ public class ThemeEntity {
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
+    }
+
+    public static ThemeEntity from(Theme theme) {
+        return new ThemeEntity(
+                theme.getId(),
+                theme.getThemeName(),
+                theme.getThemeDescription(),
+                theme.getThemeThumbnail()
+        );
     }
 
     public Long getId() {
@@ -35,5 +50,14 @@ public class ThemeEntity {
 
     public ThemeEntity withId(Long id) {
         return new ThemeEntity(id, this.name, this.description, this.thumbnail);
+    }
+
+    public Theme toDomain() {
+        return new Theme(
+                new ThemeId(this.id),
+                new ThemeName(this.name),
+                new ThemeDescription(this.description),
+                new ThemeThumbnail(this.thumbnail)
+        );
     }
 }

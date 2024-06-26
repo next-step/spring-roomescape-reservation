@@ -23,7 +23,7 @@ public class CreateReservationTimeValidateException extends ApplicationException
                 ApplicationErrorKeys.of(
                         new ApplicationErrorKey(
                                 ERROR_KEY_NAME_START_AT,
-                                reservationTime.getFormattedStartAt(TIME_FORMAT)
+                                reservationTime.getFormatStartAt(TIME_FORMAT)
                         ))
         );
     }

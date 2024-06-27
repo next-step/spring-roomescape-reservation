@@ -26,9 +26,9 @@ public class ThemeEntity {
     public static ThemeEntity from(Theme theme) {
         return new ThemeEntity(
                 theme.getId(),
-                theme.getThemeName(),
-                theme.getThemeDescription(),
-                theme.getThemeThumbnail()
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail()
         );
     }
 

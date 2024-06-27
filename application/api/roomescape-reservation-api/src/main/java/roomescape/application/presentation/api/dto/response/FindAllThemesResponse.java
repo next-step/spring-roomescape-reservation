@@ -26,9 +26,9 @@ public class FindAllThemesResponse {
     private static FindAllThemesResponse from(Theme theme) {
         return new FindAllThemesResponse(
                 theme.getId(),
-                theme.getThemeName(),
-                theme.getThemeDescription(),
-                theme.getThemeThumbnail()
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail()
         );
     }
 

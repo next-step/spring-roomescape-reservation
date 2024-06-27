@@ -1,5 +1,10 @@
 package roomescape.application.service.command;
 
+import roomescape.domain.reservation.vo.ReservationDate;
+import roomescape.domain.reservation.vo.ReservationName;
+import roomescape.domain.reservationtime.vo.ReservationTimeId;
+import roomescape.domain.theme.vo.ThemeId;
+
 import java.time.LocalDate;
 
 public class CreateReservationCommand {
@@ -24,19 +29,19 @@ public class CreateReservationCommand {
         this.themeId = themeId;
     }
 
-    public String getReservationName() {
-        return reservationName;
+    public ReservationName getReservationName() {
+        return new ReservationName(this.reservationName);
     }
 
-    public LocalDate getReservationDate() {
-        return reservationDate;
+    public ReservationDate getReservationDate() {
+        return new ReservationDate(this.reservationDate);
     }
 
-    public Long getReservationTimeId() {
-        return reservationTimeId;
+    public ReservationTimeId getReservationTimeId() {
+        return new ReservationTimeId(this.reservationTimeId);
     }
 
-    public Long getThemeId() {
-        return this.themeId;
+    public ThemeId getThemeId() {
+        return new ThemeId(this.themeId);
     }
 }

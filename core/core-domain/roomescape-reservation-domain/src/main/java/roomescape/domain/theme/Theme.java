@@ -8,35 +8,40 @@ import roomescape.util.validator.ObjectValidator;
 
 public class Theme {
 
-    private final ThemeId themeId;
+    private final ThemeId id;
 
-    private final ThemeName themeName;
+    private final ThemeName name;
 
-    private final ThemeDescription themeDescription;
+    private final ThemeDescription description;
 
-    private final ThemeThumbnail themeThumbnail;
+    private final ThemeThumbnail thumbnail;
 
-    public Theme(ThemeId themeId, ThemeName themeName, ThemeDescription themeDescription, ThemeThumbnail themeThumbnail) {
-        ObjectValidator.validateNotNull(themeId, themeName, themeDescription, themeThumbnail);
-        this.themeId = themeId;
-        this.themeName = themeName;
-        this.themeDescription = themeDescription;
-        this.themeThumbnail = themeThumbnail;
+    public Theme(
+            ThemeId themeId,
+            ThemeName name,
+            ThemeDescription description,
+            ThemeThumbnail thumbnail
+    ) {
+        ObjectValidator.validateNotNull(themeId, name, description, thumbnail);
+        this.id = themeId;
+        this.name = name;
+        this.description = description;
+        this.thumbnail = thumbnail;
     }
 
     public Long getId() {
-        return themeId.id();
+        return id.id();
     }
 
-    public String getThemeName() {
-        return this.themeName.name();
+    public String getName() {
+        return this.name.name();
     }
 
-    public String getThemeDescription() {
-        return this.themeDescription.description();
+    public String getDescription() {
+        return this.description.description();
     }
 
-    public String getThemeThumbnail() {
-        return this.themeThumbnail.thumbnail();
+    public String getThumbnail() {
+        return this.thumbnail.thumbnail();
     }
 }

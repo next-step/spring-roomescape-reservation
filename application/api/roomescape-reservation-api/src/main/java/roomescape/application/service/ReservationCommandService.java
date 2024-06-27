@@ -8,8 +8,6 @@ import roomescape.application.service.component.reader.ReservationTimeReader;
 import roomescape.application.service.component.reader.ThemeReader;
 import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.ReservationRepository;
-import roomescape.domain.reservation.vo.ReservationDate;
-import roomescape.domain.reservation.vo.ReservationName;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.theme.Theme;
 
@@ -42,8 +40,8 @@ public class ReservationCommandService {
         Theme theme = themeReader.readById(command.getThemeId());
 
         return reservationCreator.create(
-                new ReservationName(command.getReservationName()),
-                new ReservationDate(command.getReservationDate()),
+                command.getReservationName(),
+                command.getReservationDate(),
                 reservationTime,
                 theme
         );

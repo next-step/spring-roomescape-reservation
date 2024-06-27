@@ -13,15 +13,15 @@ import roomescape.domain.theme.Theme;
 @Component
 public class ReservationCreator {
 
-    private final CreateReservationValidator createReservationValidator;
-    private final ReservationRepository reservationRepository;
+    private final CreateReservationValidator validator;
+    private final ReservationRepository repository;
 
     public ReservationCreator(
-            CreateReservationValidator createReservationValidator,
-            ReservationRepository reservationRepository
+            CreateReservationValidator validator,
+            ReservationRepository repository
     ) {
-        this.createReservationValidator = createReservationValidator;
-        this.reservationRepository = reservationRepository;
+        this.validator = validator;
+        this.repository = repository;
     }
 
     public Reservation create(
@@ -30,7 +30,7 @@ public class ReservationCreator {
             ReservationTime reservationTime,
             Theme theme
     ) {
-        createReservationValidator.validate(reservationDate, reservationTime);
+        validator.validate(reservationDate, reservationTime);
 
         Reservation createdReservation = Reservation.create(
                 ReservationId.empty(),
@@ -40,6 +40,6 @@ public class ReservationCreator {
                 theme
         );
 
-        return reservationRepository.save(createdReservation);
+        return repository.save(createdReservation);
     }
 }

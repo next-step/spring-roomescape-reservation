@@ -22,9 +22,9 @@ public class CreateThemeResponse {
     public static CreateThemeResponse from(Theme theme) {
         return new CreateThemeResponse(
                 theme.getId(),
-                theme.getThemeName(),
-                theme.getThemeDescription(),
-                theme.getThemeThumbnail()
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail()
         );
     }
 

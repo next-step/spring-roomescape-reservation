@@ -10,11 +10,7 @@ public class DeleteReservationTimeCommand {
         this.reservationTimeId = reservationTimeId;
     }
 
-    public Long getReservationTimeId() {
-        return reservationTimeId;
-    }
-
-    public ReservationTimeId toReservationTimeId() {
+    public ReservationTimeId getReservationTimeId() {
         return new ReservationTimeId(reservationTimeId);
     }
 }

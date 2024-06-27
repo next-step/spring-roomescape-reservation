@@ -17,9 +17,7 @@ public class ThemeService {
     }
 
     public Theme create(CreateThemeCommand command) {
-        Theme theme = command.toTheme();
-
-        return themeRepository.save(theme);
+        return themeRepository.save(command.toTheme());
     }
 
     public Themes findAll() {

@@ -1,5 +1,6 @@
 package roomescape.domain.reservationtime.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +112,31 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                         "Cannot delete ReservationTime(id=%d). It's already in use by Reservation(id=%s)"
                                 .formatted(savedTime.getIdValue(), savedReservation.getId())
                 );
+    }
+
+    @DisplayName("예약 시간 삭제 시 해당 시간에 예약된 예약이 취소 상태면 예외 발생하지 않음")
+    @Test
+    void delete_canceled() {
+        // given
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        final ReservationTime savedTime = timeRepository.save(time);
+
+        final Reservation reservation = Reservation.builder()
+                .name(new ReservationGuestName("name"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
+                .status(ReservationStatus.CANCELED)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        reservationRepository.save(reservation);
+
+        // when & then
+        Assertions.assertDoesNotThrow(() -> sut.delete(savedTime.getId()));
+
+        final List<ReservationTime> actual = timeRepository.findAll();
+        assertThat(actual).hasSize(0);
     }
 }

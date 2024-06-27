@@ -38,18 +38,26 @@ public class ReservationTimeCommandService {
     }
 
     private void verifyTimeIdNotInUse(final ReservationTimeId timeId) {
-        final List<Reservation> reservations = reservationRepository.findAllByTimeId(timeId);
-        if (!CollectionUtils.isEmpty(reservations)) {
+        final List<Reservation> activeReservations = findActiveReservationsBy(timeId);
+
+        if (!CollectionUtils.isEmpty(activeReservations)) {
             throw new ReservationTimeAlreadyInUse(
                     "Cannot delete ReservationTime(id=%d). It's already in use by Reservation(id=%s)"
                             .formatted(
                                     timeId.getValue(),
-                                    reservations.stream()
+                                    activeReservations.stream()
                                             .map(reservation -> String.valueOf(reservation.getId()))
                                             .collect(Collectors.joining(","))
                             )
             );
         }
+    }
+
+    private List<Reservation> findActiveReservationsBy(final ReservationTimeId timeId) {
+        return reservationRepository.findAllByTimeId(timeId)
+                .stream()
+                .filter(Reservation::isActive)
+                .toList();
     }
 
     private void verifyUniqueStartAt(final LocalTime startAt) {

@@ -40,7 +40,7 @@ public class ReservationTimeApi {
 
     @DeleteMapping("/times/{timeId}")
     public ResponseEntity<Void> delete(
-            @PathVariable Long timeId
+            @PathVariable(name = "timeId") Long timeId
     ) {
         timeCommandService.delete(new ReservationTimeId(timeId));
         return ResponseEntity.ok().build();

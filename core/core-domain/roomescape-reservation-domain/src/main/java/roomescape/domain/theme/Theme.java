@@ -4,7 +4,7 @@ import roomescape.domain.theme.vo.ThemeDescription;
 import roomescape.domain.theme.vo.ThemeId;
 import roomescape.domain.theme.vo.ThemeName;
 import roomescape.domain.theme.vo.ThemeThumbnail;
-import roomescape.domain.validator.ObjectValidator;
+import roomescape.util.validator.ObjectValidator;
 
 public class Theme {
 

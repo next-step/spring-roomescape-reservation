@@ -1,6 +1,6 @@
-package roomescape.domain.validator;
+package roomescape.domain.reservation.validator;
 
-import roomescape.domain.ClockHolder;
+import roomescape.util.clockholder.ClockHolder;
 import roomescape.domain.reservation.ReservationDateTime;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservationtime.ReservationTime;

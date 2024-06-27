@@ -1,6 +1,6 @@
 package roomescape.domain.reservation.vo;
 
-import roomescape.domain.validator.ObjectValidator;
+import roomescape.util.validator.ObjectValidator;
 
 public record ReservationName(String name) {
 

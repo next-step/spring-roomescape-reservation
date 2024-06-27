@@ -1,4 +1,4 @@
-package roomescape.domain.validator;
+package roomescape.util.validator;
 
 import roomescape.util.ObjectUtils;
 

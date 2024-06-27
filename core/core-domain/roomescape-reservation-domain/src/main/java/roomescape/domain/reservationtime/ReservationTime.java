@@ -2,7 +2,7 @@ package roomescape.domain.reservationtime;
 
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
-import roomescape.domain.validator.ObjectValidator;
+import roomescape.util.validator.ObjectValidator;
 
 import java.time.LocalTime;
 

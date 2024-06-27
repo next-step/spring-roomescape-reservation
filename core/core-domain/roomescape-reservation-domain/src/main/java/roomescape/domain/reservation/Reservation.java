@@ -1,6 +1,6 @@
 package roomescape.domain.reservation;
 
-import roomescape.domain.SystemClockHolder;
+import roomescape.util.clockholder.SystemClockHolder;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservation.vo.ReservationId;
 import roomescape.domain.reservation.vo.ReservationName;
@@ -8,8 +8,8 @@ import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.theme.Theme;
 import roomescape.domain.theme.vo.ThemeId;
-import roomescape.domain.validator.CreateReservationValidator;
-import roomescape.domain.validator.ObjectValidator;
+import roomescape.domain.reservation.validator.CreateReservationValidator;
+import roomescape.util.validator.ObjectValidator;
 
 import java.time.LocalDate;
 

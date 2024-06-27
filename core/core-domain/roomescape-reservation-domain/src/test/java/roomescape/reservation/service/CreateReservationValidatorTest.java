@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import roomescape.domain.ClockHolder;
+import roomescape.util.clockholder.ClockHolder;
 import roomescape.domain.reservation.vo.ReservationDate;
 import roomescape.domain.reservationtime.ReservationTime;
 import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
-import roomescape.domain.validator.CreateReservationValidator;
+import roomescape.domain.reservation.validator.CreateReservationValidator;
 import roomescape.error.exception.CreateReservationValidateException;
 
 import java.time.LocalDate;

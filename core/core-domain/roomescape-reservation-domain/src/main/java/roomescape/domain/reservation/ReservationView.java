@@ -7,7 +7,7 @@ import roomescape.domain.reservationtime.vo.ReservationTimeId;
 import roomescape.domain.reservationtime.vo.ReservationTimeStartAt;
 import roomescape.domain.theme.vo.ThemeId;
 import roomescape.domain.theme.vo.ThemeName;
-import roomescape.domain.validator.ObjectValidator;
+import roomescape.util.validator.ObjectValidator;
 
 public class ReservationView {
 

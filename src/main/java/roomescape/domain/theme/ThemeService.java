@@ -31,10 +31,10 @@ public class ThemeService {
   public void delete(long id) {
     Theme one = repository.findOne(id);
     if (one == null) {
-      throw new ThemeNotFound();
+      throw new ThemeNotFound(id);
     }
     if (repository.isUsedInReservation(one)) {
-      throw new ThemeIsUsed();
+      throw new ThemeIsUsed(id);
     }
     repository.delete(id);
   }

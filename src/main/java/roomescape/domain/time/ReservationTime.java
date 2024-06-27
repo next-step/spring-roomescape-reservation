@@ -1,8 +1,11 @@
 package roomescape.domain.time;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import roomescape.domain.reservation.ReservationScheduleNotValid;
 
 public class ReservationTime {
+
   private long id;
   private LocalTime startAt;
 
@@ -21,5 +24,14 @@ public class ReservationTime {
 
   public LocalTime getStartAt() {
     return startAt;
+  }
+
+  public void validDateTime(LocalDate date) {
+    if (date.isBefore(LocalDate.now())) {
+      throw new ReservationScheduleNotValid(date, startAt);
+    }
+    if (date.isEqual(LocalDate.now()) && startAt.isBefore(LocalTime.now())) {
+      throw new ReservationScheduleNotValid(date, startAt);
+    }
   }
 }

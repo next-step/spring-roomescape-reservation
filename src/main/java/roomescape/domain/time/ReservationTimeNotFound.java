@@ -1,11 +1,8 @@
 package roomescape.domain.time;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
+public class ReservationTimeNotFound extends RuntimeException {
 
-class ReservationTimeNotFound extends HttpClientErrorException {
-
-  public ReservationTimeNotFound() {
-    super(HttpStatus.NOT_FOUND, "이 예약 시간이 존재하지 않습니다.");
+  public ReservationTimeNotFound(long id) {
+    super(id+"번 예약 시간이 존재하지 않습니다.");
   }
 }

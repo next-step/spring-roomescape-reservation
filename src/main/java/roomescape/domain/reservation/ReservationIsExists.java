@@ -1,11 +1,11 @@
 package roomescape.domain.reservation;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
+import java.time.LocalDate;
+import roomescape.domain.time.ReservationTime;
 
-public class ReservationIsExists extends HttpClientErrorException {
+public class ReservationIsExists extends RuntimeException {
 
-  public ReservationIsExists() {
-    super(HttpStatus.CONFLICT, "해당 시간에 예약이 이미 존재합니다.");
+  public ReservationIsExists(LocalDate date, ReservationTime time) {
+    super(date.toString() + "  "+ time.getStartAt().toString()+" 에 예약이 이미 존재합니다.");
   }
 }

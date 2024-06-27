@@ -29,7 +29,8 @@ public class ReservationController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ReservationListItemResponse create(@RequestBody CreateReservationRequest createReservation) {
+  public ReservationListItemResponse create(
+      @RequestBody CreateReservationRequest createReservation) {
     return ReservationListItemResponse.from(service.create(createReservation.toDomain()));
   }
 
@@ -38,4 +39,6 @@ public class ReservationController {
   public void delete(@PathVariable long id) {
     service.delete(id);
   }
+
+
 }

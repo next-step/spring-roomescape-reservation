@@ -1,0 +1,5 @@
+dependencies {
+    implementation project(':core:core-domain:roomescape-reservation-domain')
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'com.h2database:h2'
+}

@@ -1,0 +1,18 @@
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
+
+dependencies {
+    implementation project(':core:core-domain:roomescape-reservation-domain')
+    implementation project(':core:core-db:roomescape-mysql-jdbc-db')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    testImplementation 'io.rest-assured:rest-assured:5.3.1'
+}

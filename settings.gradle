@@ -1,0 +1,10 @@
+rootProject.name = 'spring-roomescape-reservation'
+
+include 'application'
+include 'core'
+include 'core:core-domain'
+include 'core:core-db'
+include 'application:api:roomescape-reservation-api'
+include 'core:core-domain:roomescape-reservation-domain'
+include 'core:core-db:roomescape-mysql-jdbc-db'
+

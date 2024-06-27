@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>방탈출 어드민</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/static">
+        <img alt="LOGO" src="/image/admin-logo.png" style="height: 40px;">
+    </a>
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/reservation">Reservation</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/theme">Theme</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/admin/time">Time</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="content-container">
+    <h2 class="content-container-title">방탈출 예약 페이지</h2>
+    <div class="table-header">
+        <button class="btn btn-custom mb-2 float-right" id="add-button">예약 추가</button>
+    </div>
+    <div class="table-container"/>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>예약번호</th>
+            <th>예약자</th>
+            <th>날짜</th>
+            <th>시간</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+</div>
+
+<script src="/js/reservation-legacy.js"></script>
+</body>
+</html>

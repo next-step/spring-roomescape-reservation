@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name": "조현창",
-  "date": "2023-01-01",
+  "date": "2025-01-01",
   "timeId": 1,
   "themeId": 1
 }

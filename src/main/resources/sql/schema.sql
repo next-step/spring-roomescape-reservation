@@ -18,6 +18,5 @@ create table reservations
     status         varchar(255) not null default 'CONFIRMED',
     canceled_at    varchar(255),
     created_at     varchar(255) not null,
-    primary key (reservation_id),
-    foreign key (time_id) references reservation_times (time_id)
+    primary key (reservation_id)
 );

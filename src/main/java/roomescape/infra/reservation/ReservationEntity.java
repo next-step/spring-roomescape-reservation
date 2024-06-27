@@ -8,11 +8,11 @@ import roomescape.domain.time.ReservationTime;
 class ReservationEntity {
   private final long id;
   private String name;
-  private LocalDate date;
+  private String date;
   private long timeId;
   private long themeId;
 
-  public ReservationEntity(long id, String name, LocalDate date, long timeId, long themeId) {
+  public ReservationEntity(long id, String name, String date, long timeId, long themeId) {
     this.id = id;
     this.name = name;
     this.date = date;
@@ -21,7 +21,7 @@ class ReservationEntity {
   }
 
   Reservation toDomain(ThemeSummary theme, ReservationTime time) {
-    return new Reservation(id, name, date, time, theme);
+    return new Reservation(id, name, LocalDate.parse(date), time, theme);
   }
   public long getId() {
     return id;

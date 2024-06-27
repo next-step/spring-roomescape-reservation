@@ -11,6 +11,6 @@ class ReservationRowMapper implements RowMapper<ReservationEntity> {
   @Override
   public ReservationEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
     return new ReservationEntity(rs.getLong("id"), rs.getString("name"),
-        rs.getDate("date").toLocalDate(), rs.getLong("time_id"), rs.getLong("theme_id"));
+        rs.getString("date"), rs.getLong("time_id"), rs.getLong("theme_id"));
   }
 }

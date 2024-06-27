@@ -1,66 +1,63 @@
 package roomescape.infra.reservation;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.List;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
+import java.util.Map;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.reservation.CreateReservation;
 import roomescape.domain.reservation.Reservation;
+import roomescape.domain.theme.ThemeSummary;
+import roomescape.domain.time.ReservationTime;
+import roomescape.infra.theme.ThemeRepository;
+import roomescape.infra.time.ReservationTimeRepository;
 
 @Repository
 public class ReservationRepository {
 
-  private final JdbcTemplate jdbcTemplate;
-  private final ReservationRowMapper rowMapper;
+  private final ReservationJdbcRepository jdbcRepository;
+  private final ReservationTimeRepository timeRepository;
+  private final ThemeRepository themeRepository;
 
-  public ReservationRepository(JdbcTemplate jdbcTemplate, ReservationRowMapper rowMapper) {
-    this.jdbcTemplate = jdbcTemplate;
-    this.rowMapper = rowMapper;
+  public ReservationRepository(ReservationJdbcRepository jdbcRepository,
+      ReservationTimeRepository timeRepository, ThemeRepository themeRepository) {
+    this.jdbcRepository = jdbcRepository;
+    this.timeRepository = timeRepository;
+    this.themeRepository = themeRepository;
   }
 
   public List<Reservation> findAll() {
-    return jdbcTemplate.query(
-        "select * from reservation inner join reservation_time on reservation.time_id = reservation_time.id inner join theme on theme.id= reservation.id",
-        rowMapper).stream().map(ReservationEntity::toDomain).toList();
+    List<ReservationEntity> reservations = jdbcRepository.findAll();
+    List<Long> timeIds = reservations.stream().map(ReservationEntity::getTimeId).distinct()
+        .toList();
+    Map<Long, ReservationTime> timeMap = timeRepository.findByIds(timeIds).stream()
+        .collect(toMap(ReservationTime::getId, time -> time));
+    List<Long> themeIds = reservations.stream().map(ReservationEntity::getThemeId).distinct()
+        .toList();
+    Map<Long, ThemeSummary> themeMap = themeRepository.findSummaryByIds(themeIds).stream()
+        .collect(toMap(ThemeSummary::id, t -> t));
+    return reservations.stream().map(reservationEntity -> reservationEntity.toDomain(
+            themeMap.get(reservationEntity.getThemeId()), timeMap.get(reservationEntity.getTimeId())))
+        .toList();
+
   }
 
   public boolean isExists(CreateReservation reservation) {
-    return jdbcTemplate.queryForObject(
-        "select count(id) from reservation where date=? and time_id=?",
-        (rs, i) -> rs.getLong(1) > 0, reservation.date(), reservation.timeId());
+    return jdbcRepository.isExists(reservation);
   }
 
   public Reservation getById(Long id) {
-    Reservation reservation = null;
-    try {
-      reservation = jdbcTemplate.queryForObject(
-          "select * from reservation inner join reservation_time on reservation.time_id = reservation_time.id inner join theme on theme.id= reservation.id where reservation.id=?",
-          rowMapper, id).toDomain();
-    } catch (EmptyResultDataAccessException ignored) {
-
-    }
-    return reservation;
+    ReservationEntity entity = jdbcRepository.getById(id);
+    ReservationTime time = timeRepository.findById(entity.getTimeId());
+    ThemeSummary theme = themeRepository.findSummaryOne(entity.getThemeId());
+    return entity.toDomain(theme, time);
   }
 
   public long save(CreateReservation newReservation) {
-    GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-    int updatedRow = jdbcTemplate.update(con -> {
-      PreparedStatement statement = con.prepareStatement(
-          "insert into reservation (name, date, time_id, theme_id) values ( ?, ?, ?, ? )",
-          new String[]{"id"});
-      statement.setString(1, newReservation.name());
-      statement.setDate(2, Date.valueOf(newReservation.date()));
-      statement.setLong(3, newReservation.timeId());
-      statement.setLong(4, newReservation.themeId());
-      return statement;
-    }, generatedKeyHolder);
-    return generatedKeyHolder.getKeyAs(Long.class);
+    return jdbcRepository.save(newReservation);
   }
 
   public void delete(long id) {
-    jdbcTemplate.update("delete from reservation where id = ?", id);
+    jdbcRepository.delete(id);
   }
 }

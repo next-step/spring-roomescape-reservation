@@ -7,6 +7,7 @@ import roomescape.infra.theme.ThemeRepository;
 
 @Service
 public class ThemeService {
+
   private final ThemeRepository repository;
 
   public ThemeService(ThemeRepository repository) {
@@ -14,20 +15,27 @@ public class ThemeService {
   }
 
   public List<Theme> findAll() {
-    return repository.findAll();
+    return repository.findList();
+  }
+
+  public List<ThemeSummary> findAllSummaries() {
+    return repository.findSummaries();
   }
 
   @Transactional
   public Theme create(CreateTheme theme) {
-    long savedId = repository.create(theme);
-    return repository.findOne(savedId);
+    return repository.create(theme);
   }
 
   @Transactional
   public void delete(long id) {
     Theme one = repository.findOne(id);
-    if (one == null) throw new ThemeNotFound();
-    if(repository.isUsedInReservation(one)) throw new ThemeIsUsed();
+    if (one == null) {
+      throw new ThemeNotFound();
+    }
+    if (repository.isUsedInReservation(one)) {
+      throw new ThemeIsUsed();
+    }
     repository.delete(id);
   }
 }

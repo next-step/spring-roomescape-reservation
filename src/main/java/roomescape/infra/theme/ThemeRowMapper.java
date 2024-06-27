@@ -4,14 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import roomescape.domain.theme.Theme;
 
 @Component
-class ThemeRowMapper implements RowMapper<Theme> {
+class ThemeRowMapper implements RowMapper<ThemeEntity> {
 
   @Override
-  public Theme mapRow(ResultSet rs, int rowNum) throws SQLException {
-    return new Theme(rs.getLong("id"), rs.getString("name"), rs.getString("description"),
+  public ThemeEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+    return new ThemeEntity(rs.getLong("id"), rs.getString("name"), rs.getString("description"),
         rs.getString("thumbnail"));
   }
 }

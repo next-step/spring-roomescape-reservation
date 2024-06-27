@@ -2,49 +2,36 @@ package roomescape.infra.reservation;
 
 import java.time.LocalDate;
 import roomescape.domain.reservation.Reservation;
-import roomescape.domain.theme.Theme;
+import roomescape.domain.theme.ThemeSummary;
 import roomescape.domain.time.ReservationTime;
 
 class ReservationEntity {
   private final long id;
   private String name;
   private LocalDate date;
-  private ReservationTime time;
-  private Theme theme;
+  private long timeId;
+  private long themeId;
 
-  public ReservationEntity(long id) {
-    this.id = id;
-  }
-
-  public ReservationEntity(long id, String name, LocalDate date, ReservationTime reservationTime, Theme theme) {
+  public ReservationEntity(long id, String name, LocalDate date, long timeId, long themeId) {
     this.id = id;
     this.name = name;
     this.date = date;
-    this.time = reservationTime;
-    this.theme = theme;
+    this.timeId = timeId;
+    this.themeId = themeId;
   }
 
-  public Reservation toDomain() {
+  Reservation toDomain(ThemeSummary theme, ReservationTime time) {
     return new Reservation(id, name, date, time, theme);
   }
-
   public long getId() {
     return id;
   }
 
-  public String getName() {
-    return name;
+  public long getTimeId() {
+    return timeId;
   }
 
-  public LocalDate getDate() {
-    return date;
-  }
-
-  public ReservationTime getTime() {
-    return time;
-  }
-
-  public Theme getTheme() {
-    return theme;
+  public long getThemeId() {
+    return themeId;
   }
 }

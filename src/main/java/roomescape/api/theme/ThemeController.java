@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import roomescape.domain.theme.CreateTheme;
-import roomescape.domain.theme.Theme;
 import roomescape.domain.theme.ThemeService;
 
 @RestController
 @RequestMapping("themes")
 public class ThemeController {
+
   private final ThemeService service;
 
   public ThemeController(ThemeService service) {
@@ -25,13 +24,18 @@ public class ThemeController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public Theme create(@RequestBody CreateTheme theme) {
-    return service.create(theme);
+  public ThemeListItemResponse create(@RequestBody CreateThemeRequest theme) {
+    return ThemeListItemResponse.from(service.create(theme.toDomain()));
   }
 
   @GetMapping
-  public List<Theme> findAll() {
-    return service.findAll();
+  public List<ThemeListItemResponse> findAll() {
+    return service.findAll().stream().map(ThemeListItemResponse::from).toList();
+  }
+
+  @GetMapping("dropdown")
+  public List<ThemeDropdownItemResponse> findAllDropdown() {
+    return service.findAllSummaries().stream().map(ThemeDropdownItemResponse::from).toList();
   }
 
   @DeleteMapping("{id}")

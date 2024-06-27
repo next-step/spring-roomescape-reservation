@@ -1,59 +1,46 @@
 package roomescape.infra.time;
 
-import java.sql.PreparedStatement;
-import java.sql.Time;
+import java.util.Collection;
 import java.util.List;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import roomescape.domain.time.CreateReservationTime;
 import roomescape.domain.time.ReservationTime;
 
 @Repository
 public class ReservationTimeRepository {
 
-  private final JdbcTemplate jdbcTemplate;
-  private final ReservationTimeRowMapper rowMapper;
+  private final ReservationTimeJdbcRepository jdbcRepository;
 
-  public ReservationTimeRepository(JdbcTemplate jdbcTemplate, ReservationTimeRowMapper rowMapper) {
-    this.jdbcTemplate = jdbcTemplate;
-    this.rowMapper = rowMapper;
+
+  public ReservationTimeRepository(ReservationTimeJdbcRepository jdbcRepository) {
+    this.jdbcRepository = jdbcRepository;
+
+  }
+
+  public List<ReservationTime> findByIds(Collection<Long> ids) {
+    return jdbcRepository.findByIds(ids).stream().map(ReservationTimeEntity::toDomain).toList();
   }
 
   public boolean isUsed(ReservationTime time) {
-    return jdbcTemplate.queryForObject("select count(id) from reservation where time_id=? limit 1",
-        (rs, i) -> rs.getLong(1) > 0, time.getId());
+    return jdbcRepository.isUsed(time);
   }
 
   public List<ReservationTime> findAll() {
-    return jdbcTemplate.query("select id, start_at from reservation_time", rowMapper);
+    return jdbcRepository.findAll().stream().map(ReservationTimeEntity::toDomain).toList();
   }
 
   public ReservationTime findById(long id) {
-    ReservationTime reservationTime = null;
-    try {
-      reservationTime = jdbcTemplate.queryForObject(
-          "select id, start_at from reservation_time where id=?", rowMapper, id);
-    } catch (EmptyResultDataAccessException ignored) {
-    }
-    return reservationTime;
+    return jdbcRepository.findById(id).toDomain();
   }
 
   public void deleteById(long id) {
-    jdbcTemplate.update("delete from reservation_time where id=?", id);
+    jdbcRepository.deleteById(id);
   }
 
+  @Transactional
   public ReservationTime save(CreateReservationTime newReservationTime) {
-    GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-    jdbcTemplate.update(con -> {
-      PreparedStatement statement = con.prepareStatement(
-          "insert into reservation_time (start_at) values (?)", new String[]{"id"});
-      statement.setTime(1, Time.valueOf(newReservationTime.startAt()));
-
-      return statement;
-    }, generatedKeyHolder);
-    return new ReservationTime(generatedKeyHolder.getKeyAs(Long.class),
-        newReservationTime.startAt());
+    long savedId = jdbcRepository.save(newReservationTime);
+    return findById(savedId);
   }
 }

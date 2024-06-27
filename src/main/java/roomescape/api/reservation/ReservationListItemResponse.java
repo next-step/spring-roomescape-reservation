@@ -10,6 +10,6 @@ record ReservationListItemResponse(long id, String name, LocalDate date, LocalTi
   static ReservationListItemResponse from(Reservation reservation) {
     return new ReservationListItemResponse(reservation.getId(), reservation.getName(),
         reservation.getDate(), reservation.getTime().getStartAt(),
-        reservation.getTheme().getName());
+        reservation.getTheme().name());
   }
 }

@@ -35,7 +35,8 @@ class CreateReservationTimeValidatorTest {
         );
 
         CreateReservationTimeValidator validator = new CreateReservationTimeValidator(reservationTimeRepository);
-        Assertions.assertThrows(CreateReservationTimeValidateException.class,
+        Assertions.assertThrows(
+                CreateReservationTimeValidateException.class,
                 () -> validator.validate(
                         new ReservationTime(
                                 new ReservationTimeId(1L),

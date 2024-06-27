@@ -8,7 +8,6 @@ import roomescape.domain.reservation.model.ReservationDate;
 import roomescape.domain.reservation.model.ReservationGuestName;
 import roomescape.domain.reservation.model.ReservationStatus;
 import roomescape.domain.reservation.repository.ReservationRepository;
-import roomescape.domain.reservation.service.response.ReservationQueryResponse;
 import roomescape.domain.reservationtime.model.ReservationTime;
 import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
 import roomescape.support.IntegrationTestSupport;
@@ -61,13 +60,17 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
         reservationRepository.save(canceled);
 
         // when
-        final List<ReservationQueryResponse> actual = sut.findAll();
+        final List<Reservation> actual = sut.fetchActiveReservations();
 
         // then
         assertThat(actual).hasSize(1)
                 .extracting("name", "date", "time")
                 .containsExactly(
-                        tuple("confirmed", LocalDate.of(2024, 6, 8), LocalTime.of(12, 0))
+                        tuple(
+                                new ReservationGuestName("confirmed"),
+                                new ReservationDate(LocalDate.of(2024, 6, 8)),
+                                savedTime
+                        )
                 );
     }
 }

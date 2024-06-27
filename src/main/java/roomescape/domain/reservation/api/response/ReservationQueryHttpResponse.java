@@ -1,9 +1,9 @@
 package roomescape.domain.reservation.api.response;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.domain.reservation.service.response.ReservationQueryResponse;
+import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservationtime.model.ReservationTime;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,20 +13,16 @@ import java.util.List;
 public class ReservationQueryHttpResponse {
 
     private final Long id;
-
     private final String name;
-
     private final LocalDate date;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private final LocalTime time;
+    private final ReservationTimeDto time;
 
     @Builder
     private ReservationQueryHttpResponse(
             final Long id,
             final String name,
             final LocalDate date,
-            final LocalTime time
+            final ReservationTimeDto time
     ) {
         this.id = id;
         this.name = name;
@@ -34,19 +30,32 @@ public class ReservationQueryHttpResponse {
         this.time = time;
     }
 
-    public static List<ReservationQueryHttpResponse> from(final List<ReservationQueryResponse> reservations) {
+    public static List<ReservationQueryHttpResponse> from(final List<Reservation> reservations) {
         return reservations.stream()
                 .map(ReservationQueryHttpResponse::from)
                 .toList();
     }
 
-    public static ReservationQueryHttpResponse from(final ReservationQueryResponse response) {
+    private static ReservationQueryHttpResponse from(final Reservation reservation) {
         return ReservationQueryHttpResponse.builder()
-                .id(response.getId())
-                .name(response.getName())
-                .date(response.getDate())
-                .time(response.getTime())
+                .id(reservation.getId())
+                .name(reservation.getName().getValue())
+                .date(reservation.getDate().getValue())
+                .time(ReservationTimeDto.from(reservation.getTime()))
                 .build();
     }
 
+    @Getter
+    private static class ReservationTimeDto {
+
+        private final LocalTime startAt;
+
+        public ReservationTimeDto(final LocalTime startAt) {
+            this.startAt = startAt;
+        }
+
+        public static ReservationTimeDto from(final ReservationTime time) {
+            return new ReservationTimeDto(time.getStartAt());
+        }
+    }
 }

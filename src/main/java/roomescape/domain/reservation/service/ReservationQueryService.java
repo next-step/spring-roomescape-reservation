@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import roomescape.domain.reservation.model.Reservation;
 import roomescape.domain.reservation.repository.ReservationRepository;
-import roomescape.domain.reservation.service.response.ReservationQueryResponse;
 
 import java.util.List;
 
@@ -14,13 +13,11 @@ public class ReservationQueryService {
 
     private final ReservationRepository reservationRepository;
 
-    public List<ReservationQueryResponse> findAll() {
+    public List<Reservation> fetchActiveReservations() {
         final List<Reservation> reservations = reservationRepository.findAll();
 
-        final List<Reservation> confirmedReservations = reservations.stream()
+        return reservations.stream()
                 .filter(Reservation::isActive)
                 .toList();
-
-        return ReservationQueryResponse.from(confirmedReservations);
     }
 }

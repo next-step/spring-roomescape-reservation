@@ -20,6 +20,14 @@ subprojects {
 
     sourceCompatibility = '17'
 
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
     repositories {
         mavenCentral()
     }

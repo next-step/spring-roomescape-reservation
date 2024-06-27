@@ -2,9 +2,9 @@ drop table if exists reservation_times cascade;
 create table reservation_times
 (
     time_id    bigint       not null auto_increment,
-    start_at   VARCHAR(255) not null,
+    start_at   varchar(255) not null,
     created_at varchar(255) not null,
-    PRIMARY KEY (time_id)
+    primary key (time_id)
 );
 
 
@@ -18,5 +18,6 @@ create table reservations
     status         varchar(255) not null default 'CONFIRMED',
     canceled_at    varchar(255),
     created_at     varchar(255) not null,
-    primary key (reservation_id)
+    primary key (reservation_id),
+    foreign key (time_id) references reservation_times (time_id)
 );

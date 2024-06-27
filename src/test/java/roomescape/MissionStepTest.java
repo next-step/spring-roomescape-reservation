@@ -130,4 +130,28 @@ public class MissionStepTest {
     RestAssured.given().log().all().contentType(ContentType.JSON).accept(ContentType.ANY)
         .body(params).when().post("/themes/1").then().log().all().statusCode(405);
   }
+
+  @Test
+  @DisplayName("not found 예외 테스트")
+  void notFound() {
+    Map<String, Object> params = new HashMap<>();
+    params.put("name", "브라운");
+    params.put("date", LocalDate.now().toString());
+    params.put("timeId", 3L);
+    params.put("themeId", 1L);
+
+    RestAssured.given().log().all().contentType(ContentType.JSON).accept(ContentType.ANY)
+        .body(params).when().post("/reservations").then().log().all().statusCode(404);
+    params.put("timeId", 1L);
+    params.put("themeId", 3L);
+    RestAssured.given().log().all().contentType(ContentType.JSON).accept(ContentType.ANY)
+        .body(params).when().post("/reservations").then().log().all().statusCode(404);
+
+    RestAssured.given().log().all().contentType(ContentType.JSON).accept(ContentType.ANY)
+        .when().delete("/reservations/2").then().log().all().statusCode(404);
+    RestAssured.given().log().all().contentType(ContentType.JSON).accept(ContentType.ANY)
+        .when().delete("/themes/3").then().log().all().statusCode(404);
+    RestAssured.given().log().all().contentType(ContentType.JSON).accept(ContentType.ANY)
+        .when().delete("/times/3").then().log().all().statusCode(404);
+  }
 }

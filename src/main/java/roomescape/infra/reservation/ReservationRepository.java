@@ -48,6 +48,9 @@ public class ReservationRepository {
 
   public Reservation getById(Long id) {
     ReservationEntity entity = jdbcRepository.getById(id);
+    if (entity == null) {
+      return null;
+    }
     ReservationTime time = timeRepository.findById(entity.getTimeId());
     ThemeSummary theme = themeRepository.findSummaryOne(entity.getThemeId());
     return entity.toDomain(theme, time);

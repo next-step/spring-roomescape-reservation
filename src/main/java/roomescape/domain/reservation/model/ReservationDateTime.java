@@ -1,4 +1,4 @@
-package roomescape.domain.reservation.domain.model;
+package roomescape.domain.reservation.model;
 
 import lombok.Getter;
 
@@ -8,23 +8,23 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 @Getter
-public class ReservationTimeStamp {
+public class ReservationDateTime {
 
     private final LocalDateTime value;
 
-    public ReservationTimeStamp(LocalDateTime value) {
+    public ReservationDateTime(LocalDateTime value) {
         this.value = value;
     }
 
-    public static ReservationTimeStamp of(LocalDate date, LocalTime time) {
-        return new ReservationTimeStamp(LocalDateTime.of(date, time));
+    public static ReservationDateTime of(LocalDate date, LocalTime time) {
+        return new ReservationDateTime(LocalDateTime.of(date, time));
     }
 
     @Override
     public boolean equals(final Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        final ReservationTimeStamp that = (ReservationTimeStamp) object;
+        final ReservationDateTime that = (ReservationDateTime) object;
         return Objects.equals(value, that.value);
     }
 

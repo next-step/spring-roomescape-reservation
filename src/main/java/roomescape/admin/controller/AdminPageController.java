@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class AdminController {
+public class AdminPageController {
 
     @GetMapping("/")
     public String home() {
@@ -13,7 +13,11 @@ public class AdminController {
 
     @GetMapping("/admin/reservation")
     public String reservation() {
-        return "admin/reservation-legacy";
+        return "admin/reservation";
     }
 
+    @GetMapping("/admin/time")
+    public String toTimePage() {
+        return "admin/time";
+    }
 }

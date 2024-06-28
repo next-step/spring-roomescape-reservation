@@ -1,49 +1,44 @@
 package roomescape.api.reservation;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import roomescape.domain.reservation.CreateReservation;
-import roomescape.domain.reservation.Reservation;
-import roomescape.domain.reservation.ReservationRepository;
+import roomescape.domain.reservation.ReservationService;
 
 @RestController
 @RequestMapping("reservations")
 public class ReservationController {
 
-  private final List<Reservation> reservations = new ArrayList<>();
-  private final AtomicLong generator = new AtomicLong(1);
+  private final ReservationService service;
 
-  private final ReservationRepository repository;
-
-  public ReservationController(ReservationRepository repository) {
-    this.repository = repository;
+  public ReservationController(ReservationService service) {
+    this.service = service;
   }
 
   @GetMapping
-  public List<Reservation> findReservations() {
-    return repository.findAll();
-  }
-
-  @GetMapping("{id}")
-  public Reservation getById(@PathVariable Long id) {
-    return repository.getById(id);
+  public List<ReservationListItemResponse> findReservations() {
+    return service.findAll().stream().map(ReservationListItemResponse::from).toList();
   }
 
   @PostMapping
-  public Reservation create(@RequestBody CreateReservation createReservation) {
-    return repository.save(createReservation);
+  @ResponseStatus(HttpStatus.CREATED)
+  public ReservationListItemResponse create(
+      @RequestBody CreateReservationRequest createReservation) {
+    return ReservationListItemResponse.from(service.create(createReservation.toDomain()));
   }
 
   @DeleteMapping("{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   public void delete(@PathVariable long id) {
-    repository.delete(id);
+    service.delete(id);
   }
+
+
 }

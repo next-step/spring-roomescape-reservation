@@ -15,7 +15,11 @@ public class ReservationAdminController {
 
     @GetMapping("/reservation")
     public String getReservationPage() {
-        return "admin/reservation";
+        return "admin/reservation-new";
     }
 
+    @GetMapping("/theme")
+    public String getThemePage() {
+        return "admin/theme";
+    }
 }

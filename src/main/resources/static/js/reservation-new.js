@@ -169,9 +169,15 @@ function requestCreate(reservation) {
 
   return fetch(RESERVATION_API_ENDPOINT, requestOptions)
       .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Create failed');
-      });
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          return response.json().then(error => {
+            if (error.message) alert(error.message);
+            throw new Error(error.message || 'Create failed');
+          });
+        }
+      })
 }
 
 function requestDelete(id) {

@@ -107,11 +107,17 @@ function requestCreate(data) {
     body: JSON.stringify(data)
   };
 
-  return fetch(API_ENDPOINT, requestOptions)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Create failed');
-      });
+    return fetch(API_ENDPOINT, requestOptions)
+        .then(response => {
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                return response.json().then(error => {
+                    alert(error.message);
+                    throw new Error(error.message || 'Create failed');
+                });
+            }
+        })
 }
 
 function requestRead() {

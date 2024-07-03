@@ -6,14 +6,17 @@ public class Reservation {
     private String name;
     private ReservationTime time;
 
+    private Theme theme;
+
     public Reservation() {
     }
 
-    public Reservation(Long id, String date, String name, ReservationTime time) {
+    public Reservation(Long id, String date, String name, ReservationTime time, Theme theme) {
         this.id = id;
         this.date = date;
         this.name = name;
         this.time = time;
+        this.theme = theme;
     }
 
     public String getName() {
@@ -30,5 +33,9 @@ public class Reservation {
 
     public String getDate() {
         return date;
+    }
+
+    public Theme getTheme() {
+        return theme;
     }
 }

@@ -1,8 +1,10 @@
 package roomescape.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.model.ReservationTime;
+import roomescape.model.ReservationTimeCreateRequestDto;
 import roomescape.service.ReservationTimeAdminService;
 
 import java.util.List;
@@ -17,11 +19,9 @@ public class ReservationTimeAdminApiController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationTime> createReservationTime(@RequestBody ReservationTime time) {
+    public ResponseEntity<ReservationTime> createReservationTime(@RequestBody @Valid ReservationTimeCreateRequestDto time) {
         ReservationTime reservationTime = reservationTimeAdminService.createReservationTime(time);
-
         return ResponseEntity.ok().body(reservationTime);
-
     }
 
     @GetMapping

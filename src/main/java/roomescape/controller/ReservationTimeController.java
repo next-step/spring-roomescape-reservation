@@ -6,6 +6,7 @@ import roomescape.dto.ReservationTimeRq;
 import roomescape.dto.ReservationTimeRs;
 import roomescape.service.ReservationTimeService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,14 +29,14 @@ public class ReservationTimeController {
     @PostMapping
     public ResponseEntity<ReservationTimeRs> addReservationTime(@RequestBody ReservationTimeRq reservationTimeRq) {
         ReservationTimeRs reservationTimeRs = reservationTimeService.addReservationTime(reservationTimeRq);
-        return ResponseEntity.ok().body(reservationTimeRs);
+        return ResponseEntity.created(URI.create("/times/" + reservationTimeRs.getId())).body(reservationTimeRs);
     }
 
     // 시간 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservationTime(@PathVariable Long id) {
         reservationTimeService.deleteReservationTime(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 }

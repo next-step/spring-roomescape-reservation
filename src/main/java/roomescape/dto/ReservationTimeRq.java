@@ -1,19 +1,21 @@
 package roomescape.dto;
 
+import java.time.LocalTime;
+
 public class ReservationTimeRq {
-    private String startAt;
+    private LocalTime startAt;
 
     public ReservationTimeRq() {}
 
-    public ReservationTimeRq(String startAt) {
+    public ReservationTimeRq(LocalTime startAt) {
         this.startAt = startAt;
     }
 
-    public String getStartAt() {
+    public LocalTime getStartAt() {
         return startAt;
     }
 
-    public void setStartAt(String startAt) {
+    public void setStartAt(LocalTime startAt) {
         this.startAt = startAt;
     }
 }

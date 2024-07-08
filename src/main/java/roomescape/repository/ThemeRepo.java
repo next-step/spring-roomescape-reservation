@@ -1,6 +1,7 @@
 package roomescape.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import roomescape.model.Theme;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -34,7 +36,8 @@ public class ThemeRepo {
 
     public Optional<Theme> findById(Long id) {
         String sql = "SELECT id, name, description, thumbnail FROM theme WHERE id = ?";
-        List<Theme> results = jdbcTemplate.query(sql, new Object[]{id}, this::mapTheme);
+        PreparedStatementSetter pss = ps -> ps.setLong(1, id);
+        List<Theme> results = jdbcTemplate.query(sql, pss, this::mapTheme);
 
         if (results.isEmpty()) {
             return Optional.empty();
@@ -56,7 +59,7 @@ public class ThemeRepo {
             return ps;
         }, keyHolder);
 
-        return keyHolder.getKey().longValue();
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
     public void deleteById(Long id) {

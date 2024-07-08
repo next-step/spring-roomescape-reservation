@@ -1,6 +1,8 @@
 package roomescape.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -8,7 +10,9 @@ import roomescape.dto.ReservationTimeRq;
 import roomescape.model.ReservationTime;
 
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Repository
@@ -21,7 +25,7 @@ public class ReservationTimeRepo {
 
     private ReservationTime mapReservationTime(ResultSet rs, int rowNum) throws SQLException {
         Long id = rs.getLong("id");
-        String startAt = rs.getString("start_at");
+        LocalTime startAt = rs.getTime("start_at").toLocalTime();
         return new ReservationTime(id, startAt);
     }
 
@@ -32,7 +36,8 @@ public class ReservationTimeRepo {
 
     public Optional<ReservationTime> findById(Long id) {
         String sql = "SELECT id, start_at FROM reservation_time WHERE id = ?";
-        List<ReservationTime> results = jdbcTemplate.query(sql, new Object[]{id}, this::mapReservationTime);
+        PreparedStatementSetter pss = ps -> ps.setLong(1, id);
+        List<ReservationTime> results = jdbcTemplate.query(sql, pss, this::mapReservationTime);
 
         if (results.isEmpty()) {
             return Optional.empty();
@@ -48,16 +53,27 @@ public class ReservationTimeRepo {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, reservationTimeRq.getStartAt());
+            String startAt = reservationTimeRq.getStartAt().toString();
+            ps.setString(1, startAt);
             return ps;
         }, keyHolder);
 
-        return keyHolder.getKey().longValue();
+        return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
-    public int deleteById(Long id) {
+    public boolean existsByStartAt(LocalTime startAt) {
+        String sql = "SELECT COUNT(*) FROM reservation_time WHERE start_at = ?";
+        try {
+            Integer count = jdbcTemplate.queryForObject(sql, Integer.class, startAt);
+            return count != null && count > 0;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
+    public void deleteById(Long id) {
         String sql = "DELETE FROM reservation_time WHERE id = ?";
-        return jdbcTemplate.update(sql, id);
+        jdbcTemplate.update(sql, id);
     }
 
 }

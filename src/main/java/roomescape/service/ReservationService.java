@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import roomescape.dto.ReservationRq;
 import roomescape.dto.ReservationRs;
 import roomescape.exception.DuplicateReservationException;
-import roomescape.exception.InvalidReservationException;
 import roomescape.exception.ResourceNotFoundException;
 import roomescape.model.Reservation;
 import roomescape.model.ReservationTime;
@@ -46,7 +45,7 @@ public class ReservationService {
         Theme theme = themeRepo.findById(reservationRq.getThemeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Theme not found"));
 
-        checkForDuplicateReservation(reservationRq.getDate(), reservationRq.getTimeId());
+        checkForDuplicateReservation(reservationRq.getDate(), reservationRq.getTimeId(), reservationRq.getThemeId());
 
         Reservation reservation = new Reservation(
                 null,
@@ -71,10 +70,10 @@ public class ReservationService {
         reservationRepo.deleteById(id);
     }
 
-    private void checkForDuplicateReservation(LocalDate date, Long timeId) {
-        boolean exists = reservationRepo.existsByDateAndTimeId(date, timeId);
+    private void checkForDuplicateReservation(LocalDate date, Long timeId, Long themeId) {
+        boolean exists = reservationRepo.existsByDateAndTimeIdAndThemeId(date, timeId, themeId);
         if (exists) {
-            throw new DuplicateReservationException("A reservation already exists for this date and time");
+            throw new DuplicateReservationException("A reservation already exists for this date, time, and theme");
         }
     }
 }

@@ -49,11 +49,6 @@ public class ReservationEntityRepository implements ReservationRepository {
     }
 
     @Override
-    public void deleteAllInBatch() {
-        jdbcRepository.deleteAllInBatch();
-    }
-
-    @Override
     public List<Reservation> findAllByTimeId(final ReservationTimeId timeId) {
         return jdbcRepository.findAllByTimeId(timeId).stream()
                 .map(ReservationEntity::toModel)

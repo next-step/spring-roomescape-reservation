@@ -208,26 +208,6 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    void deleteAllInBatch() {
-        // given
-        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
-
-        final Reservation reservation = Reservation.builder()
-                .name(new ReservationGuestName("name"))
-                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
-                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
-                .build();
-        sut.save(reservation);
-
-        sut.deleteAllInBatch();
-
-        final List<Reservation> actual = sut.findAll();
-        assertThat(actual).hasSize(0);
-    }
-
-    @Test
     void findByTimeId() {
         // given
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));

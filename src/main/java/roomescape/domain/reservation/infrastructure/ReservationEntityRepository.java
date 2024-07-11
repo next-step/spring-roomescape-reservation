@@ -6,6 +6,8 @@ import roomescape.domain.reservation.application.ReservationRepository;
 import roomescape.domain.reservation.domain.Reservation;
 import roomescape.domain.reservation.domain.ReservationDate;
 import roomescape.domain.reservation.domain.ReservationGuestName;
+import roomescape.domain.reservation.dto.ReservationId;
+import roomescape.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
 
 import java.util.List;
@@ -31,8 +33,10 @@ public class ReservationEntityRepository implements ReservationRepository {
     }
 
     @Override
-    public Optional<Reservation> findById(final Long reservationId) {
-        return jdbcRepository.findById(reservationId).map(ReservationEntity::toModel);
+    public Reservation getById(final Long reservationId) {
+        return jdbcRepository.findById(reservationId)
+                .map(ReservationEntity::toModel)
+                .orElseThrow(() -> ReservationNotFoundException.from(new ReservationId(reservationId)));
     }
 
     @Override

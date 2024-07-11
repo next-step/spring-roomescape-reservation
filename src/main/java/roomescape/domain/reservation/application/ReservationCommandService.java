@@ -9,7 +9,6 @@ import roomescape.domain.reservation.domain.ReservationDate;
 import roomescape.domain.reservation.domain.ReservationGuestName;
 import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
-import roomescape.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.domain.reservationtime.application.ReservationTimeRepository;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
@@ -41,7 +40,7 @@ public class ReservationCommandService {
     }
 
     public void cancel(final ReservationId reservationId) {
-        final Reservation reservation = getById(reservationId);
+        final Reservation reservation = reservationRepository.getById(reservationId.value());
         final Reservation cancelled = reservation.cancel(clockHolder);
         reservationRepository.save(cancelled);
     }
@@ -61,10 +60,5 @@ public class ReservationCommandService {
         if (!reservation.canceled()) {
             throw DuplicatedReservationException.fromId(ReservationId.from(reservation));
         }
-    }
-
-    public Reservation getById(ReservationId reservationId) {
-        return reservationRepository.findById(reservationId.value())
-                .orElseThrow(() -> ReservationNotFoundException.from(reservationId));
     }
 }

@@ -14,7 +14,7 @@ public interface ReservationRepository {
 
     List<Reservation> findAll();
 
-    Optional<Reservation> findById(Long reservationId);
+    Reservation getById(Long reservationId);
 
     Optional<Reservation> findBy(
             ReservationGuestName name,

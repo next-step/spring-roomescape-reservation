@@ -99,7 +99,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         // then
         assertThat(reservationRepository.findAll()).hasSize(1);
 
-        final Reservation actual = reservationRepository.findById(saved.getId()).get();
+        final Reservation actual = reservationRepository.getById(saved.getId());
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),

@@ -46,7 +46,7 @@ public class ReservationJdbcRepository implements ReservationRepository {
                     .id(rs.getLong("reservation_id"))
                     .name(new ReservationGuestName(rs.getString("name")))
                     .date(new ReservationDate(LocalDate.parse(rs.getString("date"))))
-                    .time(ReservationTimeJdbcRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum))
+                    .time(ReservationTimeJdbcRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum).toModel())
                     .status(ReservationStatus.valueOf(rs.getString("status")))
                     .canceledAt(Objects.isNull(rs.getString("canceled_at")) ? null : LocalDateTime.parse(rs.getString("canceled_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))

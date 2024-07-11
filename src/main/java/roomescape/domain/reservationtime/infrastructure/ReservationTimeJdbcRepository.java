@@ -7,11 +7,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.reservationtime.application.ReservationTimeRepository;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.domain.reservationtime.exception.ReservationTimeException;
-import roomescape.domain.reservationtime.exception.ReservationTimeNotFoundException;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
@@ -24,7 +22,7 @@ import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
 
 @Repository
 @RequiredArgsConstructor
-public class ReservationTimeJdbcRepository implements ReservationTimeRepository {
+public class ReservationTimeJdbcRepository {
 
     public static final String SELECT_RESERVATION_TIME_SQL = """
             select
@@ -33,26 +31,47 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
                 created_at
             from reservation_times""";
 
-    public static final RowMapper<ReservationTime> RESERVATION_TIME_ROW_MAPPER =
-            (rs, rowNum) -> ReservationTime.builder()
-                    .id(new ReservationTimeId(rs.getLong("time_id")))
+    public static final RowMapper<ReservationTimeEntity> RESERVATION_TIME_ROW_MAPPER =
+            (rs, rowNum) -> ReservationTimeEntity.builder()
+                    .id(rs.getLong("time_id"))
                     .startAt(LocalTime.parse(rs.getString("start_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Override
-    public ReservationTime save(final ReservationTime time) {
+    public ReservationTimeEntity save(final ReservationTimeEntity time) {
         if (Objects.isNull(time.getId())) {
             return insertWithKeyHolder(time);
         }
 
         updateAll(time);
-        return getById(time.getId());
+
+        return time;
     }
 
-    private void updateAll(final ReservationTime time) {
+    private ReservationTimeEntity insertWithKeyHolder(final ReservationTimeEntity time) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        String insertSql = "insert into reservation_times (start_at, created_at) values (?, ?)";
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"time_id"});
+            ps.setString(1, toIsoLocal(time.getStartAt()));
+            ps.setString(2, toIsoLocal(time.getCreatedAt()));
+            return ps;
+        }, keyHolder);
+
+        final long generatedId = Objects.requireNonNull(keyHolder.getKey()).longValue();
+
+        return ReservationTimeEntity.builder()
+                .id(generatedId)
+                .startAt(time.getStartAt())
+                .createdAt(time.getCreatedAt())
+                .build();
+    }
+
+    private void updateAll(final ReservationTimeEntity time) {
         final String updateSql = """
                 update reservation_times set
                     start_at = ?,
@@ -63,13 +82,13 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
                 updateSql,
                 toIsoLocal(time.getStartAt()),
                 toIsoLocal(time.getCreatedAt()),
-                time.getIdValue()
+                time.getId()
         );
 
         if (updateCount != 1) {
             throw new ReservationTimeException(
                     "Error occurred while updating ReservationTime where time_id=%d. Affected row is not 1 but %d."
-                            .formatted(time.getIdValue(), updateCount)
+                            .formatted(time.getId(), updateCount)
             );
         }
     }
@@ -95,50 +114,36 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
                 .build();
     }
 
-    @Override
-    public ReservationTime getById(final ReservationTimeId timeId) {
-        return findById(timeId).orElseThrow(() -> ReservationTimeNotFoundException.fromId(timeId));
-    }
-
-    @Override
-    public Optional<ReservationTime> findById(final ReservationTimeId timeId) {
+    public Optional<ReservationTimeEntity> findById(final Long timeId) {
         return queryForReservationTime(
                 generateSelectSqlWithWhereClause("where time_id = ?"),
-                timeId.getValue()
+                timeId
         );
     }
 
-    @Override
-    public List<ReservationTime> findAll() {
+    public List<ReservationTimeEntity> findAll() {
         return jdbcTemplate.query(SELECT_RESERVATION_TIME_SQL, RESERVATION_TIME_ROW_MAPPER);
     }
 
-    @Override
-    public Optional<ReservationTime> findByStartAt(final LocalTime startAt) {
+    public Optional<ReservationTimeEntity> findByStartAt(final LocalTime startAt) {
         return queryForReservationTime(
                 generateSelectSqlWithWhereClause("where start_at = ?"),
                 toIsoLocal(startAt)
         );
     }
 
-    @Override
-    public ReservationTime getByStartAt(final LocalTime startAt) {
-        return findByStartAt(startAt).orElseThrow(() -> ReservationTimeNotFoundException.fromStartAt(startAt));
-    }
-
-    @Override
-    public void delete(final ReservationTimeId timeId) {
+    public void delete(final Long timeId) {
         final String deleteSql = "delete from reservation_times t where t.time_id = ?";
-        jdbcTemplate.update(deleteSql, timeId.getValue());
+        jdbcTemplate.update(deleteSql, timeId);
     }
 
     private String generateSelectSqlWithWhereClause(String whereClause) {
         return SELECT_RESERVATION_TIME_SQL + " " + whereClause;
     }
 
-    private Optional<ReservationTime> queryForReservationTime(final String selectSql, Object... objects) {
+    private Optional<ReservationTimeEntity> queryForReservationTime(final String selectSql, Object... objects) {
         try {
-            final ReservationTime time = jdbcTemplate.queryForObject(
+            final ReservationTimeEntity time = jdbcTemplate.queryForObject(
                     selectSql,
                     RESERVATION_TIME_ROW_MAPPER,
                     objects
@@ -149,7 +154,6 @@ public class ReservationTimeJdbcRepository implements ReservationTimeRepository 
         }
     }
 
-    @Override
     public void deleteAllInBatch() {
         jdbcTemplate.execute("delete from reservation_times");
     }

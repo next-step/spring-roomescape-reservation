@@ -24,7 +24,7 @@ import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcReservationTimeRepository implements ReservationTimeRepository {
+public class ReservationTimeJdbcRepository implements ReservationTimeRepository {
 
     public static final String SELECT_RESERVATION_TIME_SQL = """
             select

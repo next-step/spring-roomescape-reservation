@@ -1,4 +1,4 @@
-package roomescape.domain.reservation.model;
+package roomescape.domain.reservation.domain;
 
 import org.springframework.util.StringUtils;
 

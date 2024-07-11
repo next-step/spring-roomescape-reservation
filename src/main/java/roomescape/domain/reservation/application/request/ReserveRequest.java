@@ -1,4 +1,4 @@
-package roomescape.domain.reservation.service.request;
+package roomescape.domain.reservation.application.request;
 
 import lombok.Builder;
 import lombok.Getter;

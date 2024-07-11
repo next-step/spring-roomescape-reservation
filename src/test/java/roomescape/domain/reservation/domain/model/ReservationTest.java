@@ -2,11 +2,11 @@ package roomescape.domain.reservation.domain.model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDate;
-import roomescape.domain.reservation.model.ReservationGuestName;
-import roomescape.domain.reservation.model.ReservationStatus;
-import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservation.domain.Reservation;
+import roomescape.domain.reservation.domain.ReservationDate;
+import roomescape.domain.reservation.domain.ReservationGuestName;
+import roomescape.domain.reservation.domain.ReservationStatus;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.global.infrastructure.ClockHolder;
 import roomescape.mock.FakeClockHolder;
 

@@ -1,9 +1,9 @@
-package roomescape.domain.reservation.model;
+package roomescape.domain.reservation.domain;
 
 import lombok.Builder;
 import lombok.Getter;
 import roomescape.domain.reservation.exception.ReservationException;
-import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.global.infrastructure.ClockHolder;
 
 import java.time.LocalDate;

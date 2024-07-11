@@ -3,7 +3,6 @@ package roomescape.domain.reservation.api.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.domain.reservation.service.response.ReserveResponse;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

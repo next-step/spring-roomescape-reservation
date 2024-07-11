@@ -1,4 +1,4 @@
-package roomescape.domain.reservationtime.repository;
+package roomescape.domain.reservationtime.infrastructure;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -7,10 +7,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.domain.reservationtime.application.ReservationTimeRepository;
+import roomescape.domain.reservationtime.domain.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.domain.reservationtime.exception.ReservationTimeException;
 import roomescape.domain.reservationtime.exception.ReservationTimeNotFoundException;
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;

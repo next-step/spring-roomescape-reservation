@@ -1,9 +1,9 @@
-package roomescape.domain.reservation.repository;
+package roomescape.domain.reservation.application;
 
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDate;
-import roomescape.domain.reservation.model.ReservationGuestName;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
+import roomescape.domain.reservation.domain.Reservation;
+import roomescape.domain.reservation.domain.ReservationDate;
+import roomescape.domain.reservation.domain.ReservationGuestName;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 
 import java.util.List;
 import java.util.Optional;

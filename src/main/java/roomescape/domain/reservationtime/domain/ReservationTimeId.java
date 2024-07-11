@@ -1,4 +1,4 @@
-package roomescape.domain.reservationtime.model;
+package roomescape.domain.reservationtime.domain;
 
 import lombok.Getter;
 import roomescape.domain.reservationtime.exception.ReservationTimeException;

@@ -1,6 +1,6 @@
 package roomescape.domain.reservation.dto;
 
-import roomescape.domain.reservation.model.Reservation;
+import roomescape.domain.reservation.domain.Reservation;
 
 public record ReservationId(
         Long value

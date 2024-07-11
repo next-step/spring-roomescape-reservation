@@ -2,7 +2,7 @@ package roomescape.domain.reservationtime.api;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
-import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 
 import java.time.LocalTime;
 import java.util.List;

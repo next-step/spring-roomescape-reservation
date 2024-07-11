@@ -2,8 +2,8 @@ package roomescape.domain.reservation.api.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservation.domain.Reservation;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

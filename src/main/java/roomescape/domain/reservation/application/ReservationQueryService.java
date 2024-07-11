@@ -1,9 +1,8 @@
-package roomescape.domain.reservation.service;
+package roomescape.domain.reservation.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.repository.ReservationRepository;
+import roomescape.domain.reservation.domain.Reservation;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package roomescape.domain.reservationtime.service;
+package roomescape.domain.reservationtime.application;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

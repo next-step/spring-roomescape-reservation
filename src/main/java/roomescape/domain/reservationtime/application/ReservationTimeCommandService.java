@@ -1,15 +1,14 @@
-package roomescape.domain.reservationtime.service;
+package roomescape.domain.reservationtime.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.repository.ReservationRepository;
+import roomescape.domain.reservation.application.ReservationRepository;
+import roomescape.domain.reservation.domain.Reservation;
+import roomescape.domain.reservationtime.domain.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.domain.reservationtime.exception.DupliactedReservationTimeException;
 import roomescape.domain.reservationtime.exception.ReservationTimeAlreadyInUse;
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
-import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
 import roomescape.global.infrastructure.ClockHolder;
 
 import java.time.LocalTime;

@@ -3,8 +3,9 @@ package roomescape.domain.reservationtime.repository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
+import roomescape.domain.reservationtime.application.ReservationTimeRepository;
+import roomescape.domain.reservationtime.domain.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.support.IntegrationTestSupport;
 
 import java.time.LocalDateTime;

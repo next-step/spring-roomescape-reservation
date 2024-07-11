@@ -1,7 +1,7 @@
-package roomescape.domain.reservationtime.repository;
+package roomescape.domain.reservationtime.application;
 
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
+import roomescape.domain.reservationtime.domain.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 
 import java.time.LocalTime;
 import java.util.List;

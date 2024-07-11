@@ -1,19 +1,18 @@
-package roomescape.domain.reservation.service;
+package roomescape.domain.reservation.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import roomescape.domain.reservation.api.response.ReserveResponse;
+import roomescape.domain.reservation.application.request.ReserveRequest;
+import roomescape.domain.reservation.domain.Reservation;
+import roomescape.domain.reservation.domain.ReservationDate;
+import roomescape.domain.reservation.domain.ReservationGuestName;
 import roomescape.domain.reservation.dto.ReservationId;
 import roomescape.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.domain.reservation.exception.ReservationNotFoundException;
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.model.ReservationDate;
-import roomescape.domain.reservation.model.ReservationGuestName;
-import roomescape.domain.reservation.repository.ReservationRepository;
-import roomescape.domain.reservation.service.request.ReserveRequest;
-import roomescape.domain.reservation.service.response.ReserveResponse;
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
-import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
+import roomescape.domain.reservationtime.application.ReservationTimeRepository;
+import roomescape.domain.reservationtime.domain.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.global.infrastructure.ClockHolder;
 
 import java.util.Optional;

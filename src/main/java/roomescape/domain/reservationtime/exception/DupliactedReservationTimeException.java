@@ -1,6 +1,6 @@
 package roomescape.domain.reservationtime.exception;
 
-import roomescape.domain.reservationtime.model.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 
 public class DupliactedReservationTimeException extends ReservationTimeException{
 

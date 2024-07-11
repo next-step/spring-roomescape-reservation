@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import roomescape.domain.reservation.api.response.ReservationQueryHttpResponse;
-import roomescape.domain.reservation.model.Reservation;
-import roomescape.domain.reservation.service.ReservationQueryService;
+import roomescape.domain.reservation.application.ReservationQueryService;
+import roomescape.domain.reservation.domain.Reservation;
 
 import java.util.List;
 

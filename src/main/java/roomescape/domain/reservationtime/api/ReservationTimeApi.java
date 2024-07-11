@@ -3,11 +3,11 @@ package roomescape.domain.reservationtime.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.model.ReservationTimeId;
-import roomescape.domain.reservationtime.service.ReservationTimeAppendRequest;
-import roomescape.domain.reservationtime.service.ReservationTimeCommandService;
-import roomescape.domain.reservationtime.service.ReservationTimeQueryService;
+import roomescape.domain.reservationtime.application.ReservationTimeAppendRequest;
+import roomescape.domain.reservationtime.application.ReservationTimeCommandService;
+import roomescape.domain.reservationtime.application.ReservationTimeQueryService;
+import roomescape.domain.reservationtime.domain.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 
 import java.util.List;
 

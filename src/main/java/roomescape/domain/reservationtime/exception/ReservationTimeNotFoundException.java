@@ -1,6 +1,6 @@
 package roomescape.domain.reservationtime.exception;
 
-import roomescape.domain.reservationtime.model.ReservationTimeId;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 
 import java.time.LocalTime;
 

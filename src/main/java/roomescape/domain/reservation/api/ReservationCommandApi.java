@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.reservation.api.response.ReserveHttpResponse;
+import roomescape.domain.reservation.api.response.ReserveResponse;
+import roomescape.domain.reservation.application.ReservationCommandService;
+import roomescape.domain.reservation.application.request.ReserveRequest;
 import roomescape.domain.reservation.dto.ReservationId;
-import roomescape.domain.reservation.service.ReservationCommandService;
-import roomescape.domain.reservation.service.request.ReserveRequest;
-import roomescape.domain.reservation.service.response.ReserveResponse;
 
 @RestController
 @RequiredArgsConstructor

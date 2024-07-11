@@ -5,8 +5,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.reservationtime.model.ReservationTime;
-import roomescape.domain.reservationtime.repository.ReservationTimeRepository;
+import roomescape.domain.reservationtime.application.ReservationTimeRepository;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.support.RestAssuredTestSupport;
 
 import java.time.LocalDateTime;

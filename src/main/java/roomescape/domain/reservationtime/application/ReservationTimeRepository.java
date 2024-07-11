@@ -15,8 +15,6 @@ public interface ReservationTimeRepository {
 
     List<ReservationTime> findAll();
 
-    void deleteAllInBatch();
-
     Optional<ReservationTime> findByStartAt(LocalTime startAt);
 
     ReservationTime getByStartAt(LocalTime startAt);

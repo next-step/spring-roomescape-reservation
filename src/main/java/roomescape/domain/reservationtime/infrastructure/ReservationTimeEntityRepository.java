@@ -39,11 +39,6 @@ public class ReservationTimeEntityRepository implements ReservationTimeRepositor
     }
 
     @Override
-    public void deleteAllInBatch() {
-        jdbcRepository.deleteAllInBatch();
-    }
-
-    @Override
     public Optional<ReservationTime> findByStartAt(final LocalTime startAt) {
         return jdbcRepository.findByStartAt(startAt).map(ReservationTimeEntity::toModel);
     }

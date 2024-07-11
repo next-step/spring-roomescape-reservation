@@ -121,20 +121,6 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    void deleteAllInBatch() {
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        sut.save(time);
-
-        sut.deleteAllInBatch();
-
-        List<ReservationTime> actual = sut.findAll();
-        assertThat(actual).hasSize(0);
-    }
-
-    @Test
     void getByStartAt() {
         // given
         final ReservationTime time = ReservationTime.builder()

@@ -2,17 +2,17 @@ package roomescape.support;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import roomescape.domain.reservation.application.ReservationRepository;
-import roomescape.domain.reservationtime.application.ReservationTimeRepository;
+import roomescape.domain.reservation.infrastructure.ReservationJdbcRepository;
+import roomescape.domain.reservationtime.infrastructure.ReservationTimeJdbcRepository;
 
 @Component
 public class DataCleanser {
 
     @Autowired
-    ReservationTimeRepository reservationTimeRepository;
+    ReservationTimeJdbcRepository reservationTimeRepository;
 
     @Autowired
-    ReservationRepository reservationRepository;
+    ReservationJdbcRepository reservationRepository;
 
     public void clean() {
         reservationRepository.deleteAllInBatch();

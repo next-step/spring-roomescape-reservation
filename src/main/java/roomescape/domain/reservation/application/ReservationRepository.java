@@ -22,7 +22,5 @@ public interface ReservationRepository {
             ReservationTimeId timeId
     );
 
-    void deleteAllInBatch();
-
     List<Reservation> findAllByTimeId(ReservationTimeId timeId);
 }

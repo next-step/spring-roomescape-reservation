@@ -42,6 +42,9 @@ public class ReservationTime {
     }
 
     public Long getIdValue() {
+        if (Objects.isNull(this.id)) {
+            return null;
+        }
         return this.id.getValue();
     }
 

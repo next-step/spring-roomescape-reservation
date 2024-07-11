@@ -13,7 +13,7 @@ import roomescape.domain.reservation.domain.ReservationDate;
 import roomescape.domain.reservation.domain.ReservationGuestName;
 import roomescape.domain.reservation.domain.ReservationStatus;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
-import roomescape.domain.reservationtime.infrastructure.JdbcReservationTimeRepository;
+import roomescape.domain.reservationtime.infrastructure.ReservationTimeJdbcRepository;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
@@ -26,7 +26,7 @@ import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
 
 @Slf4j
 @Repository
-public class JdbcReservationRepository implements ReservationRepository {
+public class ReservationJdbcRepository implements ReservationRepository {
 
     private static final String SELECT_RESERVATION_SQL = """
             select
@@ -46,7 +46,7 @@ public class JdbcReservationRepository implements ReservationRepository {
                     .id(rs.getLong("reservation_id"))
                     .name(new ReservationGuestName(rs.getString("name")))
                     .date(new ReservationDate(LocalDate.parse(rs.getString("date"))))
-                    .time(JdbcReservationTimeRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum))
+                    .time(ReservationTimeJdbcRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum))
                     .status(ReservationStatus.valueOf(rs.getString("status")))
                     .canceledAt(Objects.isNull(rs.getString("canceled_at")) ? null : LocalDateTime.parse(rs.getString("canceled_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))
@@ -54,7 +54,7 @@ public class JdbcReservationRepository implements ReservationRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public JdbcReservationRepository(final JdbcTemplate jdbcTemplate) {
+    public ReservationJdbcRepository(final JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

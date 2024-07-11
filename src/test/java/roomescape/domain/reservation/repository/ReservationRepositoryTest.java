@@ -8,6 +8,7 @@ import roomescape.domain.reservation.domain.Reservation;
 import roomescape.domain.reservation.domain.ReservationDate;
 import roomescape.domain.reservation.domain.ReservationGuestName;
 import roomescape.domain.reservation.domain.ReservationStatus;
+import roomescape.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.domain.reservationtime.application.ReservationTimeRepository;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.support.IntegrationTestSupport;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ReservationRepositoryTest extends IntegrationTestSupport {
@@ -95,7 +97,7 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    void findById() {
+    void getById() {
         // given
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
@@ -109,11 +111,9 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
         final Reservation saved = sut.save(reservation);
 
         // when
-        final Optional<Reservation> actualOpt = sut.findById(saved.getId());
+        final Reservation actual = sut.getById(saved.getId());
 
-        assertThat(actualOpt).isNotEmpty();
-        final Reservation actual = actualOpt.get();
-
+        // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
@@ -125,9 +125,9 @@ class ReservationRepositoryTest extends IntegrationTestSupport {
     }
 
     @Test
-    void findById_empty() {
-        final Optional<Reservation> actual = sut.findById(-3000L);
-        assertThat(actual).isEmpty();
+    void getById_throw_exception_for_invalid_id() {
+        assertThatThrownBy(() -> sut.getById(-3000L))
+                .isInstanceOf(ReservationNotFoundException.class);
     }
 
     @Test

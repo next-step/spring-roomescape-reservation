@@ -13,8 +13,6 @@ public interface ReservationTimeRepository {
 
     ReservationTime getById(ReservationTimeId timeId);
 
-    Optional<ReservationTime> findById(ReservationTimeId timeId);
-
     List<ReservationTime> findAll();
 
     void deleteAllInBatch();

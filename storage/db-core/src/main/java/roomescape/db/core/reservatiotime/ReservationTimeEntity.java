@@ -1,9 +1,9 @@
-package roomescape.domain.reservationtime.infrastructure;
+package roomescape.db.core.reservatiotime;
 
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.domain.reservationtime.domain.ReservationTime;
-import roomescape.domain.reservationtime.domain.ReservationTimeId;
+import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,7 +27,7 @@ public class ReservationTimeEntity {
     }
 
     public static ReservationTimeEntity fromModel(ReservationTime reservationTime) {
-        return ReservationTimeEntity.builder()
+        return builder()
                 .id(reservationTime.getIdValue())
                 .startAt(reservationTime.getStartAt())
                 .createdAt(reservationTime.getCreatedAt())

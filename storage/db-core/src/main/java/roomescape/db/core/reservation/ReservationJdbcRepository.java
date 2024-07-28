@@ -1,4 +1,4 @@
-package roomescape.domain.reservation.infrastructure;
+package roomescape.db.core.reservation;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -7,11 +7,11 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.reservation.domain.ReservationDate;
-import roomescape.domain.reservation.domain.ReservationGuestName;
-import roomescape.domain.reservation.domain.ReservationStatus;
-import roomescape.domain.reservationtime.domain.ReservationTimeId;
-import roomescape.domain.reservationtime.infrastructure.ReservationTimeJdbcRepository;
+import roomescape.core.domain.reservation.ReservationDate;
+import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.reservation.ReservationStatus;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
+import roomescape.db.core.reservatiotime.ReservationTimeJdbcRepository;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
+import static roomescape.db.core.common.utils.DateTimeFormatUtils.toIsoLocal;
+
 
 @Slf4j
 @Repository

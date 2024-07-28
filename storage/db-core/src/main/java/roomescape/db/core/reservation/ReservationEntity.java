@@ -1,12 +1,12 @@
-package roomescape.domain.reservation.infrastructure;
+package roomescape.db.core.reservation;
 
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.domain.reservation.domain.Reservation;
-import roomescape.domain.reservation.domain.ReservationDate;
-import roomescape.domain.reservation.domain.ReservationGuestName;
-import roomescape.domain.reservation.domain.ReservationStatus;
-import roomescape.domain.reservationtime.infrastructure.ReservationTimeEntity;
+import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.domain.reservation.ReservationDate;
+import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.reservation.ReservationStatus;
+import roomescape.db.core.reservatiotime.ReservationTimeEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,7 +42,7 @@ public class ReservationEntity {
     }
 
     public static ReservationEntity fromModel(Reservation reservation) {
-        return ReservationEntity.builder()
+        return builder()
                 .id(reservation.getId())
                 .name(reservation.getName().getValue())
                 .date(reservation.getDate().getValue())

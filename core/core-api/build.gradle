@@ -1,0 +1,20 @@
+bootJar.enabled = true
+jar.enabled = false
+
+dependencies {
+    implementation project(":core:core-domain")
+    implementation project(":web")
+    runtimeOnly project(":storage:db-core")
+    testImplementation project(":storage:db-core")
+
+    // spring boot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // rest assured
+    testImplementation 'io.rest-assured:rest-assured:5.3.1'
+}
+
+tasks.named('compileJava') {
+    dependsOn(':storage:db-core:build')
+}

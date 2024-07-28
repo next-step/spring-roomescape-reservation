@@ -1,6 +1,0 @@
-spring:
-
-  # console color
-  output:
-    ansi:
-      enabled: always

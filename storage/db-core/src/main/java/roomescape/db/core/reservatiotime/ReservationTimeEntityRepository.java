@@ -1,11 +1,11 @@
-package roomescape.domain.reservationtime.infrastructure;
+package roomescape.db.core.reservatiotime;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.reservationtime.application.ReservationTimeRepository;
-import roomescape.domain.reservationtime.domain.ReservationTime;
-import roomescape.domain.reservationtime.domain.ReservationTimeId;
-import roomescape.domain.reservationtime.exception.ReservationTimeNotFoundException;
+import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
+import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.core.domain.reservationtime.exception.ReservationTimeNotFoundException;
 
 import java.time.LocalTime;
 import java.util.List;

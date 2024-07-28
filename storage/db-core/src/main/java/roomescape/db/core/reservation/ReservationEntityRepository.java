@@ -1,14 +1,10 @@
-package roomescape.domain.reservation.infrastructure;
+package roomescape.db.core.reservation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.reservation.application.ReservationRepository;
-import roomescape.domain.reservation.domain.Reservation;
-import roomescape.domain.reservation.domain.ReservationDate;
-import roomescape.domain.reservation.domain.ReservationGuestName;
-import roomescape.domain.reservation.dto.ReservationId;
-import roomescape.domain.reservation.exception.ReservationNotFoundException;
-import roomescape.domain.reservationtime.domain.ReservationTimeId;
+import roomescape.core.domain.reservation.*;
+import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +41,8 @@ public class ReservationEntityRepository implements ReservationRepository {
             final ReservationDate date,
             final ReservationTimeId timeId
     ) {
-        return jdbcRepository.findBy(name, date, timeId).map(ReservationEntity::toModel);
+        return jdbcRepository.findBy(name, date, timeId)
+                .map(ReservationEntity::toModel);
     }
 
     @Override

@@ -1,9 +1,9 @@
-package roomescape.support;
+package roomescape.db.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import roomescape.domain.reservation.infrastructure.ReservationJdbcRepository;
-import roomescape.domain.reservationtime.infrastructure.ReservationTimeJdbcRepository;
+import roomescape.db.core.reservation.ReservationJdbcRepository;
+import roomescape.db.core.reservatiotime.ReservationTimeJdbcRepository;
 
 @Component
 public class DataCleanser {

@@ -1,17 +1,13 @@
-package roomescape.domain.reservation.repository;
+package roomescape.db.core.reservation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.reservation.application.ReservationRepository;
-import roomescape.domain.reservation.domain.Reservation;
-import roomescape.domain.reservation.domain.ReservationDate;
-import roomescape.domain.reservation.domain.ReservationGuestName;
-import roomescape.domain.reservation.domain.ReservationStatus;
-import roomescape.domain.reservation.exception.ReservationNotFoundException;
-import roomescape.domain.reservationtime.application.ReservationTimeRepository;
-import roomescape.domain.reservationtime.domain.ReservationTime;
-import roomescape.support.IntegrationTestSupport;
+import roomescape.core.domain.reservation.*;
+import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
+import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.db.core.ApplicationContextTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-class ReservationRepositoryTest extends IntegrationTestSupport {
+class ReservationRepositoryTest extends ApplicationContextTest {
 
     @Autowired
     ReservationRepository sut;

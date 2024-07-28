@@ -1,4 +1,4 @@
-package roomescape.domain.reservationtime.infrastructure;
+package roomescape.db.core.reservatiotime;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -7,9 +7,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.reservationtime.domain.ReservationTime;
-import roomescape.domain.reservationtime.domain.ReservationTimeId;
-import roomescape.domain.reservationtime.exception.ReservationTimeException;
+import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
+import roomescape.core.domain.reservationtime.exception.ReservationTimeException;
+import roomescape.db.core.common.utils.DateTimeFormatUtils;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
@@ -18,7 +19,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static roomescape.global.utils.DateTimeFormatUtils.toIsoLocal;
+import static roomescape.db.core.common.utils.DateTimeFormatUtils.toIsoLocal;
+
 
 @Repository
 @RequiredArgsConstructor
@@ -128,7 +130,7 @@ public class ReservationTimeJdbcRepository {
     public Optional<ReservationTimeEntity> findByStartAt(final LocalTime startAt) {
         return queryForReservationTime(
                 generateSelectSqlWithWhereClause("where start_at = ?"),
-                toIsoLocal(startAt)
+                DateTimeFormatUtils.toIsoLocal(startAt)
         );
     }
 

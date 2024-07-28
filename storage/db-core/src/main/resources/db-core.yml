@@ -1,13 +1,6 @@
+spring.config.activate.on-profile: local
+
 spring:
-  config:
-    activate:
-      on-profile: local
-
-  # console color
-  output:
-    ansi:
-      enabled: always
-
   # datasource
   datasource:
     url: jdbc:h2:mem:database
@@ -18,11 +11,6 @@ spring:
       mode: always
       schema-locations: classpath:sql/schema.sql
       data-locations: classpath:sql/data.sql
-
-  # devtools
-  devtools:
-    restart:
-      enabled: true
 
 logging:
   level:

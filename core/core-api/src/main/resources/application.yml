@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: core-api
+  config:
+    import:
+      - db-core.yml
+  profiles:
+    active: local
+
+---
+
+spring.config.activate.on-profile: local
+

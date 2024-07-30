@@ -1,4 +1,3 @@
-drop table if exists reservation_times cascade;
 create table reservation_times
 (
     time_id    bigint       not null auto_increment,
@@ -7,8 +6,6 @@ create table reservation_times
     primary key (time_id)
 );
 
-
-drop table if exists reservations cascade;
 create table reservations
 (
     reservation_id bigint       not null auto_increment,
@@ -19,4 +16,13 @@ create table reservations
     canceled_at    varchar(255),
     created_at     varchar(255) not null,
     primary key (reservation_id)
+);
+
+CREATE TABLE themes
+(
+    theme_id          BIGINT       NOT NULL AUTO_INCREMENT,
+    name        VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL,
+    thumbnail   VARCHAR(255) NOT NULL,
+    PRIMARY KEY (theme_id)
 );

@@ -7,8 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.core.domain.reservationtime.ReservationTime;
-import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.core.domain.reservationtime.exception.ReservationTimeException;
 import roomescape.db.core.common.utils.DateTimeFormatUtils;
 
@@ -93,27 +91,6 @@ public class ReservationTimeJdbcRepository {
                             .formatted(time.getId(), updateCount)
             );
         }
-    }
-
-    private ReservationTime insertWithKeyHolder(final ReservationTime time) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        String insertSql = "insert into reservation_times (start_at, created_at) values (?, ?)";
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"time_id"});
-            ps.setString(1, toIsoLocal(time.getStartAt()));
-            ps.setString(2, toIsoLocal(time.getCreatedAt()));
-            return ps;
-        }, keyHolder);
-
-        final long generatedId = Objects.requireNonNull(keyHolder.getKey()).longValue();
-
-        return ReservationTime.builder()
-                .id(new ReservationTimeId(generatedId))
-                .startAt(time.getStartAt())
-                .createdAt(time.getCreatedAt())
-                .build();
     }
 
     public Optional<ReservationTimeEntity> findById(final Long timeId) {

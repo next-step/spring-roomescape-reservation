@@ -2,19 +2,41 @@ package roomescape.db.core.theme;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.core.domain.theme.exception.ThemeException;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
 public class ThemeJdbcRepository {
 
+    public static final String SELECT_ALL_THEME_SQL = """
+            select
+                theme_id,
+                name,
+                description,
+                thumbnail
+            from themes""";
+
+    public static final RowMapper<ThemeEntity> THEME_ENTITY_ROW_MAPPER =
+            (rs, rowNum) -> ThemeEntity.builder()
+                    .themeId(rs.getLong("theme_id"))
+                    .name(rs.getString("name"))
+                    .description(rs.getString("description"))
+                    .thumbnail(rs.getString("thumbnail"))
+                    .build();
+
     private final JdbcTemplate jdbcTemplate;
+
+    public List<ThemeEntity> findAll() {
+        return jdbcTemplate.query(SELECT_ALL_THEME_SQL, THEME_ENTITY_ROW_MAPPER);
+    }
 
     public ThemeEntity save(final ThemeEntity themeEntity) {
         if (Objects.isNull(themeEntity.getThemeId())) {

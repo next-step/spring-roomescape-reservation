@@ -2,6 +2,7 @@ package roomescape.core.api.theme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import roomescape.core.api.theme.service.request.ThemeAppendRequest;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeRepository;
 
@@ -15,5 +16,9 @@ public class ThemeService {
 
     public List<Theme> findAll() {
         return themeRepository.findAll();
+    }
+
+    public Theme appendTheme(final ThemeAppendRequest request) {
+        return themeRepository.save(request.toTheme());
     }
 }

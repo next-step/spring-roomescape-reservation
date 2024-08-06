@@ -3,6 +3,7 @@ package roomescape.db.core.theme;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 import roomescape.core.domain.theme.ThemeRepository;
@@ -28,6 +29,7 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 .name("name")
                 .description("description")
                 .thumbnail("https://thumbnail.com")
+                .activeStatus(ActiveStatus.ACTIVE)
                 .build();
 
         // when
@@ -39,7 +41,8 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 () -> assertThat(actual.getId().value()).isNotNull(),
                 () -> assertThat(actual.getName()).isEqualTo("name"),
                 () -> assertThat(actual.getDescription()).isEqualTo("description"),
-                () -> assertThat(actual.getThumbnail()).isEqualTo("https://thumbnail.com")
+                () -> assertThat(actual.getThumbnail()).isEqualTo("https://thumbnail.com"),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE)
         );
     }
 
@@ -51,6 +54,7 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 .name("name")
                 .description("description")
                 .thumbnail("https://thumbnail.com")
+                .activeStatus(ActiveStatus.ACTIVE)
                 .build();
         final Theme originSaved = sut.save(origin);
 
@@ -59,6 +63,7 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 .name("changed-name")
                 .description("changed-description")
                 .thumbnail("changed-https://thumbnail.com")
+                .activeStatus(ActiveStatus.ACTIVE)
                 .build();
 
         // when
@@ -102,6 +107,7 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 .name("name")
                 .description("description")
                 .thumbnail("https://thumbnail.com")
+                .activeStatus(ActiveStatus.ACTIVE)
                 .build();
         final ThemeId themeId = notSaved.getId();
 
@@ -135,6 +141,7 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .build();
         return sut.save(theme);
     }

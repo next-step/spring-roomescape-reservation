@@ -2,6 +2,7 @@ package roomescape.core.domain.theme;
 
 import lombok.Builder;
 import lombok.Getter;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.theme.exception.ThemeException;
 
 import java.util.Objects;
@@ -14,13 +15,15 @@ public class Theme {
     private final String name;
     private final String description;
     private final String thumbnail;
+    private final ActiveStatus activeStatus;
 
     @Builder
     private Theme(
             final ThemeId id,
             final String name,
             final String description,
-            final String thumbnail
+            final String thumbnail,
+            final ActiveStatus activeStatus
     ) {
         if (Objects.isNull(name)) {
             throw ThemeException.nullField("name");
@@ -31,11 +34,15 @@ public class Theme {
         if (Objects.isNull(thumbnail)) {
             throw ThemeException.nullField("thumbnail");
         }
+        if (Objects.isNull(activeStatus)) {
+            throw ThemeException.nullField("activeStatus");
+        }
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
+        this.activeStatus = activeStatus;
     }
 
     public Optional<Long> getIdValue() {

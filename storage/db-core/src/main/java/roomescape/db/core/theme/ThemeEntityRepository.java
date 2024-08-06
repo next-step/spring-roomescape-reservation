@@ -24,7 +24,7 @@ public class ThemeEntityRepository implements ThemeRepository {
 
     @Override
     public Optional<Theme> findById(final ThemeId themeId) {
-        return Optional.empty();
+        return themeJdbcRepository.findById(themeId.value()).map(ThemeEntity::toModel);
     }
 
     @Override

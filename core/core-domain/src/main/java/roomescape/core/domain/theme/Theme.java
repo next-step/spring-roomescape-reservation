@@ -44,4 +44,17 @@ public class Theme {
         }
         return Optional.of(this.id.value());
     }
+
+    @Override
+    public boolean equals(final Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        final Theme theme = (Theme) object;
+        return Objects.equals(id, theme.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

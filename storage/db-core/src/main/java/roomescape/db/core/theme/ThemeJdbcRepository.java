@@ -1,6 +1,7 @@
 package roomescape.db.core.theme;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -11,6 +12,7 @@ import roomescape.core.domain.theme.exception.ThemeException;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,6 +40,13 @@ public class ThemeJdbcRepository {
         return jdbcTemplate.query(SELECT_ALL_THEME_SQL, THEME_ENTITY_ROW_MAPPER);
     }
 
+    public Optional<ThemeEntity> findById(final Long themeId) {
+        if (Objects.isNull(themeId)) {
+            return Optional.empty();
+        }
+        return queryForThemeEntity(SELECT_ALL_THEME_SQL + " where theme_id = ? ", themeId);
+    }
+
     public ThemeEntity save(final ThemeEntity themeEntity) {
         if (Objects.isNull(themeEntity.getThemeId())) {
             return insertWithKeyHolder(themeEntity);
@@ -46,6 +55,19 @@ public class ThemeJdbcRepository {
         updateAll(themeEntity);
 
         return themeEntity;
+    }
+
+    private Optional<ThemeEntity> queryForThemeEntity(final String selectSql, Object... objects) {
+        try {
+            final ThemeEntity themeEntity = jdbcTemplate.queryForObject(
+                    selectSql,
+                    THEME_ENTITY_ROW_MAPPER,
+                    objects
+            );
+            return Optional.ofNullable(themeEntity);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     private ThemeEntity insertWithKeyHolder(final ThemeEntity themeEntity) {

@@ -1,0 +1,28 @@
+package roomescape.core.api.theme.service.request;
+
+import lombok.Builder;
+import lombok.Getter;
+import roomescape.core.domain.theme.Theme;
+
+@Getter
+public class ThemeAppendRequest {
+
+    private final String name;
+    private final String description;
+    private final String thumbnail;
+
+    @Builder
+    private ThemeAppendRequest(final String name, final String description, final String thumbnail) {
+        this.name = name;
+        this.description = description;
+        this.thumbnail = thumbnail;
+    }
+
+    public Theme toTheme() {
+        return Theme.builder()
+                .name(this.name)
+                .description(this.description)
+                .thumbnail(this.thumbnail)
+                .build();
+    }
+}

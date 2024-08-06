@@ -29,6 +29,8 @@ public class ThemeEntityRepository implements ThemeRepository {
 
     @Override
     public List<Theme> findAll() {
-        return null;
+        return themeJdbcRepository.findAll().stream()
+                .map(ThemeEntity::toModel)
+                .toList();
     }
 }

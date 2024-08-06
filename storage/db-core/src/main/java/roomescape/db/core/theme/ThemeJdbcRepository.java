@@ -99,4 +99,8 @@ public class ThemeJdbcRepository {
             );
         }
     }
+
+    public void deleteAllInBatch() {
+        jdbcTemplate.execute("delete from themes");
+    }
 }

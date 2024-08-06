@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.theme.exception.ThemeException;
 
 import java.sql.PreparedStatement;
@@ -23,7 +24,8 @@ public class ThemeJdbcRepository {
                 theme_id,
                 name,
                 description,
-                thumbnail
+                thumbnail,
+                active_status
             from themes""";
 
     public static final RowMapper<ThemeEntity> THEME_ENTITY_ROW_MAPPER =
@@ -32,6 +34,7 @@ public class ThemeJdbcRepository {
                     .name(rs.getString("name"))
                     .description(rs.getString("description"))
                     .thumbnail(rs.getString("thumbnail"))
+                    .activeStatus(ActiveStatus.valueOf(rs.getString("active_status")))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
@@ -77,14 +80,16 @@ public class ThemeJdbcRepository {
                 insert into themes (
                     name,
                     description,
-                    thumbnail
-                ) values (?, ?, ?)""";
+                    thumbnail,
+                    active_status
+                ) values (?, ?, ?, ?)""";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"theme_id"});
             ps.setString(1, themeEntity.getName());
             ps.setString(2, themeEntity.getDescription());
             ps.setString(3, themeEntity.getThumbnail());
+            ps.setString(4, themeEntity.getActiveStatus().name());
             return ps;
         }, keyHolder);
 
@@ -95,6 +100,7 @@ public class ThemeJdbcRepository {
                 .name(themeEntity.getName())
                 .description(themeEntity.getDescription())
                 .thumbnail(themeEntity.getThumbnail())
+                .activeStatus(themeEntity.getActiveStatus())
                 .build();
     }
 
@@ -103,7 +109,8 @@ public class ThemeJdbcRepository {
                 update themes set
                     name = ?,
                     description = ?, 
-                    thumbnail = ? 
+                    thumbnail = ?,
+                    active_status = ? 
                 where theme_id = ?""";
 
         final int updatedRowCount = jdbcTemplate.update(
@@ -111,6 +118,8 @@ public class ThemeJdbcRepository {
                 themeEntity.getName(),
                 themeEntity.getDescription(),
                 themeEntity.getThumbnail(),
+                themeEntity.getActiveStatus().name(),
+
                 themeEntity.getThemeId()
         );
 

@@ -19,10 +19,10 @@ public class ThemeAppendRequest {
     }
 
     public Theme toTheme() {
-        return Theme.builder()
-                .name(this.name)
-                .description(this.description)
-                .thumbnail(this.thumbnail)
-                .build();
+        return Theme.defaultOf(
+                this.name,
+                this.description,
+                this.thumbnail
+        );
     }
 }

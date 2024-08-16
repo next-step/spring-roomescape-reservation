@@ -82,7 +82,7 @@ class ThemeRepositoryTest extends ApplicationContextTest {
     @Test
     void findById_exists() {
         // given
-        final Theme themeSaved = saveTheme("name1", "description1", "https://thumbnail.com1");
+        final Theme themeSaved = saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
         final ThemeId themeId = themeSaved.getId();
 
         // when
@@ -121,8 +121,8 @@ class ThemeRepositoryTest extends ApplicationContextTest {
     @Test
     void findAll() {
         // given
-        saveTheme("name1", "description1", "https://thumbnail.com1");
-        saveTheme("name2", "description2", "https://thumbnail.com2");
+        saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
+        saveTheme("name2", "description2", "https://thumbnail.com2", ActiveStatus.ACTIVE);
 
         // when
         final List<Theme> actual = sut.findAll();
@@ -136,12 +136,12 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 );
     }
 
-    private Theme saveTheme(String name, String description, String thumbnail) {
+    private Theme saveTheme(String name, String description, String thumbnail, ActiveStatus activeStatus) {
         final Theme theme = Theme.builder()
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
-                .activeStatus(ActiveStatus.ACTIVE)
+                .activeStatus(activeStatus)
                 .build();
         return sut.save(theme);
     }

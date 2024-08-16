@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import roomescape.core.api.theme.service.request.ThemeAppendRequest;
 import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeId;
 import roomescape.core.domain.theme.ThemeRepository;
 
 import java.util.List;
@@ -20,5 +21,11 @@ public class ThemeService {
 
     public Theme appendTheme(final ThemeAppendRequest request) {
         return themeRepository.save(request.toTheme());
+    }
+
+    public void deleteTheme(final ThemeId themeId) {
+        final Theme theme = themeRepository.getById(themeId);
+        final Theme deleted = theme.delete();
+        themeRepository.save(deleted);
     }
 }

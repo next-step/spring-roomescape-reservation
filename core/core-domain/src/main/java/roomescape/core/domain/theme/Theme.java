@@ -58,6 +58,16 @@ public class Theme {
                 .build();
     }
 
+    public Theme delete() {
+        return Theme.builder()
+                .id(this.id)
+                .name(this.name)
+                .description(this.description)
+                .thumbnail(this.thumbnail)
+                .activeStatus(ActiveStatus.DELETED)
+                .build();
+    }
+
     public Optional<Long> getIdValue() {
         if (Objects.isNull(this.id)) {
             return Optional.empty();

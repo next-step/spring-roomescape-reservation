@@ -2,15 +2,13 @@ package roomescape.core.api.theme.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import roomescape.core.api.theme.api.request.ThemeAppendHttpRequest;
 import roomescape.core.api.theme.api.response.ThemeAppendResponse;
 import roomescape.core.api.theme.api.response.ThemeQueryResponse;
 import roomescape.core.api.theme.service.ThemeService;
 import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeId;
 
 import java.util.List;
 
@@ -34,5 +32,11 @@ public class ThemeApi {
     ) {
         final Theme theme = themeService.appendTheme(request.toServiceRequest());
         return ResponseEntity.ok().body(ThemeAppendResponse.fromTheme(theme));
+    }
+
+    @DeleteMapping("/themes/{themeId}")
+    public ResponseEntity<Void> deleteTheme(@PathVariable Long themeId) {
+        themeService.deleteTheme(new ThemeId(themeId));
+        return ResponseEntity.noContent().build();
     }
 }

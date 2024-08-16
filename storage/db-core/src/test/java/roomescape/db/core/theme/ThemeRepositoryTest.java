@@ -136,6 +136,23 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 );
     }
 
+    @Test
+    void findNotDeletedThemes() {
+        // given
+        saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
+        saveTheme("name2", "description2", "https://thumbnail.com2", ActiveStatus.DELETED);
+
+        // when
+        final List<Theme> actual = sut.findNotDeletedThemes();
+
+        // then
+        assertThat(actual).hasSize(1)
+                .extracting("name", "description", "thumbnail")
+                .containsOnly(
+                        tuple("name1", "description1", "https://thumbnail.com1")
+                );
+    }
+
     private Theme saveTheme(String name, String description, String thumbnail, ActiveStatus activeStatus) {
         final Theme theme = Theme.builder()
                 .name(name)

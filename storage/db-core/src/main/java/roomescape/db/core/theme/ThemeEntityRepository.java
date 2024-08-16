@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 import roomescape.core.domain.theme.ThemeRepository;
+import roomescape.core.domain.theme.exception.ThemeNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +33,10 @@ public class ThemeEntityRepository implements ThemeRepository {
         return themeJdbcRepository.findAll().stream()
                 .map(ThemeEntity::toModel)
                 .toList();
+    }
+
+    @Override
+    public Theme getById(final ThemeId themeId) {
+        return findById(themeId).orElseThrow(() -> ThemeNotFoundException.from(themeId));
     }
 }

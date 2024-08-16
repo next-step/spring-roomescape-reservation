@@ -45,6 +45,19 @@ public class Theme {
         this.activeStatus = activeStatus;
     }
 
+    public static Theme defaultOf(
+            final String name,
+            final String description,
+            final String thumbnail
+    ) {
+        return Theme.builder()
+                .name(name)
+                .description(description)
+                .thumbnail(thumbnail)
+                .activeStatus(ActiveStatus.ACTIVE)
+                .build();
+    }
+
     public Optional<Long> getIdValue() {
         if (Objects.isNull(this.id)) {
             return Optional.empty();

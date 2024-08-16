@@ -16,7 +16,7 @@ public class ThemeService {
     private final ThemeRepository themeRepository;
 
     public List<Theme> findAll() {
-        return themeRepository.findAll();
+        return themeRepository.findNotDeletedThemes();
     }
 
     public Theme appendTheme(final ThemeAppendRequest request) {

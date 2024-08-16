@@ -50,6 +50,10 @@ public class ThemeJdbcRepository {
         return queryForThemeEntity(SELECT_ALL_THEME_SQL + " where theme_id = ? ", themeId);
     }
 
+    public List<ThemeEntity> findAllByActiveStatus(final ActiveStatus activeStatus) {
+        return queryForThemeEntities(SELECT_ALL_THEME_SQL + " where active_status = ? ", activeStatus.name());
+    }
+
     public ThemeEntity save(final ThemeEntity themeEntity) {
         if (Objects.isNull(themeEntity.getThemeId())) {
             return insertWithKeyHolder(themeEntity);
@@ -72,6 +76,11 @@ public class ThemeJdbcRepository {
             return Optional.empty();
         }
     }
+
+    private List<ThemeEntity> queryForThemeEntities(final String selectSql, Object... objects) {
+        return jdbcTemplate.query(selectSql, THEME_ENTITY_ROW_MAPPER, objects);
+    }
+
 
     private ThemeEntity insertWithKeyHolder(final ThemeEntity themeEntity) {
         final KeyHolder keyHolder = new GeneratedKeyHolder();

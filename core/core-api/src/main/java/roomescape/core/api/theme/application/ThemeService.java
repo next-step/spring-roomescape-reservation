@@ -1,8 +1,8 @@
-package roomescape.core.api.theme.service;
+package roomescape.core.api.theme.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import roomescape.core.api.theme.service.request.ThemeAppendRequest;
+import roomescape.core.api.theme.application.request.ThemeAppendRequest;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 import roomescape.core.domain.theme.ThemeRepository;

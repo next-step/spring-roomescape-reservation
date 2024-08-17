@@ -1,7 +1,7 @@
 package roomescape.core.api.theme.api.request;
 
 import lombok.Getter;
-import roomescape.core.api.theme.service.request.ThemeAppendRequest;
+import roomescape.core.api.theme.application.request.ThemeAppendRequest;
 
 @Getter
 public class ThemeAppendHttpRequest {

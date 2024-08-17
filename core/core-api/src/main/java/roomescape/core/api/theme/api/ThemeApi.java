@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import roomescape.core.api.theme.api.request.ThemeAppendHttpRequest;
 import roomescape.core.api.theme.api.response.ThemeAppendResponse;
 import roomescape.core.api.theme.api.response.ThemeQueryResponse;
-import roomescape.core.api.theme.service.ThemeService;
+import roomescape.core.api.theme.application.ThemeService;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 

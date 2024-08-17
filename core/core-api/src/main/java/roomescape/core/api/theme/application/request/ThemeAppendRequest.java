@@ -1,4 +1,4 @@
-package roomescape.core.api.theme.service.request;
+package roomescape.core.api.theme.application.request;
 
 import lombok.Builder;
 import lombok.Getter;

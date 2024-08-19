@@ -38,7 +38,7 @@ public class ReservationCommandService {
 
     public void cancel(final ReservationId reservationId) {
         final Reservation reservation = reservationRepository.getById(reservationId.value());
-        final Reservation cancelled = reservation.cancel(clockHolder);
+        final Reservation cancelled = reservation.delete(clockHolder);
         reservationRepository.save(cancelled);
     }
 

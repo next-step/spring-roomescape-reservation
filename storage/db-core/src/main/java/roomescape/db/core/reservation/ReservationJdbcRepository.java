@@ -7,9 +7,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.ReservationDate;
 import roomescape.core.domain.reservation.ReservationGuestName;
-import roomescape.core.domain.reservation.ReservationStatus;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.db.core.reservatiotime.ReservationTimeJdbcRepository;
 
@@ -32,8 +32,8 @@ public class ReservationJdbcRepository {
                 r.reservation_id,
                 r.name,
                 r.date,
-                r.status,
-                r.canceled_at,
+                r.active_status,
+                r.deleted_at,
                 r.created_at,
                 t.time_id,
                 t.start_at
@@ -46,8 +46,8 @@ public class ReservationJdbcRepository {
                     .name(rs.getString("name"))
                     .date(LocalDate.parse(rs.getString("date")))
                     .time(ReservationTimeJdbcRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum))
-                    .status(ReservationStatus.valueOf(rs.getString("status")))
-                    .canceledAt(Objects.isNull(rs.getString("canceled_at")) ? null : LocalDateTime.parse(rs.getString("canceled_at")))
+                    .activeStatus(ActiveStatus.valueOf(rs.getString("active_status")))
+                    .deletedAt(Objects.isNull(rs.getString("deleted_at")) ? null : LocalDateTime.parse(rs.getString("deleted_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))
                     .build();
 
@@ -71,8 +71,8 @@ public class ReservationJdbcRepository {
                     name = ?,
                     date = ?,
                     time_id = ?,
-                    status = ?,
-                    canceled_at = ?,
+                    active_status = ?,
+                    deleted_at = ?,
                     created_at = ?
                 where reservation_id = ?""";
 
@@ -80,8 +80,8 @@ public class ReservationJdbcRepository {
                 reservation.getName(),
                 toIsoLocal(reservation.getDate()),
                 reservation.getTime().getId(),
-                reservation.getStatus().name(),
-                Objects.isNull(reservation.getCanceledAt()) ? null : toIsoLocal(reservation.getCanceledAt()),
+                reservation.getActiveStatus().name(),
+                Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()),
                 toIsoLocal(reservation.getCreatedAt()),
                 reservation.getId()
         );
@@ -97,8 +97,8 @@ public class ReservationJdbcRepository {
                     name,
                     date,
                     time_id,
-                    status,
-                    canceled_at,
+                    active_status,
+                    deleted_at,
                     created_at
                 ) values (?, ?, ?, ?, ?, ?)""";
 
@@ -107,8 +107,8 @@ public class ReservationJdbcRepository {
             ps.setString(1, reservation.getName());
             ps.setString(2, toIsoLocal(reservation.getDate()));
             ps.setLong(3, reservation.getTime().getId());
-            ps.setString(4, reservation.getStatus().name());
-            ps.setString(5, Objects.isNull(reservation.getCanceledAt()) ? null : toIsoLocal(reservation.getCanceledAt()));
+            ps.setString(4, reservation.getActiveStatus().name());
+            ps.setString(5, Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()));
             ps.setString(6, toIsoLocal(reservation.getCreatedAt()));
             return ps;
         }, keyHolder);
@@ -120,8 +120,8 @@ public class ReservationJdbcRepository {
                 .name(reservation.getName())
                 .date(reservation.getDate())
                 .time(reservation.getTime())
-                .status(reservation.getStatus())
-                .canceledAt(reservation.getCanceledAt())
+                .activeStatus(reservation.getActiveStatus())
+                .deletedAt(reservation.getDeletedAt())
                 .createdAt(reservation.getCreatedAt())
                 .build();
     }

@@ -3,6 +3,7 @@ package roomescape.core.domain.reservation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.mock.FakeClockHolder;
 import roomescape.core.domain.reservationtime.ReservationTime;
@@ -33,7 +34,7 @@ class ReservationTest {
         );
 
         assertAll(
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0))
@@ -41,7 +42,7 @@ class ReservationTest {
     }
 
     @Test
-    void cancel() {
+    void delete() {
         // given
         final Reservation sut = Reservation.builder()
                 .id(1L)
@@ -50,14 +51,14 @@ class ReservationTest {
                 .time(ReservationTime.builder().startAt(LocalTime.of(12, 0))
                         .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                         .build())
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
 
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
 
         // when
-        final Reservation actual = sut.cancel(clockHolder);
+        final Reservation actual = sut.delete(clockHolder);
 
         // then
         assertAll(
@@ -65,8 +66,8 @@ class ReservationTest {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
-                () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED),
+                () -> assertThat(actual.getDeletedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
         );
     }

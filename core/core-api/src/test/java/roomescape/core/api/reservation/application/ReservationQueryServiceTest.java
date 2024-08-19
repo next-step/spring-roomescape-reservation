@@ -4,7 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.core.api.support.IntegrationTestSupport;
-import roomescape.core.domain.reservation.*;
+import roomescape.core.domain.common.ActiveStatus;
+import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.domain.reservation.ReservationDate;
+import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.reservation.ReservationRepository;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
 
@@ -27,7 +31,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     ReservationTimeRepository timeRepository;
 
-    @DisplayName("예약 전체 조회 시 확정된 예약만 조회된다.")
+    @DisplayName("예약 전체 조회 시 활성화 상태인 예약만 조회된다.")
     @Test
     void fetchAll() {
         // given
@@ -41,7 +45,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("confirmed"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 8)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         reservationRepository.save(confirmed);
@@ -50,7 +54,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("canceled"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CANCELED)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2023, 6, 4, 12, 0))
                 .build();
         reservationRepository.save(canceled);

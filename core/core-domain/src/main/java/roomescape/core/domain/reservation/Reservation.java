@@ -2,6 +2,7 @@ package roomescape.core.domain.reservation;
 
 import lombok.Builder;
 import lombok.Getter;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.reservation.exception.ReservationException;
 import roomescape.core.domain.reservationtime.ReservationTime;
@@ -18,8 +19,8 @@ public class Reservation {
     private final ReservationGuestName name;
     private final ReservationDate date;
     private final ReservationTime time;
-    private final ReservationStatus status;
-    private final LocalDateTime canceledAt;
+    private final ActiveStatus activeStatus;
+    private final LocalDateTime deletedAt;
     private final LocalDateTime createdAt;
 
     @Builder
@@ -28,8 +29,8 @@ public class Reservation {
             final ReservationGuestName name,
             final ReservationDate date,
             final ReservationTime time,
-            final ReservationStatus status,
-            final LocalDateTime canceledAt,
+            final ActiveStatus activeStatus,
+            final LocalDateTime deletedAt,
             final LocalDateTime createdAt
     ) {
         if (Objects.isNull(name)) {
@@ -41,8 +42,8 @@ public class Reservation {
         if (Objects.isNull(time)) {
             throw ReservationException.nullField("time");
         }
-        if (Objects.isNull(status)) {
-            throw ReservationException.nullField("status");
+        if (Objects.isNull(activeStatus)) {
+            throw ReservationException.nullField("activeStatus");
         }
         if (Objects.isNull(createdAt)) {
             throw ReservationException.nullField("createdAt");
@@ -52,8 +53,8 @@ public class Reservation {
         this.name = name;
         this.date = date;
         this.time = time;
-        this.status = status;
-        this.canceledAt = canceledAt;
+        this.activeStatus = activeStatus;
+        this.deletedAt = deletedAt;
         this.createdAt = createdAt;
     }
 
@@ -67,20 +68,20 @@ public class Reservation {
                 .name(name)
                 .date(date)
                 .time(time)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(clockHolder.getCurrentSeoulTime())
                 .build();
     }
 
-    public Reservation cancel(final ClockHolder clockHolder) {
-        return builder()
+    public Reservation delete(final ClockHolder clockHolder) {
+        return Reservation.builder()
                 .id(this.id)
                 .name(this.name)
                 .date(this.date)
                 .time(this.time)
-                .status(ReservationStatus.CANCELED)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(this.createdAt)
-                .canceledAt(clockHolder.getCurrentSeoulTime())
+                .deletedAt(clockHolder.getCurrentSeoulTime())
                 .build();
     }
 
@@ -93,11 +94,11 @@ public class Reservation {
     }
 
     public boolean isActive() {
-        return !canceled();
+        return this.activeStatus == ActiveStatus.ACTIVE;
     }
 
     public boolean canceled() {
-        return this.status.isCanceled();
+        return this.activeStatus == ActiveStatus.DELETED;
     }
 
     @Override

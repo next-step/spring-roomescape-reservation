@@ -5,7 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.core.api.support.IntegrationTestSupport;
-import roomescape.core.domain.reservation.*;
+import roomescape.core.domain.common.ActiveStatus;
+import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.domain.reservation.ReservationDate;
+import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.reservation.ReservationRepository;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
 import roomescape.core.domain.reservationtime.exception.DupliactedReservationTimeException;
@@ -96,7 +100,7 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         final Reservation savedReservation = reservationRepository.save(reservation);
@@ -124,7 +128,7 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CANCELED)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         reservationRepository.save(reservation);

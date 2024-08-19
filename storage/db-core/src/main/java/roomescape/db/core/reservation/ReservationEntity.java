@@ -2,10 +2,10 @@ package roomescape.db.core.reservation;
 
 import lombok.Builder;
 import lombok.Getter;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.Reservation;
 import roomescape.core.domain.reservation.ReservationDate;
 import roomescape.core.domain.reservation.ReservationGuestName;
-import roomescape.core.domain.reservation.ReservationStatus;
 import roomescape.db.core.reservatiotime.ReservationTimeEntity;
 
 import java.time.LocalDate;
@@ -18,8 +18,8 @@ public class ReservationEntity {
     private final String name;
     private final LocalDate date;
     private final ReservationTimeEntity time;
-    private final ReservationStatus status;
-    private final LocalDateTime canceledAt;
+    private final ActiveStatus activeStatus;
+    private final LocalDateTime deletedAt;
     private final LocalDateTime createdAt;
 
     @Builder
@@ -28,16 +28,16 @@ public class ReservationEntity {
             final String name,
             final LocalDate date,
             final ReservationTimeEntity time,
-            final ReservationStatus status,
-            final LocalDateTime canceledAt,
+            final ActiveStatus activeStatus,
+            final LocalDateTime deletedAt,
             final LocalDateTime createdAt
     ) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.time = time;
-        this.status = status;
-        this.canceledAt = canceledAt;
+        this.activeStatus = activeStatus;
+        this.deletedAt = deletedAt;
         this.createdAt = createdAt;
     }
 
@@ -47,8 +47,8 @@ public class ReservationEntity {
                 .name(reservation.getName().getValue())
                 .date(reservation.getDate().getValue())
                 .time(ReservationTimeEntity.fromModel(reservation.getTime()))
-                .status(reservation.getStatus())
-                .canceledAt(reservation.getCanceledAt())
+                .activeStatus(reservation.getActiveStatus())
+                .deletedAt(reservation.getDeletedAt())
                 .createdAt(reservation.getCreatedAt())
                 .build();
     }
@@ -59,8 +59,8 @@ public class ReservationEntity {
                 .name(new ReservationGuestName(this.name))
                 .date(new ReservationDate(this.date))
                 .time(this.time.toModel())
-                .status(this.status)
-                .canceledAt(this.canceledAt)
+                .activeStatus(this.activeStatus)
+                .deletedAt(this.deletedAt)
                 .createdAt(this.createdAt)
                 .build();
     }

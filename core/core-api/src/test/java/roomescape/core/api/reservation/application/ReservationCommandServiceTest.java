@@ -8,6 +8,7 @@ import roomescape.core.api.mock.FakeClockHolder;
 import roomescape.core.api.reservation.api.response.ReserveResponse;
 import roomescape.core.api.reservation.application.request.ReserveRequest;
 import roomescape.core.api.support.IntegrationTestSupport;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.reservation.*;
 import roomescape.core.domain.reservation.exception.DuplicatedReservationException;
@@ -75,7 +76,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         final Reservation saved = reservationRepository.save(reservation);
@@ -98,8 +99,8 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
-                () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED),
+                () -> assertThat(actual.getDeletedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
         );
     }
@@ -118,7 +119,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);
@@ -149,7 +150,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CANCELED)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);

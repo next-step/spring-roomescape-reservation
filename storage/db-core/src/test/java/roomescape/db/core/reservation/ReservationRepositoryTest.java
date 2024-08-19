@@ -3,7 +3,11 @@ package roomescape.db.core.reservation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.core.domain.reservation.*;
+import roomescape.core.domain.common.ActiveStatus;
+import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.domain.reservation.ReservationDate;
+import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.reservation.ReservationRepository;
 import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
@@ -36,7 +40,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
 
@@ -49,7 +53,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
     }
@@ -64,7 +68,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         final Reservation saved = sut.save(reservation);
@@ -74,7 +78,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("new-name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CANCELED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
 
@@ -87,7 +91,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("new-name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 6, 4, 12, 0))
         );
     }
@@ -101,7 +105,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         final Reservation saved = sut.save(reservation);
@@ -115,7 +119,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
     }
@@ -134,7 +138,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(time)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(reservation);
@@ -155,7 +159,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
-                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
+                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
     }
@@ -177,7 +181,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("r1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(r1);
@@ -186,7 +190,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("r2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CANCELED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
         sut.save(r2);
@@ -212,7 +216,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(reservation);
@@ -221,7 +225,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
-                .status(ReservationStatus.CONFIRMED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(reservation2);

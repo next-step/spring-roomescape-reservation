@@ -14,6 +14,8 @@ import roomescape.core.domain.reservation.*;
 import roomescape.core.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,6 +36,9 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
     @Autowired
     ReservationTimeRepository timeRepository;
 
+    @Autowired
+    ThemeRepository themeRepository;
+
     @DisplayName("예약 정보로 예약을 생성한다.")
     @Test
     void reserve() {
@@ -43,11 +48,13 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         final ReservationTime savedTime = timeRepository.save(time);
+        final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 8))
                 .timeId(savedTime.getIdValue())
+                .themeId(themeSaved.getId().value())
                 .build();
 
         // when
@@ -72,10 +79,13 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .build();
         final ReservationTime savedTime = timeRepository.save(time);
 
+        final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
+                .themeId(themeSaved.getId())
                 .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
@@ -85,6 +95,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         final ReservationCommandService sut = new ReservationCommandService(
                 reservationRepository,
                 timeRepository,
+                themeRepository,
                 clockHolder
         );
 
@@ -115,10 +126,13 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .build();
         final ReservationTime savedTime = timeRepository.save(time);
 
+        final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
+
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
+                .themeId(themeSaved.getId())
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
@@ -128,6 +142,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 23))
                 .timeId(savedTime.getIdValue())
+                .themeId(themeSaved.getId().value())
                 .build();
 
         // when & then
@@ -144,12 +159,14 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         final ReservationTime savedTime = timeRepository.save(time);
+        final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final Reservation reservation = Reservation.builder()
                 .id(1L)
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
+                .themeId(themeSaved.getId())
                 .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
@@ -159,9 +176,21 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 23))
                 .timeId(savedTime.getIdValue())
+                .themeId(themeSaved.getId().value())
                 .build();
 
         // when & then
         Assertions.assertDoesNotThrow(() -> sut.reserve(request));
+    }
+
+    private Theme saveTheme(String name, String thumbnail, String description) {
+        final Theme theme = Theme.builder()
+                .name(name)
+                .thumbnail(thumbnail)
+                .description(description)
+                .activeStatus(ActiveStatus.ACTIVE)
+                .build();
+
+        return themeRepository.save(theme);
     }
 }

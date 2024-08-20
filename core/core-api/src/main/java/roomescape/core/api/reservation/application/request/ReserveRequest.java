@@ -13,15 +13,17 @@ public class ReserveRequest {
     private String name;
     private LocalDate date;
     private Long timeId;
+    private Long themeId;
 
     public ReserveRequest() {
     }
 
     @Builder
-    private ReserveRequest(final String name, final LocalDate date, final Long timeId) {
+    private ReserveRequest(final String name, final LocalDate date, final Long timeId, final Long themeId) {
         this.name = name;
         this.date = date;
         this.timeId = timeId;
+        this.themeId = themeId;
     }
 
     public void validateAllFieldsExist() {
@@ -33,6 +35,9 @@ public class ReserveRequest {
         }
         if (Objects.isNull(this.timeId)) {
             throw ReservationException.nullField("time");
+        }
+        if (Objects.isNull(this.themeId)) {
+            throw ReservationException.nullField("themeId");
         }
     }
 }

@@ -30,6 +30,7 @@ public class ReservationJdbcRepository {
     private static final String SELECT_RESERVATION_SQL = """
             select
                 r.reservation_id,
+                r.theme_id,
                 r.name,
                 r.date,
                 r.active_status,
@@ -43,6 +44,7 @@ public class ReservationJdbcRepository {
     private static final RowMapper<ReservationEntity> RESERVATION_ROW_MAPPER = (rs, rowNum) ->
             ReservationEntity.builder()
                     .id(rs.getLong("reservation_id"))
+                    .themeId(rs.getLong("theme_id"))
                     .name(rs.getString("name"))
                     .date(LocalDate.parse(rs.getString("date")))
                     .time(ReservationTimeJdbcRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum))
@@ -68,6 +70,7 @@ public class ReservationJdbcRepository {
     private ReservationEntity updateAll(final ReservationEntity reservation) {
         String updateSql = """
                 update reservations set
+                    theme_id = ?,
                     name = ?,
                     date = ?,
                     time_id = ?,
@@ -77,6 +80,7 @@ public class ReservationJdbcRepository {
                 where reservation_id = ?""";
 
         jdbcTemplate.update(updateSql,
+                reservation.getThemeId(),
                 reservation.getName(),
                 toIsoLocal(reservation.getDate()),
                 reservation.getTime().getId(),
@@ -94,22 +98,24 @@ public class ReservationJdbcRepository {
 
         final String insertSql = """
                 insert into reservations (
+                    theme_id,
                     name,
                     date,
                     time_id,
                     active_status,
                     deleted_at,
                     created_at
-                ) values (?, ?, ?, ?, ?, ?)""";
+                ) values (?, ?, ?, ?, ?, ?, ?)""";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"reservation_id"});
-            ps.setString(1, reservation.getName());
-            ps.setString(2, toIsoLocal(reservation.getDate()));
-            ps.setLong(3, reservation.getTime().getId());
-            ps.setString(4, reservation.getActiveStatus().name());
-            ps.setString(5, Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()));
-            ps.setString(6, toIsoLocal(reservation.getCreatedAt()));
+            ps.setLong(1, reservation.getThemeId());
+            ps.setString(2, reservation.getName());
+            ps.setString(3, toIsoLocal(reservation.getDate()));
+            ps.setLong(4, reservation.getTime().getId());
+            ps.setString(5, reservation.getActiveStatus().name());
+            ps.setString(6, Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()));
+            ps.setString(7, toIsoLocal(reservation.getCreatedAt()));
             return ps;
         }, keyHolder);
 
@@ -117,6 +123,7 @@ public class ReservationJdbcRepository {
 
         return ReservationEntity.builder()
                 .id(generatedId)
+                .themeId(reservation.getThemeId())
                 .name(reservation.getName())
                 .date(reservation.getDate())
                 .time(reservation.getTime())

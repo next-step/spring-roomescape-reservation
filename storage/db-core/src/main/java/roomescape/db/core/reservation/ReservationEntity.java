@@ -6,6 +6,7 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.Reservation;
 import roomescape.core.domain.reservation.ReservationDate;
 import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.theme.ThemeId;
 import roomescape.db.core.reservatiotime.ReservationTimeEntity;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class ReservationEntity {
 
     private final Long id;
+    private final Long themeId;
     private final String name;
     private final LocalDate date;
     private final ReservationTimeEntity time;
@@ -25,6 +27,7 @@ public class ReservationEntity {
     @Builder
     private ReservationEntity(
             final Long id,
+            final Long themeId,
             final String name,
             final LocalDate date,
             final ReservationTimeEntity time,
@@ -33,6 +36,7 @@ public class ReservationEntity {
             final LocalDateTime createdAt
     ) {
         this.id = id;
+        this.themeId = themeId;
         this.name = name;
         this.date = date;
         this.time = time;
@@ -44,6 +48,7 @@ public class ReservationEntity {
     public static ReservationEntity fromModel(Reservation reservation) {
         return builder()
                 .id(reservation.getId())
+                .themeId(reservation.getThemeId().value())
                 .name(reservation.getName().getValue())
                 .date(reservation.getDate().getValue())
                 .time(ReservationTimeEntity.fromModel(reservation.getTime()))
@@ -56,6 +61,7 @@ public class ReservationEntity {
     public Reservation toModel() {
         return Reservation.builder()
                 .id(this.id)
+                .themeId(new ThemeId(this.themeId))
                 .name(new ReservationGuestName(this.name))
                 .date(new ReservationDate(this.date))
                 .time(this.time.toModel())

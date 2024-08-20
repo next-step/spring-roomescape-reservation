@@ -14,6 +14,7 @@ import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
 import roomescape.core.domain.reservationtime.exception.DupliactedReservationTimeException;
 import roomescape.core.domain.reservationtime.exception.ReservationTimeAlreadyInUse;
+import roomescape.core.domain.theme.ThemeId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -97,6 +98,7 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
         final ReservationTime savedTime = timeRepository.save(time);
 
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -125,6 +127,7 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
         final ReservationTime savedTime = timeRepository.save(time);
 
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)

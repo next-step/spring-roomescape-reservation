@@ -6,6 +6,8 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.reservation.exception.ReservationException;
 import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.util.Objects;
 public class Reservation {
 
     private final Long id;
+    private final ThemeId themeId;
     private final ReservationGuestName name;
     private final ReservationDate date;
     private final ReservationTime time;
@@ -26,6 +29,7 @@ public class Reservation {
     @Builder
     public Reservation(
             final Long id,
+            final ThemeId themeId,
             final ReservationGuestName name,
             final ReservationDate date,
             final ReservationTime time,
@@ -33,6 +37,9 @@ public class Reservation {
             final LocalDateTime deletedAt,
             final LocalDateTime createdAt
     ) {
+        if (Objects.isNull(themeId)) {
+            throw ReservationException.nullField("themeId");
+        }
         if (Objects.isNull(name)) {
             throw ReservationException.nullField("name");
         }
@@ -53,6 +60,7 @@ public class Reservation {
         this.name = name;
         this.date = date;
         this.time = time;
+        this.themeId = themeId;
         this.activeStatus = activeStatus;
         this.deletedAt = deletedAt;
         this.createdAt = createdAt;
@@ -62,9 +70,11 @@ public class Reservation {
             final ReservationGuestName name,
             final ReservationDate date,
             final ReservationTime time,
+            final Theme theme,
             final ClockHolder clockHolder
     ) {
-        return builder()
+        return Reservation.builder()
+                .themeId(theme.getId())
                 .name(name)
                 .date(date)
                 .time(time)
@@ -76,6 +86,7 @@ public class Reservation {
     public Reservation delete(final ClockHolder clockHolder) {
         return Reservation.builder()
                 .id(this.id)
+                .themeId(this.themeId)
                 .name(this.name)
                 .date(this.date)
                 .time(this.time)

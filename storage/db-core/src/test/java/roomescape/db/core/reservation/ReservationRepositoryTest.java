@@ -11,6 +11,7 @@ import roomescape.core.domain.reservation.ReservationRepository;
 import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.core.domain.theme.ThemeId;
 import roomescape.db.core.ApplicationContextTest;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -50,6 +52,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
@@ -68,6 +71,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
+                .themeId(new ThemeId(1000L))
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -75,6 +79,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
 
         final Reservation newReservation = Reservation.builder()
                 .id(saved.getId())
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("new-name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -102,6 +107,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -116,6 +122,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
@@ -135,6 +142,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         // given
         final ReservationTime time = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(time)
@@ -178,6 +186,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation r1 = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("r1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -187,6 +196,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         sut.save(r1);
 
         final Reservation r2 = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("r2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -213,6 +223,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -222,6 +233,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         sut.save(reservation);
 
         final Reservation reservation2 = Reservation.builder()
+                .themeId(new ThemeId(1000L))
                 .name(new ReservationGuestName("name2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)

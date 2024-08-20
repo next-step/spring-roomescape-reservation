@@ -11,6 +11,8 @@ import roomescape.core.domain.reservation.ReservationGuestName;
 import roomescape.core.domain.reservation.ReservationRepository;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +33,9 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     ReservationTimeRepository timeRepository;
 
+    @Autowired
+    ThemeRepository themeRepository;
+
     @DisplayName("예약 전체 조회 시 활성화 상태인 예약만 조회된다.")
     @Test
     void fetchAll() {
@@ -41,7 +46,10 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .build();
         final ReservationTime savedTime = timeRepository.save(time);
 
+        final Theme savedTheme = saveTheme("theme-name", "theme-description", "theme-thumbnail");
+
         final Reservation confirmed = Reservation.builder()
+                .themeId(savedTheme.getId())
                 .name(new ReservationGuestName("confirmed"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 8)))
                 .time(savedTime)
@@ -51,6 +59,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
         reservationRepository.save(confirmed);
 
         final Reservation canceled = Reservation.builder()
+                .themeId(savedTheme.getId())
                 .name(new ReservationGuestName("canceled"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .time(savedTime)
@@ -72,5 +81,15 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                                 savedTime
                         )
                 );
+    }
+
+    private Theme saveTheme(String name, String description, String thumbnail) {
+        final Theme theme = Theme.builder()
+                .name(name)
+                .description(description)
+                .thumbnail(thumbnail)
+                .activeStatus(ActiveStatus.ACTIVE)
+                .build();
+        return themeRepository.save(theme);
     }
 }

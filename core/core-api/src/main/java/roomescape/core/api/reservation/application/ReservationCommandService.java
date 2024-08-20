@@ -10,6 +10,9 @@ import roomescape.core.domain.reservation.exception.DuplicatedReservationExcepti
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeId;
+import roomescape.core.domain.theme.ThemeRepository;
 
 import java.util.Optional;
 
@@ -19,16 +22,21 @@ public class ReservationCommandService {
 
     private final ReservationRepository reservationRepository;
     private final ReservationTimeRepository timeRepository;
+    private final ThemeRepository themeRepository;
+
     private final ClockHolder clockHolder;
 
     public ReserveResponse reserve(final ReserveRequest request) {
         verifyDuplicatedReservationNotExist(request);
 
         final ReservationTime time = timeRepository.getById(new ReservationTimeId(request.getTimeId()));
+        final Theme theme = themeRepository.getById(new ThemeId(request.getThemeId()));
+
         final Reservation newReservation = Reservation.defaultOf(
                 new ReservationGuestName(request.getName()),
                 new ReservationDate(request.getDate()),
                 time,
+                theme,
                 clockHolder
         );
 

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -38,6 +40,7 @@ public class ThemeJdbcRepository {
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public List<ThemeEntity> findAll() {
         return jdbcTemplate.query(SELECT_ALL_THEME_SQL, THEME_ENTITY_ROW_MAPPER);
@@ -52,6 +55,15 @@ public class ThemeJdbcRepository {
 
     public List<ThemeEntity> findAllByActiveStatus(final ActiveStatus activeStatus) {
         return queryForThemeEntities(SELECT_ALL_THEME_SQL + " where active_status = ? ", activeStatus.name());
+    }
+
+    public List<ThemeEntity> findAllByIds(final List<Long> themeIds) {
+        final String sql = SELECT_ALL_THEME_SQL + " where theme_id in (:ids)";
+
+        final MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("ids", themeIds);
+
+        return namedParameterJdbcTemplate.query(sql, parameters, THEME_ENTITY_ROW_MAPPER);
     }
 
     public ThemeEntity save(final ThemeEntity themeEntity) {

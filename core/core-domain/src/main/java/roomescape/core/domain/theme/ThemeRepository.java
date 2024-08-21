@@ -14,4 +14,6 @@ public interface ThemeRepository {
     List<Theme> findAll();
 
     List<Theme> findNotDeletedThemes();
+
+    List<Theme> findAllByIds(List<ThemeId> themeIds);
 }

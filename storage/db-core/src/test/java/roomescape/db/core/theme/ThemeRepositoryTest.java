@@ -153,6 +153,27 @@ class ThemeRepositoryTest extends ApplicationContextTest {
                 );
     }
 
+    @Test
+    void findAllByIds() {
+        // given
+        final Theme theme1 = saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
+        final Theme theme2 = saveTheme("name2", "description2", "https://thumbnail.com2", ActiveStatus.ACTIVE);
+
+        final List<ThemeId> themeIds = List.of(theme1.getId(), theme2.getId());
+
+        // when
+        final List<Theme> actual = sut.findAllByIds(themeIds);
+
+        // then
+        assertThat(actual).hasSize(2)
+                .extracting("name", "description", "thumbnail")
+                .containsExactly(
+                        tuple("name1", "description1", "https://thumbnail.com1"),
+                        tuple("name2", "description2", "https://thumbnail.com2")
+
+                );
+    }
+
     private Theme saveTheme(String name, String description, String thumbnail, ActiveStatus activeStatus) {
         final Theme theme = Theme.builder()
                 .name(name)

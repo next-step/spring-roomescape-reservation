@@ -47,4 +47,12 @@ public class ThemeEntityRepository implements ThemeRepository {
                 .map(ThemeEntity::toModel)
                 .toList();
     }
+
+    @Override
+    public List<Theme> findAllByIds(final List<ThemeId> themeIds) {
+        final List<Long> themeIdValues = themeIds.stream().map(ThemeId::value).toList();
+        return themeJdbcRepository.findAllByIds(themeIdValues).stream()
+                .map(ThemeEntity::toModel)
+                .toList();
+    }
 }

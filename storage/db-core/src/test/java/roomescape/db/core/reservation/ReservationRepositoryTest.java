@@ -20,8 +20,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ReservationRepositoryTest extends ApplicationContextTest {
@@ -99,6 +98,40 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 6, 4, 12, 0))
         );
+    }
+
+    @Test
+    void findNotDeletedReservations() {
+        // given
+        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
+
+        final Reservation reservation1 = Reservation.builder()
+                .themeId(new ThemeId(1000L))
+                .name(new ReservationGuestName("reservation1"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
+                .activeStatus(ActiveStatus.ACTIVE)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation1);
+
+        final Reservation reservation2 = Reservation.builder()
+                .themeId(new ThemeId(2000L))
+                .name(new ReservationGuestName("reservation2"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .time(savedTime)
+                .activeStatus(ActiveStatus.DELETED)
+                .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation2);
+
+        // when
+        final List<Reservation> actual = sut.findNotDeletedReservations();
+
+        // then
+        assertThat(actual).hasSize(1)
+                .extracting("name", "themeId")
+                .containsOnly(tuple(new ReservationGuestName("reservation1"), new ThemeId(1000L)));
     }
 
     @Test
@@ -206,7 +239,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         sut.save(r2);
 
         // when
-        final List<Reservation> actual = sut.findAll();
+        final List<Reservation> actual = sut.findNotDeletedReservations();
 
         // then
         assertThat(actual).hasSize(2)

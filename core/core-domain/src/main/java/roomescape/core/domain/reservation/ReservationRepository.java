@@ -10,7 +10,7 @@ public interface ReservationRepository {
 
     Reservation save(Reservation reservation);
 
-    List<Reservation> findAll();
+    List<Reservation> findNotDeletedReservations();
 
     Reservation getById(Long reservationId);
 

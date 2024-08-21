@@ -2,6 +2,7 @@ package roomescape.db.core.reservation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.*;
 import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
@@ -22,8 +23,8 @@ public class ReservationEntityRepository implements ReservationRepository {
     }
 
     @Override
-    public List<Reservation> findAll() {
-        return jdbcRepository.findAll().stream()
+    public List<Reservation> findNotDeletedReservations() {
+        return jdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE).stream()
                 .map(ReservationEntity::toModel)
                 .toList();
     }

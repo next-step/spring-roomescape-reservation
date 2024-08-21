@@ -147,6 +147,11 @@ public class ReservationJdbcRepository {
         return queryForReservation(selectSql, reservationId);
     }
 
+    public List<ReservationEntity> findAllByActiveStatus(final ActiveStatus activeStatus) {
+        final String selectSql = generateSelectSqlWithWhereCondition("where active_status = ?");
+        return queryForReservations(selectSql, activeStatus.name());
+    }
+
     public Optional<ReservationEntity> findBy(
             final ReservationGuestName name,
             final ReservationDate date,
@@ -166,6 +171,10 @@ public class ReservationJdbcRepository {
 
     private String generateSelectSqlWithWhereCondition(final String whereConditionSql) {
         return SELECT_RESERVATION_SQL + " " + whereConditionSql;
+    }
+
+    private List<ReservationEntity> queryForReservations(final String selectSql, final Object... objects) {
+        return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, objects);
     }
 
     private Optional<ReservationEntity> queryForReservation(final String selectSql, Object... objects) {

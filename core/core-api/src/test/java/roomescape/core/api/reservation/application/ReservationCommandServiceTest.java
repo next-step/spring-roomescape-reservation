@@ -103,7 +103,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         sut.cancel(new ReservationId(saved.getId()));
 
         // then
-        assertThat(reservationRepository.findAll()).hasSize(1);
+        assertThat(reservationRepository.findNotDeletedReservations()).hasSize(1);
 
         final Reservation actual = reservationRepository.getById(saved.getId());
         assertAll(

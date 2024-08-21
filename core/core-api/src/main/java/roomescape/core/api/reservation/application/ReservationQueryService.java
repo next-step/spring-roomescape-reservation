@@ -14,10 +14,6 @@ public class ReservationQueryService {
     private final ReservationRepository reservationRepository;
 
     public List<Reservation> fetchActiveReservations() {
-        final List<Reservation> reservations = reservationRepository.findAll();
-
-        return reservations.stream()
-                .filter(Reservation::isActive)
-                .toList();
+        return reservationRepository.findNotDeletedReservations();
     }
 }

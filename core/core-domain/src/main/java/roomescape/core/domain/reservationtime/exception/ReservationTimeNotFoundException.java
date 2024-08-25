@@ -13,7 +13,7 @@ public class ReservationTimeNotFoundException extends ReservationTimeException {
 
     public static ReservationTimeNotFoundException fromId(ReservationTimeId id) {
         return new ReservationTimeNotFoundException(
-                "Cannot find ReservationTime for id=%d".formatted(id.getValue())
+                "Cannot find ReservationTime for id=%d".formatted(id.value())
         );
     }
 

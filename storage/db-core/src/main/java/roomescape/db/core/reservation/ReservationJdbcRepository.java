@@ -139,7 +139,7 @@ public class ReservationJdbcRepository {
 
     public List<ReservationEntity> findAllByTimeId(final ReservationTimeId timeId) {
         final String selectSql = generateSelectSqlWithWhereCondition("where t.time_id = ?");
-        return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, timeId.getValue());
+        return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, timeId.value());
     }
 
     public Optional<ReservationEntity> findById(final Long reservationId) {
@@ -161,7 +161,7 @@ public class ReservationJdbcRepository {
                 generateSelectSqlWithWhereCondition("where r.name = ? and r.date = ? and r.time_id = ?"),
                 name.getValue(),
                 toIsoLocal(date.getValue()),
-                timeId.getValue()
+                timeId.value()
         );
     }
 

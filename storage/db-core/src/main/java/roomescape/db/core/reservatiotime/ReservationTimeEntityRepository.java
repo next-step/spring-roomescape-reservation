@@ -26,7 +26,7 @@ public class ReservationTimeEntityRepository implements ReservationTimeRepositor
 
     @Override
     public ReservationTime getById(final ReservationTimeId timeId) {
-        return jdbcRepository.findById(timeId.getValue())
+        return jdbcRepository.findById(timeId.value())
                 .map(ReservationTimeEntity::toModel)
                 .orElseThrow(() -> ReservationTimeNotFoundException.fromId(timeId));
     }
@@ -52,6 +52,6 @@ public class ReservationTimeEntityRepository implements ReservationTimeRepositor
 
     @Override
     public void delete(final ReservationTimeId timeId) {
-        jdbcRepository.delete(timeId.getValue());
+        jdbcRepository.delete(timeId.value());
     }
 }

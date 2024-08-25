@@ -44,7 +44,7 @@ public class ReservationTimeCommandService {
             throw new ReservationTimeAlreadyInUse(
                     "Cannot delete ReservationTime(id=%d). It's already in use by Reservation(id=%s)"
                             .formatted(
-                                    timeId.getValue(),
+                                    timeId.value(),
                                     activeReservations.stream()
                                             .map(reservation -> String.valueOf(reservation.getId()))
                                             .collect(Collectors.joining(","))

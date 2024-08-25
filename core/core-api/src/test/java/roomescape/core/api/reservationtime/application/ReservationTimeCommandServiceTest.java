@@ -47,7 +47,7 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
 
         // then
         assertAll(
-                () -> assertThat(actual.getId().getValue()).isNotNull(),
+                () -> assertThat(actual.getId().value()).isNotNull(),
                 () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(6, 0))
         );
     }

@@ -31,7 +31,7 @@ class ReservationTimeRepositoryTest extends ApplicationContextTest {
         final ReservationTime actual = sut.save(time);
 
         assertAll(
-                () -> assertThat(actual.getId().getValue()).isNotNull(),
+                () -> assertThat(actual.getId().value()).isNotNull(),
                 () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(12, 0))
         );
 
@@ -44,8 +44,8 @@ class ReservationTimeRepositoryTest extends ApplicationContextTest {
         final ReservationTime actual2 = sut.save(time2);
 
         assertAll(
-                () -> assertThat(actual2.getId().getValue()).isNotNull(),
-                () -> assertThat(actual2.getId().getValue()).isNotEqualTo(actual.getId().getValue()),
+                () -> assertThat(actual2.getId().value()).isNotNull(),
+                () -> assertThat(actual2.getId().value()).isNotEqualTo(actual.getId().value()),
                 () -> assertThat(actual2.getStartAt()).isEqualTo(LocalTime.of(13, 0))
         );
     }
@@ -69,7 +69,7 @@ class ReservationTimeRepositoryTest extends ApplicationContextTest {
         // when
         final ReservationTime actual = sut.save(idExists);
         assertAll(
-                () -> assertThat(actual.getId().getValue()).isEqualTo(saved.getId().getValue()),
+                () -> assertThat(actual.getId().value()).isEqualTo(saved.getId().value()),
                 () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(6, 0))
         );
     }
@@ -88,7 +88,7 @@ class ReservationTimeRepositoryTest extends ApplicationContextTest {
 
         // then
         assertAll(
-                () -> assertThat(actual.getId().getValue()).isEqualTo(saved.getId().getValue()),
+                () -> assertThat(actual.getId().value()).isEqualTo(saved.getId().value()),
                 () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(12, 0))
         );
     }
@@ -134,7 +134,7 @@ class ReservationTimeRepositoryTest extends ApplicationContextTest {
 
         // then
         assertAll(
-                () -> assertThat(actual.getId().getValue()).isEqualTo(saved.getId().getValue()),
+                () -> assertThat(actual.getId().value()).isEqualTo(saved.getId().value()),
                 () -> assertThat(actual.getStartAt()).isEqualTo(LocalTime.of(12, 0))
         );
     }

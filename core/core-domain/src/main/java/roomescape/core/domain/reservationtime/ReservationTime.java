@@ -45,7 +45,7 @@ public class ReservationTime {
         if (Objects.isNull(this.id)) {
             return null;
         }
-        return this.id.getValue();
+        return this.id.value();
     }
 
     @Override

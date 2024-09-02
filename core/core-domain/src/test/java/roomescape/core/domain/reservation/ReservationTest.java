@@ -7,6 +7,7 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.mock.FakeClockHolder;
 import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 
@@ -30,6 +31,7 @@ class ReservationTest {
                 new ReservationGuestName("name"),
                 new ReservationDate(LocalDate.of(2024, 6, 23)),
                 ReservationTime.builder()
+                        .id(new ReservationTimeId(2000L))
                         .startAt(LocalTime.of(12, 0))
                         .startAt(LocalTime.of(12, 0))
                         .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
@@ -49,7 +51,7 @@ class ReservationTest {
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0))
+                () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(2000L))
         );
     }
 
@@ -58,13 +60,10 @@ class ReservationTest {
         // given
         final Reservation sut = Reservation.builder()
                 .id(1L)
+                .themeId(new ThemeId(1000L))
+                .timeId(new ReservationTimeId(2000L))
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(ReservationTime.builder()
-                        .startAt(LocalTime.of(12, 0))
-                        .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                        .build())
-                .themeId(new ThemeId(1000L))
                 .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
@@ -79,7 +78,7 @@ class ReservationTest {
                 () -> assertThat(actual.getId()).isEqualTo(1L),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
+                () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(2000L)),
                 () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED),
                 () -> assertThat(actual.getDeletedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),

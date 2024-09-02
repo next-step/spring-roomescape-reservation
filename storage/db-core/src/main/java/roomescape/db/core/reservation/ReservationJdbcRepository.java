@@ -11,7 +11,6 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.ReservationDate;
 import roomescape.core.domain.reservation.ReservationGuestName;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
-import roomescape.db.core.reservatiotime.ReservationTimeJdbcRepository;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
@@ -31,23 +30,21 @@ public class ReservationJdbcRepository {
             select
                 r.reservation_id,
                 r.theme_id,
+                r.time_id,
                 r.name,
                 r.date,
                 r.active_status,
                 r.deleted_at,
                 r.created_at,
-                t.time_id,
-                t.start_at
-            from reservations r
-            inner join reservation_times t on r.time_id = t.time_id""";
+            from reservations r""";
 
     private static final RowMapper<ReservationEntity> RESERVATION_ROW_MAPPER = (rs, rowNum) ->
             ReservationEntity.builder()
                     .id(rs.getLong("reservation_id"))
                     .themeId(rs.getLong("theme_id"))
+                    .timeId(rs.getLong("time_id"))
                     .name(rs.getString("name"))
                     .date(LocalDate.parse(rs.getString("date")))
-                    .time(ReservationTimeJdbcRepository.RESERVATION_TIME_ROW_MAPPER.mapRow(rs, rowNum))
                     .activeStatus(ActiveStatus.valueOf(rs.getString("active_status")))
                     .deletedAt(Objects.isNull(rs.getString("deleted_at")) ? null : LocalDateTime.parse(rs.getString("deleted_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))
@@ -71,9 +68,9 @@ public class ReservationJdbcRepository {
         String updateSql = """
                 update reservations set
                     theme_id = ?,
+                    time_id = ?,
                     name = ?,
                     date = ?,
-                    time_id = ?,
                     active_status = ?,
                     deleted_at = ?,
                     created_at = ?
@@ -81,9 +78,9 @@ public class ReservationJdbcRepository {
 
         jdbcTemplate.update(updateSql,
                 reservation.getThemeId(),
+                reservation.getTimeId(),
                 reservation.getName(),
                 toIsoLocal(reservation.getDate()),
-                reservation.getTime().getId(),
                 reservation.getActiveStatus().name(),
                 Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()),
                 toIsoLocal(reservation.getCreatedAt()),
@@ -112,7 +109,7 @@ public class ReservationJdbcRepository {
             ps.setLong(1, reservation.getThemeId());
             ps.setString(2, reservation.getName());
             ps.setString(3, toIsoLocal(reservation.getDate()));
-            ps.setLong(4, reservation.getTime().getId());
+            ps.setLong(4, reservation.getTimeId());
             ps.setString(5, reservation.getActiveStatus().name());
             ps.setString(6, Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()));
             ps.setString(7, toIsoLocal(reservation.getCreatedAt()));
@@ -126,7 +123,7 @@ public class ReservationJdbcRepository {
                 .themeId(reservation.getThemeId())
                 .name(reservation.getName())
                 .date(reservation.getDate())
-                .time(reservation.getTime())
+                .timeId(reservation.getTimeId())
                 .activeStatus(reservation.getActiveStatus())
                 .deletedAt(reservation.getDeletedAt())
                 .createdAt(reservation.getCreatedAt())
@@ -138,7 +135,7 @@ public class ReservationJdbcRepository {
     }
 
     public List<ReservationEntity> findAllByTimeId(final ReservationTimeId timeId) {
-        final String selectSql = generateSelectSqlWithWhereCondition("where t.time_id = ?");
+        final String selectSql = generateSelectSqlWithWhereCondition("where r.time_id = ?");
         return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, timeId.value());
     }
 

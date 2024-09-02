@@ -3,6 +3,9 @@ package roomescape.core.api.reservation.api.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
+import roomescape.core.api.reservation.application.dto.ReservationTimeThemeDto;
+import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.domain.reservationtime.ReservationTime;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,12 +35,15 @@ public class ReserveHttpResponse {
         this.time = time;
     }
 
-    public static ReserveHttpResponse from(ReserveResponse response) {
+    public static ReserveHttpResponse from(final ReservationTimeThemeDto dto) {
+        final Reservation reservation = dto.getReservation();
+        final ReservationTime time = dto.getTime();
+
         return ReserveHttpResponse.builder()
-                .id(response.getId())
-                .name(response.getName())
-                .date(response.getDate())
-                .time(response.getTime())
+                .id(reservation.getId())
+                .name(reservation.getName().getValue())
+                .date(reservation.getDate().getValue())
+                .time(time.getStartAt())
                 .build();
     }
 }

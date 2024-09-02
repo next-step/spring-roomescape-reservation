@@ -3,6 +3,7 @@ package roomescape.core.api.reservation.application;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import roomescape.core.api.reservation.application.dto.ReservationTimeThemeDto;
 import roomescape.core.api.support.IntegrationTestSupport;
 import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.Reservation;
@@ -36,51 +37,52 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     ThemeRepository themeRepository;
 
-    @DisplayName("예약 전체 조회 시 활성화 상태인 예약만 조회된다.")
+    @DisplayName("예약과 테마를 같이 조회한다.")
     @Test
-    void fetchAll() {
+    void fetchReservationThemes() {
         // given
-        final ReservationTime time = ReservationTime.builder()
-                .startAt(LocalTime.of(12, 0))
-                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
-                .build();
-        final ReservationTime savedTime = timeRepository.save(time);
-
-        final Theme savedTheme = saveTheme("theme-name", "theme-description", "theme-thumbnail");
-
-        final Reservation confirmed = Reservation.builder()
-                .themeId(savedTheme.getId())
-                .name(new ReservationGuestName("confirmed"))
+        final ReservationTime time1 = saveReservationTime(LocalTime.of(12, 0));
+        final Theme theme1 = saveTheme("name1", "description1", "thumbnail1");
+        final Reservation reservation1 = Reservation.builder()
+                .themeId(theme1.getId())
+                .name(new ReservationGuestName("reservation1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 8)))
-                .time(savedTime)
+                .timeId(time1.getId())
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
-        reservationRepository.save(confirmed);
+        reservationRepository.save(reservation1);
 
-        final Reservation canceled = Reservation.builder()
-                .themeId(savedTheme.getId())
-                .name(new ReservationGuestName("canceled"))
-                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
-                .activeStatus(ActiveStatus.DELETED)
-                .createdAt(LocalDateTime.of(2023, 6, 4, 12, 0))
+        final ReservationTime time2 = saveReservationTime(LocalTime.of(12, 0));
+        final Theme theme2 = saveTheme("name1", "description1", "thumbnail1");
+        final Reservation reservation2 = Reservation.builder()
+                .themeId(theme2.getId())
+                .name(new ReservationGuestName("reservation1"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 8)))
+                .timeId(time2.getId())
+                .activeStatus(ActiveStatus.ACTIVE)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
-        reservationRepository.save(canceled);
+        reservationRepository.save(reservation2);
 
         // when
-        final List<Reservation> actual = sut.fetchActiveReservations();
+        final List<ReservationTimeThemeDto> actual = sut.fetchReservationThemes();
 
         // then
-        assertThat(actual).hasSize(1)
-                .extracting("name", "date", "time")
-                .containsExactly(
-                        tuple(
-                                new ReservationGuestName("confirmed"),
-                                new ReservationDate(LocalDate.of(2024, 6, 8)),
-                                savedTime
-                        )
+        assertThat(actual).hasSize(2)
+                .extracting("reservation", "reservationTime", "theme")
+                .containsExactlyInAnyOrder(
+                        tuple(reservation1, time1, theme1),
+                        tuple(reservation2, time2, theme2)
                 );
+    }
+
+    private ReservationTime saveReservationTime(final LocalTime startAt) {
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(startAt)
+                .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
+                .build();
+        return timeRepository.save(time);
     }
 
     private Theme saveTheme(String name, String description, String thumbnail) {

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import roomescape.core.api.reservation.api.response.ReservationQueryHttpResponse;
 import roomescape.core.api.reservation.application.ReservationQueryService;
-import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.api.reservation.application.dto.ReservationTimeThemeDto;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class ReservationQueryApi {
 
     @GetMapping("/reservations")
     public ResponseEntity<List<ReservationQueryHttpResponse>> fetchAll() {
-        final List<Reservation> reservations = queryService.fetchActiveReservations();
-        final List<ReservationQueryHttpResponse> response = ReservationQueryHttpResponse.from(reservations);
+        final List<ReservationTimeThemeDto> reservationTimeThemeDtos = queryService.fetchReservationThemes();
+        final List<ReservationQueryHttpResponse> response = ReservationQueryHttpResponse.from(reservationTimeThemeDtos);
         return ResponseEntity.ok().body(response);
     }
 }

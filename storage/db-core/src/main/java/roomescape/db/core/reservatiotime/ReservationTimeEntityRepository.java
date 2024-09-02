@@ -39,6 +39,14 @@ public class ReservationTimeEntityRepository implements ReservationTimeRepositor
     }
 
     @Override
+    public List<ReservationTime> findAllByIds(final List<ReservationTimeId> reservationTimeIds) {
+        final List<Long> timeIdValues = reservationTimeIds.stream().map(ReservationTimeId::value).toList();
+        return jdbcRepository.findAllByIds(timeIdValues).stream()
+                .map(ReservationTimeEntity::toModel)
+                .toList();
+    }
+
+    @Override
     public Optional<ReservationTime> findByStartAt(final LocalTime startAt) {
         return jdbcRepository.findByStartAt(startAt).map(ReservationTimeEntity::toModel);
     }

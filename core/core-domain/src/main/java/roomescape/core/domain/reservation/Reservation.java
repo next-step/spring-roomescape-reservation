@@ -6,12 +6,11 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.reservation.exception.ReservationException;
 import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Objects;
 
 @Getter
@@ -19,9 +18,9 @@ public class Reservation {
 
     private final Long id;
     private final ThemeId themeId;
+    private final ReservationTimeId timeId;
     private final ReservationGuestName name;
     private final ReservationDate date;
-    private final ReservationTime time;
     private final ActiveStatus activeStatus;
     private final LocalDateTime deletedAt;
     private final LocalDateTime createdAt;
@@ -32,7 +31,7 @@ public class Reservation {
             final ThemeId themeId,
             final ReservationGuestName name,
             final ReservationDate date,
-            final ReservationTime time,
+            final ReservationTimeId timeId,
             final ActiveStatus activeStatus,
             final LocalDateTime deletedAt,
             final LocalDateTime createdAt
@@ -46,7 +45,7 @@ public class Reservation {
         if (Objects.isNull(date)) {
             throw ReservationException.nullField("date");
         }
-        if (Objects.isNull(time)) {
+        if (Objects.isNull(timeId)) {
             throw ReservationException.nullField("time");
         }
         if (Objects.isNull(activeStatus)) {
@@ -59,7 +58,7 @@ public class Reservation {
         this.id = id;
         this.name = name;
         this.date = date;
-        this.time = time;
+        this.timeId = timeId;
         this.themeId = themeId;
         this.activeStatus = activeStatus;
         this.deletedAt = deletedAt;
@@ -75,9 +74,9 @@ public class Reservation {
     ) {
         return Reservation.builder()
                 .themeId(theme.getId())
+                .timeId(time.getId())
                 .name(name)
                 .date(date)
-                .time(time)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(clockHolder.getCurrentSeoulTime())
                 .build();
@@ -87,21 +86,13 @@ public class Reservation {
         return Reservation.builder()
                 .id(this.id)
                 .themeId(this.themeId)
+                .timeId(this.timeId)
                 .name(this.name)
                 .date(this.date)
-                .time(this.time)
                 .activeStatus(ActiveStatus.DELETED)
                 .createdAt(this.createdAt)
                 .deletedAt(clockHolder.getCurrentSeoulTime())
                 .build();
-    }
-
-    public LocalDate fetchReservationDate() {
-        return this.date.getValue();
-    }
-
-    public LocalTime fetchReservationTime() {
-        return this.time.getStartAt();
     }
 
     public boolean isActive() {

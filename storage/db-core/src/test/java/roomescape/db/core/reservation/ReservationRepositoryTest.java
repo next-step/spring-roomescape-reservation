@@ -10,6 +10,7 @@ import roomescape.core.domain.reservation.ReservationGuestName;
 import roomescape.core.domain.reservation.ReservationRepository;
 import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
 import roomescape.core.domain.theme.ThemeId;
 import roomescape.db.core.ApplicationContextTest;
@@ -34,13 +35,11 @@ class ReservationRepositoryTest extends ApplicationContextTest {
     @Test
     void save() {
         // given
-        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
-
         final Reservation reservation = Reservation.builder()
                 .themeId(new ThemeId(1000L))
+                .timeId(new ReservationTimeId(2000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -52,9 +51,9 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
                 () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
+                () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(2000L)),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
@@ -64,24 +63,22 @@ class ReservationRepositoryTest extends ApplicationContextTest {
     @Test
     void save_exists_id() {
         // given
-        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
-
         final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
-                .themeId(new ThemeId(1000L))
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
-        final Reservation saved = sut.save(reservation);
+        final Reservation reservationSaved = sut.save(reservation);
 
         final Reservation newReservation = Reservation.builder()
-                .id(saved.getId())
-                .themeId(new ThemeId(1000L))
+                .id(reservationSaved.getId())
+                .themeId(new ThemeId(200L))
+                .timeId(new ReservationTimeId(2000L))
                 .name(new ReservationGuestName("new-name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
@@ -91,10 +88,11 @@ class ReservationRepositoryTest extends ApplicationContextTest {
 
         // then
         assertAll(
-                () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getId()).isEqualTo(reservationSaved.getId()),
+                () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(200L)),
+                () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(2000L)),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("new-name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2025, 6, 4, 12, 0))
         );
@@ -103,23 +101,21 @@ class ReservationRepositoryTest extends ApplicationContextTest {
     @Test
     void findNotDeletedReservations() {
         // given
-        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
-
         final Reservation reservation1 = Reservation.builder()
-                .themeId(new ThemeId(1000L))
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
                 .name(new ReservationGuestName("reservation1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(reservation1);
 
         final Reservation reservation2 = Reservation.builder()
-                .themeId(new ThemeId(2000L))
+                .themeId(new ThemeId(200L))
+                .timeId(new ReservationTimeId(2000L))
                 .name(new ReservationGuestName("reservation2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
@@ -130,20 +126,18 @@ class ReservationRepositoryTest extends ApplicationContextTest {
 
         // then
         assertThat(actual).hasSize(1)
-                .extracting("name", "themeId")
-                .containsOnly(tuple(new ReservationGuestName("reservation1"), new ThemeId(1000L)));
+                .extracting("name", "themeId", "timeId")
+                .containsOnly(tuple(new ReservationGuestName("reservation1"), new ThemeId(100L), new ReservationTimeId(1000L)));
     }
 
     @Test
     void getById() {
         // given
-        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
-
         final Reservation reservation = Reservation.builder()
-                .themeId(new ThemeId(1000L))
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -155,10 +149,10 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         // then
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
-                () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
+                () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(100L)),
+                () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(1000L)),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
@@ -173,12 +167,11 @@ class ReservationRepositoryTest extends ApplicationContextTest {
     @Test
     void findByNameDateTime() {
         // given
-        final ReservationTime time = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
         final Reservation reservation = Reservation.builder()
-                .themeId(new ThemeId(1000L))
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
                 .name(new ReservationGuestName("name"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(time)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
@@ -188,7 +181,7 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         final Optional<Reservation> actualOpt = sut.findBy(
                 new ReservationGuestName("name"),
                 new ReservationDate(LocalDate.of(2024, 6, 23)),
-                time.getId()
+                new ReservationTimeId(1000L)
         );
 
         // then
@@ -197,9 +190,10 @@ class ReservationRepositoryTest extends ApplicationContextTest {
 
         assertAll(
                 () -> assertThat(actual.getId()).isNotNull(),
+                () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(100L)),
+                () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(1000L)),
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("name")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 4, 12, 0))
         );
@@ -219,20 +213,20 @@ class ReservationRepositoryTest extends ApplicationContextTest {
         final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
 
         final Reservation r1 = Reservation.builder()
-                .themeId(new ThemeId(1000L))
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
                 .name(new ReservationGuestName("r1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(r1);
 
         final Reservation r2 = Reservation.builder()
-                .themeId(new ThemeId(1000L))
+                .themeId(new ThemeId(200L))
+                .timeId(new ReservationTimeId(2000L))
                 .name(new ReservationGuestName("r2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2025, 6, 4, 12, 0))
                 .build();
@@ -243,47 +237,47 @@ class ReservationRepositoryTest extends ApplicationContextTest {
 
         // then
         assertThat(actual).hasSize(2)
-                .extracting("name")
+                .extracting("name", "themeId", "timeId")
                 .containsExactly(
-                        new ReservationGuestName("r1"),
-                        new ReservationGuestName("r2")
+                        tuple(new ReservationGuestName("r1"), new ThemeId(100L), new ReservationTimeId(1000L)),
+                        tuple(new ReservationGuestName("r2"), new ThemeId(200L), new ReservationTimeId(2000L))
                 );
     }
 
     @Test
-    void findByTimeId() {
+    void findAllByTimeId() {
         // given
-        final ReservationTime savedTime = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
-
         final Reservation reservation = Reservation.builder()
-                .themeId(new ThemeId(1000L))
-                .name(new ReservationGuestName("name1"))
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
+                .name(new ReservationGuestName("r1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(reservation);
 
         final Reservation reservation2 = Reservation.builder()
-                .themeId(new ThemeId(1000L))
-                .name(new ReservationGuestName("name2"))
+                .themeId(new ThemeId(200L))
+                .timeId(new ReservationTimeId(1000L))
+                .name(new ReservationGuestName("r2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         sut.save(reservation2);
 
+        final ReservationTimeId timeId = new ReservationTimeId(1000L);
+
         // when
-        final List<Reservation> actual = sut.findAllByTimeId(savedTime.getId());
+        final List<Reservation> actual = sut.findAllByTimeId(timeId);
 
         // then
         assertThat(actual).hasSize(2)
-                .extracting("name")
-                .containsExactlyInAnyOrder(
-                        new ReservationGuestName("name1"),
-                        new ReservationGuestName("name2")
+                .extracting("name", "themeId", "timeId")
+                .containsExactly(
+                        tuple(new ReservationGuestName("r1"), new ThemeId(100L), new ReservationTimeId(1000L)),
+                        tuple(new ReservationGuestName("r2"), new ThemeId(200L), new ReservationTimeId(1000L))
                 );
     }
 }

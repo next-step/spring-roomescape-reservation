@@ -14,7 +14,8 @@ import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
 import roomescape.core.domain.reservationtime.exception.DupliactedReservationTimeException;
 import roomescape.core.domain.reservationtime.exception.ReservationTimeAlreadyInUse;
-import roomescape.core.domain.theme.ThemeId;
+import roomescape.core.domain.theme.Theme;
+import roomescape.core.domain.theme.ThemeRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +36,9 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
 
     @Autowired
     ReservationRepository reservationRepository;
+
+    @Autowired
+    ThemeRepository themeRepository;
 
     @DisplayName("예약 시간을 추가할 수 있다")
     @Test
@@ -95,24 +99,25 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime timeSaved = timeRepository.save(time);
+        final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final Reservation reservation = Reservation.builder()
-                .themeId(new ThemeId(1000L))
-                .name(new ReservationGuestName("name"))
+                .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
+                .timeId(timeSaved.getId())
+                .themeId(themeSaved.getId())
                 .activeStatus(ActiveStatus.ACTIVE)
-                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        final Reservation savedReservation = reservationRepository.save(reservation);
+        final Reservation reservationSaved = reservationRepository.save(reservation);
 
         // when & then
-        assertThatThrownBy(() -> sut.delete(savedTime.getId()))
+        assertThatThrownBy(() -> sut.delete(timeSaved.getId()))
                 .isInstanceOf(ReservationTimeAlreadyInUse.class)
                 .hasMessage(
                         "Cannot delete ReservationTime(id=%d). It's already in use by Reservation(id=%s)"
-                                .formatted(savedTime.getIdValue(), savedReservation.getId())
+                                .formatted(timeSaved.getIdValue(), reservationSaved.getId())
                 );
     }
 
@@ -124,22 +129,34 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime timeSaved = timeRepository.save(time);
+        final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final Reservation reservation = Reservation.builder()
-                .themeId(new ThemeId(1000L))
-                .name(new ReservationGuestName("name"))
+                .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
+                .timeId(timeSaved.getId())
+                .themeId(themeSaved.getId())
                 .activeStatus(ActiveStatus.DELETED)
-                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);
 
         // when & then
-        Assertions.assertDoesNotThrow(() -> sut.delete(savedTime.getId()));
+        Assertions.assertDoesNotThrow(() -> sut.delete(timeSaved.getId()));
 
         final List<ReservationTime> actual = timeRepository.findAll();
         assertThat(actual).hasSize(0);
+    }
+
+    private Theme saveTheme(String name, String thumbnail, String description) {
+        final Theme theme = Theme.builder()
+                .name(name)
+                .thumbnail(thumbnail)
+                .description(description)
+                .activeStatus(ActiveStatus.ACTIVE)
+                .build();
+
+        return themeRepository.save(theme);
     }
 }

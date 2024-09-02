@@ -51,29 +51,29 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
-        reservationRepository.save(reservation1);
+        final Reservation reservationSaved1 = reservationRepository.save(reservation1);
 
-        final ReservationTime time2 = saveReservationTime(LocalTime.of(12, 0));
-        final Theme theme2 = saveTheme("name1", "description1", "thumbnail1");
+        final ReservationTime time2 = saveReservationTime(LocalTime.of(14, 0));
+        final Theme theme2 = saveTheme("name2", "description2", "thumbnail2");
         final Reservation reservation2 = Reservation.builder()
                 .themeId(theme2.getId())
-                .name(new ReservationGuestName("reservation1"))
-                .date(new ReservationDate(LocalDate.of(2024, 6, 8)))
+                .name(new ReservationGuestName("reservation2"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 10)))
                 .timeId(time2.getId())
                 .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
-        reservationRepository.save(reservation2);
+        final Reservation reservationSaved2 = reservationRepository.save(reservation2);
 
         // when
         final List<ReservationTimeThemeDto> actual = sut.fetchReservationThemes();
 
         // then
         assertThat(actual).hasSize(2)
-                .extracting("reservation", "reservationTime", "theme")
+                .extracting("reservation", "time", "theme")
                 .containsExactlyInAnyOrder(
-                        tuple(reservation1, time1, theme1),
-                        tuple(reservation2, time2, theme2)
+                        tuple(reservationSaved1, time1, theme1),
+                        tuple(reservationSaved2, time2, theme2)
                 );
     }
 

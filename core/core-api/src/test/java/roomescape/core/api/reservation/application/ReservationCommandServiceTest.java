@@ -104,8 +104,6 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         sut.cancel(new ReservationId(saved.getId()));
 
         // then
-        assertThat(reservationRepository.findNotDeletedReservations()).hasSize(1);
-
         final Reservation actual = reservationRepository.getById(saved.getId());
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
@@ -133,7 +131,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.DELETED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);

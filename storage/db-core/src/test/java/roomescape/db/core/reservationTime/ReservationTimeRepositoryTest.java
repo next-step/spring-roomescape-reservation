@@ -121,6 +121,35 @@ class ReservationTimeRepositoryTest extends ApplicationContextTest {
     }
 
     @Test
+    void findAllByIds() {
+        // given
+        final ReservationTime time1 = ReservationTime.builder()
+                .startAt(LocalTime.of(6, 0))
+                .createdAt(LocalDateTime.of(2024, 9, 2, 6, 0))
+                .build();
+        final ReservationTime savedTime1 = sut.save(time1);
+
+        final ReservationTime time2 = ReservationTime.builder()
+                .startAt(LocalTime.of(12, 0))
+                .createdAt(LocalDateTime.of(2024, 9, 2, 12, 0))
+                .build();
+        final ReservationTime savedTime2 = sut.save(time2);
+
+        final List<ReservationTimeId> timeIds = List.of(savedTime1.getId(), savedTime2.getId());
+
+        // when
+        final List<ReservationTime> actual = sut.findAllByIds(timeIds);
+
+        // then
+        assertThat(actual).hasSize(2)
+                .extracting("startAt")
+                .containsExactlyInAnyOrder(
+                        LocalTime.of(12, 0),
+                        LocalTime.of(6, 0)
+                );
+    }
+
+    @Test
     void getByStartAt() {
         // given
         final ReservationTime time = ReservationTime.builder()

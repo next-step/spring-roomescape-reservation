@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -39,6 +41,7 @@ public class ReservationTimeJdbcRepository {
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public ReservationTimeEntity save(final ReservationTimeEntity time) {
         if (Objects.isNull(time.getId())) {
@@ -102,6 +105,15 @@ public class ReservationTimeJdbcRepository {
 
     public List<ReservationTimeEntity> findAll() {
         return jdbcTemplate.query(SELECT_RESERVATION_TIME_SQL, RESERVATION_TIME_ROW_MAPPER);
+    }
+
+    public List<ReservationTimeEntity> findAllByIds(final List<Long> timeIds) {
+        final String sql = SELECT_RESERVATION_TIME_SQL + " where time_id in (:ids)";
+
+        final MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("ids", timeIds);
+
+        return namedParameterJdbcTemplate.query(sql, parameters, RESERVATION_TIME_ROW_MAPPER);
     }
 
     public Optional<ReservationTimeEntity> findByStartAt(final LocalTime startAt) {

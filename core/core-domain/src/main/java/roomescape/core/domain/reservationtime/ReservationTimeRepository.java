@@ -12,6 +12,8 @@ public interface ReservationTimeRepository {
 
     List<ReservationTime> findAll();
 
+    List<ReservationTime> findAllByIds(List<ReservationTimeId> reservationTimeIds);
+
     Optional<ReservationTime> findByStartAt(LocalTime startAt);
 
     ReservationTime getByStartAt(LocalTime startAt);

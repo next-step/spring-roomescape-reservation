@@ -1,11 +1,9 @@
 package roomescape.core.api.reservation.application;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.core.api.mock.FakeClockHolder;
-import roomescape.core.api.reservation.api.response.ReserveResponse;
 import roomescape.core.api.reservation.application.request.ReserveRequest;
 import roomescape.core.api.support.IntegrationTestSupport;
 import roomescape.core.domain.common.ActiveStatus;
@@ -24,6 +22,7 @@ import java.time.LocalTime;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class ReservationCommandServiceTest extends IntegrationTestSupport {
 
@@ -47,26 +46,28 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime timeSaved = timeRepository.save(time);
         final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 8))
-                .timeId(savedTime.getIdValue())
+                .timeId(timeSaved.getIdValue())
                 .themeId(themeSaved.getId().value())
                 .build();
 
         // when
-        final ReserveResponse actual = sut.reserve(request);
+        final ReservationId reservationId = sut.reserve(request);
 
         // then
-        assertThat(actual.getId()).isNotNull();
-        assertThat(actual)
-                .extracting("name", "date", "time")
-                .containsExactly(
-                        "brie", LocalDate.of(2024, 6, 8), LocalTime.of(12, 0)
-                );
+        final Reservation reservation = reservationRepository.getById(reservationId.value());
+
+        assertAll(
+                () -> assertThat(reservation.getName()).isEqualTo(new ReservationGuestName("brie")),
+                () -> assertThat(reservation.getDate()).isEqualTo(new ReservationDate(LocalDate.of(2024, 6, 8))),
+                () -> assertThat(reservation.getThemeId()).isEqualTo(themeSaved.getId()),
+                () -> assertThat(reservation.getTimeId()).isEqualTo(timeSaved.getId())
+        );
     }
 
     @DisplayName("예약 id로 예약을 취소한다")
@@ -77,18 +78,18 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
-        final ReservationTime savedTime = timeRepository.save(time);
-
+        final ReservationTime timeSaved = timeRepository.save(time);
         final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
+                .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.DELETED)
+                .activeStatus(ActiveStatus.ACTIVE)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
+
         final Reservation saved = reservationRepository.save(reservation);
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
 
@@ -109,7 +110,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
-                () -> assertThat(actual.getTime().getStartAt()).isEqualTo(LocalTime.of(12, 0)),
+                () -> assertThat(actual.getTimeId()).isEqualTo(timeSaved.getId()),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED),
                 () -> assertThat(actual.getDeletedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
@@ -124,16 +125,15 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
-        final ReservationTime savedTime = timeRepository.save(time);
-
+        final ReservationTime timeSaved = timeRepository.save(time);
         final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final Reservation reservation = Reservation.builder()
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
+                .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.ACTIVE)
+                .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);
@@ -141,7 +141,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 23))
-                .timeId(savedTime.getIdValue())
+                .timeId(timeSaved.getIdValue())
                 .themeId(themeSaved.getId().value())
                 .build();
 
@@ -158,14 +158,13 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
-        final ReservationTime savedTime = timeRepository.save(time);
+        final ReservationTime timeSaved = timeRepository.save(time);
         final Theme themeSaved = saveTheme("theme-name", "theme-thumbnail", "theme-description");
 
         final Reservation reservation = Reservation.builder()
-                .id(1L)
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .time(savedTime)
+                .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
                 .activeStatus(ActiveStatus.DELETED)
                 .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
@@ -175,12 +174,12 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         final ReserveRequest request = ReserveRequest.builder()
                 .name("brie")
                 .date(LocalDate.of(2024, 6, 23))
-                .timeId(savedTime.getIdValue())
+                .timeId(timeSaved.getIdValue())
                 .themeId(themeSaved.getId().value())
                 .build();
 
         // when & then
-        Assertions.assertDoesNotThrow(() -> sut.reserve(request));
+        assertDoesNotThrow(() -> sut.reserve(request));
     }
 
     private Theme saveTheme(String name, String thumbnail, String description) {

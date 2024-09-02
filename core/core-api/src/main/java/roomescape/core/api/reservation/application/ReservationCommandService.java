@@ -2,7 +2,6 @@ package roomescape.core.api.reservation.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import roomescape.core.api.reservation.api.response.ReserveResponse;
 import roomescape.core.api.reservation.application.request.ReserveRequest;
 import roomescape.core.domain.common.ClockHolder;
 import roomescape.core.domain.reservation.*;
@@ -26,7 +25,7 @@ public class ReservationCommandService {
 
     private final ClockHolder clockHolder;
 
-    public ReserveResponse reserve(final ReserveRequest request) {
+    public ReservationId reserve(final ReserveRequest request) {
         verifyDuplicatedReservationNotExist(request);
 
         final ReservationTime time = timeRepository.getById(new ReservationTimeId(request.getTimeId()));
@@ -41,7 +40,7 @@ public class ReservationCommandService {
         );
 
         final Reservation saved = reservationRepository.save(newReservation);
-        return ReserveResponse.from(saved);
+        return ReservationId.from(saved);
     }
 
     public void cancel(final ReservationId reservationId) {

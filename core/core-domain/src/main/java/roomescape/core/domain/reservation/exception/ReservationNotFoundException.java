@@ -1,9 +1,10 @@
 package roomescape.core.domain.reservation.exception;
 
 
+import roomescape.core.domain.common.exception.NotFoundException;
 import roomescape.core.domain.reservation.ReservationId;
 
-public class ReservationNotFoundException extends ReservationException {
+public class ReservationNotFoundException extends NotFoundException {
 
     public ReservationNotFoundException(final String message) {
         super(message);

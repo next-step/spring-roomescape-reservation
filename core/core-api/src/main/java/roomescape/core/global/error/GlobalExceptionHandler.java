@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import roomescape.core.domain.common.exception.BusinessException;
 
 @Slf4j
 @RestControllerAdvice
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleIllegalArgumentException(final IllegalArgumentException e) {
         log.error("IllegalArgumentException occurred: %s".formatted(e.getMessage()), e);
         return toErrorResponseEntity(new ApiErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiErrorResponse> handleBusinessException(final BusinessException e) {
+        log.error("BusinessException occurred: %s".formatted(e.getMessage()), e);
+        return toErrorResponseEntity(new ApiErrorResponse(HttpStatus.valueOf(e.getStatsCode()), e.getMessage()));
     }
 
     private ResponseEntity<ApiErrorResponse> toErrorResponseEntity(final ApiErrorResponse errorResponse) {

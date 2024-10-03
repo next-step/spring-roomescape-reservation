@@ -1,11 +1,12 @@
 package roomescape.core.domain.reservationtime.exception;
 
 
+import roomescape.core.domain.common.exception.NotFoundException;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
 
 import java.time.LocalTime;
 
-public class ReservationTimeNotFoundException extends ReservationTimeException {
+public class ReservationTimeNotFoundException extends NotFoundException {
 
     public ReservationTimeNotFoundException(final String message) {
         super(message);

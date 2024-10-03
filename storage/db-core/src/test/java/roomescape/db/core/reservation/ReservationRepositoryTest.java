@@ -280,4 +280,40 @@ class ReservationRepositoryTest extends ApplicationContextTest {
                         tuple(new ReservationGuestName("r2"), new ThemeId(200L), new ReservationTimeId(1000L))
                 );
     }
+
+    @Test
+    void findAllByThemeId() {
+        // given
+        final Reservation reservation = Reservation.builder()
+                .themeId(new ThemeId(100L))
+                .timeId(new ReservationTimeId(1000L))
+                .name(new ReservationGuestName("r1"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .activeStatus(ActiveStatus.ACTIVE)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation);
+
+        final Reservation reservation2 = Reservation.builder()
+                .themeId(new ThemeId(200L))
+                .timeId(new ReservationTimeId(2000L))
+                .name(new ReservationGuestName("r2"))
+                .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
+                .activeStatus(ActiveStatus.ACTIVE)
+                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .build();
+        sut.save(reservation2);
+
+        final ThemeId themeId = new ThemeId(100L);
+
+        // when
+        final List<Reservation> actual = sut.findAllByThemeId(themeId);
+
+        // then
+        assertThat(actual).hasSize(1)
+                .extracting("name", "themeId", "timeId")
+                .containsExactly(
+                        tuple(new ReservationGuestName("r1"), new ThemeId(100L), new ReservationTimeId(1000L))
+                );
+    }
 }

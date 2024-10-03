@@ -2,6 +2,7 @@ package roomescape.core.domain.reservation;
 
 
 import roomescape.core.domain.reservationtime.ReservationTimeId;
+import roomescape.core.domain.theme.ThemeId;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,4 +22,6 @@ public interface ReservationRepository {
     );
 
     List<Reservation> findAllByTimeId(ReservationTimeId timeId);
+
+    List<Reservation> findAllByThemeId(ThemeId themeId);
 }

@@ -11,6 +11,7 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.ReservationDate;
 import roomescape.core.domain.reservation.ReservationGuestName;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
+import roomescape.core.domain.theme.ThemeId;
 
 import java.sql.PreparedStatement;
 import java.time.LocalDate;
@@ -137,6 +138,11 @@ public class ReservationJdbcRepository {
     public List<ReservationEntity> findAllByTimeId(final ReservationTimeId timeId) {
         final String selectSql = generateSelectSqlWithWhereCondition("where r.time_id = ?");
         return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, timeId.value());
+    }
+
+    public List<ReservationEntity> findAllByThemeId(final ThemeId themeId) {
+        final String selectSql = generateSelectSqlWithWhereCondition("where r.theme_id = ?");
+        return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, themeId.value());
     }
 
     public Optional<ReservationEntity> findById(final Long reservationId) {

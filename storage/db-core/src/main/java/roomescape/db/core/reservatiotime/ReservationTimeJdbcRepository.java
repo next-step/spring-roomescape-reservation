@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.core.domain.reservationtime.exception.ReservationTimeException;
+import roomescape.core.domain.common.exception.DataAccessException;
 import roomescape.db.core.common.utils.DateTimeFormatUtils;
 
 import java.sql.PreparedStatement;
@@ -89,7 +89,7 @@ public class ReservationTimeJdbcRepository {
         );
 
         if (updateCount != 1) {
-            throw new ReservationTimeException(
+            throw new DataAccessException(
                     "Error occurred while updating ReservationTime where time_id=%d. Affected row is not 1 but %d."
                             .formatted(time.getId(), updateCount)
             );

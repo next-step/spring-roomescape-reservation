@@ -12,6 +12,7 @@ import roomescape.core.domain.reservation.*;
 import roomescape.core.domain.reservation.exception.DuplicatedReservationException;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeRepository;
+import roomescape.core.domain.reservationtime.exception.ReservationTimeOutOfRangeException;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeRepository;
 
@@ -180,7 +181,40 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         assertDoesNotThrow(() -> sut.reserve(request));
     }
 
-    // todo 지난 날짜 시간에 대해서 예외 발생
+    @DisplayName("현재 시간 이전의 날짜에 대해서는 예약을 생성 시 예외 발생")
+    @Test
+    void reserve_before_current_date_time() {
+        // given
+        final ReservationTime time = saveTime(LocalTime.of(11, 59), LocalDateTime.of(2024, 6, 23, 7, 0));
+        final Theme theme = saveTheme("theme-name", "theme-thumbnail", "theme-description");
+
+        final ReserveRequest request = ReserveRequest.builder()
+                .name("brie")
+                .date(LocalDate.of(2024, 10, 4))
+                .timeId(time.getId().value())
+                .themeId(theme.getId().value())
+                .build();
+
+        final LocalDateTime currentSeoulTime = LocalDateTime.of(2024, 10, 4, 12, 0);
+        final ReservationCommandService sut = new ReservationCommandService(
+                reservationRepository,
+                timeRepository,
+                themeRepository,
+                new FakeClockHolder(currentSeoulTime)
+        );
+
+        // when
+        assertThatThrownBy(() -> sut.reserve(request))
+                .isInstanceOf(ReservationTimeOutOfRangeException.class);
+    }
+
+    private ReservationTime saveTime(LocalTime startAt, LocalDateTime createdAt) {
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(startAt)
+                .createdAt(createdAt)
+                .build();
+        return timeRepository.save(time);
+    }
 
     private Theme saveTheme(String name, String thumbnail, String description) {
         final Theme theme = Theme.builder()

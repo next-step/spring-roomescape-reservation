@@ -6,6 +6,7 @@ import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.reservation.*;
 import roomescape.core.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
+import roomescape.core.domain.theme.ThemeId;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +50,13 @@ public class ReservationEntityRepository implements ReservationRepository {
     @Override
     public List<Reservation> findAllByTimeId(final ReservationTimeId timeId) {
         return jdbcRepository.findAllByTimeId(timeId).stream()
+                .map(ReservationEntity::toModel)
+                .toList();
+    }
+
+    @Override
+    public List<Reservation> findAllByThemeId(final ThemeId themeId) {
+        return jdbcRepository.findAllByThemeId(themeId).stream()
                 .map(ReservationEntity::toModel)
                 .toList();
     }

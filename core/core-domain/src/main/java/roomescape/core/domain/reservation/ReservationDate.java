@@ -1,7 +1,7 @@
 package roomescape.core.domain.reservation;
 
 import lombok.Getter;
-import roomescape.core.domain.reservation.exception.ReservationException;
+import roomescape.core.domain.common.exception.Assert;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -12,9 +12,7 @@ public class ReservationDate {
     private final LocalDate value;
 
     public ReservationDate(final LocalDate value) {
-        if (Objects.isNull("value")) {
-            throw ReservationException.nullField("value");
-        }
+        Assert.notNullField(value, "value of reservation date");
         this.value = value;
     }
 

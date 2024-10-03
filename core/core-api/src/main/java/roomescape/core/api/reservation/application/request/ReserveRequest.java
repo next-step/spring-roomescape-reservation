@@ -2,10 +2,9 @@ package roomescape.core.api.reservation.application.request;
 
 import lombok.Builder;
 import lombok.Getter;
-import roomescape.core.domain.reservation.exception.ReservationException;
+import roomescape.core.domain.common.exception.Assert;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Getter
 public class ReserveRequest {
@@ -27,17 +26,9 @@ public class ReserveRequest {
     }
 
     public void validateAllFieldsExist() {
-        if (Objects.isNull(this.name)) {
-            throw ReservationException.nullField("name");
-        }
-        if (Objects.isNull(this.date)) {
-            throw ReservationException.nullField("date");
-        }
-        if (Objects.isNull(this.timeId)) {
-            throw ReservationException.nullField("time");
-        }
-        if (Objects.isNull(this.themeId)) {
-            throw ReservationException.nullField("themeId");
-        }
+        Assert.notNullField(name, "name");
+        Assert.notNullField(date, "date");
+        Assert.notNullField(timeId, "timeId");
+        Assert.notNullField(themeId, "themeId");
     }
 }

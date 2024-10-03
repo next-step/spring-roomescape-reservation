@@ -1,8 +1,9 @@
 package roomescape.core.domain.theme.exception;
 
+import roomescape.core.domain.common.exception.NotFoundException;
 import roomescape.core.domain.theme.ThemeId;
 
-public class ThemeNotFoundException extends ThemeException {
+public class ThemeNotFoundException extends NotFoundException {
 
     public ThemeNotFoundException(final String message) {
         super(message);

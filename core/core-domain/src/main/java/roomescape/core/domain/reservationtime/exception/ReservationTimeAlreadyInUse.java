@@ -1,6 +1,8 @@
 package roomescape.core.domain.reservationtime.exception;
 
-public class ReservationTimeAlreadyInUse extends ReservationTimeException{
+import roomescape.core.domain.common.exception.BadRequestException;
+
+public class ReservationTimeAlreadyInUse extends BadRequestException {
 
     public ReservationTimeAlreadyInUse(final String message) {
         super(message);

@@ -2,8 +2,8 @@ package roomescape.core.domain.theme;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.util.Assert;
 import roomescape.core.domain.common.ActiveStatus;
-import roomescape.core.domain.theme.exception.ThemeException;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -25,18 +25,10 @@ public class Theme {
             final String thumbnail,
             final ActiveStatus activeStatus
     ) {
-        if (Objects.isNull(name)) {
-            throw ThemeException.nullField("name");
-        }
-        if (Objects.isNull(description)) {
-            throw ThemeException.nullField("description");
-        }
-        if (Objects.isNull(thumbnail)) {
-            throw ThemeException.nullField("thumbnail");
-        }
-        if (Objects.isNull(activeStatus)) {
-            throw ThemeException.nullField("activeStatus");
-        }
+        Assert.notNull(name, "name must not be null");
+        Assert.notNull(description, "description must not be null");
+        Assert.notNull(thumbnail, "thumbnail must not be null");
+        Assert.notNull(activeStatus, "activeStatus must not be null");
 
         this.id = id;
         this.name = name;

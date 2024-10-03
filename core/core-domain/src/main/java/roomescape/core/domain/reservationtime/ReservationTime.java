@@ -3,7 +3,7 @@ package roomescape.core.domain.reservationtime;
 import lombok.Builder;
 import lombok.Getter;
 import roomescape.core.domain.common.ClockHolder;
-import roomescape.core.domain.reservationtime.exception.ReservationTimeException;
+import roomescape.core.domain.common.exception.Assert;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,12 +22,8 @@ public class ReservationTime {
             final LocalTime startAt,
             final LocalDateTime createdAt
     ) {
-        if (Objects.isNull(startAt)) {
-            throw ReservationTimeException.nullField("startAt");
-        }
-        if (Objects.isNull(createdAt)) {
-            throw ReservationTimeException.nullField("createdAt");
-        }
+        Assert.notNullField(startAt, "startAt");
+        Assert.notNullField(createdAt, "createdAt");
 
         this.id = id;
         this.startAt = startAt;

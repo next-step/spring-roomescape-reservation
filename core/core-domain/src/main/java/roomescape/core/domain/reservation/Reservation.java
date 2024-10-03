@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import roomescape.core.domain.common.ActiveStatus;
 import roomescape.core.domain.common.ClockHolder;
-import roomescape.core.domain.reservation.exception.ReservationException;
+import roomescape.core.domain.common.exception.Assert;
 import roomescape.core.domain.reservationtime.ReservationTime;
 import roomescape.core.domain.reservationtime.ReservationTimeId;
 import roomescape.core.domain.theme.Theme;
@@ -36,24 +36,12 @@ public class Reservation {
             final LocalDateTime deletedAt,
             final LocalDateTime createdAt
     ) {
-        if (Objects.isNull(themeId)) {
-            throw ReservationException.nullField("themeId");
-        }
-        if (Objects.isNull(name)) {
-            throw ReservationException.nullField("name");
-        }
-        if (Objects.isNull(date)) {
-            throw ReservationException.nullField("date");
-        }
-        if (Objects.isNull(timeId)) {
-            throw ReservationException.nullField("time");
-        }
-        if (Objects.isNull(activeStatus)) {
-            throw ReservationException.nullField("activeStatus");
-        }
-        if (Objects.isNull(createdAt)) {
-            throw ReservationException.nullField("createdAt");
-        }
+        Assert.notNullField(themeId, "themeId");
+        Assert.notNullField(name, "name");
+        Assert.notNullField(date, "date");
+        Assert.notNullField(timeId, "timeId");
+        Assert.notNullField(activeStatus, "activeStatus");
+        Assert.notNullField(createdAt, "createdAt");
 
         this.id = id;
         this.name = name;

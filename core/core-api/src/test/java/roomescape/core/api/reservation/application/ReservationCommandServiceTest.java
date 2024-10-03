@@ -180,6 +180,8 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
         assertDoesNotThrow(() -> sut.reserve(request));
     }
 
+    // todo 지난 날짜 시간에 대해서 예외 발생
+
     private Theme saveTheme(String name, String thumbnail, String description) {
         final Theme theme = Theme.builder()
                 .name(name)

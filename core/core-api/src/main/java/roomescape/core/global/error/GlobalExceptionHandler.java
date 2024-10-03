@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiErrorResponse> handleBusinessException(final BusinessException e) {
-        log.error("BusinessException occurred: %s".formatted(e.getMessage()), e);
+        log.info("BusinessException occurred: %s".formatted(e.getMessage()), e);
         return toErrorResponseEntity(new ApiErrorResponse(HttpStatus.valueOf(e.getStatsCode()), e.getMessage()));
     }
 

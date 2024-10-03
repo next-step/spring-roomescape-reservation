@@ -10,7 +10,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.core.domain.common.ActiveStatus;
-import roomescape.core.domain.theme.exception.ThemeException;
+import roomescape.core.domain.common.exception.DataAccessException;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -145,7 +145,7 @@ public class ThemeJdbcRepository {
         );
 
         if (updatedRowCount != 1) {
-            throw new ThemeException(
+            throw new DataAccessException(
                     "Error occurred while updating ThemeEntity where theme_id=%d. Affected row is not 1 but %d."
                             .formatted(themeEntity.getThemeId(), updatedRowCount)
             );

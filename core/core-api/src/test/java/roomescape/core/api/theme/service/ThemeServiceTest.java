@@ -7,11 +7,24 @@ import roomescape.core.api.support.IntegrationTestSupport;
 import roomescape.core.api.theme.application.ThemeService;
 import roomescape.core.api.theme.application.request.ThemeAppendRequest;
 import roomescape.core.domain.common.ActiveStatus;
+import roomescape.core.domain.common.ClockHolder;
+import roomescape.core.domain.reservation.Reservation;
+import roomescape.core.domain.reservation.ReservationDate;
+import roomescape.core.domain.reservation.ReservationGuestName;
+import roomescape.core.domain.reservation.ReservationRepository;
+import roomescape.core.domain.reservationtime.ReservationTime;
+import roomescape.core.domain.reservationtime.ReservationTimeRepository;
 import roomescape.core.domain.theme.Theme;
 import roomescape.core.domain.theme.ThemeId;
 import roomescape.core.domain.theme.ThemeRepository;
+import roomescape.core.domain.theme.exception.ThemeAlreadyInUseException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ThemeServiceTest extends IntegrationTestSupport {
@@ -20,7 +33,16 @@ class ThemeServiceTest extends IntegrationTestSupport {
     ThemeService sut;
 
     @Autowired
+    ReservationRepository reservationRepository;
+
+    @Autowired
     ThemeRepository themeRepository;
+
+    @Autowired
+    ReservationTimeRepository timeRepository;
+
+    @Autowired
+    ClockHolder clockHolder;
 
     @DisplayName("테마를 추가할 수 있다")
     @Test
@@ -63,6 +85,36 @@ class ThemeServiceTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getThumbnail()).isEqualTo("https://thumbnail.com1"),
                 () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED)
         );
+    }
+
+    @DisplayName("테마 삭제 시 해당 테마로 예약된 예약이 있으면 예외가 발생한다")
+    @Test
+    void delete_theme_failed() {
+        // given
+        final Theme theme = saveTheme("name", "description", "thumbnail");
+        final ReservationTime time = saveTime(LocalTime.of(12, 0), LocalDateTime.of(2024, 6, 23, 7, 0));
+        final Reservation reservation = Reservation.defaultOf(
+                new ReservationGuestName("name"),
+                new ReservationDate(LocalDate.of(2024, 10, 3)),
+                time,
+                theme,
+                clockHolder
+        );
+        reservationRepository.save(reservation);
+
+        // when
+        assertThatThrownBy(() -> sut.deleteTheme(theme.getId()))
+                .isInstanceOf(ThemeAlreadyInUseException.class);
+
+        assertThat(themeRepository.findById(theme.getId())).isNotEmpty();
+    }
+
+    private ReservationTime saveTime(final LocalTime startAt, final LocalDateTime createdAt) {
+        final ReservationTime time = ReservationTime.builder()
+                .startAt(startAt)
+                .createdAt(createdAt)
+                .build();
+        return timeRepository.save(time);
     }
 
     private Theme saveTheme(String name, String description, String thumbnail) {

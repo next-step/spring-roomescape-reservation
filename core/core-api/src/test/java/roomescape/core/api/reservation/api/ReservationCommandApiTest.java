@@ -4,6 +4,7 @@ import io.restassured.RestAssured;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import roomescape.core.api.support.RestAssuredTestSupport;
+import roomescape.core.domain.common.exception.CustomErrorCode;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -21,6 +22,7 @@ class ReservationCommandApiTest extends RestAssuredTestSupport {
                 .then().log().all()
                 .statusCode(404)
                 .body("code", equalTo(404))
-                .body("status", equalTo("NOT_FOUND"));
+                .body("status", equalTo("NOT_FOUND"))
+                .body("data.errorCode", equalTo(CustomErrorCode.R404.name()));
     }
 }

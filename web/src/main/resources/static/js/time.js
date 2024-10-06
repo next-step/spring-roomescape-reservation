@@ -1,7 +1,10 @@
+import {handleResponseBody} from './common/api-handling.js';
+
 let isEditing = false;
 const API_ENDPOINT = '/times';
 const cellFields = ['id', 'startAt'];
 const createCellFields = ['', createInput()];
+
 function createBody(inputs) {
   return {
     startAt: inputs[0].value,
@@ -94,7 +97,9 @@ function deleteRow(event) {
 
   requestDelete(id)
       .then(() => row.remove())
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        alert(error.message);
+      });
 }
 
 
@@ -128,7 +133,5 @@ function requestDelete(id) {
   };
 
   return fetch(`${API_ENDPOINT}/${id}`, requestOptions)
-      .then(response => {
-        if (response.status !== 200) throw new Error('Delete failed');
-      });
+      .then(handleResponseBody);
 }

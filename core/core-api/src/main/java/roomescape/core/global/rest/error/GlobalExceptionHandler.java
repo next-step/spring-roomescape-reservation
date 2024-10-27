@@ -2,7 +2,6 @@ package roomescape.core.global.rest.error;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import roomescape.core.domain.common.exception.BusinessException;
@@ -13,32 +12,26 @@ import roomescape.core.global.rest.ApiResponse;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<ErrorDetails>> handleException(final Exception e) {
+    public ApiResponse<ErrorDetails> handleException(final Exception e) {
         log.error("Exception occurred: %s".formatted(e.getMessage()), e);
-        return ApiResponse.serverError().toResponseEntity();
+        return ApiResponse.serverError();
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ApiResponse<ErrorDetails>> handleRuntimeException(final RuntimeException e) {
+    public ApiResponse<ErrorDetails> handleRuntimeException(final RuntimeException e) {
         log.error("RuntimeException occurred: %s".formatted(e.getMessage()), e);
-        return ApiResponse.serverError().toResponseEntity();
+        return ApiResponse.serverError();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<ErrorDetails>> handleIllegalArgumentException(final IllegalArgumentException e) {
+    public ApiResponse<ErrorDetails> handleIllegalArgumentException(final IllegalArgumentException e) {
         log.error("IllegalArgumentException occurred: %s".formatted(e.getMessage()), e);
-        return ApiResponse.badRequest(ErrorDetails.from(e)).toResponseEntity();
+        return ApiResponse.badRequest(ErrorDetails.from(e));
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiResponse<ErrorDetails>> handleBusinessException(final BusinessException e) {
+    public ApiResponse<ErrorDetails> handleBusinessException(final BusinessException e) {
         log.info("BusinessException occurred: %s".formatted(e.getMessage()), e);
-
-        final ApiResponse<ErrorDetails> errorResponse = ApiResponse.ofErrorDetails(
-                HttpStatus.valueOf(e.getStatsCode()),
-                ErrorDetails.from(e)
-        );
-
-        return errorResponse.toResponseEntity();
+        return ApiResponse.ofErrorDetails(HttpStatus.valueOf(e.getStatusCode()), ErrorDetails.from(e));
     }
 }

@@ -38,7 +38,9 @@ class ReservationApiTest extends RestAssuredTestSupport {
 
         Map<String, String> params = new HashMap<>();
         params.put("name", "브라운");
-        params.put("date", "2023-08-05");
+
+        // fixme service 통합 테스트에서는 fake clock holder를 썼지만 실제 통합 테스트에서는 어떻게 fakeClockHolder를 넣어줘야할까?
+        params.put("date", "2099-08-05");
         params.put("timeId", String.valueOf(savedTime.getIdValue()));
         params.put("themeId", String.valueOf(themeSaved.getId().value()));
 

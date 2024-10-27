@@ -7,7 +7,8 @@ pluginManagement {
 
 rootProject.name = 'nextstep-roomescape'
 
-include 'core:core-api'
-include 'core:core-domain'
-include 'storage:db-core'
+include 'core'
+//include 'core:core-api'
+//include 'core:core-domain'
+//include 'storage:db-core'
 include 'web'

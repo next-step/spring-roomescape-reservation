@@ -2,7 +2,7 @@ package roomescape.domain.theme.exception;
 
 import roomescape.domain.common.exception.BadRequestException;
 import roomescape.domain.common.exception.CustomErrorCode;
-import roomescape.domain.theme.ThemeId;
+import roomescape.domain.theme.domain.ThemeId;
 
 public class ThemeAlreadyInUseException extends BadRequestException {
 

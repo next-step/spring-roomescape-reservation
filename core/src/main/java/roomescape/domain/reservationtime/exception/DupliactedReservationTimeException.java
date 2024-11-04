@@ -3,7 +3,7 @@ package roomescape.domain.reservationtime.exception;
 
 import roomescape.domain.common.exception.BadRequestException;
 import roomescape.domain.common.exception.CustomErrorCode;
-import roomescape.domain.reservationtime.ReservationTime;
+import roomescape.domain.reservationtime.domain.ReservationTime;
 
 public class DupliactedReservationTimeException extends BadRequestException {
 

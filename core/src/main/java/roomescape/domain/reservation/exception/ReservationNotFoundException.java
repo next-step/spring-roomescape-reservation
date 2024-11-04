@@ -3,7 +3,7 @@ package roomescape.domain.reservation.exception;
 
 import roomescape.domain.common.exception.CustomErrorCode;
 import roomescape.domain.common.exception.NotFoundException;
-import roomescape.domain.reservation.ReservationId;
+import roomescape.domain.reservation.domain.ReservationId;
 
 public class ReservationNotFoundException extends NotFoundException {
 

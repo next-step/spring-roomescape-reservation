@@ -2,7 +2,7 @@ package roomescape.domain.theme.exception;
 
 import roomescape.domain.common.exception.CustomErrorCode;
 import roomescape.domain.common.exception.NotFoundException;
-import roomescape.domain.theme.ThemeId;
+import roomescape.domain.theme.domain.ThemeId;
 
 public class ThemeNotFoundException extends NotFoundException {
 

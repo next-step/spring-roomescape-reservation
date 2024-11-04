@@ -3,7 +3,7 @@ package roomescape.domain.reservationtime.exception;
 
 import roomescape.domain.common.exception.CustomErrorCode;
 import roomescape.domain.common.exception.NotFoundException;
-import roomescape.domain.reservationtime.ReservationTimeId;
+import roomescape.domain.reservationtime.domain.ReservationTimeId;
 
 import java.time.LocalTime;
 

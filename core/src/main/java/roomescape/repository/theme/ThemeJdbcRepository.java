@@ -11,6 +11,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.common.exception.DataAccessException;
+import roomescape.domain.theme.Theme;
+import roomescape.domain.theme.ThemeId;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -30,9 +32,9 @@ public class ThemeJdbcRepository {
                 active_status
             from themes""";
 
-    public static final RowMapper<ThemeEntity> THEME_ENTITY_ROW_MAPPER =
-            (rs, rowNum) -> ThemeEntity.builder()
-                    .themeId(rs.getLong("theme_id"))
+    public static final RowMapper<Theme> THEME_ENTITY_ROW_MAPPER =
+            (rs, rowNum) -> Theme.builder()
+                    .id(new ThemeId(rs.getLong("theme_id")))
                     .name(rs.getString("name"))
                     .description(rs.getString("description"))
                     .thumbnail(rs.getString("thumbnail"))
@@ -42,22 +44,22 @@ public class ThemeJdbcRepository {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public List<ThemeEntity> findAll() {
+    public List<Theme> findAll() {
         return jdbcTemplate.query(SELECT_ALL_THEME_SQL, THEME_ENTITY_ROW_MAPPER);
     }
 
-    public Optional<ThemeEntity> findById(final Long themeId) {
+    public Optional<Theme> findById(final Long themeId) {
         if (Objects.isNull(themeId)) {
             return Optional.empty();
         }
-        return queryForThemeEntity(SELECT_ALL_THEME_SQL + " where theme_id = ? ", themeId);
+        return queryForTheme(SELECT_ALL_THEME_SQL + " where theme_id = ? ", themeId);
     }
 
-    public List<ThemeEntity> findAllByActiveStatus(final ActiveStatus activeStatus) {
+    public List<Theme> findAllByActiveStatus(final ActiveStatus activeStatus) {
         return queryForThemeEntities(SELECT_ALL_THEME_SQL + " where active_status = ? ", activeStatus.name());
     }
 
-    public List<ThemeEntity> findAllByIds(final List<Long> themeIds) {
+    public List<Theme> findAllByIds(final List<Long> themeIds) {
         final String sql = SELECT_ALL_THEME_SQL + " where theme_id in (:ids)";
 
         final MapSqlParameterSource parameters = new MapSqlParameterSource();
@@ -66,35 +68,35 @@ public class ThemeJdbcRepository {
         return namedParameterJdbcTemplate.query(sql, parameters, THEME_ENTITY_ROW_MAPPER);
     }
 
-    public ThemeEntity save(final ThemeEntity themeEntity) {
-        if (Objects.isNull(themeEntity.getThemeId())) {
-            return insertWithKeyHolder(themeEntity);
+    public Theme save(final Theme theme) {
+        if (Objects.isNull(theme.getId())) {
+            return insertWithKeyHolder(theme);
         }
 
-        updateAll(themeEntity);
+        updateAll(theme);
 
-        return themeEntity;
+        return theme;
     }
 
-    private Optional<ThemeEntity> queryForThemeEntity(final String selectSql, Object... objects) {
+    private Optional<Theme> queryForTheme(final String selectSql, Object... objects) {
         try {
-            final ThemeEntity themeEntity = jdbcTemplate.queryForObject(
+            final Theme Theme = jdbcTemplate.queryForObject(
                     selectSql,
                     THEME_ENTITY_ROW_MAPPER,
                     objects
             );
-            return Optional.ofNullable(themeEntity);
+            return Optional.ofNullable(Theme);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
     }
 
-    private List<ThemeEntity> queryForThemeEntities(final String selectSql, Object... objects) {
+    private List<Theme> queryForThemeEntities(final String selectSql, Object... objects) {
         return jdbcTemplate.query(selectSql, THEME_ENTITY_ROW_MAPPER, objects);
     }
 
 
-    private ThemeEntity insertWithKeyHolder(final ThemeEntity themeEntity) {
+    private Theme insertWithKeyHolder(final Theme theme) {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
 
         final String insertSql = """
@@ -107,25 +109,25 @@ public class ThemeJdbcRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"theme_id"});
-            ps.setString(1, themeEntity.getName());
-            ps.setString(2, themeEntity.getDescription());
-            ps.setString(3, themeEntity.getThumbnail());
-            ps.setString(4, themeEntity.getActiveStatus().name());
+            ps.setString(1, theme.getName());
+            ps.setString(2, theme.getDescription());
+            ps.setString(3, theme.getThumbnail());
+            ps.setString(4, theme.getActiveStatus().name());
             return ps;
         }, keyHolder);
 
         final long generatedId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        return ThemeEntity.builder()
-                .themeId(generatedId)
-                .name(themeEntity.getName())
-                .description(themeEntity.getDescription())
-                .thumbnail(themeEntity.getThumbnail())
-                .activeStatus(themeEntity.getActiveStatus())
+        return Theme.builder()
+                .id(new ThemeId(generatedId))
+                .name(theme.getName())
+                .description(theme.getDescription())
+                .thumbnail(theme.getThumbnail())
+                .activeStatus(theme.getActiveStatus())
                 .build();
     }
 
-    private void updateAll(final ThemeEntity themeEntity) {
+    private void updateAll(final Theme theme) {
         final String updateSql = """
                 update themes set
                     name = ?,
@@ -136,18 +138,17 @@ public class ThemeJdbcRepository {
 
         final int updatedRowCount = jdbcTemplate.update(
                 updateSql,
-                themeEntity.getName(),
-                themeEntity.getDescription(),
-                themeEntity.getThumbnail(),
-                themeEntity.getActiveStatus().name(),
-
-                themeEntity.getThemeId()
+                theme.getName(),
+                theme.getDescription(),
+                theme.getThumbnail(),
+                theme.getActiveStatus().name(),
+                theme.getId().value()
         );
 
         if (updatedRowCount != 1) {
             throw new DataAccessException(
-                    "Error occurred while updating ThemeEntity where theme_id=%d. Affected row is not 1 but %d."
-                            .formatted(themeEntity.getThemeId(), updatedRowCount)
+                    "Error occurred while updating Theme where theme_id=%d. Affected row is not 1 but %d."
+                            .formatted(theme.getId().value(), updatedRowCount)
             );
         }
     }

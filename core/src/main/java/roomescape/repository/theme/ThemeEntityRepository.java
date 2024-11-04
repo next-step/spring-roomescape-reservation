@@ -19,21 +19,17 @@ public class ThemeEntityRepository implements ThemeRepository {
 
     @Override
     public Theme save(final Theme theme) {
-        final ThemeEntity themeEntity = ThemeEntity.fromModel(theme);
-        ThemeEntity saved = themeJdbcRepository.save(themeEntity);
-        return saved.toModel();
+        return themeJdbcRepository.save(theme);
     }
 
     @Override
     public Optional<Theme> findById(final ThemeId themeId) {
-        return themeJdbcRepository.findById(themeId.value()).map(ThemeEntity::toModel);
+        return themeJdbcRepository.findById(themeId.value());
     }
 
     @Override
     public List<Theme> findAll() {
-        return themeJdbcRepository.findAll().stream()
-                .map(ThemeEntity::toModel)
-                .toList();
+        return themeJdbcRepository.findAll();
     }
 
     @Override
@@ -43,16 +39,12 @@ public class ThemeEntityRepository implements ThemeRepository {
 
     @Override
     public List<Theme> findNotDeletedThemes() {
-        return themeJdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE).stream()
-                .map(ThemeEntity::toModel)
-                .toList();
+        return themeJdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE);
     }
 
     @Override
     public List<Theme> findAllByIds(final List<ThemeId> themeIds) {
         final List<Long> themeIdValues = themeIds.stream().map(ThemeId::value).toList();
-        return themeJdbcRepository.findAllByIds(themeIdValues).stream()
-                .map(ThemeEntity::toModel)
-                .toList();
+        return themeJdbcRepository.findAllByIds(themeIdValues);
     }
 }

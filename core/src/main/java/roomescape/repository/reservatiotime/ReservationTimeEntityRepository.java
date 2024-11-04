@@ -19,42 +19,35 @@ public class ReservationTimeEntityRepository implements ReservationTimeRepositor
 
     @Override
     public ReservationTime save(final ReservationTime reservationTime) {
-        final ReservationTimeEntity timeEntity = ReservationTimeEntity.fromModel(reservationTime);
-        final ReservationTimeEntity saved = jdbcRepository.save(timeEntity);
-        return saved.toModel();
+        return jdbcRepository.save(reservationTime);
     }
 
     @Override
     public ReservationTime getById(final ReservationTimeId timeId) {
         return jdbcRepository.findById(timeId.value())
-                .map(ReservationTimeEntity::toModel)
                 .orElseThrow(() -> ReservationTimeNotFoundException.fromId(timeId));
     }
 
     @Override
     public List<ReservationTime> findAll() {
         return jdbcRepository.findAll().stream()
-                .map(ReservationTimeEntity::toModel)
                 .toList();
     }
 
     @Override
     public List<ReservationTime> findAllByIds(final List<ReservationTimeId> reservationTimeIds) {
         final List<Long> timeIdValues = reservationTimeIds.stream().map(ReservationTimeId::value).toList();
-        return jdbcRepository.findAllByIds(timeIdValues).stream()
-                .map(ReservationTimeEntity::toModel)
-                .toList();
+        return jdbcRepository.findAllByIds(timeIdValues);
     }
 
     @Override
     public Optional<ReservationTime> findByStartAt(final LocalTime startAt) {
-        return jdbcRepository.findByStartAt(startAt).map(ReservationTimeEntity::toModel);
+        return jdbcRepository.findByStartAt(startAt);
     }
 
     @Override
     public ReservationTime getByStartAt(final LocalTime startAt) {
         return jdbcRepository.findByStartAt(startAt)
-                .map(ReservationTimeEntity::toModel)
                 .orElseThrow(() -> ReservationTimeNotFoundException.fromStartAt(startAt));
     }
 

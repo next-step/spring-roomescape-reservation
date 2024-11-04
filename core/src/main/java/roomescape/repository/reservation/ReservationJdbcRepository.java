@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import roomescape.domain.common.ActiveStatus;
+import roomescape.domain.reservation.Reservation;
 import roomescape.domain.reservation.ReservationDate;
 import roomescape.domain.reservation.ReservationGuestName;
 import roomescape.domain.reservationtime.ReservationTimeId;
@@ -39,13 +40,13 @@ public class ReservationJdbcRepository {
                 r.created_at,
             from reservations r""";
 
-    private static final RowMapper<ReservationEntity> RESERVATION_ROW_MAPPER = (rs, rowNum) ->
-            ReservationEntity.builder()
+    private static final RowMapper<Reservation> RESERVATION_ROW_MAPPER = (rs, rowNum) ->
+            Reservation.builder()
                     .id(rs.getLong("reservation_id"))
-                    .themeId(rs.getLong("theme_id"))
-                    .timeId(rs.getLong("time_id"))
-                    .name(rs.getString("name"))
-                    .date(LocalDate.parse(rs.getString("date")))
+                    .themeId(new ThemeId(rs.getLong("theme_id")))
+                    .timeId(new ReservationTimeId(rs.getLong("time_id")))
+                    .name(new ReservationGuestName(rs.getString("name")))
+                    .date(new ReservationDate(LocalDate.parse(rs.getString("date"))))
                     .activeStatus(ActiveStatus.valueOf(rs.getString("active_status")))
                     .deletedAt(Objects.isNull(rs.getString("deleted_at")) ? null : LocalDateTime.parse(rs.getString("deleted_at")))
                     .createdAt(LocalDateTime.parse(rs.getString("created_at")))
@@ -57,7 +58,7 @@ public class ReservationJdbcRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public ReservationEntity save(final ReservationEntity reservation) {
+    public Reservation save(final Reservation reservation) {
         if (Objects.nonNull(reservation.getId())) {
             return updateAll(reservation);
         }
@@ -65,7 +66,7 @@ public class ReservationJdbcRepository {
         return insertWithKeyHolder(reservation);
     }
 
-    private ReservationEntity updateAll(final ReservationEntity reservation) {
+    private Reservation updateAll(final Reservation reservation) {
         String updateSql = """
                 update reservations set
                     theme_id = ?,
@@ -78,10 +79,10 @@ public class ReservationJdbcRepository {
                 where reservation_id = ?""";
 
         jdbcTemplate.update(updateSql,
-                reservation.getThemeId(),
-                reservation.getTimeId(),
-                reservation.getName(),
-                toIsoLocal(reservation.getDate()),
+                reservation.getThemeId().value(),
+                reservation.getTimeId().value(),
+                reservation.getName().getValue(),
+                toIsoLocal(reservation.getDate().getValue()),
                 reservation.getActiveStatus().name(),
                 Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()),
                 toIsoLocal(reservation.getCreatedAt()),
@@ -91,7 +92,7 @@ public class ReservationJdbcRepository {
         return reservation;
     }
 
-    private ReservationEntity insertWithKeyHolder(final ReservationEntity reservation) {
+    private Reservation insertWithKeyHolder(final Reservation reservation) {
         final KeyHolder keyHolder = new GeneratedKeyHolder();
 
         final String insertSql = """
@@ -107,10 +108,10 @@ public class ReservationJdbcRepository {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"reservation_id"});
-            ps.setLong(1, reservation.getThemeId());
-            ps.setString(2, reservation.getName());
-            ps.setString(3, toIsoLocal(reservation.getDate()));
-            ps.setLong(4, reservation.getTimeId());
+            ps.setLong(1, reservation.getThemeId().value());
+            ps.setString(2, reservation.getName().getValue());
+            ps.setString(3, toIsoLocal(reservation.getDate().getValue()));
+            ps.setLong(4, reservation.getTimeId().value());
             ps.setString(5, reservation.getActiveStatus().name());
             ps.setString(6, Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()));
             ps.setString(7, toIsoLocal(reservation.getCreatedAt()));
@@ -119,7 +120,7 @@ public class ReservationJdbcRepository {
 
         final long generatedId = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
-        return ReservationEntity.builder()
+        return Reservation.builder()
                 .id(generatedId)
                 .themeId(reservation.getThemeId())
                 .name(reservation.getName())
@@ -131,31 +132,31 @@ public class ReservationJdbcRepository {
                 .build();
     }
 
-    public List<ReservationEntity> findAll() {
+    public List<Reservation> findAll() {
         return jdbcTemplate.query(SELECT_RESERVATION_SQL, RESERVATION_ROW_MAPPER);
     }
 
-    public List<ReservationEntity> findAllByTimeId(final ReservationTimeId timeId) {
+    public List<Reservation> findAllByTimeId(final ReservationTimeId timeId) {
         final String selectSql = generateSelectSqlWithWhereCondition("where r.time_id = ?");
         return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, timeId.value());
     }
 
-    public List<ReservationEntity> findAllByThemeId(final ThemeId themeId) {
+    public List<Reservation> findAllByThemeId(final ThemeId themeId) {
         final String selectSql = generateSelectSqlWithWhereCondition("where r.theme_id = ?");
         return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, themeId.value());
     }
 
-    public Optional<ReservationEntity> findById(final Long reservationId) {
+    public Optional<Reservation> findById(final Long reservationId) {
         final String selectSql = generateSelectSqlWithWhereCondition("where reservation_id = ?");
         return queryForReservation(selectSql, reservationId);
     }
 
-    public List<ReservationEntity> findAllByActiveStatus(final ActiveStatus activeStatus) {
+    public List<Reservation> findAllByActiveStatus(final ActiveStatus activeStatus) {
         final String selectSql = generateSelectSqlWithWhereCondition("where active_status = ?");
         return queryForReservations(selectSql, activeStatus.name());
     }
 
-    public Optional<ReservationEntity> findBy(
+    public Optional<Reservation> findBy(
             final ReservationGuestName name,
             final ReservationDate date,
             final ReservationTimeId timeId
@@ -176,13 +177,13 @@ public class ReservationJdbcRepository {
         return SELECT_RESERVATION_SQL + " " + whereConditionSql;
     }
 
-    private List<ReservationEntity> queryForReservations(final String selectSql, final Object... objects) {
+    private List<Reservation> queryForReservations(final String selectSql, final Object... objects) {
         return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, objects);
     }
 
-    private Optional<ReservationEntity> queryForReservation(final String selectSql, Object... objects) {
+    private Optional<Reservation> queryForReservation(final String selectSql, Object... objects) {
         try {
-            final ReservationEntity reservation = jdbcTemplate.queryForObject(
+            final Reservation reservation = jdbcTemplate.queryForObject(
                     selectSql,
                     RESERVATION_ROW_MAPPER,
                     objects

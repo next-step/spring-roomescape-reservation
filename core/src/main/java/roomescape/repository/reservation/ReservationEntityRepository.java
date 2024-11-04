@@ -20,21 +20,17 @@ public class ReservationEntityRepository implements ReservationRepository {
 
     @Override
     public Reservation save(final Reservation reservation) {
-        final ReservationEntity saved = jdbcRepository.save(ReservationEntity.fromModel(reservation));
-        return saved.toModel();
+        return jdbcRepository.save(reservation);
     }
 
     @Override
     public List<Reservation> findNotDeletedReservations() {
-        return jdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE).stream()
-                .map(ReservationEntity::toModel)
-                .toList();
+        return jdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE);
     }
 
     @Override
     public Reservation getById(final Long reservationId) {
         return jdbcRepository.findById(reservationId)
-                .map(ReservationEntity::toModel)
                 .orElseThrow(() -> ReservationNotFoundException.from(new ReservationId(reservationId)));
     }
 
@@ -44,21 +40,16 @@ public class ReservationEntityRepository implements ReservationRepository {
             final ReservationDate date,
             final ReservationTimeId timeId
     ) {
-        return jdbcRepository.findBy(name, date, timeId)
-                .map(ReservationEntity::toModel);
+        return jdbcRepository.findBy(name, date, timeId);
     }
 
     @Override
     public List<Reservation> findAllByTimeId(final ReservationTimeId timeId) {
-        return jdbcRepository.findAllByTimeId(timeId).stream()
-                .map(ReservationEntity::toModel)
-                .toList();
+        return jdbcRepository.findAllByTimeId(timeId);
     }
 
     @Override
     public List<Reservation> findAllByThemeId(final ThemeId themeId) {
-        return jdbcRepository.findAllByThemeId(themeId).stream()
-                .map(ReservationEntity::toModel)
-                .toList();
+        return jdbcRepository.findAllByThemeId(themeId);
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.common.exception.DataAccessException;
 import roomescape.domain.theme.domain.Theme;
 import roomescape.domain.theme.domain.ThemeId;
@@ -29,7 +28,7 @@ public class ThemeJdbcRepository {
                 name,
                 description,
                 thumbnail,
-                active_status
+                deleted
             from themes""";
 
     public static final RowMapper<Theme> THEME_ENTITY_ROW_MAPPER =
@@ -38,7 +37,7 @@ public class ThemeJdbcRepository {
                     .name(rs.getString("name"))
                     .description(rs.getString("description"))
                     .thumbnail(rs.getString("thumbnail"))
-                    .activeStatus(ActiveStatus.valueOf(rs.getString("active_status")))
+                    .deleted(rs.getBoolean("deleted"))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
@@ -55,8 +54,8 @@ public class ThemeJdbcRepository {
         return queryForTheme(SELECT_ALL_THEME_SQL + " where theme_id = ? ", themeId);
     }
 
-    public List<Theme> findAllByActiveStatus(final ActiveStatus activeStatus) {
-        return queryForThemeEntities(SELECT_ALL_THEME_SQL + " where active_status = ? ", activeStatus.name());
+    public List<Theme> findAllByDeleted(final boolean isDeleted) {
+        return queryForThemeEntities(SELECT_ALL_THEME_SQL + " where deleted = ? ", isDeleted);
     }
 
     public List<Theme> findAllByIds(final List<Long> themeIds) {
@@ -104,7 +103,7 @@ public class ThemeJdbcRepository {
                     name,
                     description,
                     thumbnail,
-                    active_status
+                    deleted
                 ) values (?, ?, ?, ?)""";
 
         jdbcTemplate.update(connection -> {
@@ -112,7 +111,7 @@ public class ThemeJdbcRepository {
             ps.setString(1, theme.getName());
             ps.setString(2, theme.getDescription());
             ps.setString(3, theme.getThumbnail());
-            ps.setString(4, theme.getActiveStatus().name());
+            ps.setBoolean(4, theme.isDeleted());
             return ps;
         }, keyHolder);
 
@@ -123,7 +122,7 @@ public class ThemeJdbcRepository {
                 .name(theme.getName())
                 .description(theme.getDescription())
                 .thumbnail(theme.getThumbnail())
-                .activeStatus(theme.getActiveStatus())
+                .deleted(theme.isDeleted())
                 .build();
     }
 
@@ -133,7 +132,7 @@ public class ThemeJdbcRepository {
                     name = ?,
                     description = ?, 
                     thumbnail = ?,
-                    active_status = ? 
+                    deleted = ? 
                 where theme_id = ?""";
 
         final int updatedRowCount = jdbcTemplate.update(
@@ -141,7 +140,7 @@ public class ThemeJdbcRepository {
                 theme.getName(),
                 theme.getDescription(),
                 theme.getThumbnail(),
-                theme.getActiveStatus().name(),
+                theme.isDeleted(),
                 theme.getId().value()
         );
 

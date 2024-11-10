@@ -90,7 +90,7 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
         return themeRepository.save(theme);
     }

@@ -237,7 +237,7 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .name(name)
                 .thumbnail(thumbnail)
                 .description(description)
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
 
         return themeRepository.save(theme);

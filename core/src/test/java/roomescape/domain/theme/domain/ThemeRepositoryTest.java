@@ -3,7 +3,6 @@ package roomescape.domain.theme.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.support.IntegrationTestSupport;
 
 import java.util.List;
@@ -26,7 +25,7 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
                 .name("name")
                 .description("description")
                 .thumbnail("https://thumbnail.com")
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
 
         // when
@@ -39,7 +38,7 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getName()).isEqualTo("name"),
                 () -> assertThat(actual.getDescription()).isEqualTo("description"),
                 () -> assertThat(actual.getThumbnail()).isEqualTo("https://thumbnail.com"),
-                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE)
+                () -> assertThat(actual.isDeleted()).isFalse()
         );
     }
 
@@ -51,7 +50,7 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
                 .name("name")
                 .description("description")
                 .thumbnail("https://thumbnail.com")
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
         final Theme originSaved = sut.save(origin);
 
@@ -60,7 +59,7 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
                 .name("changed-name")
                 .description("changed-description")
                 .thumbnail("changed-https://thumbnail.com")
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
 
         // when
@@ -79,7 +78,7 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
     @Test
     void findById_exists() {
         // given
-        final Theme themeSaved = saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
+        final Theme themeSaved = saveTheme("name1", "description1", "https://thumbnail.com1", false);
         final ThemeId themeId = themeSaved.getId();
 
         // when
@@ -104,7 +103,7 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
                 .name("name")
                 .description("description")
                 .thumbnail("https://thumbnail.com")
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
         final ThemeId themeId = notSaved.getId();
 
@@ -118,8 +117,8 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
     @Test
     void findAll() {
         // given
-        saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
-        saveTheme("name2", "description2", "https://thumbnail.com2", ActiveStatus.ACTIVE);
+        saveTheme("name1", "description1", "https://thumbnail.com1", true);
+        saveTheme("name2", "description2", "https://thumbnail.com2", false);
 
         // when
         final List<Theme> actual = sut.findAll();
@@ -136,8 +135,8 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
     @Test
     void findNotDeletedThemes() {
         // given
-        saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
-        saveTheme("name2", "description2", "https://thumbnail.com2", ActiveStatus.DELETED);
+        saveTheme("name1", "description1", "https://thumbnail.com1", false);
+        saveTheme("name2", "description2", "https://thumbnail.com2", true);
 
         // when
         final List<Theme> actual = sut.findNotDeletedThemes();
@@ -153,8 +152,8 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
     @Test
     void findAllByIds() {
         // given
-        final Theme theme1 = saveTheme("name1", "description1", "https://thumbnail.com1", ActiveStatus.ACTIVE);
-        final Theme theme2 = saveTheme("name2", "description2", "https://thumbnail.com2", ActiveStatus.ACTIVE);
+        final Theme theme1 = saveTheme("name1", "description1", "https://thumbnail.com1", true);
+        final Theme theme2 = saveTheme("name2", "description2", "https://thumbnail.com2", true);
 
         final List<ThemeId> themeIds = List.of(theme1.getId(), theme2.getId());
 
@@ -167,17 +166,17 @@ class ThemeRepositoryTest extends IntegrationTestSupport {
                 .containsExactly(
                         tuple("name1", "description1", "https://thumbnail.com1"),
                         tuple("name2", "description2", "https://thumbnail.com2")
-
                 );
     }
 
-    private Theme saveTheme(String name, String description, String thumbnail, ActiveStatus activeStatus) {
+    private Theme saveTheme(String name, String description, String thumbnail, final boolean deleted) {
         final Theme theme = Theme.builder()
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
-                .activeStatus(activeStatus)
+                .deleted(deleted)
                 .build();
+
         return sut.save(theme);
     }
 }

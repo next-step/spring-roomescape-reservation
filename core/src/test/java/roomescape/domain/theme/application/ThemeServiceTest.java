@@ -3,7 +3,6 @@ package roomescape.domain.theme.application;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.common.ClockHolder;
 import roomescape.domain.reservation.domain.Reservation;
 import roomescape.domain.reservation.domain.ReservationDate;
@@ -62,7 +61,7 @@ class ThemeServiceTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getName()).isEqualTo("name"),
                 () -> assertThat(actual.getDescription()).isEqualTo("description"),
                 () -> assertThat(actual.getThumbnail()).isEqualTo("https://thumbnail.com"),
-                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE)
+                () -> assertThat(actual.isDeleted()).isFalse()
         );
     }
 
@@ -82,7 +81,7 @@ class ThemeServiceTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getName()).isEqualTo("name1"),
                 () -> assertThat(actual.getDescription()).isEqualTo("description1"),
                 () -> assertThat(actual.getThumbnail()).isEqualTo("https://thumbnail.com1"),
-                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED)
+                () -> assertThat(actual.isDeleted()).isTrue()
         );
     }
 
@@ -121,7 +120,7 @@ class ThemeServiceTest extends IntegrationTestSupport {
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
         return themeRepository.save(theme);
     }

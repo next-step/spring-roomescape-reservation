@@ -5,7 +5,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeRepository;
 import roomescape.domain.theme.domain.Theme;
@@ -76,7 +75,7 @@ class ReservationApiTest extends RestAssuredTestSupport {
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
         return themeRepository.save(theme);
     }

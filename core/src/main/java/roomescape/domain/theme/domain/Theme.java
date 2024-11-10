@@ -3,7 +3,6 @@ package roomescape.domain.theme.domain;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.util.Assert;
-import roomescape.domain.common.ActiveStatus;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -15,7 +14,7 @@ public class Theme {
     private final String name;
     private final String description;
     private final String thumbnail;
-    private final ActiveStatus activeStatus;
+    private final boolean deleted;
 
     @Builder
     private Theme(
@@ -23,18 +22,17 @@ public class Theme {
             final String name,
             final String description,
             final String thumbnail,
-            final ActiveStatus activeStatus
+            final boolean deleted
     ) {
         Assert.notNull(name, "name must not be null");
         Assert.notNull(description, "description must not be null");
         Assert.notNull(thumbnail, "thumbnail must not be null");
-        Assert.notNull(activeStatus, "activeStatus must not be null");
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.thumbnail = thumbnail;
-        this.activeStatus = activeStatus;
+        this.deleted = deleted;
     }
 
     public static Theme defaultOf(
@@ -46,7 +44,7 @@ public class Theme {
                 .name(name)
                 .description(description)
                 .thumbnail(thumbnail)
-                .activeStatus(ActiveStatus.ACTIVE)
+                .deleted(false)
                 .build();
     }
 
@@ -56,7 +54,7 @@ public class Theme {
                 .name(this.name)
                 .description(this.description)
                 .thumbnail(this.thumbnail)
-                .activeStatus(ActiveStatus.DELETED)
+                .deleted(true)
                 .build();
     }
 

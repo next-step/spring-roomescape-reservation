@@ -41,7 +41,7 @@ class ReservationTest {
                         .name("theme-name")
                         .description("theme-description")
                         .thumbnail("theme-thumbnail")
-                        .activeStatus(ActiveStatus.ACTIVE)
+                        .deleted(false)
                         .build(),
                 clockHolder
         );

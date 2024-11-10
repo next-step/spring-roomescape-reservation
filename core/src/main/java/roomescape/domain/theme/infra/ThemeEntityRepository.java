@@ -2,7 +2,6 @@ package roomescape.domain.theme.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.theme.domain.Theme;
 import roomescape.domain.theme.domain.ThemeId;
 import roomescape.domain.theme.domain.ThemeRepository;
@@ -39,7 +38,7 @@ public class ThemeEntityRepository implements ThemeRepository {
 
     @Override
     public List<Theme> findNotDeletedThemes() {
-        return themeJdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE);
+        return themeJdbcRepository.findAllByDeleted(false);
     }
 
     @Override

@@ -71,14 +71,6 @@ function createSelect(options, defaultText, selectId, textProperty) {
   return select;
 }
 
-function createActionButton(label, className, eventListener) {
-  const button = document.createElement('button');
-  button.textContent = label;
-  button.classList.add('btn', className, 'mr-2');
-  button.addEventListener('click', eventListener);
-  return button;
-}
-
 function addInputRow() {
   if (isEditing) return;  // 이미 편집 중인 경우 추가하지 않음
 

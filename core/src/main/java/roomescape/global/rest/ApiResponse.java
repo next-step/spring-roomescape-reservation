@@ -29,6 +29,10 @@ public final class ApiResponse<T> {
         return successOf(HttpStatus.OK, data);
     }
 
+    public static <T> ApiResponse<T> okWithEmptyData() {
+        return successOf(HttpStatus.OK, null);
+    }
+
     public static ApiResponse<ErrorDetails> badRequest(final ErrorDetails errorDetails) {
         return errorOf(HttpStatus.BAD_REQUEST, errorDetails);
     }

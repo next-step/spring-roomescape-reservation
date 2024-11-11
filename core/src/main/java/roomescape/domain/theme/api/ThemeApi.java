@@ -1,7 +1,6 @@
 package roomescape.domain.theme.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.theme.api.request.ThemeAppendHttpRequest;
 import roomescape.domain.theme.api.response.ThemeAppendResponse;
@@ -9,6 +8,7 @@ import roomescape.domain.theme.api.response.ThemeQueryResponse;
 import roomescape.domain.theme.application.ThemeService;
 import roomescape.domain.theme.domain.Theme;
 import roomescape.domain.theme.domain.ThemeId;
+import roomescape.global.rest.ApiResponse;
 
 import java.util.List;
 
@@ -19,24 +19,23 @@ public class ThemeApi {
     private final ThemeService themeService;
 
     @GetMapping("/themes")
-    public ResponseEntity<List<ThemeQueryResponse>> getThemes() {
+    public ApiResponse<List<ThemeQueryResponse>> getThemes() {
         final List<Theme> themes = themeService.findAll();
-
         final List<ThemeQueryResponse> response = ThemeQueryResponse.fromThemes(themes);
-        return ResponseEntity.ok().body(response);
+        return ApiResponse.ok(response);
     }
 
     @PostMapping("/themes")
-    public ResponseEntity<ThemeAppendResponse> appendTheme(
+    public ApiResponse<ThemeAppendResponse> appendTheme(
             @RequestBody ThemeAppendHttpRequest request
     ) {
         final Theme theme = themeService.appendTheme(request.toServiceRequest());
-        return ResponseEntity.ok().body(ThemeAppendResponse.fromTheme(theme));
+        return ApiResponse.ok(ThemeAppendResponse.fromTheme(theme));
     }
 
     @DeleteMapping("/themes/{themeId}")
-    public ResponseEntity<Void> deleteTheme(@PathVariable Long themeId) {
+    public ApiResponse<Object> deleteTheme(@PathVariable Long themeId) {
         themeService.deleteTheme(new ThemeId(themeId));
-        return ResponseEntity.noContent().build();
+        return ApiResponse.okWithEmptyData();
     }
 }

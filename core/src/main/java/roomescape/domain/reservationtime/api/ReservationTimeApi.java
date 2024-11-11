@@ -1,13 +1,13 @@
 package roomescape.domain.reservationtime.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.reservationtime.application.ReservationTimeAppendRequest;
 import roomescape.domain.reservationtime.application.ReservationTimeCommandService;
 import roomescape.domain.reservationtime.application.ReservationTimeQueryService;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
+import roomescape.global.rest.ApiResponse;
 
 import java.util.List;
 
@@ -19,30 +19,24 @@ public class ReservationTimeApi {
     private final ReservationTimeQueryService timeQueryService;
 
     @PostMapping("/times")
-    public ResponseEntity<ReservationTimeAppendHttpResponse> append(
+    public ApiResponse<ReservationTimeAppendHttpResponse> append(
             @RequestBody ReservationTimeAppendRequest request
     ) {
         final ReservationTime appended = timeCommandService.append(request);
-
-        final ReservationTimeAppendHttpResponse response = ReservationTimeAppendHttpResponse.from(appended);
-
-        return ResponseEntity.ok().body(response);
+        return ApiResponse.ok(ReservationTimeAppendHttpResponse.from(appended));
     }
 
     @GetMapping("/times")
-    public ResponseEntity<List<ReservationTimeAppendHttpResponse>> fetchAll() {
+    public ApiResponse<List<ReservationTimeAppendHttpResponse>> fetchAll() {
         List<ReservationTime> times = timeQueryService.fetchAll();
-
-        final List<ReservationTimeAppendHttpResponse> response = ReservationTimeAppendHttpResponse.from(times);
-
-        return ResponseEntity.ok().body(response);
+        return ApiResponse.ok(ReservationTimeAppendHttpResponse.from(times));
     }
 
     @DeleteMapping("/times/{timeId}")
-    public ResponseEntity<Void> delete(
+    public ApiResponse<Object> delete(
             @PathVariable(name = "timeId") Long timeId
     ) {
         timeCommandService.delete(new ReservationTimeId(timeId));
-        return ResponseEntity.ok().build();
+        return ApiResponse.okWithEmptyData();
     }
 }

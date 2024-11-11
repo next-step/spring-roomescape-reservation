@@ -1,3 +1,5 @@
+import {handleResponseBody} from './common/api-handling.js';
+
 let isEditing = false;
 const RESERVATION_API_ENDPOINT = '/reservations';
 const TIME_API_ENDPOINT = '/times';
@@ -9,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-button').addEventListener('click', addInputRow);
 
   requestRead(RESERVATION_API_ENDPOINT)
-      .then(render)
+      .then(responseBody => render(responseBody.data))
       .catch(error => console.error('Error fetching reservations:', error));
 
   fetchTimes();
@@ -36,18 +38,20 @@ function render(data) {
 
 function fetchTimes() {
   requestRead(TIME_API_ENDPOINT)
-      .then(data => {
-        timesOptions.push(...data);
-      })
-      .catch(error => console.error('Error fetching time:', error));
+      .then(responseBody => timesOptions.push(...responseBody.data))
+      .catch(error => {
+        alert(error.message);
+        console.error('Error fetching time:', error);
+      });
 }
 
 function fetchThemes() {
   requestRead(THEME_API_ENDPOINT)
-      .then(data => {
-        themesOptions.push(...data);
-      })
-      .catch(error => console.error('Error fetching theme:', error));
+      .then(responseBody => themesOptions.push(...responseBody.data))
+      .catch(error => {
+        alert(error.message);
+        console.error('Error fetching time:', error);
+      });
 }
 
 function createSelect(options, defaultText, selectId, textProperty) {
@@ -135,10 +139,11 @@ function saveRow(event) {
   };
 
   requestCreate(reservation)
-      .then(() => {
-        location.reload();
-      })
-      .catch(error => console.error('Error:', error));
+      .then(() => location.reload())
+      .catch(error => {
+        alert(error.message);
+        console.error('Error:', error);
+      });
 
   isEditing = false;  // isEditing 값을 false로 설정
 }
@@ -149,7 +154,10 @@ function deleteRow(event) {
 
   requestDelete(reservationId)
       .then(() => row.remove())
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        alert(error.message);
+        console.error('Error:', error);
+      });
 }
 
 function requestCreate(reservation) {
@@ -159,11 +167,7 @@ function requestCreate(reservation) {
     body: JSON.stringify(reservation)
   };
 
-  return fetch(RESERVATION_API_ENDPOINT, requestOptions)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Create failed');
-      });
+  return fetch(RESERVATION_API_ENDPOINT, requestOptions).then(handleResponseBody);
 }
 
 function requestDelete(id) {
@@ -171,16 +175,10 @@ function requestDelete(id) {
     method: 'DELETE',
   };
 
-  return fetch(`${RESERVATION_API_ENDPOINT}/${id}`, requestOptions)
-      .then(response => {
-        if (response.status !== 200) throw new Error('Delete failed');
-      });
+  return fetch(`${RESERVATION_API_ENDPOINT}/${id}`, requestOptions).then(handleResponseBody);
 }
 
 function requestRead(endpoint) {
-  return fetch(endpoint)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Read failed');
-      });
+  let responsePromise = fetch(endpoint).then(handleResponseBody);
+  return responsePromise;
 }

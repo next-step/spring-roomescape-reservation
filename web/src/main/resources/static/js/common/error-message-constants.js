@@ -1,5 +1,5 @@
 export const errorMessages = {
-    NOT_DEFINED: "정의되지 않은 오류가 발생했습니다.",
+    NOT_DEFINED: "알 수 없는 오류가 발생했습니다.",
     SERVER_ERROR: "서버 내부 오류가 발생했습니다. 나중에 다시 시도해주세요.",
     R404: "예약을 찾을 수 없습니다.",
     R405: "중복된 예약이 있습니다.",

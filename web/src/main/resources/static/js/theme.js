@@ -1,7 +1,10 @@
+import {handleResponseBody} from './common/api-handling.js';
+
 let isEditing = false;
 const API_ENDPOINT = '/themes';
 const cellFields = ['id', 'name', 'description', 'thumbnail'];
 const createCellFields = ['', createInput(), createInput(), createInput()];
+
 function createBody(inputs) {
   return {
     name: inputs[0].value,
@@ -13,11 +16,16 @@ function createBody(inputs) {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('add-button').addEventListener('click', addRow);
   requestRead()
-      .then(render)
-      .catch(error => console.error('Error fetching times:', error));
+      .then(responseBody => render(responseBody.data))
+      .catch(error => {
+        console.error('Error fetching times:', error);
+        alert(error.message);
+      });
 });
 
 function render(data) {
+  console.log(data);
+
   const tableBody = document.getElementById('table-body');
   tableBody.innerHTML = '';
 
@@ -84,7 +92,7 @@ function saveRow(event) {
       .then(() => {
         location.reload();
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => alert(error.message));
 
   isEditing = false;  // isEditing 값을 false로 설정
 }
@@ -95,7 +103,7 @@ function deleteRow(event) {
 
   requestDelete(id)
       .then(() => row.remove())
-      .catch(error => console.error('Error:', error));
+      .catch(error => alert(error.message));
 }
 
 
@@ -116,11 +124,7 @@ function requestCreate(data) {
 }
 
 function requestRead() {
-  return fetch(API_ENDPOINT)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Read failed');
-      });
+  return fetch(API_ENDPOINT).then(handleResponseBody);
 }
 
 function requestDelete(id) {
@@ -128,8 +132,5 @@ function requestDelete(id) {
     method: 'DELETE',
   };
 
-  return fetch(`${API_ENDPOINT}/${id}`, requestOptions)
-      .then(response => {
-        if (response.status !== 204) throw new Error('Delete failed');
-      });
+  return fetch(`${API_ENDPOINT}/${id}`, requestOptions).then(handleResponseBody);
 }

@@ -19,4 +19,6 @@ public interface ReservationTimeRepository {
     ReservationTime getByStartAt(LocalTime startAt);
 
     void delete(ReservationTimeId timeId);
+
+    void delete(ReservationTime reservationTime);
 }

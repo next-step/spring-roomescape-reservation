@@ -2,7 +2,6 @@ package roomescape.domain.reservationtime.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import roomescape.domain.common.ClockHolder;
 import roomescape.domain.reservation.domain.Reservation;
 import roomescape.domain.reservation.domain.ReservationRepository;
@@ -15,7 +14,6 @@ import roomescape.domain.reservationtime.exception.ReservationTimeAlreadyInUse;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,31 +31,20 @@ public class ReservationTimeCommandService {
     }
 
     public void delete(final ReservationTimeId timeId) {
-        verifyTimeIdNotInUse(timeId);
-        timeRepository.delete(timeId);
+        final ReservationTime time = timeRepository.getById(timeId);
+        verifyTimeIdNotInUse(time);
+        timeRepository.delete(time);
     }
 
-    private void verifyTimeIdNotInUse(final ReservationTimeId timeId) {
-        final List<Reservation> activeReservations = findActiveReservationsBy(timeId);
-
-        if (!CollectionUtils.isEmpty(activeReservations)) {
-            throw new ReservationTimeAlreadyInUse(
-                    "Cannot delete ReservationTime(id=%d). It's already in use by Reservation(id=%s)"
-                            .formatted(
-                                    timeId.value(),
-                                    activeReservations.stream()
-                                            .map(reservation -> String.valueOf(reservation.getId()))
-                                            .collect(Collectors.joining(","))
-                            )
-            );
+    private void verifyTimeIdNotInUse(final ReservationTime time) {
+        if (anyConfirmedReservationExistsBy(time)) {
+            throw ReservationTimeAlreadyInUse.from(time);
         }
     }
 
-    private List<Reservation> findActiveReservationsBy(final ReservationTimeId timeId) {
-        return reservationRepository.findAllByTimeId(timeId)
-                .stream()
-                .filter(Reservation::isActive)
-                .toList();
+    private boolean anyConfirmedReservationExistsBy(final ReservationTime time) {
+        final List<Reservation> reservations = reservationRepository.findAllByTimeId(time.getId());
+        return reservations.stream().anyMatch(Reservation::isConfirmed);
     }
 
     private void verifyUniqueStartAt(final LocalTime startAt) {

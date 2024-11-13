@@ -55,4 +55,9 @@ public class ReservationTimeEntityRepository implements ReservationTimeRepositor
     public void delete(final ReservationTimeId timeId) {
         jdbcRepository.delete(timeId.value());
     }
+
+    @Override
+    public void delete(final ReservationTime reservationTime) {
+        jdbcRepository.delete(reservationTime.getId().value());
+    }
 }

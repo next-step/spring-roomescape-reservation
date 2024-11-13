@@ -2,7 +2,6 @@ package roomescape.domain.reservation.infra;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.reservation.domain.*;
 import roomescape.domain.reservation.exception.ReservationNotFoundException;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
@@ -21,11 +20,6 @@ public class ReservationEntityRepository implements ReservationRepository {
     @Override
     public Reservation save(final Reservation reservation) {
         return jdbcRepository.save(reservation);
-    }
-
-    @Override
-    public List<Reservation> findNotDeletedReservations() {
-        return jdbcRepository.findAllByActiveStatus(ActiveStatus.ACTIVE);
     }
 
     @Override
@@ -51,5 +45,10 @@ public class ReservationEntityRepository implements ReservationRepository {
     @Override
     public List<Reservation> findAllByThemeId(final ThemeId themeId) {
         return jdbcRepository.findAllByThemeId(themeId);
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        return jdbcRepository.findAll();
     }
 }

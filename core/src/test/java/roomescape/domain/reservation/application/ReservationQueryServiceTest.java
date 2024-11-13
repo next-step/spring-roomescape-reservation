@@ -3,12 +3,8 @@ package roomescape.domain.reservation.application;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.reservation.application.dto.ReservationTimeThemeDto;
-import roomescape.domain.reservation.domain.Reservation;
-import roomescape.domain.reservation.domain.ReservationDate;
-import roomescape.domain.reservation.domain.ReservationGuestName;
-import roomescape.domain.reservation.domain.ReservationRepository;
+import roomescape.domain.reservation.domain.*;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeRepository;
 import roomescape.domain.theme.domain.Theme;
@@ -48,8 +44,8 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("reservation1"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 8)))
                 .timeId(time1.getId())
-                .activeStatus(ActiveStatus.ACTIVE)
-                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         final Reservation reservationSaved1 = reservationRepository.save(reservation1);
 
@@ -60,8 +56,8 @@ class ReservationQueryServiceTest extends IntegrationTestSupport {
                 .name(new ReservationGuestName("reservation2"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 10)))
                 .timeId(time2.getId())
-                .activeStatus(ActiveStatus.ACTIVE)
-                .createdAt(LocalDateTime.of(2024, 6, 4, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 6, 4, 12, 0))
                 .build();
         final Reservation reservationSaved2 = reservationRepository.save(reservation2);
 

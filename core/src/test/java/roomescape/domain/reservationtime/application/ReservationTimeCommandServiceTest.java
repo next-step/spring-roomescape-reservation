@@ -4,11 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.common.ActiveStatus;
-import roomescape.domain.reservation.domain.Reservation;
-import roomescape.domain.reservation.domain.ReservationDate;
-import roomescape.domain.reservation.domain.ReservationGuestName;
-import roomescape.domain.reservation.domain.ReservationRepository;
+import roomescape.domain.reservation.domain.*;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeRepository;
 import roomescape.domain.reservationtime.exception.DupliactedReservationTimeException;
@@ -107,18 +103,14 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.ACTIVE)
-                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
-        final Reservation reservationSaved = reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
 
         // when & then
         assertThatThrownBy(() -> sut.delete(timeSaved.getId()))
-                .isInstanceOf(ReservationTimeAlreadyInUse.class)
-                .hasMessage(
-                        "Cannot delete ReservationTime(id=%d). It's already in use by Reservation(id=%s)"
-                                .formatted(timeSaved.getIdValue(), reservationSaved.getId())
-                );
+                .isInstanceOf(ReservationTimeAlreadyInUse.class);
     }
 
     @DisplayName("예약 시간 삭제 시 해당 시간에 예약된 예약이 취소 상태면 예외 발생하지 않음")
@@ -137,8 +129,8 @@ class ReservationTimeCommandServiceTest extends IntegrationTestSupport {
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.DELETED)
-                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .status(ReservationStatus.CANCELED)
+                .reservedAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);
 

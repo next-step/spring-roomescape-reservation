@@ -11,6 +11,7 @@ import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.reservation.domain.Reservation;
 import roomescape.domain.reservation.domain.ReservationDate;
 import roomescape.domain.reservation.domain.ReservationGuestName;
+import roomescape.domain.reservation.domain.ReservationStatus;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.domain.theme.domain.ThemeId;
 
@@ -32,24 +33,24 @@ public class ReservationJdbcRepository {
             select
                 r.reservation_id,
                 r.theme_id,
+                r.date,
                 r.time_id,
                 r.name,
-                r.date,
-                r.active_status,
-                r.deleted_at,
-                r.created_at,
+                r.status,
+                r.reserved_at,
+                r.canceled_at,
             from reservations r""";
 
     private static final RowMapper<Reservation> RESERVATION_ROW_MAPPER = (rs, rowNum) ->
             Reservation.builder()
                     .id(rs.getLong("reservation_id"))
                     .themeId(new ThemeId(rs.getLong("theme_id")))
+                    .date(new ReservationDate(LocalDate.parse(rs.getString("date"))))
                     .timeId(new ReservationTimeId(rs.getLong("time_id")))
                     .name(new ReservationGuestName(rs.getString("name")))
-                    .date(new ReservationDate(LocalDate.parse(rs.getString("date"))))
-                    .activeStatus(ActiveStatus.valueOf(rs.getString("active_status")))
-                    .deletedAt(Objects.isNull(rs.getString("deleted_at")) ? null : LocalDateTime.parse(rs.getString("deleted_at")))
-                    .createdAt(LocalDateTime.parse(rs.getString("created_at")))
+                    .status(ReservationStatus.valueOf(rs.getString("status")))
+                    .reservedAt(LocalDateTime.parse(rs.getString("reserved_at")))
+                    .canceledAt(Objects.isNull(rs.getString("canceled_at")) ? null : LocalDateTime.parse(rs.getString("canceled_at")))
                     .build();
 
     private final JdbcTemplate jdbcTemplate;
@@ -70,22 +71,22 @@ public class ReservationJdbcRepository {
         String updateSql = """
                 update reservations set
                     theme_id = ?,
+                    date = ?,
                     time_id = ?,
                     name = ?,
-                    date = ?,
-                    active_status = ?,
-                    deleted_at = ?,
-                    created_at = ?
+                    status = ?,
+                    reserved_at = ?,
+                    canceled_at = ?
                 where reservation_id = ?""";
 
         jdbcTemplate.update(updateSql,
                 reservation.getThemeId().value(),
+                toIsoLocal(reservation.getDate().getValue()),
                 reservation.getTimeId().value(),
                 reservation.getName().getValue(),
-                toIsoLocal(reservation.getDate().getValue()),
-                reservation.getActiveStatus().name(),
-                Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()),
-                toIsoLocal(reservation.getCreatedAt()),
+                reservation.getStatus().name(),
+                toIsoLocal(reservation.getReservedAt()),
+                Objects.isNull(reservation.getCanceledAt()) ? null : toIsoLocal(reservation.getCanceledAt()),
                 reservation.getId()
         );
 
@@ -98,23 +99,23 @@ public class ReservationJdbcRepository {
         final String insertSql = """
                 insert into reservations (
                     theme_id,
-                    name,
                     date,
                     time_id,
-                    active_status,
-                    deleted_at,
-                    created_at
+                    name,
+                    status,
+                    reserved_at,
+                    canceled_at
                 ) values (?, ?, ?, ?, ?, ?, ?)""";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"reservation_id"});
             ps.setLong(1, reservation.getThemeId().value());
-            ps.setString(2, reservation.getName().getValue());
-            ps.setString(3, toIsoLocal(reservation.getDate().getValue()));
-            ps.setLong(4, reservation.getTimeId().value());
-            ps.setString(5, reservation.getActiveStatus().name());
-            ps.setString(6, Objects.isNull(reservation.getDeletedAt()) ? null : toIsoLocal(reservation.getDeletedAt()));
-            ps.setString(7, toIsoLocal(reservation.getCreatedAt()));
+            ps.setString(2, toIsoLocal(reservation.getDate().getValue()));
+            ps.setLong(3, reservation.getTimeId().value());
+            ps.setString(4, reservation.getName().getValue());
+            ps.setString(5, reservation.getStatus().name());
+            ps.setString(6, toIsoLocal(reservation.getReservedAt()));
+            ps.setString(7, Objects.isNull(reservation.getCanceledAt()) ? null : toIsoLocal(reservation.getCanceledAt()));
             return ps;
         }, keyHolder);
 
@@ -123,12 +124,12 @@ public class ReservationJdbcRepository {
         return Reservation.builder()
                 .id(generatedId)
                 .themeId(reservation.getThemeId())
-                .name(reservation.getName())
                 .date(reservation.getDate())
                 .timeId(reservation.getTimeId())
-                .activeStatus(reservation.getActiveStatus())
-                .deletedAt(reservation.getDeletedAt())
-                .createdAt(reservation.getCreatedAt())
+                .name(reservation.getName())
+                .status(reservation.getStatus())
+                .reservedAt(reservation.getReservedAt())
+                .canceledAt(reservation.getCanceledAt())
                 .build();
     }
 

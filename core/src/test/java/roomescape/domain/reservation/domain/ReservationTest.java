@@ -3,7 +3,6 @@ package roomescape.domain.reservation.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.common.ClockHolder;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
@@ -47,8 +46,8 @@ class ReservationTest {
         );
 
         assertAll(
-                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.ACTIVE),
-                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CONFIRMED),
+                () -> assertThat(actual.getReservedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
                 () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(2000L))
@@ -64,14 +63,14 @@ class ReservationTest {
                 .timeId(new ReservationTimeId(2000L))
                 .name(new ReservationGuestName("brie"))
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
-                .activeStatus(ActiveStatus.DELETED)
-                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
 
         final ClockHolder clockHolder = new FakeClockHolder(LocalDateTime.of(2024, 6, 7, 12, 0));
 
         // when
-        final Reservation actual = sut.delete(clockHolder);
+        final Reservation actual = sut.cancel(clockHolder);
 
         // then
         assertAll(
@@ -80,9 +79,9 @@ class ReservationTest {
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTimeId()).isEqualTo(new ReservationTimeId(2000L)),
                 () -> assertThat(actual.getThemeId()).isEqualTo(new ThemeId(1000L)),
-                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED),
-                () -> assertThat(actual.getDeletedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
-                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
+                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
+                () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getReservedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
         );
     }
 }

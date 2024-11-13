@@ -63,8 +63,8 @@ public class ReservationCommandService {
 
     public void cancel(final ReservationId reservationId) {
         final Reservation reservation = reservationRepository.getById(reservationId.value());
-        final Reservation cancelled = reservation.delete(clockHolder);
-        reservationRepository.save(cancelled);
+        final Reservation canceled = reservation.cancel(clockHolder);
+        reservationRepository.save(canceled);
     }
 
     private void verifyDuplicatedReservationNotExist(final ReserveRequest request) {
@@ -79,7 +79,7 @@ public class ReservationCommandService {
         }
 
         final Reservation reservation = reservationOpt.get();
-        if (!reservation.canceled()) {
+        if (!reservation.isCanceled()) {
             throw DuplicatedReservationException.fromId(ReservationId.from(reservation));
         }
     }

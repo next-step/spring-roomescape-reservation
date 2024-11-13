@@ -11,8 +11,6 @@ public interface ReservationRepository {
 
     Reservation save(Reservation reservation);
 
-    List<Reservation> findNotDeletedReservations();
-
     Reservation getById(Long reservationId);
 
     Optional<Reservation> findBy(
@@ -24,4 +22,6 @@ public interface ReservationRepository {
     List<Reservation> findAllByTimeId(ReservationTimeId timeId);
 
     List<Reservation> findAllByThemeId(ThemeId themeId);
+
+    List<Reservation> findAll();
 }

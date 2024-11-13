@@ -3,7 +3,6 @@ package roomescape.domain.reservation.application;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.common.ClockHolder;
 import roomescape.domain.reservation.application.request.ReserveRequest;
 import roomescape.domain.reservation.domain.*;
@@ -95,8 +94,8 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.ACTIVE)
-                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
 
         final Reservation saved = reservationRepository.save(reservation);
@@ -118,9 +117,9 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 () -> assertThat(actual.getName()).isEqualTo(new ReservationGuestName("brie")),
                 () -> assertThat(actual.getDate().getValue()).isEqualTo(LocalDate.of(2024, 6, 23)),
                 () -> assertThat(actual.getTimeId()).isEqualTo(timeSaved.getId()),
-                () -> assertThat(actual.getActiveStatus()).isEqualTo(ActiveStatus.DELETED),
-                () -> assertThat(actual.getDeletedAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
-                () -> assertThat(actual.getCreatedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
+                () -> assertThat(actual.getStatus()).isEqualTo(ReservationStatus.CANCELED),
+                () -> assertThat(actual.getCanceledAt()).isEqualTo(LocalDateTime.of(2024, 6, 7, 12, 0)),
+                () -> assertThat(actual.getReservedAt()).isEqualTo(LocalDateTime.of(2024, 3, 8, 12, 0))
         );
     }
 
@@ -140,8 +139,8 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.ACTIVE)
-                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);
 
@@ -173,8 +172,8 @@ class ReservationCommandServiceTest extends IntegrationTestSupport {
                 .date(new ReservationDate(LocalDate.of(2024, 6, 23)))
                 .timeId(timeSaved.getId())
                 .themeId(themeSaved.getId())
-                .activeStatus(ActiveStatus.DELETED)
-                .createdAt(LocalDateTime.of(2024, 3, 8, 12, 0))
+                .status(ReservationStatus.CONFIRMED)
+                .reservedAt(LocalDateTime.of(2024, 3, 8, 12, 0))
                 .build();
         reservationRepository.save(reservation);
 

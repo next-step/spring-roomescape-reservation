@@ -173,10 +173,9 @@ class ReservationTimeRepositoryTest extends IntegrationTestSupport {
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
                 .build();
         final ReservationTime saved = sut.save(time);
-        final ReservationTimeId timeId = saved.getId();
 
         // when
-        sut.delete(timeId);
+        sut.delete(saved);
 
         // when
         final List<ReservationTime> actual = sut.findAll();

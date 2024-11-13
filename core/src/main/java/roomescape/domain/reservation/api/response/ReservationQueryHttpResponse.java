@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import roomescape.domain.reservation.application.dto.ReservationTimeThemeDto;
 import roomescape.domain.reservation.domain.Reservation;
+import roomescape.domain.reservation.domain.ReservationStatus;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.theme.domain.Theme;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class ReservationQueryHttpResponse {
 
     private final Long id;
+    private final ReservationStatus status;
+    private final String statusDescription;
     private final String name;
     private final LocalDate date;
     private final ReservationTimeDto time;
@@ -23,12 +26,16 @@ public class ReservationQueryHttpResponse {
     @Builder
     private ReservationQueryHttpResponse(
             final Long id,
+            final ReservationStatus status,
+            final String statusDescription,
             final String name,
             final LocalDate date,
             final ReservationTimeDto time,
             final ThemeDto theme
     ) {
         this.id = id;
+        this.status = status;
+        this.statusDescription = statusDescription;
         this.name = name;
         this.date = date;
         this.time = time;
@@ -47,6 +54,8 @@ public class ReservationQueryHttpResponse {
 
         return ReservationQueryHttpResponse.builder()
                 .id(reservation.getId())
+                .status(reservation.getStatus())
+                .statusDescription(reservation.getStatus().getDescription())
                 .name(reservation.getName().getValue())
                 .date(reservation.getDate().getValue())
                 .time(ReservationTimeDto.from(reservationTime))

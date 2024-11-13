@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import roomescape.domain.reservation.application.dto.ReservationTimeThemeDto;
 import roomescape.domain.reservation.domain.Reservation;
-import roomescape.domain.reservation.domain.ReservationId;
 import roomescape.domain.reservation.domain.ReservationRepository;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
@@ -26,7 +25,7 @@ public class ReservationQueryService {
     private final ReservationTimeRepository reservationTimeRepository;
 
     public List<ReservationTimeThemeDto> fetchReservationThemes() {
-        final List<Reservation> reservations = reservationRepository.findNotDeletedReservations();
+        final List<Reservation> reservations = reservationRepository.findAll();
         final Map<ThemeId, Theme> themes = findThemes(reservations);
         final Map<ReservationTimeId, ReservationTime> times = findTimes(reservations);
 
@@ -37,14 +36,6 @@ public class ReservationQueryService {
                         themes.get(reservation.getThemeId())
                 ))
                 .toList();
-    }
-
-    public ReservationTimeThemeDto fetchReservationTimeThemeBy(final ReservationId reservationId) {
-        final Reservation reservation = reservationRepository.getById(reservationId.value());
-        final Map<ReservationTimeId, ReservationTime> times = findTimes(List.of(reservation));
-        final Map<ThemeId, Theme> themes = findThemes(List.of(reservation));
-
-        return ReservationTimeThemeDto.of(reservation, times.get(reservation.getTimeId()), themes.get(reservation.getThemeId()));
     }
 
     private Map<ReservationTimeId, ReservationTime> findTimes(final List<Reservation> reservations) {

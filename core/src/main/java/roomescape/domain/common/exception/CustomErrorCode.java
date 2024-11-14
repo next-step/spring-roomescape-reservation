@@ -10,6 +10,7 @@ public enum CustomErrorCode {
 
     R404("Reservation not found"),
     R405("Reservation duplicated"),
+    R406("Reservation already canceled"),
 
     RT404("ReservationTime not found"),
     RT405("ReservationTime duplicated"),

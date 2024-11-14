@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import roomescape.domain.common.ClockHolder;
 import roomescape.domain.common.exception.Assert;
+import roomescape.domain.reservation.exception.ReservationAlreadyCanceledException;
 import roomescape.domain.reservationtime.domain.ReservationTime;
 import roomescape.domain.reservationtime.domain.ReservationTimeId;
 import roomescape.domain.theme.domain.Theme;
@@ -71,6 +72,10 @@ public class Reservation {
     }
 
     public Reservation cancel(final ClockHolder clockHolder) {
+        if (isCanceled()) {
+            throw new ReservationAlreadyCanceledException();
+        }
+
         return Reservation.builder()
                 .id(this.id)
                 .themeId(this.themeId)

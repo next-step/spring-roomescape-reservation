@@ -1,4 +1,5 @@
 import {handleResponseBody} from './common/api-handling.js';
+import {getReservationStatusText, getReservationStatusTextStyle} from './constants/reservation-constants.js';
 
 let isEditing = false;
 const RESERVATION_API_ENDPOINT = '/reservations';
@@ -31,8 +32,13 @@ function render(data) {
     row.insertCell(3).textContent = item.date;          // 예약 날짜
     row.insertCell(4).textContent = item.time.startAt;  // 시작 시간
 
+    // 예약 상태 셀 추가
+    const statusCell = row.insertCell(5);
+    statusCell.textContent = getReservationStatusText(item.status);
+    statusCell.className = getReservationStatusTextStyle(item.status);
+
     const actionCell = row.insertCell(row.cells.length);
-    actionCell.appendChild(createActionButton('삭제', 'btn-danger', deleteRow));
+    actionCell.appendChild(createActionButton('예약 취소', 'btn-secondary', cancelReservation));
   });
 }
 
@@ -160,6 +166,18 @@ function deleteRow(event) {
       });
 }
 
+function cancelReservation(event) {
+  const row = event.target.closest('tr');
+  const reservationId = row.cells[0].textContent;
+
+  callReservationCancelApi(reservationId)
+      .then(refreshReservationList)
+      .catch(error => {
+        alert(error.message);
+        console.error('Error:', error);
+      });
+}
+
 function requestCreate(reservation) {
   const requestOptions = {
     method: 'POST',
@@ -178,7 +196,20 @@ function requestDelete(id) {
   return fetch(`${RESERVATION_API_ENDPOINT}/${id}`, requestOptions).then(handleResponseBody);
 }
 
+function callReservationCancelApi(reservationId) {
+  const requestOptions = {
+    method: 'DELETE',
+  };
+
+  return fetch(`${RESERVATION_API_ENDPOINT}/${reservationId}`, requestOptions)
+      .then(handleResponseBody);
+}
+
+function refreshReservationList() {
+  return requestRead(RESERVATION_API_ENDPOINT)
+      .then(responseBody => render(responseBody.data));
+}
+
 function requestRead(endpoint) {
-  let responsePromise = fetch(endpoint).then(handleResponseBody);
-  return responsePromise;
+  return fetch(endpoint).then(handleResponseBody);
 }

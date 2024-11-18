@@ -1,7 +1,11 @@
 package roomescape.domain.reservation.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import roomescape.domain.reservation.api.response.ReservationCreateHttpResponse;
 import roomescape.domain.reservation.application.ReservationCommandService;
 import roomescape.domain.reservation.application.ReservationQueryService;
 import roomescape.domain.reservation.application.request.ReserveRequest;
@@ -24,7 +28,7 @@ public class ReservationCommandApi {
         return ApiResponse.ok(new ReservationCreateHttpResponse(reservationId.value()));
     }
 
-    @DeleteMapping("/reservations/{reservationId}")
+    @PostMapping("/reservations/{reservationId}/cancel")
     public ApiResponse<Object> cancel(
             @PathVariable(name = "reservationId") Long reservationId
     ) {

@@ -25,18 +25,16 @@ class ReservationTimeApiTest extends RestAssuredTestSupport {
                 .when().post("/times")
                 .then().log().all()
                 .statusCode(200)
-                .body(
-                        "startAt", is("10:00")
-                );
+                .body("data.startAt", is("10:00"));
 
-        final Long timeId = ((Integer) response.extract().path("id")).longValue();
+        final Long timeId = ((Integer) response.extract().path("data.id")).longValue();
 
         // 예약 시간 전체 조회
         RestAssured.given().log().all()
                 .when().get("/times")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(1));
+                .body("data.size()", is(1));
 
         // 예약 시간 삭제
         RestAssured.given().log().all()
@@ -50,6 +48,6 @@ class ReservationTimeApiTest extends RestAssuredTestSupport {
                 .when().get("/times")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(0));
+                .body("data.size()", is(0));
     }
 }

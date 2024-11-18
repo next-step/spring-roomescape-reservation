@@ -2,7 +2,6 @@ package roomescape.domain.theme.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.util.Assert;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -24,9 +23,7 @@ public class Theme {
             final String thumbnail,
             final boolean deleted
     ) {
-        Assert.notNull(name, "name must not be null");
-        Assert.notNull(description, "description must not be null");
-        Assert.notNull(thumbnail, "thumbnail must not be null");
+        verifyThemeName(name);
 
         this.id = id;
         this.name = name;
@@ -56,6 +53,12 @@ public class Theme {
                 .thumbnail(this.thumbnail)
                 .deleted(true)
                 .build();
+    }
+
+    private void verifyThemeName(final String name) {
+        if (Objects.isNull(name) || name.isBlank()) {
+            throw new IllegalArgumentException("name must not be null or whitespace");
+        }
     }
 
     public Optional<Long> getIdValue() {

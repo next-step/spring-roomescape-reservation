@@ -117,10 +117,7 @@ function requestCreate(data) {
   };
 
   return fetch(API_ENDPOINT, requestOptions)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        throw new Error('Create failed');
-      });
+      .then(handleResponseBody)
 }
 
 function requestRead() {

@@ -212,4 +212,4 @@ function refreshReservationList() {
 
 function requestRead(endpoint) {
   return fetch(endpoint).then(handleResponseBody);
-}
+}l

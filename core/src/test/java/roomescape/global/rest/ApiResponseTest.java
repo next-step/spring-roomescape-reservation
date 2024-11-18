@@ -15,8 +15,8 @@ class ApiResponseTest {
 
         assertAll(
                 () -> assertThat(response.getResponseType()).isEqualTo(HttpResponseType.SUCCESS),
-                () -> assertThat(response.getCode()).isEqualTo(200),
-                () -> assertThat(response.getStatus()).isEqualTo(HttpStatus.OK),
+                () -> assertThat(response.getStatusCode()).isEqualTo(200),
+                () -> assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.OK),
                 () -> assertThat(response.getData()).isNotNull()
         );
     }
@@ -27,8 +27,8 @@ class ApiResponseTest {
 
         assertAll(
                 () -> assertThat(response.getResponseType()).isEqualTo(HttpResponseType.ERROR),
-                () -> assertThat(response.getCode()).isEqualTo(500),
-                () -> assertThat(response.getStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR),
+                () -> assertThat(response.getStatusCode()).isEqualTo(500),
+                () -> assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR),
                 () -> assertThat(response.getData()).isNotNull()
         );
     }
@@ -39,8 +39,8 @@ class ApiResponseTest {
 
         assertAll(
                 () -> assertThat(response.getResponseType()).isEqualTo(HttpResponseType.ERROR),
-                () -> assertThat(response.getCode()).isEqualTo(400),
-                () -> assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST)
+                () -> assertThat(response.getStatusCode()).isEqualTo(400),
+                () -> assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST)
         );
     }
 
@@ -50,8 +50,8 @@ class ApiResponseTest {
 
         assertAll(
                 () -> assertThat(response.getResponseType()).isEqualTo(HttpResponseType.ERROR),
-                () -> assertThat(response.getCode()).isEqualTo(404),
-                () -> assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND)
+                () -> assertThat(response.getStatusCode()).isEqualTo(404),
+                () -> assertThat(response.getHttpStatus()).isEqualTo(HttpStatus.NOT_FOUND)
         );
     }
 

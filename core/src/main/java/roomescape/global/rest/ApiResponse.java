@@ -10,17 +10,17 @@ import roomescape.global.rest.error.ErrorDetails;
 @Getter
 public final class ApiResponse<T> {
 
-    private final int code;
-    private final HttpStatus status;
+    private final int statusCode;
+    private final HttpStatus httpStatus;
     private final HttpResponseType responseType;
     private final T data;
 
-    private ApiResponse(final HttpStatus status, final HttpResponseType responseType, final T data) {
-        Assert.notNull(status, "status must not be null");
+    private ApiResponse(final HttpStatus httpStatus, final HttpResponseType responseType, final T data) {
+        Assert.notNull(httpStatus, "status must not be null");
         Assert.notNull(responseType, "responseType must not be null");
 
-        this.code = status.value();
-        this.status = status;
+        this.statusCode = httpStatus.value();
+        this.httpStatus = httpStatus;
         this.responseType = responseType;
         this.data = data;
     }
@@ -59,7 +59,7 @@ public final class ApiResponse<T> {
 
     public ResponseEntity<ApiResponse<T>> toResponseEntity() {
         return ResponseEntity
-                .status(this.getStatus())
+                .status(this.getHttpStatus())
                 .body(this);
     }
 }

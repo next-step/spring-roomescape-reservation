@@ -31,7 +31,7 @@ public class ApiResponseAdvice implements ResponseBodyAdvice<ApiResponse<?>> {
             final ServerHttpResponse response
     ) {
         if (Objects.nonNull(body)) {
-            response.setStatusCode(body.getStatus());
+            response.setStatusCode(body.getHttpStatus());
         }
         return body;
     }

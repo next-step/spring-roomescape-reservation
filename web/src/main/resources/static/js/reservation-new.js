@@ -198,10 +198,10 @@ function requestDelete(id) {
 
 function callReservationCancelApi(reservationId) {
   const requestOptions = {
-    method: 'DELETE',
+    method: 'POST',
   };
 
-  return fetch(`${RESERVATION_API_ENDPOINT}/${reservationId}`, requestOptions)
+  return fetch(`${RESERVATION_API_ENDPOINT}/${reservationId}/cancel`, requestOptions)
       .then(handleResponseBody);
 }
 

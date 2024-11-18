@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import roomescape.domain.common.ActiveStatus;
 import roomescape.domain.reservation.domain.Reservation;
 import roomescape.domain.reservation.domain.ReservationDate;
 import roomescape.domain.reservation.domain.ReservationGuestName;
@@ -152,11 +151,6 @@ public class ReservationJdbcRepository {
         return queryForReservation(selectSql, reservationId);
     }
 
-    public List<Reservation> findAllByActiveStatus(final ActiveStatus activeStatus) {
-        final String selectSql = generateSelectSqlWithWhereCondition("where active_status = ?");
-        return queryForReservations(selectSql, activeStatus.name());
-    }
-
     public Optional<Reservation> findBy(
             final ReservationGuestName name,
             final ReservationDate date,
@@ -176,10 +170,6 @@ public class ReservationJdbcRepository {
 
     private String generateSelectSqlWithWhereCondition(final String whereConditionSql) {
         return SELECT_RESERVATION_SQL + " " + whereConditionSql;
-    }
-
-    private List<Reservation> queryForReservations(final String selectSql, final Object... objects) {
-        return jdbcTemplate.query(selectSql, RESERVATION_ROW_MAPPER, objects);
     }
 
     private Optional<Reservation> queryForReservation(final String selectSql, Object... objects) {

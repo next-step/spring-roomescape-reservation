@@ -20,9 +20,8 @@ public class ReservationCommandApi {
             @RequestBody ReserveRequest request
     ) {
         request.validateAllFieldsExist();
-        commandService.reserve(request);
-
-        return ApiResponse.okWithEmptyData();
+        final ReservationId reservationId = commandService.reserve(request);
+        return ApiResponse.ok(new ReservationCreateHttpResponse(reservationId.value()));
     }
 
     @DeleteMapping("/reservations/{reservationId}")

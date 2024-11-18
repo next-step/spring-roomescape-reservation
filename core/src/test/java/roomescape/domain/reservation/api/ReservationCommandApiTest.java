@@ -18,11 +18,11 @@ class ReservationCommandApiTest extends RestAssuredTestSupport {
 
         // when & then
         RestAssured.given().log().all()
-                .when().pathParam("reservationId", nonExistingReservationId).delete("/reservations/{reservationId}")
+                .when().pathParam("reservationId", nonExistingReservationId).post("/reservations/{reservationId}/cancel")
                 .then().log().all()
                 .statusCode(404)
-                .body("code", equalTo(404))
-                .body("status", equalTo("NOT_FOUND"))
+                .body("statusCode", equalTo(404))
+                .body("httpStatus", equalTo("NOT_FOUND"))
                 .body("data.errorCode", equalTo(CustomErrorCode.R404.name()));
     }
 }

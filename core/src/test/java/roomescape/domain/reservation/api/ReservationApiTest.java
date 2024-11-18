@@ -3,6 +3,7 @@ package roomescape.domain.reservation.api;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import roomescape.domain.reservationtime.domain.ReservationTime;
@@ -26,8 +27,9 @@ class ReservationApiTest extends RestAssuredTestSupport {
     @Autowired
     ThemeRepository themeRepository;
 
+    @DisplayName("예약을 생성한다")
     @Test
-    void reservation() {
+    void create_reservation() {
         final ReservationTime time = ReservationTime.builder()
                 .startAt(LocalTime.of(12, 0))
                 .createdAt(LocalDateTime.of(2024, 6, 23, 7, 0))
@@ -50,24 +52,29 @@ class ReservationApiTest extends RestAssuredTestSupport {
                 .then().log().all()
                 .statusCode(200);
 
-        final Long reservationId = ((Integer) response.extract().path("id")).longValue();
-
+        // 조회
         RestAssured.given().log().all()
                 .when().get("/reservations")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(1));
+                .body("data.size()", is(1));
 
+        final Long reservationId = ((Integer) response.extract().path("data.reservationId")).longValue();
+
+        // 취소
         RestAssured.given().log().all()
-                .when().pathParam("reservationId", reservationId).delete("/reservations/{reservationId}")
+                .contentType(ContentType.JSON)
+                .when().pathParam("reservationId", reservationId).post("/reservations/{reservationId}/cancel")
                 .then().log().all()
                 .statusCode(200);
 
+        // 조회
         RestAssured.given().log().all()
                 .when().get("/reservations")
                 .then().log().all()
                 .statusCode(200)
-                .body("size()", is(0));
+                .body("data.size()", is(1))
+                .body("data[0].status", is("CANCELED"));
     }
 
     private Theme saveTheme(String name, String description, String thumbnail) {

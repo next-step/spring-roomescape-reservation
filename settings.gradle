@@ -1,0 +1,14 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    }
+}
+
+rootProject.name = 'nextstep-roomescape'
+
+include 'core'
+//include 'core:core-api'
+//include 'core:core-domain'
+//include 'storage:db-core'
+include 'web'
